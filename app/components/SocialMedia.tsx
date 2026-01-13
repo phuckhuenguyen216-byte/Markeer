@@ -24,7 +24,7 @@ const SocialMedia = () => {
   const handleMessengerClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     window.open(
-      "https://www.facebook.com/profile.php?id=61558045738607",
+      "https://www.facebook.com/markeeaimarketing/",
       "_blank"
     );
   };
