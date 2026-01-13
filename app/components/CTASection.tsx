@@ -30,7 +30,7 @@ export default function CTASection() {
         </div>
 
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-          Nhận ngay 1 tháng sử dụng Hiagi miễn phí
+          Nhận ngay 1 tháng sử dụng Markee miễn phí
         </h2>
 
         <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">

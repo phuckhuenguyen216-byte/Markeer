@@ -25,10 +25,10 @@ export default function AboutSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Hiagi là gì?
+            Markee là gì?
           </h2>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Hiagi là nền tảng AI Marketing dành cho doanh nghiệp hiện đại, giúp bạn thay thế nhiều công cụ rời rạc bằng một hệ thống thông minh duy nhất.
+            Markee là nền tảng AI Marketing dành cho doanh nghiệp hiện đại, giúp bạn thay thế nhiều công cụ rời rạc bằng một hệ thống thông minh duy nhất.
           </p>
         </div>
 
@@ -55,14 +55,6 @@ export default function AboutSection() {
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="text-center mt-12">
-          <div className="inline-flex items-center space-x-2 bg-blue-100 text-blue-800 px-6 py-3 rounded-full">
-            <span className="text-sm font-medium">
-              Hiagi giúp bạn xây chiến lược marketing dựa trên dữ liệu – không cảm tính
-            </span>
-          </div>
         </div>
       </div>
     </section>

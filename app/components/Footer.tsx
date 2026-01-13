@@ -13,7 +13,7 @@ export default function Footer() {
           <div className="md:col-span-1">
             <div className="mb-6">
               <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Hiagi AI Marketing
+                Markee AI Marketing
               </h3>
             </div>
             <p className="text-gray-400 leading-relaxed mb-6">
@@ -68,7 +68,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
             <p className="text-gray-400 text-sm">
-              © 2024 Hiagi AI Marketing. All rights reserved.
+              © 2024 Markee AI Marketing. All rights reserved.
             </p>
           </div>
 
@@ -84,7 +84,7 @@ export default function Footer() {
             </button>
 
             <div className="flex items-center space-x-2 text-gray-400">
-              <span className="text-sm">Truy cập Hiagi:</span>
+              <span className="text-sm">Truy cập Markee:</span>
               <a 
                 href="https://marketing.hiagi.ai/" 
                 target="_blank" 
@@ -100,7 +100,7 @@ export default function Footer() {
         {/* Slogan */}
         <div className="text-center mt-8 pt-8 border-t border-gray-800">
           <h3 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
-            Hiagi – Trợ lý Marketing AI cho doanh nghiệp hiện đại
+            Markee – Trợ lý Marketing AI cho doanh nghiệp hiện đại
           </h3>
           <p className="text-gray-400">
             Tạo nhanh hơn · Phân tích sâu hơn · Tăng trưởng thông minh hơn

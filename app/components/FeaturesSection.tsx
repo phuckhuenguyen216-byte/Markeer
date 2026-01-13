@@ -60,7 +60,7 @@ export default function FeaturesSection() {
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section id="features" className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -112,7 +112,7 @@ export default function FeaturesSection() {
         <div className="text-center mt-16">
           <div className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl p-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Hiagi giúp bạn xây chiến lược marketing dựa trên dữ liệu – không cảm tính
+              Markee giúp bạn xây chiến lược marketing dựa trên dữ liệu – không cảm tính
             </h3>
             <p className="text-lg text-gray-700">
               Mọi quyết định đều được đề xuất bởi AI dựa trên dữ liệu thực tế, giúp bạn tối ưu hiệu quả marketing một cách khoa học.
