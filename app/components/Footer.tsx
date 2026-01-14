@@ -9,12 +9,18 @@ export default function Footer() {
   };
 
   const { t } = useTranslation("common");
-  const productItems = t("footer.products.items", {
+  const rawProductItems = t("footer.products.items", {
     returnObjects: true,
-  }) as string[];
-  const supportItems = t("footer.support.items", {
+  }) as unknown;
+  const rawSupportItems = t("footer.support.items", {
     returnObjects: true,
-  }) as string[];
+  }) as unknown;
+  const productItems: string[] = Array.isArray(rawProductItems)
+    ? (rawProductItems as string[])
+    : [];
+  const supportItems: string[] = Array.isArray(rawSupportItems)
+    ? (rawSupportItems as string[])
+    : [];
 
   return (
     <footer className="bg-gray-900 text-white py-16">

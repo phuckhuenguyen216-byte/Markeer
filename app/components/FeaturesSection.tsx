@@ -16,9 +16,12 @@ type FeatureGroup = {
 
 export default function FeaturesSection() {
   const { t } = useTranslation("common");
-  const features = t("features.groups", {
+  const rawFeatures = t("features.groups", {
     returnObjects: true,
-  }) as FeatureGroup[];
+  }) as unknown;
+  const features: FeatureGroup[] = Array.isArray(rawFeatures)
+    ? (rawFeatures as FeatureGroup[])
+    : [];
 
   return (
     <section id="features" className="py-20 bg-white">

@@ -4,10 +4,13 @@ import "../i18n";
 
 export default function AboutSection() {
   const { t } = useTranslation("common");
-  const coreValues = t("about.values", { returnObjects: true }) as {
-    title: string;
-    description: string;
-  }[];
+  const rawCoreValues = t("about.values", { returnObjects: true }) as unknown;
+  const coreValues = Array.isArray(rawCoreValues)
+    ? (rawCoreValues as {
+        title: string;
+        description: string;
+      }[])
+    : [];
 
   return (
     <section className="py-20 bg-gray-50">
