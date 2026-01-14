@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ChatwootWidget from "@/app/components/ChatwootWidget";
-
 const SocialMedia = () => {
   const [isScrollVisible, setIsScrollVisible] = useState(false);
   const [isChatwootOpen, setIsChatwootOpen] = useState(false);

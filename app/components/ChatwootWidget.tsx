@@ -1,10 +1,26 @@
 "use client";
 
 import { useEffect } from "react";
+
+type ChatwootSDK = {
+  run: (config: {
+    websiteToken: string;
+    baseUrl: string;
+    position?: "left" | "right";
+    type?: "standard" | "expanded_bubble";
+    launcherTitle?: string;
+    hideMessageBubble?: boolean;
+  }) => void;
+};
+
+type ChatwootController = {
+  toggle: () => void;
+};
+
 declare global {
   interface Window {
-    chatwootSDK?: any;
-    $chatwoot?: any;
+    chatwootSDK?: ChatwootSDK;
+    $chatwoot?: ChatwootController;
   }
 }
 export default function ChatwootWidget() {

@@ -1,34 +1,23 @@
-import React from 'react';
+import React from "react";
+import { useTranslation } from "react-i18next";
+import "../i18n";
 
 export default function AboutSection() {
-  const coreValues = [
-    {
-      title: "Tạo nội dung AI đa nền tảng",
-      description: "Facebook, TikTok, Instagram, Ads chỉ trong vài giây với đúng giọng thương hiệu & ngành hàng."
-    },
-    {
-      title: "Quản lý kế hoạch & lịch marketing tập trung",
-      description: "Lập kế hoạch tuần/tháng, tránh trùng lặp & bỏ sót nội dung một cách hiệu quả."
-    },
-    {
-      title: "Phân tích hiệu quả fanpage theo dữ liệu real-time",
-      description: "Theo dõi lượt tiếp cận, tương tác, top bài viết, tăng trưởng liên tục."
-    },
-    {
-      title: "AI đề xuất chiến lược dựa trên hiệu suất thực tế",
-      description: "Gợi ý nội dung, lịch đăng, content pillar dựa trên dữ liệu thật và xu hướng."
-    }
-  ];
+  const { t } = useTranslation("common");
+  const coreValues = t("about.values", { returnObjects: true }) as {
+    title: string;
+    description: string;
+  }[];
 
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Markee là gì?
+            {t("about.title")}
           </h2>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Markee là nền tảng AI Marketing dành cho doanh nghiệp hiện đại, giúp bạn thay thế nhiều công cụ rời rạc bằng một hệ thống thông minh duy nhất.
+            {t("about.description")}
           </p>
         </div>
 

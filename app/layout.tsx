@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: "Markee AI Marketing - Nền tảng AI Marketing tất cả trong một",
   description: "Markee là nền tảng AI Marketing giúp bạn tạo nội dung nhanh gấp 10 lần và tăng trưởng bằng dữ liệu thật. Dùng thử MIỄN PHÍ 1 tháng!",
   icons: {
-    icon: "/logo.png",
+    icon: "/logo.svg",
   },
 };
 

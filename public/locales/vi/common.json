@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "title": "Markee AI Marketing - Nền tảng AI Marketing tất cả trong một",
+    "description": "Markee là nền tảng AI Marketing giúp bạn tạo nội dung nhanh gấp 10 lần và tăng trưởng bằng dữ liệu thật. Dùng thử MIỄN PHÍ 1 tháng!"
+  },
+  "header": {
+    "features": "Tính năng",
+    "register": "Đăng ký",
+    "app": "Truy cập ứng dụng"
+  },
+  "hero": {
+    "brand": "Markee AI",
+    "headline": "Nền tảng AI Marketing giúp bạn tạo nội dung nhanh gấp 10 lần & tăng trưởng bằng dữ liệu thật",
+    "subheadline": "Markee là nền tảng AI tất cả trong một giúp doanh nghiệp, shop và agency tạo nội dung – quản lý kế hoạch – phân tích hiệu quả marketing chỉ trong một nơi duy nhất.",
+    "badge": "Ưu đãi đặc biệt cho người dùng mới",
+    "offer": "Dùng thử <strong>MIỄN PHÍ 1 tháng</strong> – 1000 AI credit",
+    "cta": "Đăng ký nhận ưu đãi"
+  },
+  "about": {
+    "title": "Markee là gì?",
+    "description": "Markee là nền tảng AI Marketing dành cho doanh nghiệp hiện đại, giúp bạn thay thế nhiều công cụ rời rạc bằng một hệ thống thông minh duy nhất.",
+    "values": [
+      {
+        "title": "Tạo nội dung AI đa nền tảng",
+        "description": "Facebook, TikTok, Instagram, Ads chỉ trong vài giây với đúng giọng thương hiệu & ngành hàng."
+      },
+      {
+        "title": "Quản lý kế hoạch & lịch marketing tập trung",
+        "description": "Lập kế hoạch tuần/tháng, tránh trùng lặp & bỏ sót nội dung một cách hiệu quả."
+      },
+      {
+        "title": "Phân tích hiệu quả fanpage theo dữ liệu real-time",
+        "description": "Theo dõi lượt tiếp cận, tương tác, top bài viết, tăng trưởng liên tục."
+      },
+      {
+        "title": "AI đề xuất chiến lược dựa trên hiệu suất thực tế",
+        "description": "Gợi ý nội dung, lịch đăng, content pillar dựa trên dữ liệu thật và xu hướng."
+      }
+    ]
+  },
+  "cta": {
+    "badge": "Ưu đãi có hạn",
+    "headline": "Nhận ngay 1 tháng sử dụng Markee miễn phí",
+    "description": "Ưu đãi dành cho người dùng đăng ký trong thời gian giới hạn. Không cần thẻ tín dụng, kích hoạt ngay lập tức.",
+    "point1": "1,000 AI credits",
+    "point2": "Truy cập đầy đủ tính năng",
+    "point3": "Hỗ trợ 24/7",
+    "button": "Đăng ký ngay",
+    "noCard": "Không cần thẻ tín dụng",
+    "cancelAnytime": "Hủy bất cứ lúc nào"
+  },
+  "registration": {
+    "title": "Sẵn sàng bùng nổ doanh số với Markee AI?",
+    "description": "Gia nhập cộng đồng 10,000+ marketer thông minh đang sử dụng AI để tối ưu hóa công việc mỗi ngày.",
+    "primary": "Bắt đầu miễn phí ngay",
+    "secondary": "Xem demo sản phẩm"
+  },
+  "features": {
+    "title": "Tính năng nổi bật",
+    "description": "Tất cả công cụ bạn cần để xây dựng chiến lược marketing hiệu quả trong một nền tảng duy nhất",
+    "groups": [
+      {
+        "group": "CREATE (TẠO NỘI DUNG)",
+        "items": [
+          {
+            "title": "AI Content Generator",
+            "description": "Tạo nội dung cho Facebook, TikTok, Instagram, Ads chỉ trong vài giây. Viết đúng giọng thương hiệu & ngành hàng.",
+            "icon": "✍️"
+          },
+          {
+            "title": "AI Gợi ý ý tưởng & concept",
+            "description": "Đề xuất chủ đề, concept theo ngành hàng & xu hướng.",
+            "icon": "💡"
+          }
+        ]
+      },
+      {
+        "group": "PLAN & MANAGE (LẬP KẾ HOẠCH)",
+        "items": [
+          {
+            "title": "Lập kế hoạch & lịch nội dung",
+            "description": "Quản lý kế hoạch tuần/tháng, tránh trùng lặp & bỏ sót nội dung.",
+            "icon": "📅"
+          },
+          {
+            "title": "Làm việc nhóm",
+            "description": "Giao việc – phê duyệt – theo dõi tiến độ trong một nền tảng.",
+            "icon": "👥"
+          },
+          {
+            "title": "Kho tài nguyên thông minh",
+            "description": "Lưu trữ nội dung AI, media, template tập trung.",
+            "icon": "📚"
+          }
+        ]
+      },
+      {
+        "group": "ANALYZE & OPTIMIZE (PHÂN TÍCH)",
+        "items": [
+          {
+            "title": "Phân tích hiệu quả Fanpage",
+            "description": "Theo dõi: lượt tiếp cận, tương tác, top bài viết, tăng trưởng.",
+            "icon": "📊"
+          },
+          {
+            "title": "So sánh đa Fanpage",
+            "description": "So sánh hiệu suất để xác định trang mạnh – yếu.",
+            "icon": "⚖️"
+          },
+          {
+            "title": "AI đề xuất chiến lược",
+            "description": "Gợi ý nội dung, lịch đăng, content pillar dựa trên dữ liệu thật.",
+            "icon": "🎯"
+          }
+        ]
+      }
+    ],
+    "ctaTitle": "Markee giúp bạn xây chiến lược marketing dựa trên dữ liệu – không cảm tính",
+    "ctaDescription": "Mọi quyết định đều được đề xuất bởi AI dựa trên dữ liệu thực tế, giúp bạn tối ưu hiệu quả marketing một cách khoa học."
+  },
+  "footer": {
+    "brandTitle": "Markee AI Marketing",
+    "brandDescription": "Trợ lý Marketing AI cho doanh nghiệp hiện đại. Tạo nhanh hơn · Phân tích sâu hơn · Tăng trưởng thông minh hơn.",
+    "products": {
+      "title": "Sản phẩm",
+      "items": [
+        "AI Content Generator",
+        "Content Planning",
+        "Fanpage Analytics",
+        "AI Strategy"
+      ]
+    },
+    "support": {
+      "title": "Hỗ trợ",
+      "items": [
+        "Trung tâm trợ giúp",
+        "Liên hệ",
+        "Chính sách bảo mật",
+        "Điều khoản dịch vụ"
+      ]
+    },
+    "contact": {
+      "emailLabel": "Email",
+      "phoneLabel": "Điện thoại"
+    },
+    "bottom": {
+      "copyright": "© 2024 Markee AI Marketing. All rights reserved.",
+      "scrollTop": "Lên đầu trang",
+      "visitMarkee": "Truy cập Markee:"
+    },
+    "slogan": {
+      "title": "Markee – Trợ lý Marketing AI cho doanh nghiệp hiện đại",
+      "subtitle": "Tạo nhanh hơn · Phân tích sâu hơn · Tăng trưởng thông minh hơn"
+    }
+  }
+}

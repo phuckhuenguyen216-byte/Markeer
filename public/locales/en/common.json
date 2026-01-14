@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "title": "Markee AI Marketing - All-in-one AI Marketing platform",
+    "description": "Markee helps you create content 10x faster and grow with real data. Try it FREE for 1 month!"
+  },
+  "header": {
+    "features": "Features",
+    "register": "Sign up",
+    "app": "Go to app"
+  },
+  "hero": {
+    "brand": "Markee AI",
+    "headline": "AI Marketing platform that helps you create content 10x faster & grow with real data",
+    "subheadline": "Markee is an all-in-one AI platform for businesses, shops and agencies to create content, manage plans and analyze marketing performance in one place.",
+    "badge": "Special offer for new users",
+    "offer": "Try <strong>1 month FREE</strong> – 1000 AI credits",
+    "cta": "Claim your offer"
+  },
+  "about": {
+    "title": "What is Markee?",
+    "description": "Markee is an AI Marketing platform for modern businesses, helping you replace many siloed tools with one intelligent system.",
+    "values": [
+      {
+        "title": "Create AI content for multiple channels",
+        "description": "Facebook, TikTok, Instagram, Ads in seconds with the right brand voice and industry."
+      },
+      {
+        "title": "Centralized marketing plans & calendar",
+        "description": "Plan weekly/monthly content, avoid overlap and missing posts effectively."
+      },
+      {
+        "title": "Analyze fanpage performance in real-time",
+        "description": "Track reach, engagement, top posts and continuous growth."
+      },
+      {
+        "title": "AI suggests strategy from real performance",
+        "description": "Get suggestions for content, posting schedule and content pillars based on real data and trends."
+      }
+    ]
+  },
+  "cta": {
+    "badge": "Limited-time offer",
+    "headline": "Get 1 month of Markee for free",
+    "description": "Offer for users who sign up during the promo period. No credit card required, instant activation.",
+    "point1": "1,000 AI credits",
+    "point2": "Full feature access",
+    "point3": "24/7 support",
+    "button": "Sign up now",
+    "noCard": "No credit card required",
+    "cancelAnytime": "Cancel anytime"
+  },
+  "registration": {
+    "title": "Ready to boost your revenue with Markee AI?",
+    "description": "Join 10,000+ smart marketers using AI to optimize their work every day.",
+    "primary": "Start for free",
+    "secondary": "Watch product demo"
+  },
+  "features": {
+    "title": "Key features",
+    "description": "Everything you need to build an effective marketing strategy in a single platform.",
+    "groups": [
+      {
+        "group": "CREATE",
+        "items": [
+          {
+            "title": "AI Content Generator",
+            "description": "Create content for Facebook, TikTok, Instagram and Ads in seconds with the right brand voice and industry context.",
+            "icon": "✍️"
+          },
+          {
+            "title": "AI ideas & concept suggestions",
+            "description": "Get topic and concept ideas based on your industry and trends.",
+            "icon": "💡"
+          }
+        ]
+      },
+      {
+        "group": "PLAN & MANAGE",
+        "items": [
+          {
+            "title": "Content planning & calendar",
+            "description": "Manage weekly/monthly plans, avoid overlap and missing content.",
+            "icon": "📅"
+          },
+          {
+            "title": "Team collaboration",
+            "description": "Assign tasks, approve content and track progress in one place.",
+            "icon": "👥"
+          },
+          {
+            "title": "Smart asset library",
+            "description": "Store AI content, media and templates in a central library.",
+            "icon": "📚"
+          }
+        ]
+      },
+      {
+        "group": "ANALYZE & OPTIMIZE",
+        "items": [
+          {
+            "title": "Fanpage performance analytics",
+            "description": "Track reach, engagement, top posts and growth over time.",
+            "icon": "📊"
+          },
+          {
+            "title": "Multi-page comparison",
+            "description": "Compare page performance to identify strengths and weaknesses.",
+            "icon": "⚖️"
+          },
+          {
+            "title": "AI strategy suggestions",
+            "description": "Get content, schedule and content pillar suggestions from real data.",
+            "icon": "🎯"
+          }
+        ]
+      }
+    ],
+    "ctaTitle": "Markee helps you build data-driven marketing strategies – not guesses.",
+    "ctaDescription": "Every decision is suggested by AI based on real performance data so you can optimize marketing scientifically."
+  },
+  "footer": {
+    "brandTitle": "Markee AI Marketing",
+    "brandDescription": "AI marketing assistant for modern businesses. Create faster · Analyze deeper · Grow smarter.",
+    "products": {
+      "title": "Product",
+      "items": [
+        "AI Content Generator",
+        "Content Planning",
+        "Fanpage Analytics",
+        "AI Strategy"
+      ]
+    },
+    "support": {
+      "title": "Support",
+      "items": [
+        "Help center",
+        "Contact",
+        "Privacy policy",
+        "Terms of service"
+      ]
+    },
+    "contact": {
+      "emailLabel": "Email",
+      "phoneLabel": "Phone"
+    },
+    "bottom": {
+      "copyright": "© 2024 Markee AI Marketing. All rights reserved.",
+      "scrollTop": "Back to top",
+      "visitMarkee": "Visit Markee:"
+    },
+    "slogan": {
+      "title": "Markee – AI Marketing assistant for modern businesses",
+      "subtitle": "Create faster · Analyze deeper · Grow smarter"
+    }
+  }
+}

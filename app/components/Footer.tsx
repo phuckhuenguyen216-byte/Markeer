@@ -1,9 +1,20 @@
-import React from 'react';
+"use client"
+import React from "react";
+import { useTranslation } from "react-i18next";
+import "../i18n";
 
 export default function Footer() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const { t } = useTranslation("common");
+  const productItems = t("footer.products.items", {
+    returnObjects: true,
+  }) as string[];
+  const supportItems = t("footer.support.items", {
+    returnObjects: true,
+  }) as string[];
 
   return (
     <footer className="bg-gray-900 text-white py-16">
@@ -13,11 +24,11 @@ export default function Footer() {
           <div className="md:col-span-1">
             <div className="mb-6">
               <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Markee AI Marketing
+                {t("footer.brandTitle")}
               </h3>
             </div>
             <p className="text-gray-400 leading-relaxed mb-6">
-              Trợ lý Marketing AI cho doanh nghiệp hiện đại. Tạo nhanh hơn · Phân tích sâu hơn · Tăng trưởng thông minh hơn.
+              {t("footer.brandDescription")}
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
@@ -40,25 +51,55 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Sản phẩm</h4>
+            <h4 className="text-lg font-semibold mb-4">
+              {t("footer.products.title")}
+            </h4>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">AI Content Generator</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Content Planning</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Fanpage Analytics</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">AI Strategy</a></li>
+              {productItems.map((item, index) => (
+                <li key={index}>
+                  <a href="#" className="hover:text-white transition-colors">
+                    {item}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Contact & Support */}
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Hỗ trợ</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Trung tâm trợ giúp</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Liên hệ</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Chính sách bảo mật</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Điều khoản dịch vụ</a></li>
-            </ul>
+        {/* Contact & Support */}
+        <div>
+          <h4 className="text-lg font-semibold mb-4">
+            {t("footer.support.title")}
+          </h4>
+          <ul className="space-y-2 text-gray-400">
+            {supportItems.map((item, index) => (
+              <li key={index}>
+                <a href="#" className="hover:text-white transition-colors">
+                  {item}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-6 space-y-1 text-sm text-gray-300">
+            <div>
+              {t("footer.contact.emailLabel")}:{" "}
+              <a
+                href="mailto:mkt.szone@gmail.com"
+                className="text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                mkt.szone@gmail.com
+              </a>
+            </div>
+            <div>
+              {t("footer.contact.phoneLabel")}:{" "}
+              <a
+                href="tel:0392806307"
+                className="text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                0392 806 307
+              </a>
+            </div>
           </div>
+        </div>
         </div>
 
         {/* Divider */}
@@ -68,7 +109,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
             <p className="text-gray-400 text-sm">
-              © 2024 Markee AI Marketing. All rights reserved.
+              {t("footer.bottom.copyright")}
             </p>
           </div>
 
@@ -77,35 +118,39 @@ export default function Footer() {
               onClick={scrollToTop}
               className="text-gray-400 hover:text-white transition-colors flex items-center space-x-2"
             >
-              <span className="text-sm">Lên đầu trang</span>
+              <span className="text-sm">
+                {t("footer.bottom.scrollTop")}
+              </span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
               </svg>
             </button>
 
             <div className="flex items-center space-x-2 text-gray-400">
-              <span className="text-sm">Truy cập Markee:</span>
+              <span className="text-sm">
+                {t("footer.bottom.visitMarkee")}
+              </span>
               <a 
-                href="https://marketing.hiagi.ai/" 
+                href="https://app.markeeai.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
               >
-                marketing.hiagi.ai
+                app.markeeai.com
               </a>
             </div>
           </div>
         </div>
 
         {/* Slogan */}
-        <div className="text-center mt-8 pt-8 border-t border-gray-800">
+        {/* <div className="text-center mt-8 pt-8 border-t border-gray-800">
           <h3 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
             Markee – Trợ lý Marketing AI cho doanh nghiệp hiện đại
           </h3>
           <p className="text-gray-400">
             Tạo nhanh hơn · Phân tích sâu hơn · Tăng trưởng thông minh hơn
           </p>
-        </div>
+        </div> */}
       </div>
     </footer>
   );
