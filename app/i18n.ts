@@ -2,36 +2,38 @@
 
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import HttpBackend from "i18next-http-backend";
-import LanguageDetector from "i18next-browser-languagedetector";
+import viCommon from "../public/locales/vi/common.json";
+import enCommon from "../public/locales/en/common.json";
 
 const isBrowser = typeof window !== "undefined";
 
 if (!i18n.isInitialized) {
-  i18n
-    .use(HttpBackend)
-    .use(LanguageDetector)
-    .use(initReactI18next)
-    .init({
-      fallbackLng: "vi",
-      supportedLngs: ["vi", "en"],
-      ns: ["common"],
-      defaultNS: "common",
-      interpolation: {
-        escapeValue: false,
-      },
-      backend: {
-        loadPath: "/locales/{{lng}}/{{ns}}.json",
-      },
-      detection: {
-        order: ["querystring", "localStorage", "cookie", "navigator"],
-        caches: isBrowser ? ["localStorage", "cookie"] : [],
-      },
-      react: {
-        useSuspense: false,
-      },
-    });
+  const initialLng =
+    isBrowser && typeof window.localStorage !== "undefined"
+      ? window.localStorage.getItem("i18nextLng") ||
+        (typeof navigator !== "undefined" &&
+        navigator.language?.toLowerCase().startsWith("vi")
+          ? "vi"
+          : "en")
+      : "vi";
+
+  i18n.use(initReactI18next).init({
+    lng: initialLng,
+    fallbackLng: "vi",
+    supportedLngs: ["vi", "en"],
+    resources: {
+      vi: { common: viCommon },
+      en: { common: enCommon },
+    },
+    ns: ["common"],
+    defaultNS: "common",
+    interpolation: {
+      escapeValue: false,
+    },
+    react: {
+      useSuspense: false,
+    },
+  });
 }
 
 export default i18n;
-

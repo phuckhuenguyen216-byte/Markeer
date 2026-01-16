@@ -89,10 +89,10 @@ export default function Footer() {
             <div>
               {t("footer.contact.emailLabel")}:{" "}
               <a
-                href="mailto:mkt.szone@gmail.com"
+                href="mailto:hello@markeeai.com"
                 className="text-blue-400 hover:text-blue-300 transition-colors"
               >
-                mkt.szone@gmail.com
+                hello@markeeai.com
               </a>
             </div>
             <div>
