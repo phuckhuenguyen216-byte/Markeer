@@ -6,7 +6,8 @@
   "header": {
     "features": "Tính năng",
     "register": "Đăng ký",
-    "app": "Truy cập ứng dụng"
+    "app": "Truy cập ứng dụng",
+    "documentation": "Tài liệu"
   },
   "hero": {
     "brand": "Markee AI",

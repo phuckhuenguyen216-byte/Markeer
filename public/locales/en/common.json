@@ -6,7 +6,8 @@
   "header": {
     "features": "Features",
     "register": "Sign up",
-    "app": "Go to app"
+    "app": "App",
+    "documentation": "Documentation"
   },
   "hero": {
     "brand": "Markee AI",

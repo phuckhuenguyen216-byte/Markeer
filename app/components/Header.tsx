@@ -16,8 +16,10 @@ export default function Header() {
         </div>
         <nav className="hidden md:flex items-center gap-6 text-sm text-gray-700">
           <a href="#features" className="hover:text-gray-900">{t("header.features")}</a>
-          <Link href="https://app.markeeai.com" className="hover:text-gray-900" target="_blank">{t("header.register")}</Link>
           <Link href="https://app.markeeai.com" className="hover:text-gray-900" target="_blank">{t("header.app")}</Link>
+          <Link href="/docs/autopost/intro" className="hover:text-gray-900" target="_blank" rel="noopener noreferrer">
+            {t("header.documentation")}
+          </Link>
         </nav>
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
