@@ -4,11 +4,14 @@
     "description": "Markee là nền tảng AI Marketing giúp bạn tạo nội dung nhanh gấp 10 lần và tăng trưởng bằng dữ liệu thật. Dùng thử MIỄN PHÍ 1 tháng!"
   },
   "header": {
-    "features": "Tính năng",
-    "register": "Đăng ký",
-    "app": "Truy cập ứng dụng",
-    "documentation": "Tài liệu"
-  },
+  "features": "Tính năng",
+  "register": "Đăng ký",
+  "app": "Truy cập ứng dụng",
+  "documentation": "Tài liệu",
+  "aboutMenu": "Về chúng tôi",
+  "privacy": "Chính sách bảo mật",
+  "terms": "Điều khoản dịch vụ"
+},
   "hero": {
     "brand": "Markee AI",
     "headline": "Nền tảng AI Marketing giúp bạn tạo nội dung nhanh gấp 10 lần & tăng trưởng bằng dữ liệu thật",

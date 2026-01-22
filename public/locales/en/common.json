@@ -4,11 +4,14 @@
     "description": "Markee helps you create content 10x faster and grow with real data. Try it FREE for 1 month!"
   },
   "header": {
-    "features": "Features",
-    "register": "Sign up",
-    "app": "App",
-    "documentation": "Documentation"
-  },
+  "features": "Features",
+  "register": "Sign up",
+  "app": "App",
+  "documentation": "Documentation",
+  "aboutMenu": "About us",
+  "privacy": "Privacy Policy",
+  "terms": "Terms of Service"
+},
   "hero": {
     "brand": "Markee AI",
     "headline": "AI Marketing platform that helps you create content 10x faster & grow with real data",
