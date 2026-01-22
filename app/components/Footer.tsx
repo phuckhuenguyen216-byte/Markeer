@@ -12,15 +12,34 @@ export default function Footer() {
   const rawProductItems = t("footer.products.items", {
     returnObjects: true,
   }) as unknown;
-  const rawSupportItems = t("footer.support.items", {
-    returnObjects: true,
-  }) as unknown;
+  // const rawSupportItems = t("footer.support.items", {
+  //   returnObjects: true,
+  // }) as unknown;
   const productItems: string[] = Array.isArray(rawProductItems)
     ? (rawProductItems as string[])
     : [];
-  const supportItems: string[] = Array.isArray(rawSupportItems)
-    ? (rawSupportItems as string[])
-    : [];
+  // const supportItems: string[] = Array.isArray(rawSupportItems)
+  //   ? (rawSupportItems as string[])
+  //   : [];
+
+    const supportItems = [
+  {
+    label: t("footer.support.items.0"),
+    href: "#",
+  },
+  {
+    label: t("footer.support.items.1"),
+    href: "#",
+  },
+  {
+    label: t("footer.support.items.2"),
+    href: "/policy",
+  },
+  {
+    label: t("footer.support.items.3"),
+    href: "/clause",
+  },
+];
 
   return (
     <footer className="bg-gray-900 text-white py-16">
@@ -73,39 +92,45 @@ export default function Footer() {
 
         {/* Contact & Support */}
         <div>
-          <h4 className="text-lg font-semibold mb-4">
-            {t("footer.support.title")}
-          </h4>
-          <ul className="space-y-2 text-gray-400">
-            {supportItems.map((item, index) => (
-              <li key={index}>
-                <a href="#" className="hover:text-white transition-colors">
-                  {item}
+            <h4 className="text-lg font-semibold mb-4">
+              {t("footer.support.title")}
+            </h4>
+
+            <ul className="space-y-2 text-gray-400">
+              {supportItems.map((item, index) => (
+                <li key={index}>
+                  <a
+                    href={item.href}
+                    className="hover:text-white transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-6 space-y-1 text-sm text-gray-300">
+              <div>
+                {t("footer.contact.emailLabel")}:{" "}
+                <a
+                  href="mailto:hello@markeeai.com"
+                  className="text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  hello@markeeai.com
                 </a>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-6 space-y-1 text-sm text-gray-300">
-            <div>
-              {t("footer.contact.emailLabel")}:{" "}
-              <a
-                href="mailto:hello@markeeai.com"
-                className="text-blue-400 hover:text-blue-300 transition-colors"
-              >
-                hello@markeeai.com
-              </a>
-            </div>
-            <div>
-              {t("footer.contact.phoneLabel")}:{" "}
-              <a
-                href="tel:0392806307"
-                className="text-blue-400 hover:text-blue-300 transition-colors"
-              >
-                0392 806 307
-              </a>
+              </div>
+
+              <div>
+                {t("footer.contact.phoneLabel")}:{" "}
+                <a
+                  href="tel:0392806307"
+                  className="text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  0392 806 307
+                </a>
+              </div>
             </div>
           </div>
-        </div>
         </div>
 
         {/* Divider */}
