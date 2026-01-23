@@ -37,7 +37,7 @@ export default function Footer() {
   },
   {
     label: t("footer.support.items.3"),
-    href: "/clause",
+    href: "/terms",
   },
 ];
 
