@@ -156,5 +156,126 @@
       "title": "Markee – AI Marketing assistant for modern businesses",
       "subtitle": "Create faster · Analyze deeper · Grow smarter"
     }
+  },
+  
+  "privacy": {
+    "pageTitle": "Privacy Policy – Markee AI",
+    "tableOfContents": "Table of Contents",
+
+    "sections": {
+      "1": {
+        "title": "1. Introduction to the Privacy Policy",
+        "aboutMarkee": "About Markee AI",
+        "aboutMarkeeText": "We are a provider of AI-powered marketing assistant solutions, helping users optimize content creation and management processes.",
+        "applicableSubjects": "Applicable Subjects",
+        "applicableSubjectsText": "This policy applies to all individuals and organizations that register an account, access, or use any features on the Markee AI system.",
+        "scope": "Scope",
+        "scopeText": "Applies to all data collection activities through the website markeeai.com, custom tools (widgets), and directly integrated services we provide."
+      },
+      "2": {
+        "title": "2. Information We Collect",
+        "accountInfo": "Account Information",
+        "accountInfoText": "Includes username, email address, phone number, password (encrypted), and business-related information such as company name and industry to help the AI understand context.",
+        "serviceUsageInfo": "Service Usage Information",
+        "content": "Content",
+        "contentText": "Prompts, text, images, or documents you provide for AI processing.",
+        "scheduling": "Scheduling",
+        "schedulingText": "Data related to post planning and scheduled publishing times.",
+        "interactions": "Interactions",
+        "interactionsText": "How you respond to AI-generated results (edits, copies, saves).",
+        "thirdPartyConnections": "Third-Party Platform Connection Data",
+        "thirdPartyConnectionsText": "When connecting APIs (Facebook, Instagram, etc.), we collect reach metrics, engagement, managed pages list, and necessary identifiers for auto-posting or analytics.",
+        "technicalData": "Technical Data",
+        "technicalDataText": "IP address, device type, operating system, browser, cookies to remember login sessions and interface preferences."
+      },
+      "3": {
+        "title": "3. Purposes of Information Use",
+        "provideOperate": "Provide & Operate",
+        "provideOperateText": "Ensure features such as content generation, Fanpage analysis, and scheduling function correctly and stably.",
+        "trainImproveAI": "Train & Improve AI",
+        "trainImproveAIText": "Use aggregated data to fine-tune AI models for more natural and accurate responses. We commit not to publicly disclose or sell raw individual data for this purpose.",
+        "personalize": "Personalize Experience",
+        "personalizeText": "Analyze usage patterns to recommend the most suitable templates or marketing strategies for your style.",
+        "supportSecurity": "Support & Security",
+        "supportSecurityText": "Authenticate identity on login, protect accounts from unauthorized access, and quickly respond to technical support requests."
+      },
+      "4": {
+        "title": "4. Sharing Your Information",
+        "infrastructurePartners": "Infrastructure & AI Partners",
+        "infrastructurePartnersText": "To process natural language, some data (e.g., prompts) may be sent via API to large AI model providers (e.g., OpenAI). Data is transferred encrypted and complies with partner privacy terms.",
+        "legalCompliance": "Legal Compliance",
+        "legalComplianceText": "We will disclose personal information if requested by a court or competent state authority in cases related to legal violations.",
+        "commercialCommitment": "Commercial Commitment",
+        "commercialCommitmentText": "Markee AI affirms that it does not sell, trade, or rent email lists, personal identifiers, or business data to third-party advertisers."
+      },
+      "5": {
+        "title": "5. Data Storage and Processing",
+        "storageLocation": "Storage Location",
+        "storageLocationText": "Your data is stored on international-standard cloud servers, ensuring high availability and disaster recovery.",
+        "storageDuration": "Storage Duration",
+        "accountRetention": "Account information is retained until the user requests deletion or completely ceases using the service.",
+        "logsRetention": "Logs and session data may be kept for a shorter period (typically 6–24 months) for technical analysis.",
+        "deletionProcessing": "Account Deletion Processing",
+        "deletionProcessingText": "When you request account deletion, the system will delete or anonymize all personal information within 30 days, except for payment-related data required by tax regulations."
+      },
+      "6": {
+        "title": "6. Your Rights and Choices",
+        "accessEdit": "Access and Edit",
+        "accessEditText": "You can update personal information or brand settings anytime in the Dashboard.",
+        "exportData": "Export Data",
+        "exportDataText": "Markee AI provides tools to export created content or analytics reports in common formats (PDF, Excel).",
+        "deleteData": "Delete Data",
+        "deleteDataText": "Users have the right to request complete deletion of created content or the entire personal profile.",
+        "connectionManagement": "Connection Management",
+        "connectionManagementText": "You have full control to grant or revoke connections to social platforms directly in the settings interface."
+      },
+      "7": {
+        "title": "7. Security of Your Information",
+        "technicalMeasures": "Technical Measures",
+        "technicalMeasuresText": "We apply SSL/TLS encryption for all data transmitted between user devices and servers. Sensitive data is protected by multiple firewall layers.",
+        "internalControls": "Internal Controls",
+        "internalControlsText": "Only staff with specific duties and who have signed confidentiality agreements can access limited data portions for customer support.",
+        "liabilityLimit": "Liability Limit",
+        "liabilityLimitText": "While we use state-of-the-art measures, we cannot completely eliminate risks from sophisticated cyberattacks. Markee AI will notify users immediately if a data breach is detected."
+      },
+      "8": {
+        "title": "8. AI Data and User Content",
+        "contentOwnership": "Content Ownership",
+        "contentOwnershipText": "All text, ideas, and AI-generated outputs based on your prompts are legally owned by you.",
+        "inputDataHandling": "Input Data Handling",
+        "inputDataHandlingText": "We treat your prompts and internal documents as private property. The system will never use this raw data to display publicly to other users.",
+        "brandVoiceSecurity": "Brand Voice Security",
+        "brandVoiceSecurityText": "The “Brand Voice” you create is applied exclusively to your account."
+      },
+      "9": {
+        "title": "9. Children's Information",
+        "ageLimit": "Age Limit",
+        "ageLimitText": "Our service is not intended for individuals under 16 years old. If we become aware that we have collected data from a minor, we will promptly delete it.",
+        "violationHandling": "Violation Handling",
+        "violationHandlingText": "We do not actively collect children's data. If unauthorized child data is discovered, we will immediately delete it."
+      },
+      "10": {
+        "title": "10. Legal Compliance",
+        "scopeOfDisclosure": "Scope of Disclosure",
+        "scopeOfDisclosureText": "In case of legal requests, Markee AI will only provide the minimum data directly relevant to the request, maximizing user privacy.",
+        "notification": "Notification",
+        "notificationText": "Unless prohibited by law, we will endeavor to notify users when their data is requested by third parties."
+      },
+      "11": {
+        "title": "11. Changes to This Privacy Policy",
+        "policyChanges": "Policy Changes",
+        "policyChangesText": "We reserve the right to update this policy to reflect changes in data handling practices or legal requirements.",
+        "notificationMethod": "Notification Method",
+        "notificationMethodText": "Important changes will be notified via your registered email or prominently displayed on the homepage for at least 7 days before taking effect."
+      },
+      "12": {
+        "title": "12. Contact Us",
+        "contactText": "For any questions, complaints, or requests regarding personal data, please contact us at:",
+        "email": "Email",
+        "emailValue": "support@markeeai.com",
+        "liveSupport": "Live Support",
+        "liveSupportText": "Chat widget in the bottom corner of the website."
+      }
+    }
   }
 }

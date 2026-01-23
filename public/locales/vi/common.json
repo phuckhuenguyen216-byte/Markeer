@@ -156,5 +156,127 @@
       "title": "Markee – Trợ lý Marketing AI cho doanh nghiệp hiện đại",
       "subtitle": "Tạo nhanh hơn · Phân tích sâu hơn · Tăng trưởng thông minh hơn"
     }
+  },
+
+  "privacy": {
+    "pageTitle": "CHÍNH SÁCH BẢO MẬT THÔNG TIN – MARKEE AI",
+    "tableOfContents": "Danh mục",
+
+    "sections": {
+      "1": {
+        "title": "1. Giới thiệu về Chính sách bảo mật",
+        "aboutMarkee": "Về Markee AI",
+        "aboutMarkeeText": "Chúng tôi là đơn vị cung cấp giải pháp trợ lý tiếp thị ứng dụng trí tuệ nhân tạo, giúp người dùng tối ưu hóa quy trình sáng tạo và quản lý nội dung.",
+        "applicableSubjects": "Đối tượng áp dụng",
+        "applicableSubjectsText": "Chính sách này có hiệu lực với tất cả cá nhân, tổ chức đăng ký tài khoản, truy cập hoặc sử dụng bất kỳ tính năng nào trên hệ thống Markee AI.",
+        "scope": "Phạm vi",
+        "scopeText": "Áp dụng cho mọi hoạt động thu thập dữ liệu thông qua website markeeai.com, các công cụ tùy chỉnh (widgets), và các dịch vụ tích hợp trực tiếp mà chúng tôi cung cấp."
+      },
+      "2": {
+        "title": "2. Thông tin chúng tôi thu thập",
+        "accountInfo": "Thông tin tài khoản",
+        "accountInfoText": "Bao gồm tên đăng nhập, địa chỉ email, số điện thoại, mật khẩu (đã được mã hóa) và các thông tin liên quan đến doanh nghiệp như tên công ty, lĩnh vực kinh doanh để AI làm quen với ngữ cảnh.",
+        "serviceUsageInfo": "Thông tin sử dụng dịch vụ",
+        "content": "Nội dung",
+        "contentText": "Các câu lệnh (prompts), văn bản, hình ảnh hoặc tài liệu bạn cung cấp để AI xử lý.",
+        "scheduling": "Lịch trình",
+        "schedulingText": "Dữ liệu về việc lập kế hoạch bài viết, thời gian đăng tải dự kiến.",
+        "interactions": "Tương tác",
+        "interactionsText": "Cách bạn phản hồi với các kết quả do AI tạo ra (thao tác chỉnh sửa, sao chép, lưu trữ).",
+        "thirdPartyConnections": "Dữ liệu kết nối nền tảng bên thứ ba",
+        "thirdPartyConnectionsText": "Khi bạn thực hiện kết nối API (Facebook, Instagram, v.v.), chúng tôi thu thập các chỉ số về lượt tiếp cận, tương tác, danh sách trang quản lý và các mã định danh cần thiết để thực hiện việc đăng bài tự động hoặc phân tích dữ liệu.",
+        "technicalData": "Dữ liệu kỹ thuật",
+        "technicalDataText": "Địa chỉ IP, loại thiết bị, hệ điều hành, trình duyệt, dữ liệu Cookies để ghi nhớ phiên đăng nhập và các tùy chỉnh giao diện của người dùng."
+      },
+      "3": {
+        "title": "3. Mục đích sử dụng thông tin",
+        "provideOperate": "Cung cấp & Vận hành",
+        "provideOperateText": "Đảm bảo các tính năng như tạo content, phân tích Fanpage và lập lịch hoạt động đúng chức năng và ổn định.",
+        "trainImproveAI": "Huấn luyện & Cải thiện AI",
+        "trainImproveAIText": "Sử dụng dữ liệu tổng hợp để tinh chỉnh mô hình AI, giúp phản hồi của máy tính ngày càng tự nhiên và chính xác hơn. Chúng tôi cam kết không công khai hoặc bán dữ liệu thô của cá nhân cho mục đích này.",
+        "personalize": "Cá nhân hóa trải nghiệm",
+        "personalizeText": "Phân tích thói quen sử dụng để đề xuất các mẫu (templates) hoặc chiến lược marketing phù hợp nhất với phong cách của bạn.",
+        "supportSecurity": "Hỗ trợ & Bảo mật",
+        "supportSecurityText": "Xác thực danh tính khi đăng nhập, bảo vệ tài khoản khỏi các hành vi truy cập trái phép và phản hồi nhanh các yêu cầu hỗ trợ kỹ thuật."
+      },
+      "4": {
+        "title": "4. Chia sẻ thông tin của bạn",
+        "infrastructurePartners": "Đối tác hạ tầng & AI",
+        "infrastructurePartnersText": "Để thực hiện việc xử lý ngôn ngữ, một phần dữ liệu (như prompt) có thể được gửi qua API của các bên cung cấp mô hình AI lớn (ví dụ: OpenAI). Dữ liệu này được chuyển giao dưới dạng mã hóa và tuân thủ điều khoản bảo mật của đối tác.",
+        "legalCompliance": "Tuân thủ pháp luật",
+        "legalComplianceText": "Chúng tôi sẽ tiết lộ thông tin cá nhân nếu có yêu cầu từ tòa án hoặc cơ quan nhà nước có thẩm quyền trong các trường hợp liên quan đến vi phạm pháp luật.",
+        "commercialCommitment": "Cam kết thương mại",
+        "commercialCommitmentText": "Markee AI khẳng định không kinh doanh, bán hoặc cho thuê danh sách email, thông tin định danh hay dữ liệu doanh nghiệp của người dùng cho các bên quảng cáo thứ ba."
+      },
+      "5": {
+        "title": "5. Lưu trữ và xử lý dữ liệu",
+        "storageLocation": "Vị trí lưu trữ",
+        "storageLocationText": "Dữ liệu của bạn được lưu trữ trên hệ thống máy chủ điện toán đám mây (Cloud Server) đạt tiêu chuẩn quốc tế, đảm bảo tính sẵn sàng cao và khả năng phục hồi sau sự cố.",
+        "storageDuration": "Thời gian lưu trữ",
+        "accountRetention": "Thông tin tài khoản được giữ lại cho đến khi người dùng yêu cầu xóa tài khoản hoặc ngừng sử dụng dịch vụ hoàn toàn.",
+        "logsRetention": "Dữ liệu lịch sử (log) và các phiên làm việc có thể được lưu trữ trong thời gian ngắn hơn (thường từ 6–24 tháng) để phục vụ mục đích phân tích kỹ thuật.",
+        "deletionProcessing": "Xử lý khi hủy tài khoản",
+        "deletionProcessingText": "Khi bạn thực hiện lệnh xóa tài khoản, hệ thống sẽ tiến hành xóa hoặc ẩn danh hóa toàn bộ thông tin cá nhân trong vòng 30 ngày, trừ các dữ liệu liên quan đến hóa đơn thanh toán phải giữ lại theo quy định thuế."
+      },
+      "6": {
+        "title": "6. Quyền và lựa chọn của bạn",
+        "accessEdit": "Truy cập và Chỉnh sửa",
+        "accessEditText": "Bạn có thể tự cập nhật thông tin cá nhân hoặc cài đặt thương hiệu bất kỳ lúc nào trong Dashboard.",
+        "exportData": "Xuất dữ liệu",
+        "exportDataText": "Markee AI cung cấp công cụ giúp bạn trích xuất các nội dung đã tạo hoặc các báo cáo phân tích ra định dạng phổ biến (như PDF, Excel).",
+        "deleteData": "Xóa dữ liệu",
+        "deleteDataText": "Người dùng có quyền yêu cầu xóa bỏ hoàn toàn các nội dung đã tạo hoặc toàn bộ hồ sơ cá nhân trên hệ thống.",
+        "connectionManagement": "Quản lý liên kết",
+        "connectionManagementText": "Bạn hoàn toàn chủ động trong việc cấp quyền hoặc hủy kết nối (Revoke) với các nền tảng mạng xã hội ngay tại giao diện cài đặt."
+      },
+      "7": {
+        "title": "7. Bảo mật thông tin của bạn",
+        "technicalMeasures": "Biện pháp kỹ thuật",
+        "technicalMeasuresText": "Chúng tôi áp dụng chuẩn mã hóa SSL/TLS cho toàn bộ dữ liệu truyền tải giữa máy tính người dùng và máy chủ. Dữ liệu nhạy cảm được bảo vệ bởi nhiều lớp tường lửa.",
+        "internalControls": "Kiểm soát nội bộ",
+        "internalControlsText": "Chỉ những nhân viên có nhiệm vụ cụ thể và đã cam kết bảo mật mới được quyền truy cập vào các phần dữ liệu giới hạn để hỗ trợ khách hàng.",
+        "liabilityLimit": "Giới hạn trách nhiệm",
+        "liabilityLimitText": "Mặc dù chúng tôi áp dụng những biện pháp tiên tiến nhất, nhưng không thể loại trừ hoàn toàn rủi ro từ các cuộc tấn công mạng phức tạp. Markee AI sẽ thông báo cho người dùng ngay lập tức nếu phát hiện sự cố rò rỉ dữ liệu."
+      },
+      "8": {
+        "title": "8. Dữ liệu AI và Nội dung người dùng",
+        "contentOwnership": "Quyền sở hữu nội dung",
+        "contentOwnershipText": "Tất cả các văn bản, ý tưởng và kết quả do AI tạo ra dựa trên prompt của bạn đều thuộc quyền sở hữu hợp pháp của bạn.",
+        "inputDataHandling": "Xử lý dữ liệu đầu vào",
+        "inputDataHandlingText": "Chúng tôi coi các câu lệnh (prompts) và tài liệu nội bộ của bạn là tài sản riêng tư. Hệ thống sẽ không bao giờ sử dụng dữ liệu thô này để hiển thị công khai cho người dùng khác.",
+        "brandVoiceSecurity": "Bảo mật mô hình",
+        "brandVoiceSecurityText": "Các “Brand Voice” (giọng văn thương hiệu) bạn thiết lập chỉ được áp dụng riêng cho tài khoản của bạn."
+      },
+      "9": {
+        "title": "9. Thông tin liên quan đến trẻ em",
+        "ageLimit": "Giới hạn độ tuổi",
+        "ageLimitText": "Dịch vụ của chúng tôi không dành cho các cá nhân dưới 16 tuổi. Nếu chúng tôi biết rằng chúng tôi đã thu thập dữ liệu từ một trẻ vị thành niên, chúng tôi sẽ xóa dữ liệu đó kịp thời.",
+        "violationHandling": "Xử lý vi phạm",
+        "violationHandlingText": "Chúng tôi không chủ động thu thập dữ liệu trẻ em. Nếu phát hiện có thông tin của trẻ em được thu thập trái phép, chúng tôi sẽ thực hiện các bước xóa bỏ thông tin đó ngay lập tức."
+      },
+      "10": {
+        "title": "10. Tuân thủ pháp luật",
+        "scopeOfDisclosure": "Phạm vi cung cấp",
+        "scopeOfDisclosureText": "Trong trường hợp có yêu cầu pháp lý, Markee AI chỉ cung cấp những dữ liệu tối thiểu và trực tiếp liên quan đến yêu cầu đó, nhằm đảm bảo quyền lợi riêng tư lớn nhất có thể cho người dùng.",
+        "notification": "Thông báo",
+        "notificationText": "Nếu luật pháp không cấm, chúng tôi sẽ nỗ lực thông báo cho người dùng khi có yêu cầu cung cấp dữ liệu của họ cho bên thứ ba."
+      },
+      "11": {
+        "title": "11. Cập nhật chính sách bảo mật",
+        "policyChanges": "Thay đổi chính sách",
+        "policyChangesText": "Chúng tôi có quyền cập nhật chính sách này để phản ánh những thay đổi trong cách xử lý dữ liệu hoặc thay đổi về luật pháp.",
+        "notificationMethod": "Cách thức thông báo",
+        "notificationMethodText": "Mọi thay đổi quan trọng sẽ được thông báo qua Email đăng ký của bạn hoặc hiển thị nổi bật tại trang chủ của website trong ít nhất 07 ngày trước khi có hiệu lực."
+      },
+      "12": {
+        "title": "12. Liên hệ",
+        "contactText": "Mọi thắc mắc, khiếu nại hoặc yêu cầu liên quan đến dữ liệu cá nhân, vui lòng liên hệ với chúng tôi qua:",
+        "email": "Email",
+        "emailValue": "support@markeeai.com",
+        "liveSupport": "Hỗ trợ trực tuyến",
+        "liveSupportText": "Khung chat tại góc dưới màn hình website."
+      }
+    }
   }
 }
+
