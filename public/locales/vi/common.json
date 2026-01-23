@@ -4,14 +4,14 @@
     "description": "Markee là nền tảng AI Marketing giúp bạn tạo nội dung nhanh gấp 10 lần và tăng trưởng bằng dữ liệu thật. Dùng thử MIỄN PHÍ 1 tháng!"
   },
   "header": {
-  "features": "Tính năng",
-  "register": "Đăng ký",
-  "app": "Truy cập ứng dụng",
-  "documentation": "Tài liệu",
-  "aboutMenu": "Về chúng tôi",
-  "privacy": "Chính sách bảo mật",
-  "terms": "Điều khoản dịch vụ"
-},
+    "features": "Tính năng",
+    "register": "Đăng ký",
+    "app": "Truy cập ứng dụng",
+    "documentation": "Tài liệu",
+    "aboutMenu": "Về chúng tôi",
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản dịch vụ"
+  },
   "hero": {
     "brand": "Markee AI",
     "headline": "Nền tảng AI Marketing giúp bạn tạo nội dung nhanh gấp 10 lần & tăng trưởng bằng dữ liệu thật",
@@ -157,11 +157,9 @@
       "subtitle": "Tạo nhanh hơn · Phân tích sâu hơn · Tăng trưởng thông minh hơn"
     }
   },
-
   "privacy": {
     "pageTitle": "CHÍNH SÁCH BẢO MẬT THÔNG TIN – MARKEE AI",
     "tableOfContents": "Danh mục",
-
     "sections": {
       "1": {
         "title": "1. Giới thiệu về Chính sách bảo mật",
@@ -277,6 +275,344 @@
         "liveSupportText": "Khung chat tại góc dưới màn hình website."
       }
     }
+  },
+  "terms": {
+    "title": "ĐIỀU KHOẢN DỊCH VỤ - MARKEE AI",
+    "sections": {
+      "1": {
+        "title": "1. Giới thiệu & Mối Quan Hệ Pháp Lý",
+        "content1": "Markee AI (“Markee”, “chúng tôi”) là nền tảng phần mềm trực tuyến cung cấp các giải pháp ứng dụng trí tuệ nhân tạo trong marketing, bao gồm nhưng không giới hạn ở việc tạo nội dung, đề xuất ý tưởng, tối ưu hiệu suất, phân tích dữ liệu và tự động hoá đăng tải nội dung trên các kênh truyền thông và nền tảng số (“Dịch vụ”).",
+        "content2": "Bằng việc truy cập website <1>https://markeeai.com/</1>, tạo tài khoản hoặc sử dụng bất kỳ phần nào của Dịch vụ, bạn (“Người dùng”, “bạn”) xác nhận đã đọc, hiểu và đồng ý chịu sự ràng buộc của Điều khoản dịch vụ này, từ đó hình thành một thỏa thuận pháp lý có giá trị giữa bạn và Markee AI."
+      },
+      "2": {
+        "title": "2. Chấp Thuận Điều Khoản",
+        "content": "Việc bạn tạo tài khoản, truy cập hoặc sử dụng Dịch vụ đồng nghĩa với việc bạn chấp thuận toàn bộ các điều khoản và điều kiện được quy định tại đây. Nếu bạn không đồng ý với bất kỳ nội dung nào của Điều khoản dịch vụ, bạn không được phép truy cập hoặc sử dụng Dịch vụ của Markee AI."
+      },
+      "3": {
+        "title": "3. Thay Đổi Điều Khoản",
+        "content1": "Markee có quyền sửa đổi, cập nhật hoặc bổ sung Điều khoản dịch vụ này bất kỳ lúc nào nhằm phản ánh sự thay đổi của Dịch vụ, yêu cầu pháp lý hoặc nhu cầu kinh doanh. Các thay đổi sẽ có hiệu lực kể từ thời điểm được công bố trên website, thông báo trong ứng dụng hoặc gửi qua email (nếu có).",
+        "content2": "Việc bạn tiếp tục sử dụng Dịch vụ sau khi các thay đổi có hiệu lực được hiểu là bạn đã chấp thuận Điều khoản dịch vụ được cập nhật."
+      },
+      "4": {
+        "title": "4. Đối Tượng & Điều Kiện Sử Dụng",
+        "content1": "Dịch vụ của chúng tôi không dành cho các cá nhân dưới 16 tuổi. Nếu chúng tôi biết rằng chúng tôi đã thu thập dữ liệu từ một trẻ vị thành niên, chúng tôi sẽ xóa dữ liệu đó kịp thời.",
+        "content2": "Bạn cam kết cung cấp và duy trì các thông tin cần thiết để tạo và quản lý tài khoản một cách chính xác. Markee không chịu trách nhiệm đối với các sự cố phát sinh do thông tin tài khoản không chính xác hoặc không còn hiệu lực."
+      },
+      "5": {
+        "title": "5. Tài khoản của bạn",
+        "items": [
+          "Để sử dụng đầy đủ các tính năng của Dịch vụ, bạn cần tạo một tài khoản Markee AI. Mỗi tài khoản được bảo vệ bằng thông tin đăng nhập riêng và chỉ được sử dụng bởi chính chủ tài khoản.",
+          "Bạn chịu hoàn toàn trách nhiệm trong việc bảo mật thông tin đăng nhập, cũng như mọi hoạt động diễn ra thông qua tài khoản của mình. Bạn không được chia sẻ, cho mượn hoặc chuyển nhượng tài khoản cho bên thứ ba nếu không có sự cho phép bằng văn bản của Markee.",
+          "Markee có quyền tạm ngưng, hạn chế hoặc chấm dứt tài khoản của bạn nếu phát hiện có dấu hiệu vi phạm Điều khoản dịch vụ, pháp luật hiện hành hoặc gây rủi ro cho hệ thống và người dùng khác."
+        ]
+      },
+      "6": {
+        "title": "6. Quyền Truy Cập & Sử Dụng Dịch Vụ",
+        "intro": "Markee cấp cho bạn một quyền sử dụng Dịch vụ có giới hạn, không độc quyền, không thể chuyển nhượng và có thể bị thu hồi, chỉ nhằm mục đích sử dụng các tính năng theo đúng chức năng mà Markee cung cấp.",
+        "list_intro": "Bạn cam kết không sử dụng Dịch vụ vào các mục đích sau:",
+        "list_items": [
+          "Xâm nhập, can thiệp trái phép, phá hoại hoặc làm gián đoạn hệ thống, máy chủ hoặc hạ tầng kỹ thuật của Markee.",
+          "Lạm dụng các tính năng AI để tạo, lan truyền nội dung vi phạm pháp luật, xâm phạm quyền của bên thứ ba hoặc trái thuần phong mỹ tục.",
+          "Phát tán mã độc, spam, nội dung quảng cáo trái phép hoặc quấy rối người khác.",
+          "Sử dụng Dịch vụ theo cách gây ảnh hưởng tiêu cực đến uy tín, hoạt động hoặc người dùng khác của Markee."
+        ],
+        "outro": "Markee có quyền áp dụng các biện pháp kỹ thuật hoặc hành chính, bao gồm đình chỉ hoặc chấm dứt quyền truy cập, nếu phát hiện hành vi vi phạm."
+      },
+      "7": {
+        "title": "7. Nội dung & Dữ liệu Người dùng",
+        "items": [
+          "“Nội dung người dùng” bao gồm tất cả dữ liệu, văn bản, hình ảnh, video, thông tin, nội dung tiếp thị hoặc các dữ liệu khác mà bạn tạo, tải lên, nhập vào hoặc xử lý thông qua Dịch vụ.",
+          "Bạn vẫn giữ quyền sở hữu đối với Nội dung người dùng của mình. Tuy nhiên, bằng việc sử dụng Dịch vụ, bạn cấp cho Markee quyền không độc quyền để lưu trữ, xử lý, phân tích và sử dụng Nội dung người dùng đó nhằm mục đích vận hành, cải thiện và cung cấp Dịch vụ.",
+          "Bạn chịu hoàn toàn trách nhiệm pháp lý đối với Nội dung người dùng của mình. Markee có quyền xóa, hạn chế hiển thị hoặc từ chối xử lý bất kỳ nội dung nào vi phạm pháp luật, quyền của bên thứ ba hoặc Điều khoản dịch vụ này."
+        ]
+      },
+      "8": {
+        "title": "8. Quyền sở hữu trí tuệ",
+        "items": [
+          "Tất cả các quyền sở hữu trí tuệ liên quan đến Dịch vụ, bao gồm nhưng không giới hạn ở phần mềm, mã nguồn, thuật toán AI, thiết kế giao diện, thương hiệu, logo và nội dung do Markee tạo ra, đều thuộc quyền sở hữu độc quyền của Markee AI hoặc bên cấp phép hợp pháp cho Markee.",
+          "Bạn không được sao chép, chỉnh sửa, phân phối, tái tạo, đảo ngược kỹ thuật hoặc phát triển sản phẩm cạnh tranh dựa trên Dịch vụ của Markee nếu không có sự cho phép bằng văn bản."
+        ]
+      },
+      "9": {
+        "title": "9. Hợp tác với Bên Thứ Ba",
+        "items": [
+          "Dịch vụ của Markee có thể tích hợp hoặc kết nối với các nền tảng và dịch vụ của bên thứ ba như Facebook, Instagram, LinkedIn, WordPress hoặc các nền tảng khác.",
+          "Việc bạn sử dụng các tích hợp này đồng nghĩa với việc bạn chấp thuận và tuân thủ các điều khoản, chính sách riêng của các bên thứ ba đó. Markee không chịu trách nhiệm đối với nội dung, chính sách, thay đổi hoặc rủi ro phát sinh từ các dịch vụ của bên thứ ba."
+        ]
+      },
+      "10": {
+        "title": "10. Tạm ngưng & Chấm dứt dịch vụ",
+        "intro": "Markee có quyền tạm ngưng hoặc chấm dứt quyền truy cập Dịch vụ của bạn trong các trường hợp sau:",
+        "list_items": [
+          "Bạn vi phạm nghiêm trọng hoặc vi phạm nhiều lần Điều khoản dịch vụ.",
+          "Theo yêu cầu của cơ quan nhà nước có thẩm quyền hoặc quy định pháp luật.",
+          "Nhằm bảo vệ hệ thống, người dùng khác hoặc quyền lợi hợp pháp của Markee."
+        ],
+        "outro": "Khi tài khoản bị chấm dứt, bạn sẽ không còn quyền truy cập Dịch vụ và dữ liệu liên quan, ngoại trừ các dữ liệu mà Markee có nghĩa vụ lưu trữ theo yêu cầu của pháp luật."
+      },
+      "11": {
+        "title": "11. Bồi thường và Trách nhiệm",
+        "intro": "Bạn đồng ý bồi thường và giữ cho Markee không bị thiệt hại đối với mọi khiếu nại, tổn thất, trách nhiệm, chi phí hoặc yêu cầu phát sinh từ:",
+        "list_items": [
+          "Việc bạn vi phạm Điều khoản dịch vụ.",
+          "Nội dung hoặc hành vi sử dụng Dịch vụ của bạn gây thiệt hại cho Markee hoặc bên thứ ba."
+        ],
+        "outro": "Trách nhiệm pháp lý của Markee (nếu có) sẽ được giới hạn trong phạm vi tối đa mà pháp luật cho phép."
+      },
+      "12": {
+        "title": "12. Loại trừ & giới hạn trách nhiệm",
+        "items": [
+          "Dịch vụ của Markee được cung cấp trên cơ sở “nguyên trạng” và “theo khả năng hiện có”. Markee không đưa ra bất kỳ bảo đảm nào, dù rõ ràng hay ngụ ý, rằng Dịch vụ sẽ không bị gián đoạn, không có lỗi hoặc đáp ứng mọi kỳ vọng của người dùng.",
+          "Trong mọi trường hợp, Markee không chịu trách nhiệm đối với các thiệt hại gián tiếp, ngẫu nhiên, đặc biệt, mất doanh thu, mất lợi nhuận, mất dữ liệu hoặc cơ hội kinh doanh phát sinh từ việc sử dụng hoặc không thể sử dụng Dịch vụ."
+        ]
+      },
+      "13": {
+        "title": "13. Luật áp dụng & Giải quyết tranh chấp",
+        "content": "Điều khoản dịch vụ này được điều chỉnh và giải thích theo pháp luật áp dụng mà Markee lựa chọn. Mọi tranh chấp phát sinh liên quan đến Điều khoản dịch vụ hoặc Dịch vụ sẽ được ưu tiên giải quyết thông qua thương lượng thiện chí; nếu không đạt được thỏa thuận, tranh chấp sẽ được đưa ra cơ quan giải quyết có thẩm quyền theo quy định pháp luật."
+      },
+      "14": {
+        "title": "14. Điều khoản khác",
+        "items": [
+          "Nếu bất kỳ điều khoản nào trong Điều khoản dịch vụ này bị tuyên bố là vô hiệu hoặc không thể thi hành, các điều khoản còn lại vẫn giữ nguyên hiệu lực.",
+          "Việc Markee không thực hiện hoặc chậm thực hiện bất kỳ quyền nào không được coi là từ bỏ quyền đó."
+        ]
+      },
+      "15": {
+        "title": "15. Liên hệ",
+        "content": "Nếu bạn có bất kỳ câu hỏi, khiếu nại hoặc yêu cầu nào liên quan đến Điều khoản dịch vụ này, vui lòng liên hệ với chúng tôi thông qua các thông tin hỗ trợ được công bố trên website chính thức của Markee AI tại <1>https://markeeai.com/</1>."
+      }
+    },
+    "toc": {
+      "title": "Danh mục"
+    }
+  },
+  "policy": {
+    "title": "CHÍNH SÁCH BẢO MẬT THÔNG TIN – MARKEE AI",
+    "sections": {
+      "1": {
+        "title": "1. Giới thiệu về Chính sách bảo mật",
+        "items": [
+          {
+            "title": "Về Markee AI",
+            "content": "Chúng tôi là đơn vị cung cấp giải pháp trợ lý tiếp thị ứng dụng trí tuệ nhân tạo, giúp người dùng tối ưu hóa quy trình sáng tạo và quản lý nội dung."
+          },
+          {
+            "title": "Đối tượng áp dụng",
+            "content": "Chính sách này có hiệu lực với tất cả cá nhân, tổ chức đăng ký tài khoản, truy cập hoặc sử dụng bất kỳ tính năng nào trên hệ thống Markee AI."
+          },
+          {
+            "title": "Phạm vi",
+            "content": "Áp dụng cho mọi hoạt động thu thập dữ liệu thông qua website markeeai.com, các công cụ tùy chỉnh (widgets), và các dịch vụ tích hợp trực tiếp mà chúng tôi cung cấp."
+          }
+        ]
+      },
+      "2": {
+        "title": "2. Thông tin chúng tôi thu thập",
+        "items": [
+          {
+            "title": "Thông tin tài khoản",
+            "content": "Bao gồm tên đăng nhập, địa chỉ email, số điện thoại, mật khẩu (đã được mã hóa) và các thông tin liên quan đến doanh nghiệp như tên công ty, lĩnh vực kinh doanh để AI làm quen với ngữ cảnh."
+          },
+          {
+            "title": "Thông tin sử dụng dịch vụ",
+            "subitems": [
+              {
+                "title": "Nội dung",
+                "content": "Các câu lệnh (prompts), văn bản, hình ảnh hoặc tài liệu bạn cung cấp để AI xử lý."
+              },
+              {
+                "title": "Lịch trình",
+                "content": "Dữ liệu về việc lập kế hoạch bài viết, thời gian đăng tải dự kiến."
+              },
+              {
+                "title": "Tương tác",
+                "content": "Cách bạn phản hồi với các kết quả do AI tạo ra (thao tác chỉnh sửa, sao chép, lưu trữ)."
+              }
+            ]
+          },
+          {
+            "title": "Dữ liệu kết nối nền tảng bên thứ ba",
+            "content": "Khi bạn thực hiện kết nối API (Facebook, Instagram, v.v.), chúng tôi thu thập các chỉ số về lượt tiếp cận, tương tác, danh sách trang quản lý và các mã định danh cần thiết để thực hiện việc đăng bài tự động hoặc phân tích dữ liệu."
+          },
+          {
+            "title": "Dữ liệu kỹ thuật",
+            "content": "Địa chỉ IP, loại thiết bị, hệ điều hành, trình duyệt, dữ liệu Cookies để ghi nhớ phiên đăng nhập và các tùy chỉnh giao diện của người dùng."
+          }
+        ]
+      },
+      "3": {
+        "title": "3. Mục đích sử dụng thông tin",
+        "items": [
+          {
+            "title": "Cung cấp & Vận hành",
+            "content": "Đảm bảo các tính năng như tạo content, phân tích Fanpage và lập lịch hoạt động đúng chức năng và ổn định."
+          },
+          {
+            "title": "Huấn luyện & Cải thiện AI",
+            "content": "Sử dụng dữ liệu tổng hợp để tinh chỉnh mô hình AI, giúp phản hồi của máy tính ngày càng tự nhiên và chính xác hơn. Chúng tôi cam kết không công khai hoặc bán dữ liệu thô của cá nhân cho mục đích này."
+          },
+          {
+            "title": "Cá nhân hóa trải nghiệm",
+            "content": "Phân tích thói quen sử dụng để đề xuất các mẫu (templates) hoặc chiến lược marketing phù hợp nhất với phong cách của bạn."
+          },
+          {
+            "title": "Hỗ trợ & Bảo mật",
+            "content": "Xác thực danh tính khi đăng nhập, bảo vệ tài khoản khỏi các hành vi truy cập trái phép và phản hồi nhanh các yêu cầu hỗ trợ kỹ thuật."
+          }
+        ]
+      },
+      "4": {
+        "title": "4. Chia sẻ thông tin của bạn",
+        "items": [
+          {
+            "title": "Đối tác hạ tầng & AI",
+            "content": "Để thực hiện việc xử lý ngôn ngữ, một phần dữ liệu (như prompt) có thể được gửi qua API của các bên cung cấp mô hình AI lớn (ví dụ: OpenAI). Dữ liệu này được chuyển giao dưới dạng mã hóa và tuân thủ điều khoản bảo mật của đối tác."
+          },
+          {
+            "title": "Tuân thủ pháp luật",
+            "content": "Chúng tôi sẽ tiết lộ thông tin cá nhân nếu có yêu cầu từ tòa án hoặc cơ quan nhà nước có thẩm quyền trong các trường hợp liên quan đến vi phạm pháp luật."
+          },
+          {
+            "title": "Cam kết thương mại",
+            "content": "Markee AI khẳng định không kinh doanh, bán hoặc cho thuê danh sách email, thông tin định danh hay dữ liệu doanh nghiệp của người dùng cho các bên quảng cáo thứ ba."
+          }
+        ]
+      },
+      "5": {
+        "title": "5. Lưu trữ và xử lý dữ liệu",
+        "items": [
+          {
+            "title": "Vị trí lưu trữ",
+            "content": "Dữ liệu của bạn được lưu trữ trên hệ thống máy chủ điện toán đám mây (Cloud Server) đạt tiêu chuẩn quốc tế, đảm bảo tính sẵn sàng cao và khả năng phục hồi sau sự cố."
+          },
+          {
+            "title": "Thời gian lưu trữ",
+            "subitems": [
+              {
+                "content": "Thông tin tài khoản được giữ lại cho đến khi người dùng yêu cầu xóa hoặc ngừng sử dụng dịch vụ hoàn toàn."
+              },
+              {
+                "content": "Dữ liệu lịch sử (log) và các phiên làm việc có thể được lưu trữ trong thời gian ngắn hơn (thường từ 6–24 tháng) để phục vụ mục đích phân tích kỹ thuật."
+              }
+            ]
+          },
+          {
+            "title": "Xử lý khi hủy tài khoản",
+            "content": "Khi bạn thực hiện lệnh xóa tài khoản, hệ thống sẽ tiến hành xóa hoặc ẩn danh hóa toàn bộ thông tin cá nhân trong vòng 30 ngày, trừ các dữ liệu liên quan đến hóa đơn thanh toán phải giữ lại theo quy định thuế."
+          }
+        ]
+      },
+      "6": {
+        "title": "6. Quyền và lựa chọn của bạn",
+        "items": [
+          {
+            "title": "Truy cập và Chỉnh sửa",
+            "content": "Bạn có thể tự cập nhật thông tin cá nhân hoặc cài đặt thương hiệu bất kỳ lúc nào trong Dashboard."
+          },
+          {
+            "title": "Xuất dữ liệu",
+            "content": "Markee AI cung cấp công cụ giúp bạn trích xuất các nội dung đã tạo hoặc các báo cáo phân tích ra định dạng phổ biến (như PDF, Excel)."
+          },
+          {
+            "title": "Xóa dữ liệu",
+            "content": "Người dùng có quyền yêu cầu xóa bỏ hoàn toàn các nội dung đã tạo hoặc toàn bộ hồ sơ cá nhân trên hệ thống."
+          },
+          {
+            "title": "Quản lý liên kết",
+            "content": "Bạn hoàn toàn chủ động trong việc cấp quyền hoặc hủy kết nối (Revoke) với các nền tảng mạng xã hội ngay tại giao diện cài đặt."
+          }
+        ]
+      },
+      "7": {
+        "title": "7. Bảo mật thông tin của bạn",
+        "items": [
+          {
+            "title": "Biện pháp kỹ thuật",
+            "content": "Chúng tôi áp dụng chuẩn mã hóa SSL/TLS cho toàn bộ dữ liệu truyền tải giữa máy tính người dùng và máy chủ. Dữ liệu nhạy cảm được bảo vệ bởi nhiều lớp tường lửa."
+          },
+          {
+            "title": "Kiểm soát nội bộ",
+            "content": "Chỉ những nhân viên có nhiệm vụ cụ thể và đã cam kết bảo mật mới được quyền truy cập vào các phần dữ liệu giới hạn để hỗ trợ khách hàng."
+          },
+          {
+            "title": "Giới hạn trách nhiệm",
+            "content": "Mặc dù chúng tôi áp dụng những biện pháp tiên tiến nhất, nhưng không thể loại trừ hoàn toàn rủi ro từ các cuộc tấn công mạng phức tạp. Markee AI sẽ thông báo cho người dùng ngay lập tức nếu phát hiện sự cố rò rỉ dữ liệu."
+          }
+        ]
+      },
+      "8": {
+        "title": "8. Dữ liệu AI và Nội dung người dùng",
+        "items": [
+          {
+            "title": "Quyền sở hữu nội dung",
+            "content": "Tất cả các văn bản, ý tưởng và kết quả do AI tạo ra dựa trên prompt của bạn đều thuộc quyền sở hữu hợp pháp của bạn."
+          },
+          {
+            "title": "Xử lý dữ liệu đầu vào",
+            "content": "Chúng tôi coi các câu lệnh (prompts) và tài liệu nội bộ của bạn là tài sản riêng tư. Hệ thống sẽ không bao giờ sử dụng dữ liệu thô này để hiển thị công khai cho người dùng khác."
+          },
+          {
+            "title": "Bảo mật mô hình",
+            "content": "Các “Brand Voice” (giọng văn thương hiệu) bạn thiết lập chỉ được áp dụng riêng cho tài khoản của bạn."
+          }
+        ]
+      },
+      "9": {
+        "title": "9. Thông tin liên quan đến trẻ em",
+        "items": [
+          {
+            "title": "Giới hạn độ tuổi",
+            "content": "Dịch vụ của chúng tôi không dành cho các cá nhân dưới 16 tuổi. Nếu chúng tôi biết rằng chúng tôi đã thu thập dữ liệu từ một trẻ vị thành niên, chúng tôi sẽ xóa dữ liệu đó kịp thời."
+          },
+          {
+            "title": "Xử lý vi phạm",
+            "content": "Chúng tôi không chủ động thu thập dữ liệu trẻ em. Nếu phát hiện có thông tin của trẻ em được thu thập trái phép, chúng tôi sẽ thực hiện các bước xóa bỏ thông tin đó ngay lập tức."
+          }
+        ]
+      },
+      "10": {
+        "title": "10. Tuân thủ pháp luật và yêu cầu từ cơ quan chức năng",
+        "items": [
+          {
+            "title": "Phạm vi cung cấp",
+            "content": "Trong trường hợp có yêu cầu pháp lý, Markee AI chỉ cung cấp những dữ liệu tối thiểu và trực tiếp liên quan đến yêu cầu đó, nhằm đảm bảo quyền lợi riêng tư lớn nhất có thể cho người dùng."
+          },
+          {
+            "title": "Thông báo",
+            "content": "Nếu luật pháp không cấm, chúng tôi sẽ nỗ lực thông báo cho người dùng khi có yêu cầu cung cấp dữ liệu của họ cho bên thứ ba."
+          }
+        ]
+      },
+      "11": {
+        "title": "11. Cập nhật chính sách bảo mật",
+        "items": [
+          {
+            "title": "Thay đổi chính sách",
+            "content": "Chúng tôi có quyền cập nhật chính sách này để phản ánh những thay đổi trong cách xử lý dữ liệu hoặc thay đổi về luật pháp."
+          },
+          {
+            "title": "Cách thức thông báo",
+            "content": "Mọi thay đổi quan trọng sẽ được thông báo qua Email đăng ký của bạn hoặc hiển thị nổi bật tại trang chủ của website trong ít nhất 07 ngày trước khi có hiệu lực."
+          }
+        ]
+      },
+      "12": {
+        "title": "12. Liên hệ",
+        "intro": "Mọi thắc mắc, khiếu nại hoặc yêu cầu liên quan đến dữ liệu cá nhân, vui lòng liên hệ với chúng tôi qua:",
+        "items": [
+          {
+            "title": "Email",
+            "content": "support@markeeai.com"
+          },
+          {
+            "title": "Hỗ trợ trực tuyến",
+            "content": "Khung chat tại góc dưới màn hình website."
+          }
+        ]
+      }
+    },
+    "toc": {
+      "title": "Danh mục"
+    }
   }
 }
-

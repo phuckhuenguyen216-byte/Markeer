@@ -4,14 +4,14 @@
     "description": "Markee helps you create content 10x faster and grow with real data. Try it FREE for 1 month!"
   },
   "header": {
-  "features": "Features",
-  "register": "Sign up",
-  "app": "App",
-  "documentation": "Documentation",
-  "aboutMenu": "About us",
-  "privacy": "Privacy Policy",
-  "terms": "Terms of Service"
-},
+    "features": "Features",
+    "register": "Sign up",
+    "app": "App",
+    "documentation": "Documentation",
+    "aboutMenu": "About us",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
   "hero": {
     "brand": "Markee AI",
     "headline": "AI Marketing platform that helps you create content 10x faster & grow with real data",
@@ -157,11 +157,9 @@
       "subtitle": "Create faster · Analyze deeper · Grow smarter"
     }
   },
-  
   "privacy": {
     "pageTitle": "Privacy Policy – Markee AI",
     "tableOfContents": "Table of Contents",
-
     "sections": {
       "1": {
         "title": "1. Introduction to the Privacy Policy",
@@ -276,6 +274,345 @@
         "liveSupport": "Live Support",
         "liveSupportText": "Chat widget in the bottom corner of the website."
       }
+    }
+  },
+  "policy": {
+    "title": "PRIVACY POLICY – MARKEE AI",
+    "sections": {
+      "1": {
+        "title": "1. Introduction to Privacy Policy",
+        "items": [
+          {
+            "title": "About Markee AI",
+            "content": "We are a provider of AI-powered marketing assistant solutions, helping users optimize their content creation and management processes."
+          },
+          {
+            "title": "Applicable Subjects",
+            "content": "This policy applies to all individuals and organizations that register for an account, access, or use any features on the Markee AI system."
+          },
+          {
+            "title": "Scope",
+            "content": "Applies to all data collection activities through the markeeai.com website, custom widgets, and direct integration services we provide."
+          }
+        ]
+      },
+      "2": {
+        "title": "2. Information We Collect",
+        "items": [
+          {
+            "title": "Account Information",
+            "content": "Includes username, email address, phone number, password (encrypted), and business-related information such as company name and business sector to help AI familiarize itself with the context."
+          },
+          {
+            "title": "Service Usage Information",
+            "subitems": [
+              {
+                "title": "Content",
+                "content": "Prompts, text, images, or documents you provide for AI processing."
+              },
+              {
+                "title": "Schedule",
+                "content": "Data on post planning and expected posting times."
+              },
+              {
+                "title": "Interaction",
+                "content": "How you respond to AI-generated results (editing, copying, saving actions)."
+              }
+            ]
+          },
+          {
+            "title": "Third-Party Platform Connection Data",
+            "content": "When you connect APIs (Facebook, Instagram, etc.), we collect metrics on reach, engagement, managed page lists, and identifiers necessary for automatic posting or data analysis."
+          },
+          {
+            "title": "Technical Data",
+            "content": "IP address, device type, operating system, browser, Cookies data to remember login sessions and user interface preferences."
+          }
+        ]
+      },
+      "3": {
+        "title": "3. Purpose of Information Usage",
+        "items": [
+          {
+            "title": "Provision & Operation",
+            "content": "Ensure features such as content creation, Fanpage analysis, and scheduling function correctly and stably."
+          },
+          {
+            "title": "AI Training & Improvement",
+            "content": "Use aggregated data to refine AI models, making computer responses increasingly natural and accurate. We commit not to publish or sell personal raw data for this purpose."
+          },
+          {
+            "title": "Personalized Experience",
+            "content": "Analyze usage habits to suggest templates or marketing strategies best suited to your style."
+          },
+          {
+            "title": "Support & Security",
+            "content": "Verify identity upon login, protect accounts from unauthorized access, and respond quickly to technical support requests."
+          }
+        ]
+      },
+      "4": {
+        "title": "4. Sharing Your Information",
+        "items": [
+          {
+            "title": "Infrastructure & AI Partners",
+            "content": "To perform language processing, some data (such as prompts) may be sent via API to major AI model providers (e.g., OpenAI). This data is transferred in encrypted form and complies with the partner's security terms."
+          },
+          {
+            "title": "Legal Compliance",
+            "content": "We will disclose personal information if required by courts or competent state authorities in cases related to legal violations."
+          },
+          {
+            "title": "Commercial Commitment",
+            "content": "Markee AI confirms that it does not trade, sell, or rent email lists, identification information, or corporate data of users to third-party advertisers."
+          }
+        ]
+      },
+      "5": {
+        "title": "5. Data Storage and Processing",
+        "items": [
+          {
+            "title": "Storage Location",
+            "content": "Your data is stored on international standard cloud server systems, ensuring high availability and disaster recovery capabilities."
+          },
+          {
+            "title": "Storage Period",
+            "subitems": [
+              {
+                "content": "Account information is retained until the user requests deletion or completely stops using the service."
+              },
+              {
+                "content": "Historical data (logs) and sessions may be stored for a shorter period (usually 6–24 months) for technical analysis purposes."
+              }
+            ]
+          },
+          {
+            "title": "Processing upon Account Cancellation",
+            "content": "When you execute an account deletion command, the system will delete or anonymize all personal information within 30 days, except for data related to payment invoices that must be retained according to tax regulations."
+          }
+        ]
+      },
+      "6": {
+        "title": "6. Your Rights and Choices",
+        "items": [
+          {
+            "title": "Access and Correction",
+            "content": "You can update your personal information or brand settings at any time in the Dashboard."
+          },
+          {
+            "title": "Data Export",
+            "content": "Markee AI provides tools to help you export created content or analysis reports to common formats (such as PDF, Excel)."
+          },
+          {
+            "title": "Data Deletion",
+            "content": "Users have the right to request the complete removal of created content or their entire personal profile on the system."
+          },
+          {
+            "title": "Connection Management",
+            "content": "You are fully proactive in granting permissions or revoking connections (Revoke) with social media platforms right in the settings interface."
+          }
+        ]
+      },
+      "7": {
+        "title": "7. Securing Your Information",
+        "items": [
+          {
+            "title": "Technical Measures",
+            "content": "We apply SSL/TLS encryption standards for all data transmitted between user computers and servers. Sensitive data is protected by multiple firewall layers."
+          },
+          {
+            "title": "Internal Control",
+            "content": "Only employees with specific duties and who have committed to confidentiality are allowed access to limited data parts to support customers."
+          },
+          {
+            "title": "Limitation of Liability",
+            "content": "Although we apply the most advanced measures, risks from complex cyber-attacks cannot be completely ruled out. Markee AI will notify users immediately if a data leak incident is detected."
+          }
+        ]
+      },
+      "8": {
+        "title": "8. AI Data and User Content",
+        "items": [
+          {
+            "title": "Content Ownership",
+            "content": "All texts, ideas, and results generated by AI based on your prompts belong to your legal ownership."
+          },
+          {
+            "title": "Input Data Processing",
+            "content": "We consider your prompts and internal documents as private property. The system will never use this raw data to publicly display to other users."
+          },
+          {
+            "title": "Model Security",
+            "content": "The \"Brand Voices\" you set up are applied exclusively to your account."
+          }
+        ]
+      },
+      "9": {
+        "title": "9. Information Related to Children",
+        "items": [
+          {
+            "title": "Age Limit",
+            "content": "Our service is not intended for individuals under 16 years of age. If we learn that we have collected data from a minor, we will delete that data promptly."
+          },
+          {
+            "title": "Violation Handling",
+            "content": "We do not actively collect children's data. If unauthorized collection of children's information is detected, we will take steps to remove that information immediately."
+          }
+        ]
+      },
+      "10": {
+        "title": "10. Legal Compliance and Authority Requests",
+        "items": [
+          {
+            "title": "Scope of Provision",
+            "content": "In case of legal requirements, Markee AI only provides minimal data directly related to that request, to ensure the greatest possible privacy rights for users."
+          },
+          {
+            "title": "Notification",
+            "content": "Unless prohibited by law, we will strive to notify users when there is a request to provide their data to a third party."
+          }
+        ]
+      },
+      "11": {
+        "title": "11. Privacy Policy Updates",
+        "items": [
+          {
+            "title": "Policy Changes",
+            "content": "We reserve the right to update this policy to reflect changes in data processing or changes in the law."
+          },
+          {
+            "title": "Notification Method",
+            "content": "Any significant changes will be notified via your registered email or prominently displayed on the website homepage at least 07 days before taking effect."
+          }
+        ]
+      },
+      "12": {
+        "title": "12. Contact",
+        "intro": "For any questions, complaints, or requests related to personal data, please contact us via:",
+        "items": [
+          {
+            "title": "Email",
+            "content": "support@markeeai.com"
+          },
+          {
+            "title": "Online Support",
+            "content": "Chat box at the bottom corner of the website screen."
+          }
+        ]
+      }
+    },
+    "toc": {
+      "title": "Table of Contents"
+    }
+  },
+  "terms": {
+    "title": "TERMS OF SERVICE - MARKEE AI",
+    "sections": {
+      "1": {
+        "title": "1. Introduction & Legal Relationship",
+        "content1": "Markee AI (“Markee”, “we”) is an online software platform providing AI-powered marketing solutions, including but not limited to content creation, idea suggestion, performance optimization, data analysis, and automated content posting on communication channels and digital platforms (“Service”).",
+        "content2": "By accessing the website <1>https://markeeai.com/</1>, creating an account, or using any part of the Service, you (“User”, “you”) confirm that you have read, understood, and agreed to be bound by these Terms of Service, thereby forming a valid legal agreement between you and Markee AI."
+      },
+      "2": {
+        "title": "2. Acceptance of Terms",
+        "content": "Your creation of an account, access, or use of the Service means you accept all terms and conditions set forth herein. If you do not agree with any content of the Terms of Service, you are not permitted to access or use Markee AI's Service."
+      },
+      "3": {
+        "title": "3. Changes to Terms",
+        "content1": "Markee reserves the right to modify, update, or supplement these Terms of Service at any time to reflect changes in the Service, legal requirements, or business needs. Changes will take effect from the time they are published on the website, notified in the app, or sent via email (if applicable).",
+        "content2": "Your continued use of the Service after changes take effect is understood as your acceptance of the updated Terms of Service."
+      },
+      "4": {
+        "title": "4. Subjects & Conditions of Use",
+        "content1": "Our service is not intended for individuals under 16 years of age. If we learn that we have collected data from a minor, we will delete that data promptly.",
+        "content2": "You commit to providing and maintaining the necessary information to create and manage your account accurately. Markee is not responsible for incidents arising from inaccurate or invalid account information."
+      },
+      "5": {
+        "title": "5. Your Account",
+        "items": [
+          "To use the full features of the Service, you need to create a Markee AI account. Each account is protected by unique login information and is only to be used by the account owner.",
+          "You are fully responsible for securing your login information, as well as all activities occurring through your account. You may not share, lend, or transfer your account to a third party without Markee's written permission.",
+          "Markee reserves the right to suspend, restrict, or terminate your account if there are signs of violation of the Terms of Service, applicable laws, or risks to the system and other users."
+        ]
+      },
+      "6": {
+        "title": "6. Access Rights & Service Usage",
+        "intro": "Markee grants you a limited, non-exclusive, non-transferable, and revocable right to use the Service, solely for the purpose of using the features as intended by Markee.",
+        "list_intro": "You commit not to use the Service for the following purposes:",
+        "list_items": [
+          "Intruding, unauthorized interference, destroying, or disrupting Markee's system, servers, or technical infrastructure.",
+          "Abusing AI features to create or spread content that violates the law, infringes on third-party rights, or violates social ethics.",
+          "Distributing malware, spam, unauthorized advertising content, or harassing others.",
+          "Using the Service in a way that negatively affects Markee's reputation, operations, or other users."
+        ],
+        "outro": "Markee reserves the right to apply technical or administrative measures, including suspending or terminating access rights, if violations are detected."
+      },
+      "7": {
+        "title": "7. User Content & Data",
+        "items": [
+          "“User Content” includes all data, text, images, videos, information, marketing content, or other data that you create, upload, input, or process through the Service.",
+          "You retain ownership of your User Content. However, by using the Service, you grant Markee a non-exclusive right to store, process, analyze, and use that User Content for the purpose of operating, improving, and providing the Service.",
+          "You are fully legally responsible for your User Content. Markee reserves the right to delete, restrict display, or refuse to process any content that violates the law, third-party rights, or these Terms of Service."
+        ]
+      },
+      "8": {
+        "title": "8. Intellectual Property Rights",
+        "items": [
+          "All intellectual property rights related to the Service, including but not limited to software, source code, AI algorithms, interface design, trademarks, logos, and content created by Markee, are the exclusive property of Markee AI or its legal licensors.",
+          "You may not copy, modify, distribute, reproduce, reverse engineer, or develop competitive products based on Markee's Service without written permission."
+        ]
+      },
+      "9": {
+        "title": "9. Cooperation with Third Parties",
+        "items": [
+          "Markee's Service may integrate or connect with third-party platforms and services such as Facebook, Instagram, LinkedIn, WordPress, or other platforms.",
+          "Your use of these integrations means you accept and comply with the separate terms and policies of those third parties. Markee is not responsible for the content, policies, changes, or risks arising from third-party services."
+        ]
+      },
+      "10": {
+        "title": "10. Suspension & Termination of Service",
+        "intro": "Markee reserves the right to suspend or terminate your access to the Service in the following cases:",
+        "list_items": [
+          "You seriously violate or repeatedly violate the Terms of Service.",
+          "Upon request of competent state authorities or legal regulations.",
+          "To protect the system, other users, or Markee's legal interests."
+        ],
+        "outro": "When an account is terminated, you will no longer have the right to access the Service and related data, except for data that Markee is obligated to retain according to legal requirements."
+      },
+      "11": {
+        "title": "11. Indemnification and Liability",
+        "intro": "You agree to indemnify and hold Markee harmless from any claims, losses, liabilities, costs, or demands arising from:",
+        "list_items": [
+          "Your violation of the Terms of Service.",
+          "Your content or use of the Service causing damage to Markee or a third party."
+        ],
+        "outro": "Markee's liability (if any) will be limited to the maximum extent permitted by law."
+      },
+      "12": {
+        "title": "12. Exclusion & Limitation of Liability",
+        "items": [
+          "Markee's Service is provided on an “as is” and “as available” basis. Markee makes no warranties, whether express or implied, that the Service will be uninterrupted, error-free, or meet all user expectations.",
+          "In no event shall Markee be liable for indirect, incidental, special damages, loss of revenue, loss of profit, loss of data, or business opportunities arising from the use or inability to use the Service."
+        ]
+      },
+      "13": {
+        "title": "13. Applicable Law & Dispute Resolution",
+        "content": "These Terms of Service are governed and interpreted according to the applicable law chosen by Markee. Any disputes arising related to the Terms of Service or Service will be prioritized for resolution through good faith negotiation; if no agreement is reached, the dispute will be submitted to the competent authority for resolution according to legal regulations."
+      },
+      "14": {
+        "title": "14. Other Terms",
+        "items": [
+          "If any provision of these Terms of Service is declared invalid or unenforceable, the remaining provisions remain in full force.",
+          "Markee's failure or delay in exercising any right shall not be considered a waiver of that right."
+        ]
+      },
+      "15": {
+        "title": "15. Contact",
+        "content": "If you have any questions, complaints, or requests related to these Terms of Service, please contact us via the support information published on Markee AI's official website at <1>https://markeeai.com/</1>."
+      }
+    },
+    "toc": {
+      "title": "Table of Contents"
     }
   }
 }
