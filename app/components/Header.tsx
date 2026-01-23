@@ -73,7 +73,7 @@ export default function Header() {
               </Link>
 
               <Link
-                href="/clause"
+                href="/terms"
                 className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 rounded-b-xl"
               >
                 {t("header.terms")}

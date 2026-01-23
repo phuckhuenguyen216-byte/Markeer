@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Footer from "../components/Footer";
+import ChatwootWidget from "../components/ChatwootWidget";
+import SocialMedia from "../components/SocialMedia";
 
 const sections = [
   { id: "section-1", title: "1. Giới thiệu về Chính sách bảo mật" },
@@ -21,11 +23,14 @@ const sections = [
 ];
 
 export default function PrivacyPolicyPage() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
    return (
     <>
-    <div className="relative">
+    <ChatwootWidget />
+    <SocialMedia />
+    <div className="relative lg:flex lg:gap-0">
+
 
       {/* ================= MOBILE TOC ================= */}
         <div className="lg:hidden">
@@ -79,93 +84,120 @@ export default function PrivacyPolicyPage() {
             )}
         </aside>
         </div>
+
       {/* ================= DESKTOP TOC (GIỮ NGUYÊN) ================= */}
       <aside
-        className={`
+        className="
           hidden lg:block
-          sticky top-24 left-20 z-40
+          sticky top-24
+          left-20
+          z-40
+
+          w-90               /* cố định width */
           h-[calc(100vh-120px)]
+
           self-start
-          bg-white border-r border-gray-200
-          transition-all duration-300
-          ${open ? "w-96" : "w-12"}
-        `}
+          bg-white
+          border-r border-gray-200
+        "
       >
+        <div className="pl-8 pr-6 py-2 h-full overflow-y-auto">
+          <h3 className="text-lg font-semibold mb-6 text-gray-900">
+            Danh mục
+          </h3>
 
-        <button
-          onClick={() => setOpen(!open)}
-          className="
-            absolute -right-4 top-6 w-8 h-8
-            bg-gray-800 text-white rounded-full
-            flex items-center justify-center shadow
-          "
-        >
-          {open ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
-        </button>
+          <ul className="space-y-2">
+            {sections.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={`#${item.id}`}
+                  className="
+                    group relative overflow-hidden block
+                    text-sm font-medium
 
-        {open && (
-          <div className="pl-10 pr-6 py-6 h-full overflow-y-auto">
-            <h3 className="text-lg font-semibold mb-4 text-gray-900">
-              Danh mục
-            </h3>
+                    px-4 py-1
+                    rounded-lg
 
-            <ul className="space-y-3">
-              {sections.map((item) => (
-                <li key={item.id}>
-                  <Link
-                    href={`#${item.id}`}
+                    text-gray-700
+                    transition-colors duration-300
+                  "
+                >
+                  {/* Overlay nền đen trượt */}
+                  <span
                     className="
-                      group relative block
-                      text-sm text-gray-700
-                      px-3 py-2
-                      rounded-md
-                      transition-all duration-200 ease-in-out
-                      hover:bg-gray-50
-                      hover:text-gray-900
-                      hover:pl-5
+                      absolute inset-0
+                      bg-black
+                      -translate-x-full
+                      transition-transform duration-500 ease-out
+                      group-hover:translate-x-0
+                    "
+                  />
+
+                  {/* Thanh nhấn bên trái (giữ nguyên, nhưng nổi trên nền) */}
+                  <span
+                    className="
+                      absolute left-0 top-1/2 -translate-y-1/2
+                      h-5 w-[3px]
+                      rounded-full
+                      bg-white
+
+                      opacity-0 scale-y-0
+                      transition-all duration-300
+                      group-hover:opacity-100
+                      group-hover:scale-y-100
+                      z-10
+                    "
+                  />
+
+                  {/* Text */}
+                  <span
+                    className="
+                      relative z-10
+                      transition-colors duration-500
+                      group-hover:text-white
                     "
                   >
-                    <span
-                      className="
-                        absolute left-0 top-1/2 -translate-y-1/2
-                        h-4 w-[2px]
-                        bg-gray-800
-                        opacity-0
-                        transition-all duration-200
-                        group-hover:opacity-100
-                      "
-                    />
                     {item.title}
-                  </Link>
+                  </span>
+                </Link>
                 </li>
               ))}
             </ul>
           </div>
-        )}
-      </aside>
+        </aside>
+
 
       {/* ================= MAIN CONTENT ================= */}
      <main
-      className="
-        px-6 py-12
-        lg:-mt-[820px]
-        lg:pl-[120px]
-        scroll-smooth
-        transition-all duration-300
+        className="
+          flex-1
+          px-6
+          pt-16          
+          pb-24
 
-        lg:ml-[24rem]
-        lg:mr-auto
-        lg:max-w-5xl
-      "
-    >
+          scroll-smooth
+          transition-all duration-300
+
+          lg:pl-[120px]
+          lg:max-w-6xl
+        "
+      >
         <h1 className="text-3xl font-bold text-gray-900 mb-10 text-center">
           CHÍNH SÁCH BẢO MẬT THÔNG TIN – MARKEE AI
         </h1>
 
-        <div className="space-y-16 text-gray-800 leading-relaxed [&>section]:scroll-mt-28">
+        <div className="
+          space-y-16
+          text-gray-800
+          leading-relaxed
+          text-justify
+          break-words
+          hyphens-auto
+          [&>section]:scroll-mt-28
+        ">
 
           {/* 1 */}
-          <section id="section-1">
+          <section id="section-1" className="scroll-mt-28">
             <h2 className="text-2xl font-semibold mb-4">
               1. Giới thiệu về Chính sách bảo mật
             </h2>
@@ -189,7 +221,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           {/* 2 */}
-          <section id="section-2">
+          <section id="section-2" className="scroll-mt-28">
             <h2 className="text-2xl font-semibold mb-4">
                 2. Thông tin chúng tôi thu thập
             </h2>
@@ -234,7 +266,7 @@ export default function PrivacyPolicyPage() {
             </ul>
             </section>
           {/* 3 */}
-          <section id="section-3">
+          <section id="section-3" className="scroll-mt-28">
             <h2 className="text-2xl font-semibold mb-4">
                 3. Mục đích sử dụng thông tin
             </h2>
@@ -265,7 +297,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
           {/* 4 */}
-        <section id="section-4">
+        <section id="section-4" className="scroll-mt-28">
             <h2 className="text-2xl font-semibold mb-4">
                 4. Chia sẻ thông tin của bạn
             </h2>
@@ -292,7 +324,7 @@ export default function PrivacyPolicyPage() {
             </ul>
         </section>
           {/* 5 */}
-          <section id="section-5">
+          <section id="section-5" className="scroll-mt-28">
             <h2 className="text-2xl font-semibold mb-4">
                 5. Lưu trữ và xử lý dữ liệu
             </h2>
@@ -330,7 +362,7 @@ export default function PrivacyPolicyPage() {
 
 
           {/* 6 */}
-          <section id="section-6">
+          <section id="section-6" className="scroll-mt-28">
             <h2 className="text-2xl font-semibold mb-4">
                 6. Quyền và lựa chọn của bạn
             </h2>
@@ -361,7 +393,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
           {/* 7 */}
-          <section id="section-7">
+          <section id="section-7" className="scroll-mt-28">
             <h2 className="text-2xl font-semibold mb-4">
                 7. Bảo mật thông tin của bạn
             </h2>
@@ -389,7 +421,7 @@ export default function PrivacyPolicyPage() {
         </section>
 
           {/* 8 */}
-          <section id="section-8">
+          <section id="section-8" className="scroll-mt-28">
             <h2 className="text-2xl font-semibold mb-4">
                 8. Dữ liệu AI và Nội dung người dùng
             </h2>
@@ -416,7 +448,7 @@ export default function PrivacyPolicyPage() {
 
 
           {/* 9 */}
-          <section id="section-9">
+          <section id="section-9" className="scroll-mt-28">
             <h2 className="text-2xl font-semibold mb-4">
                 9. Thông tin liên quan đến trẻ em
             </h2>
@@ -438,7 +470,7 @@ export default function PrivacyPolicyPage() {
 
 
           {/* 10 */}
-          <section id="section-10">
+          <section id="section-10" className="scroll-mt-28">
             <h2 className="text-2xl font-semibold mb-4">
                 10. Tuân thủ pháp luật và yêu cầu từ cơ quan chức năng
             </h2>
@@ -460,7 +492,7 @@ export default function PrivacyPolicyPage() {
 
 
           {/* 11 */}
-          <section id="section-11">
+          <section id="section-11" className="scroll-mt-28">
             <h2 className="text-2xl font-semibold mb-4">
                 11. Cập nhật chính sách bảo mật
             </h2>
@@ -482,7 +514,7 @@ export default function PrivacyPolicyPage() {
 
 
           {/* 12 */}
-          <section id="section-12">
+          <section id="section-12" className="scroll-mt-28">
             <h2 className="text-2xl font-semibold mb-4">
                 12. Liên hệ
             </h2>
