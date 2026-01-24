@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: [self-hosted, nextjs, prod]
+    runs-on: [self-hosted, web]
 
     steps:
       - name: Pull latest code
