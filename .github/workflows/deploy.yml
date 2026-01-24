@@ -1,0 +1,30 @@
+name: Deploy Next.js (Self-hosted)
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, nextjs, prod]
+
+    steps:
+      - name: Pull latest code
+        run: |
+          cd /app/ai-marketing
+          git pull origin master
+
+      - name: Install deps
+        run: |
+          cd /app/ai-marketing
+          npm install
+
+      - name: Build
+        run: |
+          cd /app/ai-marketing
+          npm run build
+
+      - name: Restart app
+        run: |
+          cd /app/ai-marketing
+          pm2 restart ai-app
