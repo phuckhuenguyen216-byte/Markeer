@@ -34,6 +34,12 @@ if (!i18n.isInitialized) {
       useSuspense: false,
     },
   });
+
+  if (isBrowser && typeof window.localStorage !== "undefined") {
+    i18n.on("languageChanged", (lng) => {
+      window.localStorage.setItem("i18nextLng", lng);
+    });
+  }
 }
 
 export default i18n;

@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import "../i18n";
-
+import Link from "next/link";
 export default function Footer() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -99,12 +99,12 @@ export default function Footer() {
             <ul className="space-y-2 text-gray-400">
               {supportItems.map((item, index) => (
                 <li key={index}>
-                  <a
+                  <Link
                     href={item.href}
                     className="hover:text-white transition-colors"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
