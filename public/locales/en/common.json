@@ -43,85 +43,121 @@
     ]
   },
   "cta": {
-    "badge": "Limited-time offer",
-    "headline": "Get 1 month of Markee for free",
-    "description": "Offer for users who sign up during the promo period. No credit card required, instant activation.",
-    "point1": "1,000 AI credits",
-    "point2": "Full feature access",
-    "point3": "24/7 support",
-    "button": "Sign up now",
-    "noCard": "No credit card required",
-    "cancelAnytime": "Cancel anytime"
-  },
+  "badge": "Limited-time offer",
+  "headline": "Get 1 month of Markee for free",
+  "description": "Offer for users who sign up during the promo period. No credit card required, instant activation.",
+  "namePlaceholder": "Your full name",
+  "emailPlaceholder": "Your email",
+  "messagePlaceholder": "Where would you like to start?",
+  "sending": "Sending...",
+  "point1": "1,000 AI credits",
+  "point2": "Full feature access",
+  "point3": "24/7 support",
+  "button": "Sign up now",
+  "noCard": "No credit card required",
+  "cancelAnytime": "Cancel anytime"
+},
   "registration": {
-    "title": "Ready to boost your revenue with Markee AI?",
-    "description": "Join 10,000+ smart marketers using AI to optimize their work every day.",
-    "primary": "Start for free",
-    "secondary": "Watch product demo"
-  },
+  "title": "Ready to boost your revenue with Markee AI?",
+  "description": "Join 10,000+ smart marketers using AI to optimize their work every day.",
+  "primary": "Start for free",
+  "secondary": "Watch product demo",
+
+  "statusLive": "LIVE",
+  "usersOnline": "USERS ONLINE",
+
+  "users": "Users",
+
+  "trust1": "No credit card required",
+  "trust2": "Cancel anytime",
+  "trust3": "256-bit SSL security",
+
+  "metricUsers": "Users",
+  "metricSatisfaction": "Satisfaction",
+  "metricRating": "Rating",
+  "metricResponse": "Response",
+  "systemStatus": "SYSTEM READY · ALL MODULES ONLINE"
+},
   "features": {
-    "title": "Key features",
-    "description": "Everything you need to build an effective marketing strategy in a single platform.",
-    "groups": [
-      {
-        "group": "CREATE",
-        "items": [
-          {
-            "title": "AI Content Generator",
-            "description": "Create content for Facebook, TikTok, Instagram and Ads in seconds with the right brand voice and industry context.",
-            "icon": "✍️"
-          },
-          {
-            "title": "AI ideas & concept suggestions",
-            "description": "Get topic and concept ideas based on your industry and trends.",
-            "icon": "💡"
-          }
-        ]
-      },
-      {
-        "group": "PLAN & MANAGE",
-        "items": [
-          {
-            "title": "Content planning & calendar",
-            "description": "Manage weekly/monthly plans, avoid overlap and missing content.",
-            "icon": "📅"
-          },
-          {
-            "title": "Team collaboration",
-            "description": "Assign tasks, approve content and track progress in one place.",
-            "icon": "👥"
-          },
-          {
-            "title": "Smart asset library",
-            "description": "Store AI content, media and templates in a central library.",
-            "icon": "📚"
-          }
-        ]
-      },
-      {
-        "group": "ANALYZE & OPTIMIZE",
-        "items": [
-          {
-            "title": "Fanpage performance analytics",
-            "description": "Track reach, engagement, top posts and growth over time.",
-            "icon": "📊"
-          },
-          {
-            "title": "Multi-page comparison",
-            "description": "Compare page performance to identify strengths and weaknesses.",
-            "icon": "⚖️"
-          },
-          {
-            "title": "AI strategy suggestions",
-            "description": "Get content, schedule and content pillar suggestions from real data.",
-            "icon": "🎯"
-          }
-        ]
-      }
-    ],
-    "ctaTitle": "Markee helps you build data-driven marketing strategies – not guesses.",
-    "ctaDescription": "Every decision is suggested by AI based on real performance data so you can optimize marketing scientifically."
-  },
+  "title": "Key Features",
+  "description": "An AI Marketing Automation platform that helps you create content, plan campaigns, and optimize performance efficiently.",
+
+  "groups": [
+    {
+      "group": "AUTO POST – MARKETING AUTOMATION",
+      "logo": "/img/mascot/Theo-logo.png",
+      "items": [
+        {
+          "title": "Automated Posting",
+          "description": "Automatically publish content across Facebook, Instagram, TikTok, LinkedIn, YouTube, X, or your Website.",
+          "icon": "Send"
+        },
+        {
+          "title": "Smart Multi-Platform Publishing",
+          "description": "Publish the same content across multiple platforms with a single action.",
+          "icon": "Share2"
+        }
+      ]
+    },
+
+    {
+      "group": "PLAN & SCHEDULE – CONTENT PLANNING",
+      "logo": "/img/mascot/Max-logo.png",
+      "items": [
+        {
+          "title": "Visual Content Calendar",
+          "description": "View publishing schedules by day, week, month, or campaign.",
+          "icon": "Calendar"
+        },
+        {
+          "title": "Automatic Scheduling",
+          "description": "Set publishing time in advance and let the system post automatically.",
+          "icon": "Clock"
+        },
+        {
+          "title": "Progress Tracking",
+          "description": "Manage content status: Draft – In Progress – Review – Published.",
+          "icon": "ListChecks"
+        },
+        {
+          "title": "Version Management",
+          "description": "Track content edit history to prevent mistakes.",
+          "icon": "History"
+        }
+      ]
+    },
+
+    {
+      "group": "DASHBOARD – ANALYTICS & REPORTING",
+      "logo": "/img/mascot/Pip-logo.png",
+      "items": [
+        {
+          "title": "Multi-Platform Reports",
+          "description": "Aggregate performance data from Facebook, Instagram, TikTok, LinkedIn, YouTube, and Website.",
+          "icon": "BarChart3"
+        },
+        {
+          "title": "KPI Tracking",
+          "description": "Measure reach, engagement, growth, and post performance.",
+          "icon": "TrendingUp"
+        },
+        {
+          "title": "Campaign Performance Reports",
+          "description": "Evaluate marketing effectiveness based on campaign objectives.",
+          "icon": "Target"
+        },
+        {
+          "title": "AI Optimization Recommendations",
+          "description": "AI suggests improvements for content, posting schedules, and marketing strategies based on real data.",
+          "icon": "Sparkles"
+        }
+      ]
+    }
+  ],
+
+  "ctaTitle": "Automate Your Marketing with AI",
+  "ctaDescription": "Markee helps you automate marketing workflows, optimize strategies, and make data-driven decisions with confidence."
+},
   "footer": {
     "brandTitle": "Markee AI Marketing",
     "brandDescription": "AI marketing assistant for modern businesses. Create faster · Analyze deeper · Grow smarter.",
