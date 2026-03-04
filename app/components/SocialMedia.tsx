@@ -20,19 +20,39 @@ const SocialMedia = () => {
     return () => window.removeEventListener("scroll", toggleScrollVisibility);
   }, []);
 
-  const handleMessengerClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    window.open(
-      "https://www.facebook.com/markeeaimarketing/",
-      "_blank"
-    );
-  };
+  // const handleMessengerClick = (e: React.MouseEvent) => {
+  //   e.stopPropagation();
+  //   window.open(
+  //     "https://www.facebook.com/markeeaimarketing/",
+  //     "_blank"
+  //   );
+  // };
 
   const handleInstagramClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     // Replace with your Zalo number or Zalo OA link
-    window.open("https://www.instagram.com/danangvilla05/", "_blank");
+    window.open("https://www.instagram.com/markeeaimarketing1111/", "_blank");
   };
+
+  const handleFacebookClick = (e: React.MouseEvent) => {
+  e.stopPropagation();
+  window.open("https://www.facebook.com/markeeaimarketing", "_blank");
+};
+
+const handleDiscordClick = (e: React.MouseEvent) => {
+  e.stopPropagation();
+  window.open("https://discord.com/channels/1443163286773170218/1443240299416522924", "_blank");
+};
+
+const handleViberClick = (e: React.MouseEvent) => {
+  e.stopPropagation();
+  window.open("https://invite.viber.com/?g2=AQAP4%2FUS7E8NqlYDXE7sn5XUpn3hiArfFeLU0p%2FXKJ2RjplQ4QvPZqwYHFpQj6ew", "_blank");
+};
+
+const handleTelegramClick = (e: React.MouseEvent) => {
+  e.stopPropagation();
+  window.open("https://t.me/+zl4qiUlVDQ44ZDE9", "_blank");
+};
 
   const handleChatwootClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -101,14 +121,12 @@ const SocialMedia = () => {
     <div className="fixed right-4 bottom-10 z-40 flex flex-col space-y-3">
       {/* Messenger Button */}
       <ChatwootWidget />
-      <button
+      {/* <button
         className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
         aria-label="Contact via Messenger"
       >
         <span className="ripple-circle pointer-events-none"></span>
         <span className="ripple-circle ripple-2 pointer-events-none"></span>
-        {/* <span className="ripple-circle ripple-3"></span> */}
-        {/* Messenger Icon */}
         <img
           src="/icons/messenger.svg"
           alt="Messenger"
@@ -118,10 +136,85 @@ const SocialMedia = () => {
           onClick={handleMessengerClick}
         />
 
-        {/* Tooltip */}
         <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white text-sm px-3 py-2 rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
           Chat qua Messenger
           <div className="absolute left-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-l-gray-800"></div>
+        </div>
+      </button> */}
+
+      <button
+        className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
+        aria-label="Contact via Facebook"
+      >
+        <span className="ripple-circle pointer-events-none"></span>
+        <span className="ripple-circle ripple-2 pointer-events-none"></span>
+
+        <img
+          src="/img/facebook.webp"
+          alt="Facebook"
+          className="w-12 h-12 peer"
+          onClick={handleFacebookClick}
+        />
+
+        <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-sm px-3 py-2 rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+          Chat qua Facebook
+        </div>
+      </button>
+
+      <button
+        className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
+        aria-label="Contact via Discord"
+      >
+        <span className="ripple-circle pointer-events-none"></span>
+        <span className="ripple-circle ripple-2 pointer-events-none"></span>
+
+        <img
+          src="/img/discord.webp"
+          alt="Discord"
+          className="w-12 h-12 peer"
+          onClick={handleDiscordClick}
+        />
+
+        <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-sm px-3 py-2 rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+          Tham gia Discord
+        </div>
+      </button>
+
+      <button
+        className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
+        aria-label="Contact via Viber"
+      >
+        <span className="ripple-circle pointer-events-none"></span>
+        <span className="ripple-circle ripple-2 pointer-events-none"></span>
+
+        <img
+          src="/img/viber.png"
+          alt="Viber"
+          className="w-12 h-12 peer"
+          onClick={handleViberClick}
+        />
+
+        <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-sm px-3 py-2 rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+          Chat qua Viber
+        </div>
+      </button>
+
+      <button
+        className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
+        aria-label="Contact via Telegram"
+      >
+        <span className="ripple-circle pointer-events-none"></span>
+        <span className="ripple-circle ripple-2 pointer-events-none"></span>
+
+        <img
+          src="/img/tele.webp"
+          alt="Telegram"
+          className="w-12 h-12 peer"
+          onClick={handleTelegramClick}
+        />
+
+        <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-sm px-3 py-2 rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+          Chat qua Telegram
         </div>
       </button>
 
@@ -134,7 +227,7 @@ const SocialMedia = () => {
         {/* <span className="ripple-circle ripple-3"></span> */}
         {/* Instagram Icon */}
         <img
-          src="/icons/instagram.svg"
+          src="/img/ig.png"
           alt="Instagram"
           width={50}
           height={50}
@@ -148,6 +241,7 @@ const SocialMedia = () => {
           <div className="absolute left-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-l-gray-800"></div>
         </div>
       </button>
+
       <button
         ref={chatwootBtnRef}
         className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto bg-white"
