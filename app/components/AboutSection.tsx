@@ -50,7 +50,7 @@ export default function AboutSection() {
   return (
 <>
 <style>{`
-
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800;900&display=swap');
 .about-section{
   background:#faf7f6;
   padding:100px 24px;
@@ -75,35 +75,98 @@ export default function AboutSection() {
 }
 
 .big-number{
-  font-size:clamp(180px,25vw,250px);
-  font-weight:800;
+  font-size:clamp(240px,30vw,320px);
+  font-weight:900;
+
+  font-family:
+    "Orbitron",
+    "Rajdhani",
+    system-ui,
+    sans-serif;
+
+  letter-spacing:-6px;
+  margin-left:100px;
+
   background:linear-gradient(
-    135deg,
-    #ff6b6b,
-    #ffa5a5,
-    #ffd6d6
+    120deg,
+    #ff0000,
+    #ff4d00,
+    #ff7a18,
+    #ff3b7a,
+    #ff8ac6,
+    #ffd900,
+    #ff0000
   );
+
+  background-size:400% 400%;
+
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
+
+  
+
+  animation:colorFlow 6s ease infinite;
+
+  position:relative;
+}
+
+@keyframes colorFlow{
+  0%{
+    background-position:0% 50%;
+  }
+  50%{
+    background-position:100% 50%;
+  }
+  100%{
+    background-position:0% 50%;
+  }
+}
+
+/* viền glow nhẹ */
+.big-number::after{
+  content:attr(data-number);
+  position:absolute;
+  left:0;
+  top:0;
+
+  color:transparent;
+  -webkit-text-stroke:2px rgba(255,120,120,.25);
+
+  z-index:-1;
 }
 
 /* TITLE DỌC */
 .vertical-label{
-  font-size:30px;
+  font-size:42px;
   font-weight:700;
-  letter-spacing:.25em;
+  letter-spacing:.28em;
   text-transform:uppercase;
-  color:#2a2a2a;
+
+  margin-left:130px;
 
   writing-mode:vertical-rl;
   transform:rotate(180deg);
+
+  /* Gradient đen → đỏ */
+  background: linear-gradient(
+    180deg,
+    #252323,
+    #3a0e0e,
+    #6b0000,
+    #b30000,
+    #ff2a2a
+  );
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
 }
 
 /* DESCRIPTION */
 .points-label{
   margin-top:26px;
   max-width:560px;
-  font-size:16px;
+  font-size:17px;
   line-height:1.8;
   color:#666;
 }
@@ -248,14 +311,70 @@ export default function AboutSection() {
 
 /* MOBILE */
 @media(max-width:768px){
-  .about-inner{
-    grid-template-columns:1fr;
-  }
 
-  .vertical-label{
-    writing-mode:horizontal-tb;
-    transform:none;
-  }
+.about-section{
+  padding:70px 20px;
+}
+
+.about-inner{
+  grid-template-columns:1fr;
+  gap:40px;
+}
+
+/* TITLE AREA */
+.title-row{
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:10px;
+}
+
+.big-number{
+  font-size:120px;
+  margin-left:0;
+  line-height:1;
+}
+
+.vertical-label{
+  writing-mode:horizontal-tb;
+  transform:none;
+  margin-left:0;
+  font-size:26px;
+  letter-spacing:.12em;
+}
+
+/* TEXT */
+.points-label{
+  margin-top:26px;
+  max-width:560px;
+  font-size:16px;
+  line-height:1.8;
+  color:#666;
+  text-align:justify;
+}
+
+/* CARDS */
+.item-card{
+  padding:20px 20px;
+}
+
+/* disable translate mobile */
+.item-card.active{
+  transform:scale(1.02);
+}
+
+.item-card.inactive{
+  opacity:.6;
+  transform:scale(.98);
+}
+
+/* ICON */
+.active-icon{
+  width:52px;
+  height:52px;
+  transform:translate(35%,-50%) rotate(12deg);
+}
+
 }
 
 `}</style>

@@ -21,7 +21,7 @@
     "cta": "Đăng ký nhận ưu đãi"
   },
   "about": {
-    "title": "Markee là gì?",
+    "title": "MARKEE AI LÀ GÌ?",
     "description": "Markee là nền tảng AI Marketing dành cho doanh nghiệp hiện đại, giúp bạn thay thế nhiều công cụ rời rạc bằng một hệ thống thông minh duy nhất.",
     "values": [
       {
@@ -44,7 +44,8 @@
   },
   "cta": {
   "badge": "Ưu đãi có hạn",
-  "headline": "Nhận ngay 1 tháng sử dụng Markee miễn phí",
+  "headline": "NHẬN NGAY 1 THÁNG SỬ DỤNG MARKEE AI MIỄN PHÍ",
+  "highlight": "MIỄN PHÍ",
   "description": "Ưu đãi dành cho người dùng đăng ký trong thời gian giới hạn. Không cần thẻ tín dụng, kích hoạt ngay lập tức.",
   "namePlaceholder": "Họ và tên",
   "emailPlaceholder": "Email của bạn",
@@ -58,7 +59,7 @@
   "cancelAnytime": "Hủy bất cứ lúc nào"
 },
   "registration": {
-  "title": "Sẵn sàng bùng nổ doanh số với Markee AI?",
+  "title": "SẴN SÀNG BÙNG NỔ DOANH SỐ VỚI MARKEE AI?",
   "description": "Gia nhập cộng đồng 10,000+ marketer thông minh đang sử dụng AI để tối ưu hóa công việc mỗi ngày.",
   "primary": "Bắt đầu miễn phí ngay",
   "secondary": "Xem demo sản phẩm",
@@ -79,12 +80,13 @@
   "systemStatus": "HỆ THỐNG SẴN SÀNG · TẤT CẢ MODULE ĐANG HOẠT ĐỘNG"
 },
   "features": {
-  "title": "Tính năng nổi bật",
+  "title": "TÍNH NĂNG NỔI BẬT",
   "description": "Nền tảng AI Marketing Automation giúp bạn tạo nội dung, lập kế hoạch và tối ưu hiệu suất toàn diện.",
 
   "groups": [
     {
       "group": "AUTO POST – TỰ ĐỘNG HÓA MARKETING",
+      "name": "THEO",
       "logo": "/img/mascot/Theo-logo.png",
       "items": [
         {
@@ -102,6 +104,7 @@
 
     {
       "group": "PLAN & SCHEDULE – LẬP KẾ HOẠCH",
+      "name": "MAX",
       "logo": "/img/mascot/Max-logo.png",
       "items": [
         {
@@ -129,6 +132,7 @@
 
     {
       "group": "DASHBOARD – PHÂN TÍCH & BÁO CÁO",
+      "name": "PIP",
       "logo": "/img/mascot/Pip-logo.png",
       "items": [
         {
@@ -155,11 +159,11 @@
     }
   ],
 
-  "ctaTitle": "Marketing vận hành tự động bằng AI",
-  "ctaDescription": "Markee giúp bạn tự động hóa marketing, tối ưu chiến lược và ra quyết định dựa trên dữ liệu thực."
+  "ctaTitle": "MARKETING VẬN HÀNH TỰ ĐỘNG, TỐI ƯU HIỆU QUẢ THỰC",
+  "ctaDescription": "MARKEE AI giúp bạn tự động hóa marketing, tối ưu chiến lược và ra quyết định dựa trên dữ liệu thực."
 },
   "footer": {
-    "brandTitle": "Markee AI Marketing",
+    "brandTitle": "MARKEE AI ",
     "brandDescription": "Trợ lý Marketing AI cho doanh nghiệp hiện đại. Tạo nhanh hơn · Phân tích sâu hơn · Tăng trưởng thông minh hơn.",
     "products": {
       "title": "Sản phẩm",

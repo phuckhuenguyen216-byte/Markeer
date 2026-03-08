@@ -15,6 +15,7 @@
     Target,
     Sparkles
   } from "lucide-react";
+import { t } from "i18next";
 
   const ICON_MAP: Record<
     string,
@@ -72,6 +73,7 @@
     }
   };
 
+  const features = t("features.groups", { returnObjects: true }) as FeatureGroup[];
   type FeatureItem = {
     title: string;
     description: string;
@@ -80,6 +82,7 @@
 
   type FeatureGroup = {
     group: string;
+    name: string;
     logo: string;
     items: FeatureItem[];
   };
@@ -229,13 +232,32 @@
           .fs-title-rule-shine {
             position: absolute; inset: 0;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
-            animation: fs-shine 2.2s linear infinite;
+            animation: fs-shine 1.2s linear infinite;
           }
           @keyframes fs-shine { from{transform:translateX(-100%)} to{transform:translateX(100%)} }
-          .fs-subtitle {
-            font-size: 1.05rem; color: var(--fs-text-mid);
-            font-weight: 300; line-height: 1.75; max-width: 580px; margin: 0 auto;
-          }
+          .fs-subtitle{
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.75;
+  max-width: 580px;
+  margin: 0 auto;
+
+  background: linear-gradient(
+    90deg,
+    #ff4d4d,
+    #ff8080,
+    #ff4d4d
+  );
+
+  background-size: 200%;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: subtitleMove 6s linear infinite,
+             subtitleFloat 4s ease-in-out infinite;
+}
+             
 
           .fs-tabs-row {
             max-width: 1200px;
@@ -261,6 +283,41 @@
             z-index: 6;
             pointer-events: none;
           }
+.fs-logo-name{
+  margin-top:10px;
+  transform: translateX(-130px);
+  font-size:25px;
+  font-weight:800;
+  letter-spacing:0.15em;
+
+  /* gradient màu */
+  background: linear-gradient(
+    90deg,
+    #ff2a2a,
+    #ff7a18,
+    #ff4fa3,
+    #ffd93d,
+    #ff2a2a
+  );
+  background-size:200%;
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+
+  text-shadow:0 0 18px rgba(255,255,255,0.6);
+
+  animation:logoGradient 4s linear infinite;
+}
+
+@keyframes logoGradient{
+  0%{
+    background-position:0%;
+  }
+  100%{
+    background-position:200%;
+  }
+}
           .fs-tab-card {
             position: relative;
             overflow: visible;
@@ -582,36 +639,78 @@
             transform: scale(1.1) translateY(-6px);
           }
 
-          .glitch { position: relative; display: inline-block; }
-          .glitch::before, .glitch::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%; background: transparent;
-          }
-          .glitch::before {
-            left: 2px;
-            background-image: linear-gradient(135deg, var(--r500), var(--r800));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            clip-path: polygon(0 0,100% 0,100% 42%,0 42%);
-            animation: g1 5s infinite linear alternate-reverse;
-          }
-          .glitch::after {
-            left: -2px;
-            background-image: linear-gradient(135deg, var(--r500), var(--r800));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            clip-path: polygon(0 58%,100% 58%,100% 100%,0 100%);
-            animation: g2 5s infinite linear alternate-reverse;
-          }
-          @keyframes g1 {
-            0%,88%,100%{ clip-path:polygon(0 0,100% 0,100% 42%,0 42%); transform:translate(0); }
-            90%{ transform:translate(-3px,1px); } 92%{ transform:translate(3px,-1px); }
-            94%{ transform:translate(-2px,2px); clip-path:polygon(0 5%,100% 5%,100% 38%,0 38%); }
-          }
-          @keyframes g2 {
-            0%,88%,100%{ clip-path:polygon(0 58%,100% 58%,100% 100%,0 100%); transform:translate(0); }
-            90%{ transform:translate(3px,-1px); } 92%{ transform:translate(-3px,1px); }
-            94%{ transform:translate(2px,2px); clip-path:polygon(0 62%,100% 62%,100% 100%,0 100%); }
-          }
+          .glitch {
+  position: relative;
+  display: inline-block;
+}
 
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.glitch::before {
+  left: 2px;
+  background-image: linear-gradient(135deg, var(--r500), var(--r800));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: g1 4.2s infinite steps(4);   /* steps để giữ cảm giác glitch digital */
+}
+
+.glitch::after {
+  left: -2px;
+  background-image: linear-gradient(135deg, var(--r500), var(--r800));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: g2 5.1s infinite steps(4);   /* thời gian khác → không đồng bộ */
+}
+
+/* ──────────────────────────────────────────────── */
+/* g1 – layer trên, giật thường xuyên hơn            */
+/* ──────────────────────────────────────────────── */
+@keyframes g1 {
+  0%    { transform: translate(0);    clip-path: polygon(0 0, 100% 0, 100% 42%, 0 42%); }
+  8%    { transform: translate(-3px, 1px); clip-path: polygon(0 4%, 100% 4%, 100% 40%, 0 40%); }
+  16%   { transform: translate(3px, -2px); clip-path: polygon(0 0, 100% 0, 100% 44%, 0 44%); }
+  24%   { transform: translate(-2px, 2px); clip-path: polygon(0 6%, 100% 6%, 100% 38%, 0 38%); }
+  32%   { transform: translate(2px, -1px); }
+  40%   { transform: translate(-1px, 1px); clip-path: polygon(0 2%, 100% 2%, 100% 43%, 0 43%); }
+  48%   { transform: translate(0); }
+  56%   { transform: translate(-4px, 2px); clip-path: polygon(0 5%, 100% 5%, 100% 39%, 0 39%); }
+  64%   { transform: translate(3px, -3px); }
+  72%   { transform: translate(-2px, 1px); clip-path: polygon(0 3%, 100% 3%, 100% 41%, 0 41%); }
+  80%   { transform: translate(1px, -1px); }
+  88%   { transform: translate(-3px, 2px); }
+  96%   { transform: translate(2px, -2px); clip-path: polygon(0 7%, 100% 7%, 100% 37%, 0 37%); }
+  100%  { transform: translate(0);    clip-path: polygon(0 0, 100% 0, 100% 42%, 0 42%); }
+}
+
+/* ──────────────────────────────────────────────── */
+/* g2 – layer dưới, nhịp khác, vẫn giật liên tục     */
+/* ──────────────────────────────────────────────── */
+@keyframes g2 {
+  0%    { transform: translate(0);    clip-path: polygon(0 58%, 100% 58%, 100% 100%, 0 100%); }
+  10%   { transform: translate(3px, -1px); clip-path: polygon(0 56%, 100% 56%, 100% 98%, 0 98%); }
+  20%   { transform: translate(-3px, 2px); }
+  30%   { transform: translate(2px, -2px); clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%); }
+  40%   { transform: translate(-1px, 1px); }
+  50%   { transform: translate(3px, -1px); clip-path: polygon(0 57%, 100% 57%, 100% 99%, 0 99%); }
+  60%   { transform: translate(0); }
+  70%   { transform: translate(-4px, 3px); clip-path: polygon(0 59%, 100% 59%, 100% 97%, 0 97%); }
+  80%   { transform: translate(2px, -1px); }
+  90%   { transform: translate(-2px, 2px); }
+  100%  { transform: translate(0);    clip-path: polygon(0 58%, 100% 58%, 100% 100%, 0 100%); }
+}
+
+          
           /* CTA WRAPPER */
 /* ───────────────────────────── */
 
@@ -896,13 +995,17 @@
                   onMouseEnter={() => { isPausedRef.current = true; }}
                   onMouseLeave={() => { isPausedRef.current = false; }}
                 >
-                  <div className="fs-tab-card-visual">
-                    <img
-                      src={group.logo}
-                      alt={group.group}
-                      className="fs-tab-card-img"
-                    />
-                  </div>
+                 <div className="fs-tab-card-visual">
+
+                  <img
+                    src={group.logo}
+                    alt={group.group}
+                    className="fs-tab-card-img"
+                  />
+                </div>
+                 <p className="fs-logo-name">
+                    {group.name}
+                  </p>
 
                   <div className="fs-tab-card-label">{group.group}</div>
                   <div className="fs-tab-card-count">{group.items.length} modules</div>
