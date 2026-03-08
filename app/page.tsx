@@ -6,10 +6,11 @@ import CTASection from './components/CTASection';
 import RegistrationForm from './components/RegistrationForm';
 import Footer from './components/Footer';
 import SocialMedia from './components/SocialMedia';
+import HeroBanner from './components/HeroBanner';
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <HeroSection />
+      <HeroBanner />
       <AboutSection />
       <FeaturesSection />
       <CTASection />
