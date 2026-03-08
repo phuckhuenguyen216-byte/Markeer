@@ -85,6 +85,7 @@
   "groups": [
     {
       "group": "AUTO POST – MARKETING AUTOMATION",
+      "name": "THEO",
       "logo": "/img/mascot/Theo-logo.png",
       "items": [
         {
@@ -102,6 +103,7 @@
 
     {
       "group": "PLAN & SCHEDULE – CONTENT PLANNING",
+      "name": "MAX",
       "logo": "/img/mascot/Max-logo.png",
       "items": [
         {
@@ -129,6 +131,7 @@
 
     {
       "group": "DASHBOARD – ANALYTICS & REPORTING",
+      "name": "PIP",
       "logo": "/img/mascot/Pip-logo.png",
       "items": [
         {

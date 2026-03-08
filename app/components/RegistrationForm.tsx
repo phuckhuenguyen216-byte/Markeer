@@ -287,9 +287,22 @@ export default function RegistrationForm() {
   font-size: clamp(2rem, 4.5vw, 3.2rem);
   font-weight: 700;
   line-height: 1.18;
-  color: #1f2937; /* xám đậm cao cấp */
   margin: 0 0 10px;
   letter-spacing: -0.015em;
+
+  /* Gradient đen → đỏ */
+  background: linear-gradient(
+    90deg,
+    #201e1e,
+    #350707,
+    #d63d3d,
+    #ad2e2e,
+    #ff2a2a
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
         .rf-headline .hi {
           background: linear-gradient(90deg, var(--r400) 0%, var(--r300) 100%);
@@ -358,7 +371,7 @@ export default function RegistrationForm() {
   border: 1px solid #ff3b3b;
   text-decoration: none;
 
-  font-family: 'Syne', sans-serif;
+  font-family: 'DM', sans-serif;
   font-weight: 700;
   letter-spacing: .04em;
 

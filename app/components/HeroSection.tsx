@@ -86,7 +86,7 @@ export default function HeroSection() {
     <section
   className="relative min-h-screen flex items-center overflow-hidden"
   style={{
-    backgroundImage: "url('https://img.freepik.com/free-vector/circuit-lines-technology-diagram-background-red-shade_1017-26284.jpg?semt=ais_hybrid&w=740&q=80')",
+    backgroundImage: "url('https://png.pngtree.com/thumb_back/fh260/background/20210422/pngtree-technology-red-line-circuit-background-with-shine-light-image_647278.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
@@ -344,9 +344,26 @@ export default function HeroSection() {
                 <div className="absolute top-0 left-0 w-32 h-32 bg-red-600/20 blur-2xl z-10 pointer-events-none" />
 
                 {/* video */}
+                {/* ===== Desktop Video ===== */}
                 <video
-                  autoPlay muted loop playsInline
-                  className="w-full h-auto object-cover block"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  className="hidden lg:block w-full h-auto object-cover"
+                >
+                  <source src="/videos/video.mp4" type="video/mp4" />
+                </video>
+
+                {/* ===== Mobile Video ===== */}
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  className="block lg:hidden w-full h-auto object-cover"
                 >
                   <source src="/videos/video.mp4" type="video/mp4" />
                 </video>
