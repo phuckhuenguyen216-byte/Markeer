@@ -199,3 +199,33 @@ html {
 html {
   scroll-behavior: smooth;
 }
+
+/* glow nhẹ */
+@keyframes techGlow {
+  0% {
+    box-shadow: 0 0 10px rgba(99,102,241,0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59,130,246,0.8);
+    transform: scale(1.03);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(99,102,241,0.4);
+    transform: scale(1);
+  }
+}
+
+.animate-tech-glow{
+  animation: techGlow 3s ease-in-out infinite;
+}
+
+/* ánh sáng chạy */
+@keyframes techShine {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(120%); }
+}
+
+.animate-tech-shine{
+  animation: techShine 1s linear infinite;
+}
