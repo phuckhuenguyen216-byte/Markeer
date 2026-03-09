@@ -14,49 +14,51 @@ export default function HeroSection() {
       }}
     >
       {/* BÊN PHẢI */}
-      <div className="hidden md:block absolute right-[6%] top-[6%] text-white max-w-[900px] text-center">
+      <div
+        className="hidden md:block absolute right-[0%] top-[8%] text-white max-w-[900px] text-center
+        bg-[url('/images/tech-bg-red.jpg')] bg-cover bg-center bg-no-repeat
+        p-8 rounded-2xl"
+      >
 
-        <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight">
+        {/* <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight">
           {t("hero.brand")}
-        </h1>
+        </h1> */}
 
-        <h2 className="text-2xl md:text-2xl font-bold mb-6 max-w-xl mx-auto">
-          {t("hero.headline")}
-        </h2>
+   <h2
+  className="text-2xl md:text-3xl font-bold mb-6 max-w-xl mx-auto text-white"
+  style={{
+    textShadow: `
+      0 2px 4px rgba(0,0,0,0.6),
+      0 4px 8px rgba(0,0,0,0.5),
+      0 8px 16px rgba(0,0,0,0.4),
+      0 12px 24px rgba(0,0,0,0.35)
+    `
+  }}
+>
+  {t("hero.headline")}
+</h2>
+   <div className="flex justify-center mt-10 mb-6 -translate-x-6">
+  <div
+    className="relative p-0 rounded-xl
+    bg-[url('/img/mascot/bieudo-logo.png')]
+    bg-contain bg-no-repeat bg-center"
+  >
 
-       {/* VIDEO */}
-        <div className="flex justify-center -mt-6 mb-6">
-        <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-[42vw] max-w-[800px] min-w-[520px] rounded-xl"
-        >
-            <source src="/videos/ANIMATION-LOGO.webm" type="video/webm" />
-        </video>
-        </div>
+    <video
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="w-[90vw] max-w-[950px] min-w-[750px] rounded-xl"
+    >
+      <source src="/videos/ANIMATION-LOGO.webm" type="video/webm" />
+    </video>
+
+  </div>
+</div>
 
         {/* TECH BADGE */}
-        <div className="relative inline-flex items-center gap-3 px-6 py-4 rounded-full
-        bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400
-        text-white font-semibold
-        border border-white/20
-        backdrop-blur-md
-        animate-tech-glow
-        overflow-hidden">
-
-        <span className="text-lg">🎁</span>
-
-        <span className="relative z-10">
-            {t("hero.badge")}
-        </span>
-
-        {/* ánh sáng chạy */}
-        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent
-        animate-tech-shine"></span>
-
-        </div>
+        
 
       </div>
 
@@ -109,60 +111,102 @@ export default function HeroSection() {
       </div>
 
       {/* BÊN TRÁI DƯỚI */}
-      <div className="absolute left-[8%] bottom-[12%] text-white max-w-[650px]">
+<div className="absolute left-[8%] bottom-[12%] md:left-[10%] md:bottom-[12%] text-white max-w-[650px]">
 
-        <p className="text-lg md:text-xl leading-relaxed">
-            {t("hero.subheadline")}
-        </p>
+  {/* TEXT */}
+  <p className="text-lg md:text-2xl font-semibold mb-8 flex justify-center text-center">
+    <Trans
+      i18nKey="hero.offer"
+      components={{
+        strong: <span className="text-red-500 font-bold" />,
+      }}
+    />
+  </p>
 
-        <p className="text-base font-medium mb-6 flex justify-center">
-          <Trans
-            i18nKey="hero.offer"
-            components={{
-              strong: <span className="text-red-500 font-bold" />,
-            }}
-          />
-        </p>
-        <div className="flex justify-center">
+  {/* BUTTONS */}
+  <div className="flex items-center justify-center gap-6 flex-wrap">
 
-        <Link
-            href="https://app.markeeai.com"
-            target="_blank"
-            className="
-            relative inline-block
-            px-8 py-2
-            font-semibold text-white
-            bg-gradient-to-r from-blue-600 to-purple-600
-            overflow-hidden
-            skew-x-[-20deg]
-            transition-all duration-300
-            group
-            hover:shadow-[0_0_25px_rgba(168,85,247,0.7)]
-            hover:scale-105
-            "
-        >
+    {/* BADGE */}
+    <div
+      className="relative inline-flex items-center gap-3 px-6 py-3 rounded-full
+      bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400
+      text-white font-semibold text-base
+      border border-white/20
+      backdrop-blur-md
+      animate-tech-glow
+      overflow-hidden"
+    >
+      <span className="text-lg">🎁</span>
 
-            {/* TEXT */}
-            <span className="relative z-10 skew-x-[20deg] group-hover:text-white transition-colors duration-300">
-            {t("hero.cta")}
-            </span>
+      <span className="relative z-10">
+        {t("hero.badge")}
+      </span>
 
-            {/* HOVER COLOR SLIDE */}
-            <span
-            className="
-            absolute top-0 left-0
-            w-0 h-full
-            bg-red-400
-            transition-all duration-500
-            group-hover:w-full
-            "
-            ></span>
+      {/* ánh sáng chạy */}
+      <span
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent
+        animate-tech-shine"
+      ></span>
+    </div>
+    <Link
+  href="https://app.markeeai.com"
+  target="_blank"
+  className="relative inline-flex items-center gap-3 px-6 py-3 rounded-full
+  bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400
+  text-white font-semibold text-base
+  border border-white/20
+  backdrop-blur-md
+  animate-tech-glow
+  overflow-hidden"
+>
 
-        </Link>
+  <span className="relative z-10">
+    {t("hero.cta")}
+  </span>
 
-        </div>
+  <span
+    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent
+    animate-tech-shine"
+  ></span>
 
-      </div>
+</Link>
+
+    {/* CTA BUTTON */}
+    {/* <Link
+      href="https://app.markeeai.com"
+      target="_blank"
+      className="
+      relative inline-block
+      px-8 py-3
+      font-semibold text-white
+      bg-gradient-to-r from-blue-600 to-purple-600
+      overflow-hidden
+      skew-x-[-20deg]
+      transition-all duration-300
+      group
+      hover:shadow-[0_0_25px_rgba(168,85,247,0.7)]
+      hover:scale-105
+      "
+    >
+
+      <span className="relative z-10 skew-x-[20deg] group-hover:text-white transition-colors duration-300">
+        {t("hero.cta")}
+      </span>
+
+      <span
+        className="
+        absolute top-0 left-0
+        w-0 h-full
+        bg-red-400
+        transition-all duration-500
+        group-hover:w-full
+        "
+      ></span>
+
+    </Link> */}
+
+  </div>
+</div>
     </section>
   );
 }
