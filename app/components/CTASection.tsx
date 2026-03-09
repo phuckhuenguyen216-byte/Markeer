@@ -657,7 +657,7 @@ useEffect(() => {
               >
                 <div className="scan-line scan-line-w" style={{ animationDelay: "1.6s" }} />
                 <img
-                  src="/img/mascot/Bob-logo.png"
+                  src="/img/mascot/zara-logo.png"
                   alt="AI Assistant"
                   className={`
                     w-full
@@ -675,7 +675,7 @@ useEffect(() => {
     textShadow: "0 0 18px rgba(255,255,255,0.7)",
   }}
 >
-  BOB
+  ZARA
 </p>
               </div>
 
