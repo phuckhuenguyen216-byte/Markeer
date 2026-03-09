@@ -657,16 +657,16 @@ useEffect(() => {
               >
                 <div className="scan-line scan-line-w" style={{ animationDelay: "1.6s" }} />
                 <img
-                  src="/img/mascot/zara-logo.png"
+                  src="/img/mascot/zara-anh.png"
                   alt="AI Assistant"
                   className={`
                     w-full
-                    max-w-[420px] sm:max-w-[480px] md:max-w-[540px]
-                    lg:max-w-[720px] xl:max-w-[820px] 2xl:max-w-[900px]
-                    lg:scale-115 xl:scale-120 2xl:scale-125
+                    max-w-[420px] sm:max-w-[480px] md:max-w-[440px]
+                    lg:max-w-[620px] xl:max-w-[720px] 2xl:max-w-[800px]
+                    lg:scale-115 xl:scale-100 2xl:scale-105
                     h-auto object-contain
                     transition-transform duration-700
-                    hover:scale-120 lg:hover:scale-125
+                    hover:scale-105 lg:hover:scale-110
                   `}
                 />
                 <p

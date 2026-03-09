@@ -9,7 +9,7 @@ import SocialMedia from './components/SocialMedia';
 import HeroBanner from './components/HeroBanner';
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="relative">
       <HeroBanner />
       <AboutSection />
       <FeaturesSection />
