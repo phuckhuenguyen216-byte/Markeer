@@ -727,7 +727,7 @@ import { t } from "i18next";
 /* ───────────────────────────── */
 
 .fs-cta-inner {
-  background: linear-gradient(135deg, #0b0a0a 0%, #150303 55%, #0b0a0a 100%);
+   background: linear-gradient(135deg, #2b0505 0%, #5a0a0a 45%, #7a0d0d 100%);
   border-radius: 22px;
   padding: 60px 60px;
 
@@ -735,6 +735,9 @@ import { t } from "i18next";
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 60px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 
   overflow: hidden;
   position: relative;
@@ -745,9 +748,9 @@ import { t } from "i18next";
   content: '';
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(255,34,34,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,34,34,0.05) 1px, transparent 1px);
+   background-image:
+    linear-gradient(rgba(255,34,34,0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,34,34,0.09) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
@@ -785,6 +788,7 @@ import { t } from "i18next";
   width: 520px;
   height: 520px;
   border-radius: 50%;
+  text-align: center;
 
   background: radial-gradient(
     circle,
@@ -854,11 +858,13 @@ import { t } from "i18next";
 
 .fs-cta-body {
   font-size: 1rem;
-  color: rgba(255,255,255,.6);
+  color: rgb(255, 255, 255);
   font-weight: 300;
   line-height: 1.7;
   max-width: 520px;
   position: relative;
+  text-align: center;
+  margin: 0 auto;
 }
 
 /* ───────────────────────────── */
@@ -1083,13 +1089,13 @@ import { t } from "i18next";
               <div className="fs-cta-title">{t("features.ctaTitle")}</div>
               <p className="fs-cta-body">{t("features.ctaDescription")}</p>
             </div>
-            <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:8, position:"relative" }}>
+            {/* <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:8, position:"relative" }}>
               <div className="fs-hex">
                 <div className="fs-hex-bg" />
                 <span className="fs-hex-icon">⚡</span>
               </div>
               <div className="fs-hex-label">READY</div>
-            </div>
+            </div> */}
           </div>
         </div>
         </section>
