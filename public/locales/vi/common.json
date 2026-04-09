@@ -10,7 +10,8 @@
     "documentation": "Tài liệu",
     "aboutMenu": "Về chúng tôi",
     "privacy": "Chính sách bảo mật",
-    "terms": "Điều khoản dịch vụ"
+    "terms": "Điều khoản dịch vụ",
+    "apply": "Tuyển dụng"
   },
   "hero": {
     "brand": "MARKEE AI",
@@ -654,5 +655,103 @@
     "toc": {
       "title": "Danh mục"
     }
+  },
+
+  "apply": {
+    "badge": "Đang tuyển sinh 2026",
+    "title": "CHƯƠNG TRÌNH",
+    "titleHighlight": "THỰC TẬP 2026",
+    "subtitle": "Từ Intern → Senior — Lộ Trình Phát Triển Sự Nghiệp",
+    "desc": "Không chỉ \"đi thực tập\" — bạn được đào tạo để làm thật, ra sản phẩm thật, có case study thật và có cơ hội trở thành nhân sự chính thức.",
+    "cta": "Ứng tuyển ngay",
+    "stats": {
+      "teams": "Teams",
+      "levels": "Levels",
+      "kpi": "KPI minh bạch",
+      "opportunity": "Cơ hội phát triển"
+    },
+    "benefits": {
+      "tag": "Benefits",
+      "heading": "BẠN SẼ ĐƯỢC GÌ\nKHI THAM GIA?",
+      "subheading": "Đánh giá thăng tiến không theo thâm niên, mà theo giá trị bạn tạo ra.",
+      "items": [
+        { "icon": "🧭", "title": "Mentor đồng hành", "desc": "Mentor/Leader hướng dẫn theo tuần & theo sprint, giúp bạn phát triển liên tục không bị bỡ ngỡ." },
+        { "icon": "📋", "title": "Project Plan thật", "desc": "Làm việc theo checklist + evidence rõ ràng, giảm cảm tính, tăng chuyên nghiệp từ ngày đầu." },
+        { "icon": "📁", "title": "Portfolio & Case Study", "desc": "Có repo/doc/report/deck/landing/campaign thật để đưa vào CV xin việc sau này." },
+        { "icon": "🚀", "title": "Lộ trình thăng tiến", "desc": "Rõ ràng từ Intern → Fresher → Junior → Middle → Senior, đánh giá minh bạch bằng KPI." },
+        { "icon": "🎯", "title": "Cơ hội chính thức", "desc": "Được xét lên Fresher Talent và Junior chính thức nếu pass gate." },
+        { "icon": "⚡", "title": "Tốc độ lên level", "desc": "Càng chủ động và có ownership, tốc độ lên level càng nhanh." }
+      ],
+      "card": {
+        "label": "Tại sao chọn chúng tôi",
+        "title": "Không phải thực tập thông thường",
+        "desc": "Bạn sẽ được làm việc trên môi trường thực tế, giao việc thật, deadline thật, và được đánh giá như một nhân sự chính thức.",
+        "pills": ["Real Projects", "KPI System", "Mentorship", "Career Path", "Fast Track"],
+        "highlightLabel": "HIGHLIGHT",
+        "highlightText": "Lộ trình 7 cấp bậc rõ ràng, thăng tiến dựa trên KPI — không phải thâm niên."
+      }
+    },
+    "teams": {
+      "tag": "Teams",
+      "heading": "CẤU TRÚC 5 TEAM CHÍNH",
+      "subheading": "Vận hành theo POD để phối hợp trơn tru Sales–Presale–Delivery.",
+      "items": [
+        { "num": "01", "icon": "🖥️", "name": "SI Delivery", "sub": "Network / System / Security" },
+        { "num": "02", "icon": "📢", "name": "Marketing", "sub": "Agency + AI Marketing" },
+        { "num": "03", "icon": "⚙️", "name": "Dev + DevOps", "sub": "SaaS + Platform" },
+        { "num": "04", "icon": "🤖", "name": "AI Team", "sub": "AI Products + Enablement" },
+        { "num": "05", "icon": "💼", "name": "Sales", "sub": "Full Solution Sales" }
+      ]
+    },
+    "eval": {
+      "tag": "Evaluation",
+      "heading": "CÁCH ĐÁNH GIÁ — 100 ĐIỂM",
+      "subheading": "Minh bạch, không cảm tính. Mỗi kỳ đánh giá theo 3 trục chính.",
+      "bars": [
+        { "name": "KPI / Output", "pct": 60, "sub": "Làm được gì, đúng hạn, có evidence" },
+        { "name": "Quality", "pct": 20, "sub": "Đúng chuẩn, ít lỗi, dễ bàn giao" },
+        { "name": "Behavior Log", "pct": 20, "sub": "Thái độ, ownership, phối hợp" }
+      ],
+      "behavior": {
+        "title": "📋 Behavior Staff Log (Anti-bias)",
+        "items": [
+          "Log tiêu cực chỉ tính khi có evidence hoặc 2-key confirm",
+          "Mỗi log cần: hành vi cụ thể → impact → hướng xử lý"
+        ]
+      },
+      "gradeHead": ["Điểm", "Kết quả", "Ý nghĩa"],
+      "grades": [
+        { "label": "≥", "score": 85, "badge": "STRONG PASS", "bg": "#fff5f5", "col": "#c53030", "desc": "Xét up-level nhanh" },
+        { "label": "≥", "score": 75, "badge": "PASS", "bg": "#f0fff4", "col": "#276749", "desc": "Đủ điều kiện lên level" },
+        { "label": "<", "score": 75, "badge": "FAIL", "bg": "#fff5f5", "col": "#9b2c2c", "desc": "Cần cải thiện hoặc dừng" }
+      ],
+      "noteLabel": "Ghi chú",
+      "noteText": "Điểm thể hiện {{strong}} giá trị bạn tạo ra {{/strong}}, không phải thâm niên hay cảm tình. Mọi đánh giá đều có evidence kèm theo."
+    },
+    "guidelines": {
+      "tag": "Guidelines",
+      "heading": "QUY ĐỊNH THỰC TẬP",
+      "subheading": "FAIR & RÕ — Rõ ràng, công bằng, có ghi nhận.",
+      "items": [
+        { "num": "01", "icon": "📅", "text": "Weekly report bắt buộc cho leader/mentor mỗi tuần." },
+        { "num": "02", "icon": "⏰", "text": "Dời deadline: báo trước càng sớm càng tốt (tối thiểu 24h)." },
+        { "num": "03", "icon": "🔍", "text": "Không có task? Chủ động xin task hoặc làm learning deliverable." },
+        { "num": "04", "icon": "⚠️", "text": "Kỷ luật 3 bước: Warning 1 → Warning 2 → Stop nếu không cải thiện." },
+        { "num": "05", "icon": "💰", "text": "Chi trả minh bạch: Level 1 theo KPI Points | Level 2–3 stipend + bonus gate." },
+        { "num": "06", "icon": "🚫", "text": "Tạm dừng chi trả: ghosting, gian dối evidence, không report sau nhắc nhở." }
+      ]
+    },
+    "final": {
+      "readyTag": "Sẵn sàng chưa?",
+      "heading": "SẴN SÀNG BẮT ĐẦU",
+      "headingHighlight": "HÀNH TRÌNH?",
+      "desc": "Nếu bạn muốn học nhanh, làm thật, có mentor đồng hành và build sự nghiệp rõ ràng — hãy ứng tuyển ngay."
+    },
+    "modal": {
+      "title": "Ứng tuyển Internship 2026",
+      "loading": "Đang tải…"
+    },
+    "path": ["Intern", "Fresher", "Junior", "Middle", "Senior"]
   }
+
 }

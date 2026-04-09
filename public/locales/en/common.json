@@ -10,7 +10,8 @@
     "documentation": "Documentation",
     "aboutMenu": "About us",
     "privacy": "Privacy Policy",
-    "terms": "Terms of Service"
+    "terms": "Terms of Service",
+    "apply": "Apply"
   },
   "hero": {
     "brand": "MARKEE AI",
@@ -653,5 +654,103 @@
     "toc": {
       "title": "Table of Contents"
     }
+  },
+
+  "apply": {
+    "badge": "Now Enrolling 2026",
+    "title": "INTERNSHIP",
+    "titleHighlight": "PROGRAM 2026",
+    "subtitle": "From Intern → Senior — A Clear Career Development Path",
+    "desc": "Not just an internship — you'll be trained to do real work, ship real products, build real case studies, and have the opportunity to become a full-time team member.",
+    "cta": "Apply Now",
+    "stats": {
+      "teams": "Teams",
+      "levels": "Levels",
+      "kpi": "Transparent KPI",
+      "opportunity": "Growth Opportunities"
+    },
+    "benefits": {
+      "tag": "Benefits",
+      "heading": "WHAT DO YOU GET\nWHEN YOU JOIN?",
+      "subheading": "Promotions are based on the value you create — not seniority.",
+      "items": [
+        { "icon": "🧭", "title": "Dedicated Mentor", "desc": "Mentors/Leaders guide you weekly & per sprint, so you grow continuously without feeling lost." },
+        { "icon": "📋", "title": "Real Project Plan", "desc": "Work with clear checklists + evidence — less guesswork, more professionalism from day one." },
+        { "icon": "📁", "title": "Portfolio & Case Study", "desc": "Walk away with real repos, docs, reports, decks, campaigns to put on your CV." },
+        { "icon": "🚀", "title": "Clear Career Path", "desc": "Defined progression from Intern → Fresher → Junior → Middle → Senior, evaluated transparently via KPIs." },
+        { "icon": "🎯", "title": "Full-Time Opportunity", "desc": "You can be promoted to Fresher Talent and official Junior if you pass the gate." },
+        { "icon": "⚡", "title": "Fast Level-Up", "desc": "The more initiative and ownership you show, the faster you level up." }
+      ],
+      "card": {
+        "label": "Why choose us",
+        "title": "Not Your Typical Internship",
+        "desc": "You'll work in a real environment with real tasks, real deadlines, and be evaluated just like a full-time employee.",
+        "pills": ["Real Projects", "KPI System", "Mentorship", "Career Path", "Fast Track"],
+        "highlightLabel": "HIGHLIGHT",
+        "highlightText": "A clear 7-level career ladder — promotions based on KPI, not tenure."
+      }
+    },
+    "teams": {
+      "tag": "Teams",
+      "heading": "5 CORE TEAM STRUCTURE",
+      "subheading": "Operating in PODs for smooth Sales–Presale–Delivery collaboration.",
+      "items": [
+        { "num": "01", "icon": "🖥️", "name": "SI Delivery", "sub": "Network / System / Security" },
+        { "num": "02", "icon": "📢", "name": "Marketing", "sub": "Agency + AI Marketing" },
+        { "num": "03", "icon": "⚙️", "name": "Dev + DevOps", "sub": "SaaS + Platform" },
+        { "num": "04", "icon": "🤖", "name": "AI Team", "sub": "AI Products + Enablement" },
+        { "num": "05", "icon": "💼", "name": "Sales", "sub": "Full Solution Sales" }
+      ]
+    },
+    "eval": {
+      "tag": "Evaluation",
+      "heading": "SCORING SYSTEM — 100 POINTS",
+      "subheading": "Transparent, unbiased. Every review cycle covers 3 core dimensions.",
+      "bars": [
+        { "name": "KPI / Output", "pct": 60, "sub": "What you delivered, on time, with evidence" },
+        { "name": "Quality", "pct": 20, "sub": "Up to standard, few errors, easy handoff" },
+        { "name": "Behavior Log", "pct": 20, "sub": "Attitude, ownership, collaboration" }
+      ],
+      "behavior": {
+        "title": "📋 Behavior Staff Log (Anti-bias)",
+        "items": [
+          "Negative logs only count with evidence or 2-key confirmation",
+          "Each log requires: specific behavior → impact → resolution path"
+        ]
+      },
+      "gradeHead": ["Score", "Result", "Meaning"],
+      "grades": [
+        { "label": "≥", "score": 85, "badge": "STRONG PASS", "bg": "#fff5f5", "col": "#c53030", "desc": "Fast-track level up" },
+        { "label": "≥", "score": 75, "badge": "PASS", "bg": "#f0fff4", "col": "#276749", "desc": "Eligible to advance" },
+        { "label": "<", "score": 75, "badge": "FAIL", "bg": "#fff5f5", "col": "#9b2c2c", "desc": "Needs improvement or exit" }
+      ],
+      "noteLabel": "Note",
+      "noteText": "Your score reflects the {{strong}}value you create{{/strong}}, not seniority or personal relationships. All evaluations are evidence-backed."
+    },
+    "guidelines": {
+      "tag": "Guidelines",
+      "heading": "INTERNSHIP POLICIES",
+      "subheading": "FAIR & CLEAR — Transparent, consistent, and rewarding.",
+      "items": [
+        { "num": "01", "icon": "📅", "text": "Weekly reports are mandatory — submit to your leader/mentor every week." },
+        { "num": "02", "icon": "⏰", "text": "Deadline changes: notify as early as possible (minimum 24 hours in advance)." },
+        { "num": "03", "icon": "🔍", "text": "No tasks? Proactively ask for one or complete a learning deliverable." },
+        { "num": "04", "icon": "⚠️", "text": "3-step discipline: Warning 1 → Warning 2 → Stop if no improvement." },
+        { "num": "05", "icon": "💰", "text": "Transparent pay: Level 1 by KPI Points | Level 2–3 stipend + bonus gate." },
+        { "num": "06", "icon": "🚫", "text": "Pay suspended for: ghosting, falsifying evidence, or missing reports after reminders." }
+      ]
+    },
+    "final": {
+      "readyTag": "Ready?",
+      "heading": "READY TO START YOUR",
+      "headingHighlight": "JOURNEY?",
+      "desc": "If you want to learn fast, do real work, have a mentor by your side and build a clear career — apply now."
+    },
+    "modal": {
+      "title": "Apply for Internship 2026",
+      "loading": "Loading…"
+    },
+    "path": ["Intern", "Fresher", "Junior", "Middle", "Senior"]
   }
+
 }  
