@@ -3,12 +3,15 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import "../../app/i18n";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";   // ← Cần cài: npm install lucide-react
 
 export default function Header() {
   const { t } = useTranslation("common");
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md border-b border-gray-200/40">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Logo */}
@@ -18,20 +21,20 @@ export default function Header() {
             alt="Markee AI Marketing"
             className="h-8 w-auto"
           />
-          <span className="text-lg font-semibold tracking-tight">
+          <span className="text-lg font-semibold tracking-tight text-gray-900">
             Markee
           </span>
         </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-6 text-sm text-gray-700">
-          <a href="#features" className="hover:text-gray-900">
+          <a href="#features" className="hover:text-gray-900 transition-colors">
             {t("header.features")}
           </a>
 
           <Link
             href="https://app.markeeai.com"
-            className="hover:text-gray-900"
+            className="hover:text-gray-900 transition-colors"
             target="_blank"
           >
             {t("header.app")}
@@ -39,63 +42,127 @@ export default function Header() {
 
           <Link
             href="/docs/autopost/intro"
-            className="hover:text-gray-900"
+            className="hover:text-gray-900 transition-colors"
             target="_blank"
             rel="noopener noreferrer"
           >
             {t("header.documentation")}
           </Link>
-          {/* === About dropdown === */}
+
+          {/* About Dropdown */}
           <div className="relative group">
             <button className="flex items-center gap-1 hover:text-gray-900 transition-colors">
               {t("header.aboutMenu")}
               <span className="text-xs">▾</span>
             </button>
-            {/* Dropdown */}
-            <div
-              className="
-                absolute left-0 top-full mt-2
-                w-56
-                rounded-xl
-                bg-white
-                shadow-lg
-                border border-gray-200
-                opacity-0 invisible
-                group-hover:opacity-100 group-hover:visible
-                transition-all duration-200
-              "
-            >
-              <Link
-                href="/policy"
-                className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 rounded-t-xl"
-              >
+            <div className="absolute left-0 top-full mt-2 w-56 rounded-xl bg-white shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-1">
+              <Link href="/policy" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
                 {t("header.privacy")}
               </Link>
-
-              <Link
-                href="/terms"
-                className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 rounded-b-xl"
-              >
+              <Link href="/terms" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
                 {t("header.terms")}
               </Link>
-
             </div>
           </div>
+
+          <Link href="/apply" className="hover:text-gray-900 transition-colors">
+            {t("header.apply")}
+          </Link>
         </nav>
 
-        {/* Right actions */}
+        {/* Right Side */}
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
+
+          {/* Desktop Register Button */}
           <Link
             href="https://app.markeeai.com"
             target="_blank"
-            className="rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-colors"
+            className="hidden md:block rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-5 py-2 text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-all"
           >
             {t("header.register")}
           </Link>
-          
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 text-gray-700 hover:text-gray-900 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </div>
+
+      {/* ==================== MOBILE MENU ==================== */}
+      {isOpen && (
+        <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
+          <div className="px-6 py-8 flex flex-col gap-6 text-base">
+            <a 
+              href="#features" 
+              className="font-medium text-gray-700 hover:text-gray-900"
+              onClick={() => setIsOpen(false)}
+            >
+              {t("header.features")}
+            </a>
+
+            <Link 
+              href="https://app.markeeai.com" 
+              target="_blank"
+              className="font-medium text-gray-700 hover:text-gray-900"
+              onClick={() => setIsOpen(false)}
+            >
+              {t("header.app")}
+            </Link>
+
+            <Link 
+              href="/docs/autopost/intro" 
+              target="_blank"
+              className="font-medium text-gray-700 hover:text-gray-900"
+              onClick={() => setIsOpen(false)}
+            >
+              {t("header.documentation")}
+            </Link>
+
+            <Link 
+              href="/apply" 
+              className="font-medium text-gray-700 hover:text-gray-900"
+              onClick={() => setIsOpen(false)}
+            >
+              {t("header.apply")}
+            </Link>
+
+            {/* About Section in Mobile */}
+            <div className="pt-4 border-t border-gray-100">
+              <p className="text-sm text-gray-500 mb-3 px-1">{t("header.aboutMenu")}</p>
+              <Link 
+                href="/policy" 
+                className="block py-3 px-1 text-gray-700 hover:text-gray-900"
+                onClick={() => setIsOpen(false)}
+              >
+                {t("header.privacy")}
+              </Link>
+              <Link 
+                href="/terms" 
+                className="block py-3 px-1 text-gray-700 hover:text-gray-900"
+                onClick={() => setIsOpen(false)}
+              >
+                {t("header.terms")}
+              </Link>
+            </div>
+
+            {/* Register Button in Mobile */}
+            <Link
+              href="https://app.markeeai.com"
+              target="_blank"
+              onClick={() => setIsOpen(false)}
+              className="mt-4 block w-full text-center rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3.5 font-semibold text-base hover:from-blue-700 hover:to-purple-700 transition-all"
+            >
+              {t("header.register")}
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
