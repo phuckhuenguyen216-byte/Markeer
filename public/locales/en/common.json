@@ -725,7 +725,7 @@
         { "label": "<", "score": 75, "badge": "FAIL", "bg": "#fff5f5", "col": "#9b2c2c", "desc": "Needs improvement or exit" }
       ],
       "noteLabel": "Note",
-      "noteText": "Your score reflects the {{strong}}value you create{{/strong}}, not seniority or personal relationships. All evaluations are evidence-backed."
+      "noteText": "Your score reflects the value you create, not seniority or personal relationships. All evaluations are evidence-backed."
     },
     "guidelines": {
       "tag": "Guidelines",
