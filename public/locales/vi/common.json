@@ -726,7 +726,7 @@
         { "label": "<", "score": 75, "badge": "FAIL", "bg": "#fff5f5", "col": "#9b2c2c", "desc": "Cần cải thiện hoặc dừng" }
       ],
       "noteLabel": "Ghi chú",
-      "noteText": "Điểm thể hiện {{strong}} giá trị bạn tạo ra {{/strong}}, không phải thâm niên hay cảm tình. Mọi đánh giá đều có evidence kèm theo."
+      "noteText": "Điểm thể hiện giá trị bạn tạo ra, không phải thâm niên hay cảm tình. Mọi đánh giá đều có evidence kèm theo."
     },
     "guidelines": {
       "tag": "Guidelines",
