@@ -52,29 +52,20 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* ==================== MOBILE - CHỈNH SỬA CHỮ NỔI BẬT HƠN ==================== */}
-      <div className="block md:hidden w-full px-6 pt-24 pb-28 text-white text-center relative">
-        {/* Overlay tối nhẹ giúp chữ nổi bật trên nền hồng */}
-        <div className="absolute inset-0 bg-black/20 z-0" />
+                  {/* ==================== MOBILE - CHỈNH CHUẨN, NỀN ĐEN MỜ NHẸ ==================== */}
+      <div className="block md:hidden relative w-full min-h-[85dvh] pt-20 pb-16 text-white text-center overflow-hidden">
+        
+        {/* Overlay nền đen - MỜ NHẸ như yêu cầu */}
+        <div 
+          className="absolute inset-0 bg-gradient-to-b 
+                     from-black/35 via-black/25 to-black/15 z-0" 
+        />
 
-        <div className="relative z-10 max-w-[380px] mx-auto">
+        <div className="relative z-10 px-6 max-w-[360px] mx-auto flex flex-col justify-center min-h-[85dvh]">
+          
           {/* Brand */}
           <h1 
-            className="text-4xl font-bold mb-3 leading-tight text-white"
-            style={{
-              textShadow: `
-                0 3px 6px rgba(0,0,0,0.8),
-                0 6px 12px rgba(0,0,0,0.7),
-                0 10px 20px rgba(0,0,0,0.6)
-              `,
-            }}
-          >
-            {t("hero.brand")}
-          </h1>
-
-          {/* Headline - Tăng độ nổi */}
-          <h2 
-            className="text-[26px] font-bold mb-10 leading-tight px-2 text-white"
+            className="text-5xl font-bold mb-4 leading-tight text-white"
             style={{
               textShadow: `
                 0 4px 8px rgba(0,0,0,0.55),
@@ -83,57 +74,59 @@ export default function HeroSection() {
               `,
             }}
           >
+            {t("hero.brand")}
+          </h1>
+
+          {/* Headline */}
+          <h2 
+            className="text-[23px] font-bold mb-9 leading-tight px-3 text-center text-white"
+            style={{
+              textShadow: `
+                0 4px 10px rgba(0,0,0,0.9),
+                0 8px 20px rgba(0,0,0,0.8),
+                0 14px 28px rgba(0,0,0,0.7)
+              `,
+            }}
+          >
             {t("hero.headline")}
           </h2>
 
           {/* Offer Text */}
-          <p className="text-[17px] font-semibold mb-10 px-4 leading-relaxed text-white drop-shadow-lg">
+          <p className="text-[16.5px] font-semibold mb-11 px-4 leading-relaxed text-white drop-shadow-xl">
             <Trans
               i18nKey="hero.offer"
               components={{
-                strong: <span className="text-white font-bold drop-shadow-md" />,
+                strong: <span className="text-white-400 text-xl font-bold" />,
               }}
             />
           </p>
 
           {/* Buttons */}
-          <div className="flex flex-col items-center gap-5">
+          <div className="flex flex-col items-center gap-5 w-full max-w-[310px]">
             {/* BADGE */}
             <div
-              className="relative inline-flex items-center justify-center gap-3 w-full max-w-[300px] px-6 py-4 rounded-full
+              className="relative inline-flex items-center justify-center gap-3 w-full px-6 py-4 rounded-full
               bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400
-              text-white font-semibold text-base
-              border border-white/30
-              backdrop-blur-md
-              animate-tech-glow
-              overflow-hidden shadow-xl"
+              text-white font-semibold text-base shadow-lg
+              border border-white/30 backdrop-blur-md animate-tech-glow overflow-hidden"
             >
               <span className="text-2xl">🎁</span>
               <span className="relative z-10">{t("hero.badge")}</span>
-              <span
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent
-                animate-tech-shine"
-              ></span>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-tech-shine"></span>
             </div>
 
             {/* CTA BUTTON */}
             <Link
               href="https://app.markeeai.com"
               target="_blank"
-              className="relative inline-flex items-center justify-center gap-3 w-full max-w-[300px] px-6 py-4 rounded-full
+              className="relative inline-flex items-center justify-center gap-3 w-full px-6 py-4 rounded-full
               bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400
-              text-white font-semibold text-base
-              border border-white/30
-              backdrop-blur-md
-              animate-tech-glow
-              overflow-hidden shadow-xl"
+              text-white font-semibold text-base shadow-lg
+              border border-white/30 backdrop-blur-md animate-tech-glow overflow-hidden"
             >
               <span className="text-2xl">📝</span>
               <span className="relative z-10">{t("hero.cta")}</span>
-              <span
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent
-                animate-tech-shine"
-              ></span>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-tech-shine"></span>
             </Link>
           </div>
         </div>
