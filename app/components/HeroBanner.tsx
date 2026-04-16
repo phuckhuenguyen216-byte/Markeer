@@ -66,13 +66,13 @@ export default function HeroSection() {
           {/* Brand */}
           <h1 
             className="text-5xl font-bold mb-4 leading-tight text-white"
-            style={{
-              textShadow: `
-                0 4px 8px rgba(0,0,0,0.55),
-                0 8px 16px rgba(0,0,0,0.45),
-                0 12px 24px rgba(0,0,0,0.35)
-              `,
-            }}
+            // style={{
+            //   textShadow: `
+            //     0 4px 8px rgba(0,0,0,0.55),
+            //     0 8px 16px rgba(0,0,0,0.45),
+            //     0 12px 24px rgba(0,0,0,0.35)
+            //   `,
+            // }}
           >
             {t("hero.brand")}
           </h1>
@@ -80,13 +80,13 @@ export default function HeroSection() {
           {/* Headline */}
           <h2 
             className="text-[23px] font-bold mb-9 leading-tight px-3 text-center text-white"
-            style={{
-              textShadow: `
-                0 4px 10px rgba(0,0,0,0.9),
-                0 8px 20px rgba(0,0,0,0.8),
-                0 14px 28px rgba(0,0,0,0.7)
-              `,
-            }}
+            // style={{
+            //   textShadow: `
+            //     0 4px 10px rgba(0,0,0,0.9),
+            //     0 8px 20px rgba(0,0,0,0.8),
+            //     0 14px 28px rgba(0,0,0,0.7)
+            //   `,
+            // }}
           >
             {t("hero.headline")}
           </h2>
