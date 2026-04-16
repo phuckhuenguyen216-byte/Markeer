@@ -692,17 +692,42 @@
       }
     },
     "teams": {
-      "tag": "Teams",
-      "heading": "CẤU TRÚC 5 TEAM CHÍNH",
-      "subheading": "Vận hành theo POD để phối hợp trơn tru Sales–Presale–Delivery.",
-      "items": [
-        { "num": "01", "icon": "🖥️", "name": "SI Delivery", "sub": "Network / System / Security" },
-        { "num": "02", "icon": "📢", "name": "Marketing", "sub": "Agency + AI Marketing" },
-        { "num": "03", "icon": "⚙️", "name": "Dev + DevOps", "sub": "SaaS + Platform" },
-        { "num": "04", "icon": "🤖", "name": "AI Team", "sub": "AI Products + Enablement" },
-        { "num": "05", "icon": "💼", "name": "Sales", "sub": "Full Solution Sales" }
-      ]
+  "tag": "Teams",
+  "heading": "CẤU TRÚC 5 TEAM CHÍNH",
+  "subheading": "Vận hành theo POD để phối hợp trơn tru Sales–Presale–Delivery.",
+  "items": [
+    { 
+      "num": "01", 
+      "icon": "💼", 
+      "name": "Sales", 
+      "sub": "Full Solution Sales" 
     },
+    { 
+      "num": "02", 
+      "icon": "📢", 
+      "name": "Marketing", 
+      "sub": "Agency + AI Marketing" 
+    },
+    { 
+      "num": "03", 
+      "icon": "🤖", 
+      "name": "AI Team", 
+      "sub": "AI Products + Enablement" 
+    },
+    { 
+      "num": "04", 
+      "icon": "⚙️", 
+      "name": "Dev + DevOps", 
+      "sub": "SaaS + Platform" 
+    },
+    { 
+      "num": "05", 
+      "icon": "🖥️", 
+      "name": "SI Delivery", 
+      "sub": "Network / System / Security" 
+    }
+  ]
+},
     "eval": {
       "tag": "Evaluation",
       "heading": "CÁCH ĐÁNH GIÁ — 100 ĐIỂM",
