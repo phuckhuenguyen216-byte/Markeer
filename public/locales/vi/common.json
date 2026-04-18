@@ -757,20 +757,6 @@
           "sub": "Network / System / Security" 
         }
       ]
-    },
-    { 
-      "num": "04", 
-      "icon": "⚙️", 
-      "name": "Dev + DevOps", 
-      "sub": "SaaS + Platform" 
-    },
-    { 
-      "num": "05", 
-      "icon": "🖥️", 
-      "name": "SI Delivery", 
-      "sub": "Network / System / Security" 
-    }
-  ]
 },
     "eval": {
       "tag": "Evaluation",
