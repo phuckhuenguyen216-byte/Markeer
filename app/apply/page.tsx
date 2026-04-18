@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import Header from "../components/Header";
+
 import Footer from "../components/Footer";
 
 export default function ApplyPage() {
@@ -27,7 +27,7 @@ export default function ApplyPage() {
             if (e.isIntersecting) e.target.classList.add("visible");
           });
         },
-        { threshold: 0.1 }
+        { threshold: 0.1 },
       );
 
       document.querySelectorAll(".anim").forEach((el) => {
@@ -81,7 +81,7 @@ export default function ApplyPage() {
           }
         });
       },
-      { threshold: 0.4 }
+      { threshold: 0.4 },
     );
 
     observer.observe(el);
@@ -121,14 +121,16 @@ export default function ApplyPage() {
           }
         });
       },
-      { threshold: 0.4 }
+      { threshold: 0.4 },
     );
 
     observer.observe(el);
     return () => observer.disconnect();
   }, [gradeAnimated]);
 
-  const benefitItems = t("apply.benefits.items", { returnObjects: true }) as Array<{
+  const benefitItems = t("apply.benefits.items", {
+    returnObjects: true,
+  }) as Array<{
     icon: string;
     title: string;
     desc: string;
@@ -147,9 +149,13 @@ export default function ApplyPage() {
     sub: string;
   }>;
 
-  const evalBehaviorItems = t("apply.eval.behavior.items", { returnObjects: true }) as string[];
+  const evalBehaviorItems = t("apply.eval.behavior.items", {
+    returnObjects: true,
+  }) as string[];
 
-  const gradeHead = t("apply.eval.gradeHead", { returnObjects: true }) as string[];
+  const gradeHead = t("apply.eval.gradeHead", {
+    returnObjects: true,
+  }) as string[];
 
   const grades = t("apply.eval.grades", { returnObjects: true }) as Array<{
     label: string;
@@ -160,20 +166,22 @@ export default function ApplyPage() {
     desc: string;
   }>;
 
-  const guidelineItems = t("apply.guidelines.items", { returnObjects: true }) as Array<{
+  const guidelineItems = t("apply.guidelines.items", {
+    returnObjects: true,
+  }) as Array<{
     num: string;
     icon: string;
     text: string;
   }>;
 
-  const benefitPills = t("apply.benefits.card.pills", { returnObjects: true }) as string[];
+  const benefitPills = t("apply.benefits.card.pills", {
+    returnObjects: true,
+  }) as string[];
 
   const pathSteps = t("apply.path", { returnObjects: true }) as string[];
 
   return (
     <>
-      <Header />
-
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -318,7 +326,7 @@ export default function ApplyPage() {
 
         @media (max-width: 680px) {
           .hero-path { padding: 10px; gap: 6px; }
-          .path-step { padding: 10px 20px; font-size: 0.85rem; }
+          .path-step { padding: 10px 12px; font-size: 0.85rem; }
         }
 
         .hero-desc { font-size: clamp(0.92rem,2vw,1.05rem); color:rgba(255,255,255,0.55); line-height:1.8; max-width:700px; margin:0 auto 2rem; }
@@ -630,7 +638,10 @@ export default function ApplyPage() {
 
         <div className="hero-path">
           {pathSteps.map((label, i) => (
-            <span key={label} className={`path-step ${i === 0 ? "active" : ""}`}>
+            <span
+              key={label}
+              className={`path-step ${i === 0 ? "active" : ""}`}
+            >
               {label}
             </span>
           ))}
@@ -660,7 +671,6 @@ export default function ApplyPage() {
 
       {/* WHITE SECTIONS */}
       <div className="white-sections">
-
         {/* S1 BENEFITS */}
         <div className="section-wrap">
           <div className="section-tag">{t("apply.benefits.tag")}</div>
@@ -670,7 +680,10 @@ export default function ApplyPage() {
             <div>
               <div className="benefits-list">
                 {benefitItems.map((b, i) => (
-                  <div key={b.title} className={`benefit-row anim d${Math.min(i + 1, 6)}`}>
+                  <div
+                    key={b.title}
+                    className={`benefit-row anim d${Math.min(i + 1, 6)}`}
+                  >
                     <div className="benefit-icon-wrap">{b.icon}</div>
                     <div>
                       <div className="benefit-t">✓ {b.title}</div>
@@ -682,19 +695,47 @@ export default function ApplyPage() {
             </div>
             <div className="benefits-right anim d2">
               <div className="benefit-card-big">
-                <div className="bcb-label">{t("apply.benefits.card.label")}</div>
-                <div className="bcb-title">{t("apply.benefits.card.title")}</div>
+                <div className="bcb-label">
+                  {t("apply.benefits.card.label")}
+                </div>
+                <div className="bcb-title">
+                  {t("apply.benefits.card.title")}
+                </div>
                 <div className="bcb-desc">{t("apply.benefits.card.desc")}</div>
                 <div className="bcb-pills">
                   {benefitPills.map((p) => (
-                    <span key={p} className="bcb-pill">{p}</span>
+                    <span key={p} className="bcb-pill">
+                      {p}
+                    </span>
                   ))}
                 </div>
-                <div style={{ marginTop: "2rem", padding: "1.25rem", background: "rgba(229,62,62,0.15)", borderRadius: 12, border: "1px solid rgba(229,62,62,0.25)" }}>
-                  <div style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.12em", color: "#fc8181", marginBottom: 6 }}>
+                <div
+                  style={{
+                    marginTop: "2rem",
+                    padding: "1.25rem",
+                    background: "rgba(229,62,62,0.15)",
+                    borderRadius: 12,
+                    border: "1px solid rgba(229,62,62,0.25)",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "0.72rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.12em",
+                      color: "#fc8181",
+                      marginBottom: 6,
+                    }}
+                  >
                     {t("apply.benefits.card.highlightLabel")}
                   </div>
-                  <div style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.8)", lineHeight: 1.6 }}>
+                  <div
+                    style={{
+                      fontSize: "0.9rem",
+                      color: "rgba(255,255,255,0.8)",
+                      lineHeight: 1.6,
+                    }}
+                  >
                     {t("apply.benefits.card.highlightText")}
                   </div>
                 </div>
@@ -740,7 +781,9 @@ export default function ApplyPage() {
                   <div key={bar.name} className={`anim d${i + 1}`}>
                     <div className="score-bar-header">
                       <span className="score-bar-name">{bar.name}</span>
-                      <span className="score-bar-pct">{animatedValues[i] ?? 0}</span>
+                      <span className="score-bar-pct">
+                        {animatedValues[i] ?? 0}
+                      </span>
                     </div>
                     <div className="score-bar-track">
                       <div
@@ -753,9 +796,13 @@ export default function ApplyPage() {
                 ))}
               </div>
               <div className="behavior-panel anim d4">
-                <div className="behavior-t">{t("apply.eval.behavior.title")}</div>
+                <div className="behavior-t">
+                  {t("apply.eval.behavior.title")}
+                </div>
                 {evalBehaviorItems.map((item, i) => (
-                  <div key={i} className="behavior-li">{item}</div>
+                  <div key={i} className="behavior-li">
+                    {item}
+                  </div>
                 ))}
               </div>
             </div>
@@ -771,18 +818,44 @@ export default function ApplyPage() {
                     <span className="grade-score-val">
                       {g.label} {animatedGrades[i] ?? 0}
                     </span>
-                    <span className="grade-badge" style={{ background: g.bg, color: g.col }}>
+                    <span
+                      className="grade-badge"
+                      style={{ background: g.bg, color: g.col }}
+                    >
                       {g.badge}
                     </span>
                     <span className="grade-d">{g.desc}</span>
                   </div>
                 ))}
               </div>
-              <div style={{ marginTop: 16, padding: "1.5rem", background: "var(--gray-50)", borderRadius: 12, border: "1px solid var(--gray-200)" }}>
-                <div style={{ fontSize: "18px", fontWeight: 700, color: "var(--gray-400)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 8 }}>
+              <div
+                style={{
+                  marginTop: 16,
+                  padding: "1.5rem",
+                  background: "var(--gray-50)",
+                  borderRadius: 12,
+                  border: "1px solid var(--gray-200)",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: 700,
+                    color: "var(--gray-400)",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    marginBottom: 8,
+                  }}
+                >
                   {t("apply.eval.noteLabel")}
                 </div>
-                <div style={{ fontSize: "16px", color: "var(--gray-600)", lineHeight: 1.7 }}>
+                <div
+                  style={{
+                    fontSize: "16px",
+                    color: "var(--gray-600)",
+                    lineHeight: 1.7,
+                  }}
+                >
                   {t("apply.eval.noteText")}
                 </div>
               </div>
@@ -796,7 +869,9 @@ export default function ApplyPage() {
         <div className="section-wrap">
           <div className="section-tag">{t("apply.guidelines.tag")}</div>
           <h2 className="section-h anim">{t("apply.guidelines.heading")}</h2>
-          <p className="section-p anim d1">{t("apply.guidelines.subheading")}</p>
+          <p className="section-p anim d1">
+            {t("apply.guidelines.subheading")}
+          </p>
 
           <div className="guidelines-layout">
             {guidelineItems.map((g, i) => (
@@ -814,16 +889,19 @@ export default function ApplyPage() {
             ))}
           </div>
         </div>
-
       </div>
 
       {/* FINAL CTA */}
       <section className="final-section">
-        <div className="section-tag anim" style={{ justifyContent: "center", color: "#fc8181" }}>
+        <div
+          className="section-tag anim"
+          style={{ justifyContent: "center", color: "#fc8181" }}
+        >
           {t("apply.final.readyTag")}
         </div>
         <h2 className="final-big anim d1">
-          {t("apply.final.heading")}<br />
+          {t("apply.final.heading")}
+          <br />
           <span>{t("apply.final.headingHighlight")}</span>
         </h2>
         <p className="final-sub anim d2">{t("apply.final.desc")}</p>
@@ -836,13 +914,24 @@ export default function ApplyPage() {
 
       {/* MODAL */}
       {showForm && (
-        <div className="modal-bg" onClick={(e) => { if (e.target === e.currentTarget) setShowForm(false); }}>
+        <div
+          className="modal-bg"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowForm(false);
+          }}
+        >
           <div className="modal-box">
             <div className="modal-head">
               <div className="modal-head-title">
-                <span style={{ fontSize: "1.1rem" }}>🚀</span> {t("apply.modal.title")}
+                <span style={{ fontSize: "1.1rem" }}>🚀</span>{" "}
+                {t("apply.modal.title")}
               </div>
-              <button className="modal-close" onClick={() => setShowForm(false)}>✕</button>
+              <button
+                className="modal-close"
+                onClick={() => setShowForm(false)}
+              >
+                ✕
+              </button>
             </div>
             <div className="modal-body">
               <iframe

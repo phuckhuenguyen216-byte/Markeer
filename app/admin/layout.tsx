@@ -1,0 +1,520 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+"use client";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { createSupabaseBrowserClient } from "@/lib/supabase";
+
+const menu = [
+  {
+    nameKey: "admin.sidebar.dashboard",
+    href: "/admin",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <rect
+          x="1"
+          y="1"
+          width="6"
+          height="6"
+          rx="1.5"
+          fill="currentColor"
+          opacity="0.9"
+        />
+        <rect
+          x="9"
+          y="1"
+          width="6"
+          height="6"
+          rx="1.5"
+          fill="currentColor"
+          opacity="0.6"
+        />
+        <rect
+          x="1"
+          y="9"
+          width="6"
+          height="6"
+          rx="1.5"
+          fill="currentColor"
+          opacity="0.6"
+        />
+        <rect
+          x="9"
+          y="9"
+          width="6"
+          height="6"
+          rx="1.5"
+          fill="currentColor"
+          opacity="0.3"
+        />
+      </svg>
+    ),
+  },
+  {
+    nameKey: "admin.sidebar.manageBlog",
+    href: "/admin/blogs",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <rect
+          x="2"
+          y="1"
+          width="12"
+          height="14"
+          rx="2"
+          fill="currentColor"
+          opacity="0.2"
+        />
+        <rect
+          x="4"
+          y="4"
+          width="8"
+          height="1.5"
+          rx="0.75"
+          fill="currentColor"
+          opacity="0.85"
+        />
+        <rect
+          x="4"
+          y="7"
+          width="6"
+          height="1.5"
+          rx="0.75"
+          fill="currentColor"
+          opacity="0.6"
+        />
+        <rect
+          x="4"
+          y="10"
+          width="7"
+          height="1.5"
+          rx="0.75"
+          fill="currentColor"
+          opacity="0.4"
+        />
+      </svg>
+    ),
+  },
+];
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    if (pathname === "/admin/login") return;
+    const supabase = createSupabaseBrowserClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) router.push("/admin/login");
+    });
+  }, [pathname, router]);
+
+  const { t } = useTranslation();
+
+  if (!mounted) return null;
+  if (pathname === "/admin/login") return <>{children}</>;
+
+  const currentPage =
+    menu.find(
+      (m) =>
+        m.href === pathname ||
+        (m.href !== "/admin" && pathname.startsWith(m.href)),
+    )?.nameKey ?? "Admin";
+
+  const currentPageLabel =
+    currentPage === "Admin" ? currentPage : t(currentPage);
+
+  return (
+    <>
+      <style>{`
+        .admin-shell { display: flex; min-height: 100vh; background: #f0f2f5; font-family: system-ui, -apple-system, sans-serif; }
+
+        .sidebar {
+          width: ${collapsed ? "64px" : "220px"};
+          flex-shrink: 0;
+          display: flex;
+          flex-direction: column;
+          position: sticky;
+          top: 0;
+          height: 100vh;
+          transition: width 0.3s cubic-bezier(.4,0,.2,1);
+          overflow: hidden;
+          background: #2c1810;
+          box-shadow: 4px 0 24px rgba(44,24,16,0.25);
+        }
+
+        .sidebar::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(160deg, #2c1810 0%, #3b1c14 40%, #4a2318 100%);
+          z-index: 0;
+        }
+
+        .sidebar-wave {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          z-index: 1;
+          opacity: 0.12;
+          animation: wave-move 8s ease-in-out infinite alternate;
+        }
+        @keyframes wave-move {
+          from { transform: translateY(0px) scaleX(1); }
+          to   { transform: translateY(-12px) scaleX(1.05); }
+        }
+
+        .sidebar-dot {
+          position: absolute;
+          border-radius: 50%;
+          background: rgba(180,120,90,0.12);
+          animation: float-dot 6s ease-in-out infinite alternate;
+          z-index: 1;
+        }
+        @keyframes float-dot {
+          from { transform: translateY(0); opacity: 0.15; }
+          to   { transform: translateY(-14px); opacity: 0.35; }
+        }
+
+        .sidebar-inner { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; }
+
+        .sidebar-logo {
+          padding: 20px 16px 16px;
+          border-bottom: 0.5px solid rgba(255,255,255,0.08);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          min-height: 68px;
+        }
+        .logo-mark {
+          width: 34px; height: 34px; flex-shrink: 0;
+          border-radius: 10px;
+          background: #8b4513;
+          display: flex; align-items: center; justify-content: center;
+          box-shadow: 0 4px 12px rgba(139,69,19,0.4);
+        }
+        .logo-mark:hover { transform: rotate(-6deg) scale(1.08); }
+        .logo-text { overflow: hidden; transition: opacity 0.2s, width 0.3s; white-space: nowrap; }
+        .logo-text.hidden-text { opacity: 0; width: 0; }
+
+        .sidebar-nav { flex: 1; padding: 12px 8px; display: flex; flex-direction: column; gap: 2px; }
+        .nav-label {
+          font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+          color: rgba(255,255,255,0.3); padding: 8px 8px 4px;
+          overflow: hidden; white-space: nowrap;
+          transition: opacity 0.2s;
+        }
+        .nav-label.hidden-text { opacity: 0; }
+
+        .nav-link {
+          display: flex; align-items: center; gap: 10px;
+          padding: 9px 10px; border-radius: 10px;
+          text-decoration: none;
+          font-size: 12px; font-weight: 500;
+          color: rgba(255,255,255,0.5);
+          transition: all 0.18s ease;
+          position: relative;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+        .nav-link::before {
+          content: '';
+          position: absolute; inset: 0;
+          background: linear-gradient(90deg, rgba(180,100,70,0.4), rgba(200,130,90,0.2));
+          opacity: 0; border-radius: 10px;
+          transition: opacity 0.2s;
+        }
+        .nav-link:hover { color: rgba(255,255,255,0.9); }
+        .nav-link:hover::before { opacity: 0.6; }
+        .nav-link.active { color: #fff; }
+        .nav-link.active::before { opacity: 1; }
+        .nav-link-bar {
+          position: absolute; left: 0; top: 20%; bottom: 20%;
+          width: 3px; border-radius: 2px;
+          background: #c0392b;
+          opacity: 0; transform: scaleY(0);
+          transition: all 0.2s;
+        }
+        .nav-link.active .nav-link-bar { opacity: 1; transform: scaleY(1); }
+        .nav-link-icon { flex-shrink: 0; transition: transform 0.2s; }
+        .nav-link:hover .nav-link-icon { transform: scale(1.15); }
+        .nav-link-name { overflow: hidden; transition: opacity 0.2s, max-width 0.3s; max-width: 120px; }
+        .nav-link-name.hidden-text { opacity: 0; max-width: 0; }
+
+        .collapse-btn {
+          position: absolute; top: 22px; right: -11px;
+          width: 22px; height: 22px;
+          border-radius: 50%;
+          background: #2c1810;
+          border: 1.5px solid rgba(255,255,255,0.15);
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer; z-index: 10;
+          transition: all 0.2s;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .collapse-btn:hover { background: #8b4513; border-color: #a0522d; }
+        .collapse-btn svg { transition: transform 0.3s; }
+        .collapse-btn.flipped svg { transform: rotate(180deg); }
+
+        .sidebar-footer { padding: 10px 8px 14px; border-top: 0.5px solid rgba(255,255,255,0.06); }
+        .logout-btn {
+          display: flex; align-items: center; gap: 10px;
+          padding: 9px 10px; border-radius: 10px;
+          background: none; border: none; cursor: pointer;
+          width: 100%; font-size: 12px; font-weight: 500;
+          color: rgba(255,140,80,0.65);
+          transition: all 0.18s;
+          white-space: nowrap;
+        }
+        .logout-btn:hover { color: rgba(255,140,80,1); background: rgba(255,100,50,0.1); }
+
+        .admin-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+        .topbar {
+          height: 56px; flex-shrink: 0;
+          background: rgba(255,255,255,0.85);
+          backdrop-filter: blur(12px);
+          border-bottom: 0.5px solid rgba(0,0,0,0.06);
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 0 24px;
+          position: sticky; top: 0; z-index: 10;
+        }
+        .topbar-left { display: flex; align-items: center; gap: 10px; }
+        .breadcrumb-sep { color: #d1d5db; font-size: 14px; }
+        .topbar-page { font-size: 14px; font-weight: 600; color: #5c3320; }
+        .topbar-sub { font-size: 11px; color: #9ca3af; }
+
+        .topbar-right { display: flex; align-items: center; gap: 12px; }
+        .avatar-ring {
+          width: 32px; height: 32px; border-radius: 50%;
+          background: linear-gradient(135deg,#8b4513,#a0522d);
+          display: flex; align-items: center; justify-content: center;
+          color: #fff; font-size: 11px; font-weight: 700;
+          box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #8b4513;
+        }
+        .topbar-name { font-size: 12px; color: #6b7280; font-weight: 500; }
+
+        .online-dot {
+          width: 7px; height: 7px; border-radius: 50%;
+          background: #16a34a;
+          box-shadow: 0 0 0 2px rgba(22,163,74,0.25);
+          animation: pulse-green 2s ease-in-out infinite;
+        }
+        @keyframes pulse-green {
+          0%,100% { box-shadow: 0 0 0 2px rgba(22,163,74,0.25); }
+          50%      { box-shadow: 0 0 0 5px rgba(22,163,74,0.08); }
+        }
+
+        .admin-content { flex: 1; padding: 24px; overflow-auto; }
+
+        .page-enter { animation: page-in 0.25s ease forwards; }
+        @keyframes page-in {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+      `}</style>
+
+      <div className="admin-shell">
+        <aside className="sidebar">
+          <div
+            className="sidebar-dot"
+            style={{
+              width: 80,
+              height: 80,
+              top: "15%",
+              right: -20,
+              animationDelay: "0s",
+            }}
+          />
+          <div
+            className="sidebar-dot"
+            style={{
+              width: 50,
+              height: 50,
+              top: "45%",
+              left: -10,
+              animationDelay: "2s",
+            }}
+          />
+          <div
+            className="sidebar-dot"
+            style={{
+              width: 40,
+              height: 40,
+              bottom: "25%",
+              right: 10,
+              animationDelay: "4s",
+            }}
+          />
+
+          <svg
+            className="sidebar-wave"
+            viewBox="0 0 220 100"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0 60 Q55 30 110 60 Q165 90 220 60 L220 100 L0 100Z"
+              fill="white"
+            />
+            <path
+              d="M0 75 Q55 45 110 75 Q165 95 220 75 L220 100 L0 100Z"
+              fill="white"
+              opacity="0.5"
+            />
+          </svg>
+
+          <button
+            className={`collapse-btn ${collapsed ? "flipped" : ""}`}
+            onClick={() => setCollapsed(!collapsed)}
+            title={collapsed ? "Mở rộng" : "Thu gọn"}
+          >
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path
+                d="M6.5 2L3.5 5L6.5 8"
+                stroke="rgba(255,255,255,0.7)"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+
+          <div className="sidebar-inner">
+            <div className="sidebar-logo">
+              <div className="logo-mark">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle cx="9" cy="9" r="6" fill="#ef4444" opacity="0.9" />
+                  <path
+                    d="M6 9l2 2 4-4"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <div className={`logo-text ${collapsed ? "hidden-text" : ""}`}>
+                <p
+                  style={{
+                    fontSize: 13,
+                    color: "#fff",
+                    fontWeight: 700,
+                    lineHeight: 1.2,
+                  }}
+                >
+                  Markee AI
+                </p>
+                <p
+                  style={{
+                    fontSize: 9,
+                    letterSpacing: "2px",
+                    textTransform: "uppercase",
+                    color: "#fca5a5",
+                    marginTop: 2,
+                  }}
+                >
+                  Admin Panel
+                </p>
+              </div>
+            </div>
+
+            <nav className="sidebar-nav">
+              <div className={`nav-label ${collapsed ? "hidden-text" : ""}`}>
+                Điều hướng
+              </div>
+              {menu.map((item) => {
+                const isActive =
+                  pathname === item.href ||
+                  (item.href !== "/admin" && pathname.startsWith(item.href));
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`nav-link ${isActive ? "active" : ""}`}
+                    title={collapsed ? t(item.nameKey) : undefined}
+                  >
+                    <div className="nav-link-bar" />
+                    <span className="nav-link-icon">{item.icon}</span>
+                    <span
+                      className={`nav-link-name ${collapsed ? "hidden-text" : ""}`}
+                    >
+                      {t(item.nameKey)}
+                    </span>
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="sidebar-footer">
+              <button
+                className="logout-btn"
+                onClick={async () => {
+                  const supabase = createSupabaseBrowserClient();
+                  await supabase.auth.signOut();
+                  router.push("/admin/login");
+                }}
+                title={collapsed ? t("admin.sidebar.logout") : undefined}
+              >
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  style={{ flexShrink: 0 }}
+                >
+                  <path
+                    d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3M10 11l3-3-3-3M13 8H6"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span
+                  className={collapsed ? "hidden-text" : ""}
+                  style={{
+                    overflow: "hidden",
+                    transition: "opacity 0.2s, max-width 0.3s",
+                    maxWidth: collapsed ? 0 : 120,
+                    opacity: collapsed ? 0 : 1,
+                  }}
+                >
+                  {t("admin.sidebar.logout")}
+                </span>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <div className="admin-main">
+          <div className="topbar">
+            <div className="topbar-left">
+              <span className="topbar-sub">Admin</span>
+              <span className="breadcrumb-sep">/</span>
+              <span className="topbar-page">{currentPageLabel}</span>
+            </div>
+            <div className="topbar-right">
+              <div className="online-dot" title="Online" />
+              <span className="topbar-name">admin</span>
+              <div className="avatar-ring">A</div>
+            </div>
+          </div>
+
+          <div className="admin-content">
+            <div className="page-enter" key={pathname}>
+              {children}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

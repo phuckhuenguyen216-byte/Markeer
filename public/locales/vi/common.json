@@ -44,125 +44,125 @@
     ]
   },
   "cta": {
-  "badge": "Ưu đãi có hạn",
-  "headline": "NHẬN NGAY 1 THÁNG SỬ DỤNG MARKEE AI MIỄN PHÍ",
-  "highlight": "MIỄN PHÍ",
-  "description": "Ưu đãi dành cho người dùng đăng ký trong thời gian giới hạn. Không cần thẻ tín dụng, kích hoạt ngay lập tức.",
-  "namePlaceholder": "Họ và tên",
-  "emailPlaceholder": "Email của bạn",
-  "messagePlaceholder": "Bạn muốn bắt đầu từ đâu?",
-  "sending": "Đang gửi...",
-  "point1": "1,000 AI credits",
-  "point2": "Truy cập đầy đủ tính năng",
-  "point3": "Hỗ trợ 24/7",
-  "button": "Đăng ký ngay",
-  "noCard": "Không cần thẻ tín dụng",
-  "cancelAnytime": "Hủy bất cứ lúc nào"
-},
+    "badge": "Ưu đãi có hạn",
+    "headline": "NHẬN NGAY 1 THÁNG SỬ DỤNG MARKEE AI MIỄN PHÍ",
+    "highlight": "MIỄN PHÍ",
+    "description": "Ưu đãi dành cho người dùng đăng ký trong thời gian giới hạn. Không cần thẻ tín dụng, kích hoạt ngay lập tức.",
+    "namePlaceholder": "Họ và tên",
+    "emailPlaceholder": "Email của bạn",
+    "messagePlaceholder": "Bạn muốn bắt đầu từ đâu?",
+    "sending": "Đang gửi...",
+    "point1": "1,000 AI credits",
+    "point2": "Truy cập đầy đủ tính năng",
+    "point3": "Hỗ trợ 24/7",
+    "button": "Đăng ký ngay",
+    "noCard": "Không cần thẻ tín dụng",
+    "cancelAnytime": "Hủy bất cứ lúc nào"
+  },
   "registration": {
-  "title": "SẴN SÀNG BÙNG NỔ DOANH SỐ VỚI MARKEE AI?",
-  "description": "Gia nhập cộng đồng 10,000+ marketer thông minh đang sử dụng AI để tối ưu hóa công việc mỗi ngày.",
-  "primary": "Bắt đầu miễn phí ngay",
-  "secondary": "Xem demo sản phẩm",
+    "title": "SẴN SÀNG BÙNG NỔ DOANH SỐ VỚI MARKEE AI?",
+    "description": "Gia nhập cộng đồng 10,000+ marketer thông minh đang sử dụng AI để tối ưu hóa công việc mỗi ngày.",
+    "primary": "Bắt đầu miễn phí ngay",
+    "secondary": "Xem demo sản phẩm",
 
-  "statusLive": "TRỰC TUYẾN",
-  "usersOnline": "NGƯỜI DÙNG ONLINE",
+    "statusLive": "TRỰC TUYẾN",
+    "usersOnline": "NGƯỜI DÙNG ONLINE",
 
-  "users": "Người dùng",
+    "users": "Người dùng",
 
-  "trust1": "Không cần thẻ tín dụng",
-  "trust2": "Hủy bất kỳ lúc nào",
-  "trust3": "Bảo mật SSL 256-bit",
+    "trust1": "Không cần thẻ tín dụng",
+    "trust2": "Hủy bất kỳ lúc nào",
+    "trust3": "Bảo mật SSL 256-bit",
 
-  "metricUsers": "Người dùng",
-  "metricSatisfaction": "Hài lòng",
-  "metricRating": "Đánh giá",
-  "metricResponse": "Phản hồi",
-  "systemStatus": "HỆ THỐNG SẴN SÀNG · TẤT CẢ MODULE ĐANG HOẠT ĐỘNG"
-},
+    "metricUsers": "Người dùng",
+    "metricSatisfaction": "Hài lòng",
+    "metricRating": "Đánh giá",
+    "metricResponse": "Phản hồi",
+    "systemStatus": "HỆ THỐNG SẴN SÀNG · TẤT CẢ MODULE ĐANG HOẠT ĐỘNG"
+  },
   "features": {
-  "title": "TÍNH NĂNG NỔI BẬT",
-  "description": "Nền tảng AI Marketing Automation giúp bạn tạo nội dung, lập kế hoạch và tối ưu hiệu suất toàn diện.",
+    "title": "TÍNH NĂNG NỔI BẬT",
+    "description": "Nền tảng AI Marketing Automation giúp bạn tạo nội dung, lập kế hoạch và tối ưu hiệu suất toàn diện.",
 
-  "groups": [
-    {
-      "group": "AUTO POST – TỰ ĐỘNG HÓA MARKETING",
-      "name": "THEO",
-      "logo": "/img/mascot/Theo-logo.png",
-      "items": [
-        {
-          "title": "Tự động đăng bài",
-          "description": "Tự động đăng bài cho Facebook, Instagram, TikTok, LinkedIn, YouTube, X hoặc Website.",
-          "icon": "Send"
-        },
-        {
-          "title": "Đăng bài đa nền tảng",
-          "description": "Đăng cùng nội dung lên nhiều nền tảng chỉ với một thao tác.",
-          "icon": "Share2"
-        }
-      ]
-    },
+    "groups": [
+      {
+        "group": "AUTO POST – TỰ ĐỘNG HÓA MARKETING",
+        "name": "THEO",
+        "logo": "/img/mascot/Theo-logo.png",
+        "items": [
+          {
+            "title": "Tự động đăng bài",
+            "description": "Tự động đăng bài cho Facebook, Instagram, TikTok, LinkedIn, YouTube, X hoặc Website.",
+            "icon": "Send"
+          },
+          {
+            "title": "Đăng bài đa nền tảng",
+            "description": "Đăng cùng nội dung lên nhiều nền tảng chỉ với một thao tác.",
+            "icon": "Share2"
+          }
+        ]
+      },
 
-    {
-      "group": "PLAN & SCHEDULE – LẬP KẾ HOẠCH",
-      "name": "MAX",
-      "logo": "/img/mascot/Max-logo.png",
-      "items": [
-        {
-          "title": "Lịch nội dung trực quan",
-          "description": "Hiển thị lịch đăng theo ngày, tuần, tháng và chiến dịch.",
-          "icon": "Calendar"
-        },
-        {
-          "title": "Hẹn lịch đăng tự động",
-          "description": "Cài đặt thời gian trước, hệ thống tự động đăng đúng giờ.",
-          "icon": "Clock"
-        },
-        {
-          "title": "Theo dõi tiến độ",
-          "description": "Quản lý trạng thái: Nháp – Xử lý – Kiểm duyệt – Đã đăng.",
-          "icon": "ListChecks"
-        },
-        {
-          "title": "Quản lý phiên bản",
-          "description": "Theo dõi lịch sử chỉnh sửa nội dung.",
-          "icon": "History"
-        }
-      ]
-    },
+      {
+        "group": "PLAN & SCHEDULE – LẬP KẾ HOẠCH",
+        "name": "MAX",
+        "logo": "/img/mascot/Max-logo.png",
+        "items": [
+          {
+            "title": "Lịch nội dung trực quan",
+            "description": "Hiển thị lịch đăng theo ngày, tuần, tháng và chiến dịch.",
+            "icon": "Calendar"
+          },
+          {
+            "title": "Hẹn lịch đăng tự động",
+            "description": "Cài đặt thời gian trước, hệ thống tự động đăng đúng giờ.",
+            "icon": "Clock"
+          },
+          {
+            "title": "Theo dõi tiến độ",
+            "description": "Quản lý trạng thái: Nháp – Xử lý – Kiểm duyệt – Đã đăng.",
+            "icon": "ListChecks"
+          },
+          {
+            "title": "Quản lý phiên bản",
+            "description": "Theo dõi lịch sử chỉnh sửa nội dung.",
+            "icon": "History"
+          }
+        ]
+      },
 
-    {
-      "group": "DASHBOARD – PHÂN TÍCH & BÁO CÁO",
-      "name": "PIP",
-      "logo": "/img/mascot/Pip-logo.png",
-      "items": [
-        {
-          "title": "Báo cáo đa nền tảng",
-          "description": "Tổng hợp dữ liệu Facebook, Instagram, TikTok, LinkedIn, YouTube và Website.",
-          "icon": "BarChart3"
-        },
-        {
-          "title": "Theo dõi KPI",
-          "description": "Đo lường tiếp cận, tương tác và tăng trưởng.",
-          "icon": "TrendingUp"
-        },
-        {
-          "title": "Báo cáo chiến dịch",
-          "description": "Đánh giá hiệu quả theo từng mục tiêu marketing.",
-          "icon": "Target"
-        },
-        {
-          "title": "AI đề xuất tối ưu",
-          "description": "AI đề xuất cải thiện nội dung và chiến lược dựa trên dữ liệu.",
-          "icon": "Sparkles"
-        }
-      ]
-    }
-  ],
+      {
+        "group": "DASHBOARD – PHÂN TÍCH & BÁO CÁO",
+        "name": "PIP",
+        "logo": "/img/mascot/Pip-logo.png",
+        "items": [
+          {
+            "title": "Báo cáo đa nền tảng",
+            "description": "Tổng hợp dữ liệu Facebook, Instagram, TikTok, LinkedIn, YouTube và Website.",
+            "icon": "BarChart3"
+          },
+          {
+            "title": "Theo dõi KPI",
+            "description": "Đo lường tiếp cận, tương tác và tăng trưởng.",
+            "icon": "TrendingUp"
+          },
+          {
+            "title": "Báo cáo chiến dịch",
+            "description": "Đánh giá hiệu quả theo từng mục tiêu marketing.",
+            "icon": "Target"
+          },
+          {
+            "title": "AI đề xuất tối ưu",
+            "description": "AI đề xuất cải thiện nội dung và chiến lược dựa trên dữ liệu.",
+            "icon": "Sparkles"
+          }
+        ]
+      }
+    ],
 
-  "ctaTitle": "MARKETING VẬN HÀNH TỰ ĐỘNG, TỐI ƯU HIỆU QUẢ THỰC",
-  "ctaDescription": "MARKEE AI giúp bạn tự động hóa marketing, tối ưu chiến lược và ra quyết định dựa trên dữ liệu thực."
-},
+    "ctaTitle": "MARKETING VẬN HÀNH TỰ ĐỘNG, TỐI ƯU HIỆU QUẢ THỰC",
+    "ctaDescription": "MARKEE AI giúp bạn tự động hóa marketing, tối ưu chiến lược và ra quyết định dựa trên dữ liệu thực."
+  },
   "footer": {
     "brandTitle": "MARKEE AI ",
     "brandDescription": "Trợ lý Marketing AI cho doanh nghiệp hiện đại. Tạo nhanh hơn · Phân tích sâu hơn · Tăng trưởng thông minh hơn.",
@@ -675,18 +675,48 @@
       "heading": "BẠN SẼ ĐƯỢC GÌ\nKHI THAM GIA?",
       "subheading": "Đánh giá thăng tiến không theo thâm niên, mà theo giá trị bạn tạo ra.",
       "items": [
-        { "icon": "🧭", "title": "Mentor đồng hành", "desc": "Mentor/Leader hướng dẫn theo tuần & theo sprint, giúp bạn phát triển liên tục không bị bỡ ngỡ." },
-        { "icon": "📋", "title": "Project Plan thật", "desc": "Làm việc theo checklist + evidence rõ ràng, giảm cảm tính, tăng chuyên nghiệp từ ngày đầu." },
-        { "icon": "📁", "title": "Portfolio & Case Study", "desc": "Có repo/doc/report/deck/landing/campaign thật để đưa vào CV xin việc sau này." },
-        { "icon": "🚀", "title": "Lộ trình thăng tiến", "desc": "Rõ ràng từ Intern → Fresher → Junior → Middle → Senior, đánh giá minh bạch bằng KPI." },
-        { "icon": "🎯", "title": "Cơ hội chính thức", "desc": "Được xét lên Fresher Talent và Junior chính thức nếu pass gate." },
-        { "icon": "⚡", "title": "Tốc độ lên level", "desc": "Càng chủ động và có ownership, tốc độ lên level càng nhanh." }
+        {
+          "icon": "🧭",
+          "title": "Mentor đồng hành",
+          "desc": "Mentor/Leader hướng dẫn theo tuần & theo sprint, giúp bạn phát triển liên tục không bị bỡ ngỡ."
+        },
+        {
+          "icon": "📋",
+          "title": "Project Plan thật",
+          "desc": "Làm việc theo checklist + evidence rõ ràng, giảm cảm tính, tăng chuyên nghiệp từ ngày đầu."
+        },
+        {
+          "icon": "📁",
+          "title": "Portfolio & Case Study",
+          "desc": "Có repo/doc/report/deck/landing/campaign thật để đưa vào CV xin việc sau này."
+        },
+        {
+          "icon": "🚀",
+          "title": "Lộ trình thăng tiến",
+          "desc": "Rõ ràng từ Intern → Fresher → Junior → Middle → Senior, đánh giá minh bạch bằng KPI."
+        },
+        {
+          "icon": "🎯",
+          "title": "Cơ hội chính thức",
+          "desc": "Được xét lên Fresher Talent và Junior chính thức nếu pass gate."
+        },
+        {
+          "icon": "⚡",
+          "title": "Tốc độ lên level",
+          "desc": "Càng chủ động và có ownership, tốc độ lên level càng nhanh."
+        }
       ],
       "card": {
         "label": "Tại sao chọn chúng tôi",
         "title": "Không phải thực tập thông thường",
         "desc": "Bạn sẽ được làm việc trên môi trường thực tế, giao việc thật, deadline thật, và được đánh giá như một nhân sự chính thức.",
-        "pills": ["Real Projects", "KPI System", "Mentorship", "Career Path", "Fast Track"],
+        "pills": [
+          "Real Projects",
+          "KPI System",
+          "Mentorship",
+          "Career Path",
+          "Fast Track"
+        ],
         "highlightLabel": "HIGHLIGHT",
         "highlightText": "Lộ trình 7 cấp bậc rõ ràng, thăng tiến dựa trên KPI — không phải thâm niên."
       }
@@ -696,11 +726,36 @@
       "heading": "CẤU TRÚC 5 TEAM CHÍNH",
       "subheading": "Vận hành theo POD để phối hợp trơn tru Sales–Presale–Delivery.",
       "items": [
-        { "num": "01", "icon": "🖥️", "name": "SI Delivery", "sub": "Network / System / Security" },
-        { "num": "02", "icon": "📢", "name": "Marketing", "sub": "Agency + AI Marketing" },
-        { "num": "03", "icon": "⚙️", "name": "Dev + DevOps", "sub": "SaaS + Platform" },
-        { "num": "04", "icon": "🤖", "name": "AI Team", "sub": "AI Products + Enablement" },
-        { "num": "05", "icon": "💼", "name": "Sales", "sub": "Full Solution Sales" }
+        { 
+          "num": "01", 
+          "icon": "💼", 
+          "name": "Sales", 
+          "sub": "Full Solution Sales" 
+        },
+        { 
+          "num": "02", 
+          "icon": "📢", 
+          "name": "Marketing", 
+          "sub": "Agency + AI Marketing" 
+        },
+        { 
+          "num": "03", 
+          "icon": "🤖", 
+          "name": "AI Team", 
+          "sub": "AI Products + Enablement" 
+        },
+        { 
+          "num": "04", 
+          "icon": "⚙️", 
+          "name": "Dev + DevOps", 
+          "sub": "SaaS + Platform" 
+        },
+        { 
+          "num": "05", 
+          "icon": "🖥️", 
+          "name": "SI Delivery", 
+          "sub": "Network / System / Security" 
+        }
       ]
     },
     "eval": {
@@ -708,9 +763,21 @@
       "heading": "CÁCH ĐÁNH GIÁ — 100 ĐIỂM",
       "subheading": "Minh bạch, không cảm tính. Mỗi kỳ đánh giá theo 3 trục chính.",
       "bars": [
-        { "name": "KPI / Output", "pct": 60, "sub": "Làm được gì, đúng hạn, có evidence" },
-        { "name": "Quality", "pct": 20, "sub": "Đúng chuẩn, ít lỗi, dễ bàn giao" },
-        { "name": "Behavior Log", "pct": 20, "sub": "Thái độ, ownership, phối hợp" }
+        {
+          "name": "KPI / Output",
+          "pct": 60,
+          "sub": "Làm được gì, đúng hạn, có evidence"
+        },
+        {
+          "name": "Quality",
+          "pct": 20,
+          "sub": "Đúng chuẩn, ít lỗi, dễ bàn giao"
+        },
+        {
+          "name": "Behavior Log",
+          "pct": 20,
+          "sub": "Thái độ, ownership, phối hợp"
+        }
       ],
       "behavior": {
         "title": "📋 Behavior Staff Log (Anti-bias)",
@@ -721,9 +788,30 @@
       },
       "gradeHead": ["Điểm", "Kết quả", "Ý nghĩa"],
       "grades": [
-        { "label": "≥", "score": 85, "badge": "STRONG PASS", "bg": "#fff5f5", "col": "#c53030", "desc": "Xét up-level nhanh" },
-        { "label": "≥", "score": 75, "badge": "PASS", "bg": "#f0fff4", "col": "#276749", "desc": "Đủ điều kiện lên level" },
-        { "label": "<", "score": 75, "badge": "FAIL", "bg": "#fff5f5", "col": "#9b2c2c", "desc": "Cần cải thiện hoặc dừng" }
+        {
+          "label": "≥",
+          "score": 85,
+          "badge": "STRONG PASS",
+          "bg": "#fff5f5",
+          "col": "#c53030",
+          "desc": "Xét up-level nhanh"
+        },
+        {
+          "label": "≥",
+          "score": 75,
+          "badge": "PASS",
+          "bg": "#f0fff4",
+          "col": "#276749",
+          "desc": "Đủ điều kiện lên level"
+        },
+        {
+          "label": "<",
+          "score": 75,
+          "badge": "FAIL",
+          "bg": "#fff5f5",
+          "col": "#9b2c2c",
+          "desc": "Cần cải thiện hoặc dừng"
+        }
       ],
       "noteLabel": "Ghi chú",
       "noteText": "Điểm thể hiện giá trị bạn tạo ra, không phải thâm niên hay cảm tình. Mọi đánh giá đều có evidence kèm theo."
@@ -733,12 +821,36 @@
       "heading": "QUY ĐỊNH THỰC TẬP",
       "subheading": "FAIR & RÕ — Rõ ràng, công bằng, có ghi nhận.",
       "items": [
-        { "num": "01", "icon": "📅", "text": "Weekly report bắt buộc cho leader/mentor mỗi tuần." },
-        { "num": "02", "icon": "⏰", "text": "Dời deadline: báo trước càng sớm càng tốt (tối thiểu 24h)." },
-        { "num": "03", "icon": "🔍", "text": "Không có task? Chủ động xin task hoặc làm learning deliverable." },
-        { "num": "04", "icon": "⚠️", "text": "Kỷ luật 3 bước: Warning 1 → Warning 2 → Stop nếu không cải thiện." },
-        { "num": "05", "icon": "💰", "text": "Chi trả minh bạch: Level 1 theo KPI Points | Level 2–3 stipend + bonus gate." },
-        { "num": "06", "icon": "🚫", "text": "Tạm dừng chi trả: ghosting, gian dối evidence, không report sau nhắc nhở." }
+        {
+          "num": "01",
+          "icon": "📅",
+          "text": "Weekly report bắt buộc cho leader/mentor mỗi tuần."
+        },
+        {
+          "num": "02",
+          "icon": "⏰",
+          "text": "Dời deadline: báo trước càng sớm càng tốt (tối thiểu 24h)."
+        },
+        {
+          "num": "03",
+          "icon": "🔍",
+          "text": "Không có task? Chủ động xin task hoặc làm learning deliverable."
+        },
+        {
+          "num": "04",
+          "icon": "⚠️",
+          "text": "Kỷ luật 3 bước: Warning 1 → Warning 2 → Stop nếu không cải thiện."
+        },
+        {
+          "num": "05",
+          "icon": "💰",
+          "text": "Chi trả minh bạch: Level 1 theo KPI Points | Level 2–3 stipend + bonus gate."
+        },
+        {
+          "num": "06",
+          "icon": "🚫",
+          "text": "Tạm dừng chi trả: ghosting, gian dối evidence, không report sau nhắc nhở."
+        }
       ]
     },
     "final": {
@@ -752,6 +864,128 @@
       "loading": "Đang tải…"
     },
     "path": ["Intern", "Fresher", "Junior", "Middle", "Senior"]
-  }
+  },
 
+  "blog": {
+    "title": "Blog AI Marketing",
+    "heroDesc": "Kiến thức, chiến lược và xu hướng AI Marketing mới nhất giúp bạn tối ưu hoá hiệu quả kinh doanh.",
+    "statPosts": "Bài viết",
+    "statReads": "Lượt đọc",
+    "statGrowth": "Tăng trưởng",
+    "latestLabel": "MỚI NHẤT",
+    "latestTitle": "Bài viết mới",
+    "latestDesc": "Những bài viết mới nhất về AI Marketing, chiến lược và xu hướng công nghệ.",
+    "latestBtn": "Bài viết mới nhất",
+    "popularBtn": "Phổ biến nhất",
+    "popularTitle": "Phổ biến nhất",
+    "popularDesc": "Những bài viết được đọc nhiều nhất, được cộng đồng yêu thích.",
+    "allTitle": "Tất cả bài viết",
+    "filterAll": "Tất cả",
+    "noPostsInCategory": "Chưa có bài viết nào trong danh mục này.",
+    "loadMore": "Xem thêm bài viết",
+    "loading": "Đang tải bài viết...",
+    "minuteRead": "phút đọc",
+    "ctaTitle": "Sẵn sàng tối ưu Marketing với AI?",
+    "ctaDesc": "Dùng thử miễn phí 1 tháng với 1000 AI credits. Không cần thẻ tín dụng.",
+    "ctaBtn": "Đăng ký dùng thử",
+    "ctaLearnMore": "Tìm hiểu thêm",
+    "detailCtaTitle": "Tối ưu Marketing với AI ngay hôm nay",
+    "detailCtaDesc": "Dùng thử miễn phí 1 tháng. Tạo content nhanh gấp 10 lần, phân tích dữ liệu real-time.",
+    "detailCtaBtn": "Đăng ký miễn phí",
+    "editedBy": "Biên soạn bởi Markee AI",
+    "backToBlog": "Quay lại Blog",
+    "loadingPost": "Đang tải bài viết...",
+    "notFoundTitle": "Không tìm thấy bài viết",
+    "notFoundDesc": "Bài viết có thể đã bị xóa hoặc không tồn tại.",
+    "notFoundBtn": "Quay lại Blog",
+    "views": "lượt xem",
+    "shareTitle": "Chia sẻ bài viết",
+    "relatedTitle": "Bài viết liên quan",
+    "relatedDesc": "Những bài viết cùng chủ đề có thể bạn quan tâm",
+    "readMore": "Đọc tiếp",
+    "translateBtn": "Dịch bài viết",
+    "showOriginal": "Xem bản gốc",
+    "translating": "Đang dịch..."
+  },
+
+  "admin": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "manageBlog": "Quản lý Blog",
+      "logout": "Đăng xuất"
+    },
+    "dashboard": {
+      "subtitle": "Thống kê blog Markee AI Marketing",
+      "totalPosts": "Tổng bài viết",
+      "published": "Đang hiển thị",
+      "draft": "Bản nháp",
+      "totalViews": "Tổng lượt xem",
+      "quickActions": "Thao tác nhanh",
+      "newPost": "Viết bài mới",
+      "newPostDesc": "Tạo bài viết blog mới",
+      "managePosts": "Quản lý bài viết",
+      "managePostsDesc": "Chỉnh sửa, xóa bài viết",
+      "viewBlog": "Xem trang Blog",
+      "viewBlogDesc": "Xem giao diện blog public"
+    },
+    "blogs": {
+      "all": "Tất cả",
+      "publishedTab": "Hiển thị",
+      "draftTab": "Nháp",
+      "searchPlaceholder": "Tìm kiếm bài viết...",
+      "loading": "Đang tải danh sách bài viết...",
+      "loadError": "Lỗi tải danh sách bài viết",
+      "confirmDeleteTitle": "Xác nhận xóa bài viết",
+      "confirmDeleteMsg": "Bài viết này sẽ bị xóa vĩnh viễn:",
+      "cancel": "Hủy",
+      "delete": "Xóa bài viết",
+      "deleted": "Đã xóa bài viết",
+      "deleteFailed": "Xóa thất bại",
+      "showing": "hiển thị",
+      "noPosts": "Chưa có bài viết nào",
+      "noPostsDesc": "Bắt đầu viết bài đầu tiên nào!",
+      "addNew": "Thêm bài viết mới",
+      "edit": "Sửa",
+      "views": "lượt xem",
+      "featured": "Nổi bật",
+      "popular": "Phổ biến"
+    },
+    "login": {
+      "welcome": "Chào mừng đến Admin Dashboard",
+      "subtitle": "Đăng nhập để quản lý Blog Markee AI",
+      "adminLabel": "Quản trị viên",
+      "usernamePlaceholder": "Tên đăng nhập",
+      "passwordPlaceholder": "Mật khẩu",
+      "loginBtn": "Đăng nhập",
+      "loggingIn": "Đang đăng nhập...",
+      "errorEmpty": "Vui lòng nhập tên đăng nhập và mật khẩu.",
+      "errorWrong": "Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại."
+    },
+    "form": {
+      "loading": "Đang tải bài viết...",
+      "backToList": "Quay lại danh sách",
+      "titlePlaceholder": "Nhập tiêu đề bài viết...",
+      "slugPlaceholder": "tieu-de-bai-viet",
+      "excerptPlaceholder": "Mô tả ngắn về nội dung bài viết...",
+      "coverImagePlaceholder": "https://images.unsplash.com/photo-xxx",
+      "coverImageLabel": "URL ảnh bìa",
+      "tagLabel": "Danh mục",
+      "authorLabel": "Tác giả",
+      "contentLabel": "Nội dung bài viết",
+      "featuredLabel": "Bài viết nổi bật",
+      "featuredDesc": "Hiển thị ở mục \"Mới nhất\" trang blog",
+      "popularLabel": "Bài viết phổ biến",
+      "popularDesc": "Hiển thị ở mục \"Phổ biến\" trang blog",
+      "cancelBtn": "Hủy",
+      "saveDraft": "Lưu bản nháp",
+      "saving": "Đang lưu...",
+      "createPost": "Tạo bài viết",
+      "updatePost": "Cập nhật bài viết",
+      "successCreate": "Tạo bài viết thành công!",
+      "successUpdate": "Cập nhật bài viết thành công!",
+      "errorTitle": "Vui lòng nhập tiêu đề bài viết!",
+      "errorCover": "Vui lòng nhập URL ảnh bìa!",
+      "errorServer": "Lỗi kết nối server"
+    }
+  }
 }
