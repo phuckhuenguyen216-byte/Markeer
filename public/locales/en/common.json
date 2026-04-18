@@ -44,124 +44,124 @@
     ]
   },
   "cta": {
-  "badge": "Limited-time offer",
-  "headline": "Get 1 month of Markee for free",
-  "description": "Offer for users who sign up during the promo period. No credit card required, instant activation.",
-  "namePlaceholder": "Your full name",
-  "emailPlaceholder": "Your email",
-  "messagePlaceholder": "Where would you like to start?",
-  "sending": "Sending...",
-  "point1": "1,000 AI credits",
-  "point2": "Full feature access",
-  "point3": "24/7 support",
-  "button": "Sign up now",
-  "noCard": "No credit card required",
-  "cancelAnytime": "Cancel anytime"
-},
+    "badge": "Limited-time offer",
+    "headline": "Get 1 month of Markee for free",
+    "description": "Offer for users who sign up during the promo period. No credit card required, instant activation.",
+    "namePlaceholder": "Your full name",
+    "emailPlaceholder": "Your email",
+    "messagePlaceholder": "Where would you like to start?",
+    "sending": "Sending...",
+    "point1": "1,000 AI credits",
+    "point2": "Full feature access",
+    "point3": "24/7 support",
+    "button": "Sign up now",
+    "noCard": "No credit card required",
+    "cancelAnytime": "Cancel anytime"
+  },
   "registration": {
-  "title": "Ready to boost your revenue with Markee AI?",
-  "description": "Join 10,000+ smart marketers using AI to optimize their work every day.",
-  "primary": "Start for free",
-  "secondary": "Watch product demo",
+    "title": "Ready to boost your revenue with Markee AI?",
+    "description": "Join 10,000+ smart marketers using AI to optimize their work every day.",
+    "primary": "Start for free",
+    "secondary": "Watch product demo",
 
-  "statusLive": "LIVE",
-  "usersOnline": "USERS ONLINE",
+    "statusLive": "LIVE",
+    "usersOnline": "USERS ONLINE",
 
-  "users": "Users",
+    "users": "Users",
 
-  "trust1": "No credit card required",
-  "trust2": "Cancel anytime",
-  "trust3": "256-bit SSL security",
+    "trust1": "No credit card required",
+    "trust2": "Cancel anytime",
+    "trust3": "256-bit SSL security",
 
-  "metricUsers": "Users",
-  "metricSatisfaction": "Satisfaction",
-  "metricRating": "Rating",
-  "metricResponse": "Response",
-  "systemStatus": "SYSTEM READY · ALL MODULES ONLINE"
-},
+    "metricUsers": "Users",
+    "metricSatisfaction": "Satisfaction",
+    "metricRating": "Rating",
+    "metricResponse": "Response",
+    "systemStatus": "SYSTEM READY · ALL MODULES ONLINE"
+  },
   "features": {
-  "title": "Key Features",
-  "description": "An AI Marketing Automation platform that helps you create content, plan campaigns, and optimize performance efficiently.",
+    "title": "Key Features",
+    "description": "An AI Marketing Automation platform that helps you create content, plan campaigns, and optimize performance efficiently.",
 
-  "groups": [
-    {
-      "group": "AUTO POST – MARKETING AUTOMATION",
-      "name": "THEO",
-      "logo": "/img/mascot/Theo-logo.png",
-      "items": [
-        {
-          "title": "Automated Posting",
-          "description": "Automatically publish content across Facebook, Instagram, TikTok, LinkedIn, YouTube, X, or your Website.",
-          "icon": "Send"
-        },
-        {
-          "title": "Smart Multi-Platform Publishing",
-          "description": "Publish the same content across multiple platforms with a single action.",
-          "icon": "Share2"
-        }
-      ]
-    },
+    "groups": [
+      {
+        "group": "AUTO POST – MARKETING AUTOMATION",
+        "name": "THEO",
+        "logo": "/img/mascot/Theo-logo.png",
+        "items": [
+          {
+            "title": "Automated Posting",
+            "description": "Automatically publish content across Facebook, Instagram, TikTok, LinkedIn, YouTube, X, or your Website.",
+            "icon": "Send"
+          },
+          {
+            "title": "Smart Multi-Platform Publishing",
+            "description": "Publish the same content across multiple platforms with a single action.",
+            "icon": "Share2"
+          }
+        ]
+      },
 
-    {
-      "group": "PLAN & SCHEDULE – CONTENT PLANNING",
-      "name": "MAX",
-      "logo": "/img/mascot/Max-logo.png",
-      "items": [
-        {
-          "title": "Visual Content Calendar",
-          "description": "View publishing schedules by day, week, month, or campaign.",
-          "icon": "Calendar"
-        },
-        {
-          "title": "Automatic Scheduling",
-          "description": "Set publishing time in advance and let the system post automatically.",
-          "icon": "Clock"
-        },
-        {
-          "title": "Progress Tracking",
-          "description": "Manage content status: Draft – In Progress – Review – Published.",
-          "icon": "ListChecks"
-        },
-        {
-          "title": "Version Management",
-          "description": "Track content edit history to prevent mistakes.",
-          "icon": "History"
-        }
-      ]
-    },
+      {
+        "group": "PLAN & SCHEDULE – CONTENT PLANNING",
+        "name": "MAX",
+        "logo": "/img/mascot/Max-logo.png",
+        "items": [
+          {
+            "title": "Visual Content Calendar",
+            "description": "View publishing schedules by day, week, month, or campaign.",
+            "icon": "Calendar"
+          },
+          {
+            "title": "Automatic Scheduling",
+            "description": "Set publishing time in advance and let the system post automatically.",
+            "icon": "Clock"
+          },
+          {
+            "title": "Progress Tracking",
+            "description": "Manage content status: Draft – In Progress – Review – Published.",
+            "icon": "ListChecks"
+          },
+          {
+            "title": "Version Management",
+            "description": "Track content edit history to prevent mistakes.",
+            "icon": "History"
+          }
+        ]
+      },
 
-    {
-      "group": "DASHBOARD – ANALYTICS & REPORTING",
-      "name": "PIP",
-      "logo": "/img/mascot/Pip-logo.png",
-      "items": [
-        {
-          "title": "Multi-Platform Reports",
-          "description": "Aggregate performance data from Facebook, Instagram, TikTok, LinkedIn, YouTube, and Website.",
-          "icon": "BarChart3"
-        },
-        {
-          "title": "KPI Tracking",
-          "description": "Measure reach, engagement, growth, and post performance.",
-          "icon": "TrendingUp"
-        },
-        {
-          "title": "Campaign Performance Reports",
-          "description": "Evaluate marketing effectiveness based on campaign objectives.",
-          "icon": "Target"
-        },
-        {
-          "title": "AI Optimization Recommendations",
-          "description": "AI suggests improvements for content, posting schedules, and marketing strategies based on real data.",
-          "icon": "Sparkles"
-        }
-      ]
-    }
-  ],
+      {
+        "group": "DASHBOARD – ANALYTICS & REPORTING",
+        "name": "PIP",
+        "logo": "/img/mascot/Pip-logo.png",
+        "items": [
+          {
+            "title": "Multi-Platform Reports",
+            "description": "Aggregate performance data from Facebook, Instagram, TikTok, LinkedIn, YouTube, and Website.",
+            "icon": "BarChart3"
+          },
+          {
+            "title": "KPI Tracking",
+            "description": "Measure reach, engagement, growth, and post performance.",
+            "icon": "TrendingUp"
+          },
+          {
+            "title": "Campaign Performance Reports",
+            "description": "Evaluate marketing effectiveness based on campaign objectives.",
+            "icon": "Target"
+          },
+          {
+            "title": "AI Optimization Recommendations",
+            "description": "AI suggests improvements for content, posting schedules, and marketing strategies based on real data.",
+            "icon": "Sparkles"
+          }
+        ]
+      }
+    ],
 
-  "ctaTitle": "Automate Your Marketing with AI",
-  "ctaDescription": "Markee helps you automate marketing workflows, optimize strategies, and make data-driven decisions with confidence."
-},
+    "ctaTitle": "Automate Your Marketing with AI",
+    "ctaDescription": "Markee helps you automate marketing workflows, optimize strategies, and make data-driven decisions with confidence."
+  },
   "footer": {
     "brandTitle": "Markee AI Marketing",
     "brandDescription": "AI marketing assistant for modern businesses. Create faster · Analyze deeper · Grow smarter.",
@@ -176,12 +176,7 @@
     },
     "support": {
       "title": "Support",
-      "items": [
-        "Help center",
-        "Contact",
-        "Privacy policy",
-        "Terms of service"
-      ]
+      "items": ["Help center", "Contact", "Privacy policy", "Terms of service"]
     },
     "contact": {
       "emailLabel": "Email",
@@ -674,18 +669,48 @@
       "heading": "WHAT DO YOU GET\nWHEN YOU JOIN?",
       "subheading": "Promotions are based on the value you create — not seniority.",
       "items": [
-        { "icon": "🧭", "title": "Dedicated Mentor", "desc": "Mentors/Leaders guide you weekly & per sprint, so you grow continuously without feeling lost." },
-        { "icon": "📋", "title": "Real Project Plan", "desc": "Work with clear checklists + evidence — less guesswork, more professionalism from day one." },
-        { "icon": "📁", "title": "Portfolio & Case Study", "desc": "Walk away with real repos, docs, reports, decks, campaigns to put on your CV." },
-        { "icon": "🚀", "title": "Clear Career Path", "desc": "Defined progression from Intern → Fresher → Junior → Middle → Senior, evaluated transparently via KPIs." },
-        { "icon": "🎯", "title": "Full-Time Opportunity", "desc": "You can be promoted to Fresher Talent and official Junior if you pass the gate." },
-        { "icon": "⚡", "title": "Fast Level-Up", "desc": "The more initiative and ownership you show, the faster you level up." }
+        {
+          "icon": "🧭",
+          "title": "Dedicated Mentor",
+          "desc": "Mentors/Leaders guide you weekly & per sprint, so you grow continuously without feeling lost."
+        },
+        {
+          "icon": "📋",
+          "title": "Real Project Plan",
+          "desc": "Work with clear checklists + evidence — less guesswork, more professionalism from day one."
+        },
+        {
+          "icon": "📁",
+          "title": "Portfolio & Case Study",
+          "desc": "Walk away with real repos, docs, reports, decks, campaigns to put on your CV."
+        },
+        {
+          "icon": "🚀",
+          "title": "Clear Career Path",
+          "desc": "Defined progression from Intern → Fresher → Junior → Middle → Senior, evaluated transparently via KPIs."
+        },
+        {
+          "icon": "🎯",
+          "title": "Full-Time Opportunity",
+          "desc": "You can be promoted to Fresher Talent and official Junior if you pass the gate."
+        },
+        {
+          "icon": "⚡",
+          "title": "Fast Level-Up",
+          "desc": "The more initiative and ownership you show, the faster you level up."
+        }
       ],
       "card": {
         "label": "Why choose us",
         "title": "Not Your Typical Internship",
         "desc": "You'll work in a real environment with real tasks, real deadlines, and be evaluated just like a full-time employee.",
-        "pills": ["Real Projects", "KPI System", "Mentorship", "Career Path", "Fast Track"],
+        "pills": [
+          "Real Projects",
+          "KPI System",
+          "Mentorship",
+          "Career Path",
+          "Fast Track"
+        ],
         "highlightLabel": "HIGHLIGHT",
         "highlightText": "A clear 7-level career ladder — promotions based on KPI, not tenure."
       }
@@ -695,46 +720,58 @@
       "heading": "5 CORE TEAM STRUCTURE",
       "subheading": "Operating in PODs for smooth Sales–Presale–Delivery collaboration.",
       "items": [
-    { 
-      "num": "01", 
-      "icon": "💼", 
-      "name": "Sales", 
-      "sub": "Full Solution Sales" 
-    },
-    { 
-      "num": "02", 
-      "icon": "📢", 
-      "name": "Marketing", 
-      "sub": "Agency + AI Marketing" 
-    },
-    { 
-      "num": "03", 
-      "icon": "🤖", 
-      "name": "AI Team", 
-      "sub": "AI Products + Enablement" 
-    },
-    { 
-      "num": "04", 
-      "icon": "⚙️", 
-      "name": "Dev + DevOps", 
-      "sub": "SaaS + Platform" 
-    },
-    { 
-      "num": "05", 
-      "icon": "🖥️", 
-      "name": "SI Delivery", 
-      "sub": "Network / System / Security" 
-    }
-  ]
+          { 
+            "num": "01", 
+            "icon": "💼", 
+            "name": "Sales", 
+            "sub": "Full Solution Sales" 
+          },
+          { 
+            "num": "02", 
+            "icon": "📢", 
+            "name": "Marketing", 
+            "sub": "Agency + AI Marketing" 
+          },
+          { 
+            "num": "03", 
+            "icon": "🤖", 
+            "name": "AI Team", 
+            "sub": "AI Products + Enablement" 
+          },
+          { 
+            "num": "04", 
+            "icon": "⚙️", 
+            "name": "Dev + DevOps", 
+            "sub": "SaaS + Platform" 
+          },
+          { 
+            "num": "05", 
+            "icon": "🖥️", 
+            "name": "SI Delivery", 
+            "sub": "Network / System / Security" 
+          }
+        ]
     },
     "eval": {
       "tag": "Evaluation",
       "heading": "SCORING SYSTEM — 100 POINTS",
       "subheading": "Transparent, unbiased. Every review cycle covers 3 core dimensions.",
       "bars": [
-        { "name": "KPI / Output", "pct": 60, "sub": "What you delivered, on time, with evidence" },
-        { "name": "Quality", "pct": 20, "sub": "Up to standard, few errors, easy handoff" },
-        { "name": "Behavior Log", "pct": 20, "sub": "Attitude, ownership, collaboration" }
+        {
+          "name": "KPI / Output",
+          "pct": 60,
+          "sub": "What you delivered, on time, with evidence"
+        },
+        {
+          "name": "Quality",
+          "pct": 20,
+          "sub": "Up to standard, few errors, easy handoff"
+        },
+        {
+          "name": "Behavior Log",
+          "pct": 20,
+          "sub": "Attitude, ownership, collaboration"
+        }
       ],
       "behavior": {
         "title": "📋 Behavior Staff Log (Anti-bias)",
@@ -745,9 +782,30 @@
       },
       "gradeHead": ["Score", "Result", "Meaning"],
       "grades": [
-        { "label": "≥", "score": 85, "badge": "STRONG PASS", "bg": "#fff5f5", "col": "#c53030", "desc": "Fast-track level up" },
-        { "label": "≥", "score": 75, "badge": "PASS", "bg": "#f0fff4", "col": "#276749", "desc": "Eligible to advance" },
-        { "label": "<", "score": 75, "badge": "FAIL", "bg": "#fff5f5", "col": "#9b2c2c", "desc": "Needs improvement or exit" }
+        {
+          "label": "≥",
+          "score": 85,
+          "badge": "STRONG PASS",
+          "bg": "#fff5f5",
+          "col": "#c53030",
+          "desc": "Fast-track level up"
+        },
+        {
+          "label": "≥",
+          "score": 75,
+          "badge": "PASS",
+          "bg": "#f0fff4",
+          "col": "#276749",
+          "desc": "Eligible to advance"
+        },
+        {
+          "label": "<",
+          "score": 75,
+          "badge": "FAIL",
+          "bg": "#fff5f5",
+          "col": "#9b2c2c",
+          "desc": "Needs improvement or exit"
+        }
       ],
       "noteLabel": "Note",
       "noteText": "Your score reflects the value you create, not seniority or personal relationships. All evaluations are evidence-backed."
@@ -757,12 +815,36 @@
       "heading": "INTERNSHIP POLICIES",
       "subheading": "FAIR & CLEAR — Transparent, consistent, and rewarding.",
       "items": [
-        { "num": "01", "icon": "📅", "text": "Weekly reports are mandatory — submit to your leader/mentor every week." },
-        { "num": "02", "icon": "⏰", "text": "Deadline changes: notify as early as possible (minimum 24 hours in advance)." },
-        { "num": "03", "icon": "🔍", "text": "No tasks? Proactively ask for one or complete a learning deliverable." },
-        { "num": "04", "icon": "⚠️", "text": "3-step discipline: Warning 1 → Warning 2 → Stop if no improvement." },
-        { "num": "05", "icon": "💰", "text": "Transparent pay: Level 1 by KPI Points | Level 2–3 stipend + bonus gate." },
-        { "num": "06", "icon": "🚫", "text": "Pay suspended for: ghosting, falsifying evidence, or missing reports after reminders." }
+        {
+          "num": "01",
+          "icon": "📅",
+          "text": "Weekly reports are mandatory — submit to your leader/mentor every week."
+        },
+        {
+          "num": "02",
+          "icon": "⏰",
+          "text": "Deadline changes: notify as early as possible (minimum 24 hours in advance)."
+        },
+        {
+          "num": "03",
+          "icon": "🔍",
+          "text": "No tasks? Proactively ask for one or complete a learning deliverable."
+        },
+        {
+          "num": "04",
+          "icon": "⚠️",
+          "text": "3-step discipline: Warning 1 → Warning 2 → Stop if no improvement."
+        },
+        {
+          "num": "05",
+          "icon": "💰",
+          "text": "Transparent pay: Level 1 by KPI Points | Level 2–3 stipend + bonus gate."
+        },
+        {
+          "num": "06",
+          "icon": "🚫",
+          "text": "Pay suspended for: ghosting, falsifying evidence, or missing reports after reminders."
+        }
       ]
     },
     "final": {
@@ -776,6 +858,128 @@
       "loading": "Loading…"
     },
     "path": ["Intern", "Fresher", "Junior", "Middle", "Senior"]
-  }
+  },
 
-}  
+  "blog": {
+    "title": "AI Marketing Blog",
+    "heroDesc": "Latest AI Marketing insights, strategies, and trends to help you optimize your business performance.",
+    "statPosts": "Posts",
+    "statReads": "Reads",
+    "statGrowth": "Growth",
+    "latestLabel": "LATEST",
+    "latestTitle": "Latest Posts",
+    "latestDesc": "The freshest articles on AI Marketing, strategies, and tech trends.",
+    "latestBtn": "Latest posts",
+    "popularBtn": "Most popular",
+    "popularTitle": "Most Popular",
+    "popularDesc": "Top-read articles loved by our community.",
+    "allTitle": "All Posts",
+    "filterAll": "All",
+    "noPostsInCategory": "No posts in this category yet.",
+    "loadMore": "Load more posts",
+    "loading": "Loading posts...",
+    "minuteRead": "min read",
+    "ctaTitle": "Ready to optimize Marketing with AI?",
+    "ctaDesc": "Try free for 1 month with 1000 AI credits. No credit card required.",
+    "ctaBtn": "Start free trial",
+    "ctaLearnMore": "Learn more",
+    "detailCtaTitle": "Optimize Marketing with AI today",
+    "detailCtaDesc": "Try free for 1 month. Create content 10x faster, analyze data in real-time.",
+    "detailCtaBtn": "Sign up free",
+    "editedBy": "Compiled by Markee AI",
+    "backToBlog": "Back to Blog",
+    "loadingPost": "Loading post...",
+    "notFoundTitle": "Post not found",
+    "notFoundDesc": "This post may have been deleted or does not exist.",
+    "notFoundBtn": "Back to Blog",
+    "views": "views",
+    "shareTitle": "Share this post",
+    "relatedTitle": "Related Posts",
+    "relatedDesc": "More articles on the same topic you might enjoy",
+    "readMore": "Read more",
+    "translateBtn": "Translate",
+    "showOriginal": "Show original",
+    "translating": "Translating..."
+  },
+
+  "admin": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "manageBlog": "Manage Blog",
+      "logout": "Logout"
+    },
+    "dashboard": {
+      "subtitle": "Markee AI Marketing blog statistics",
+      "totalPosts": "Total Posts",
+      "published": "Published",
+      "draft": "Draft",
+      "totalViews": "Total Views",
+      "quickActions": "Quick Actions",
+      "newPost": "Write New Post",
+      "newPostDesc": "Create a new blog post",
+      "managePosts": "Manage Posts",
+      "managePostsDesc": "Edit, delete posts",
+      "viewBlog": "View Blog",
+      "viewBlogDesc": "View public blog page"
+    },
+    "blogs": {
+      "all": "All",
+      "publishedTab": "Published",
+      "draftTab": "Draft",
+      "searchPlaceholder": "Search posts...",
+      "loading": "Loading posts...",
+      "loadError": "Failed to load posts",
+      "confirmDeleteTitle": "Confirm delete post",
+      "confirmDeleteMsg": "This post will be permanently deleted:",
+      "cancel": "Cancel",
+      "delete": "Delete post",
+      "deleted": "Post deleted",
+      "deleteFailed": "Delete failed",
+      "showing": "showing",
+      "noPosts": "No posts yet",
+      "noPostsDesc": "Start writing your first post!",
+      "addNew": "Add new post",
+      "edit": "Edit",
+      "views": "views",
+      "featured": "Featured",
+      "popular": "Popular"
+    },
+    "login": {
+      "welcome": "Welcome to Admin Dashboard",
+      "subtitle": "Sign in to manage Markee AI Blog",
+      "adminLabel": "Administrator",
+      "usernamePlaceholder": "Username",
+      "passwordPlaceholder": "Password",
+      "loginBtn": "Sign in",
+      "loggingIn": "Signing in...",
+      "errorEmpty": "Please enter username and password.",
+      "errorWrong": "Wrong username or password. Please try again."
+    },
+    "form": {
+      "loading": "Loading post...",
+      "backToList": "Back to list",
+      "titlePlaceholder": "Enter post title...",
+      "slugPlaceholder": "post-title-slug",
+      "excerptPlaceholder": "Short description of the post...",
+      "coverImagePlaceholder": "https://images.unsplash.com/photo-xxx",
+      "coverImageLabel": "Cover image URL",
+      "tagLabel": "Category",
+      "authorLabel": "Author",
+      "contentLabel": "Post content",
+      "featuredLabel": "Featured post",
+      "featuredDesc": "Show in \"Latest\" section on blog page",
+      "popularLabel": "Popular post",
+      "popularDesc": "Show in \"Popular\" section on blog page",
+      "cancelBtn": "Cancel",
+      "saveDraft": "Save draft",
+      "saving": "Saving...",
+      "createPost": "Create post",
+      "updatePost": "Update post",
+      "successCreate": "Post created successfully!",
+      "successUpdate": "Post updated successfully!",
+      "errorTitle": "Please enter a post title!",
+      "errorCover": "Please enter a cover image URL!",
+      "errorServer": "Server connection error"
+    }
+  }
+}

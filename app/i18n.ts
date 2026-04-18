@@ -8,17 +8,10 @@ import enCommon from "../public/locales/en/common.json";
 const isBrowser = typeof window !== "undefined";
 
 if (!i18n.isInitialized) {
-  const initialLng =
-    isBrowser && typeof window.localStorage !== "undefined"
-      ? window.localStorage.getItem("i18nextLng") ||
-        (typeof navigator !== "undefined" &&
-        navigator.language?.toLowerCase().startsWith("vi")
-          ? "vi"
-          : "en")
-      : "vi";
-
+  // Always init with "vi" to match server-rendered HTML (avoids hydration mismatch).
+  // After mount, ClientI18nProvider will switch to the stored language.
   i18n.use(initReactI18next).init({
-    lng: initialLng,
+    lng: "vi",
     fallbackLng: "vi",
     supportedLngs: ["vi", "en"],
     resources: {
@@ -37,7 +30,11 @@ if (!i18n.isInitialized) {
 
   if (isBrowser && typeof window.localStorage !== "undefined") {
     i18n.on("languageChanged", (lng) => {
-      window.localStorage.setItem("i18nextLng", lng);
+      try {
+        window.localStorage.setItem("i18nextLng", lng);
+      } catch {
+        // localStorage unavailable (Safari private, etc.)
+      }
     });
   }
 }

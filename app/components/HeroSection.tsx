@@ -39,7 +39,8 @@ export default function HeroSection() {
     window.addEventListener("resize", resize);
 
     const dots: { x: number; y: number; o: number; speed: number }[] = [];
-    const COLS = 20, ROWS = 12;
+    const COLS = 20,
+      ROWS = 12;
     for (let r = 0; r < ROWS; r++) {
       for (let c = 0; c < COLS; c++) {
         dots.push({
@@ -72,27 +73,27 @@ export default function HeroSection() {
     };
   }, []);
 
- const fadeUp = (delay = 0) => ({
-  initial: { y: 32, opacity: 0 },
-  animate: { y: 0, opacity: 1 },
-  transition: {
-    duration: 0.6,
-    delay,
-    ease: [0.22, 1, 0.36, 1] as const,
-  } satisfies Transition,
-});
+  const fadeUp = (delay = 0) => ({
+    initial: { y: 32, opacity: 0 },
+    animate: { y: 0, opacity: 1 },
+    transition: {
+      duration: 0.6,
+      delay,
+      ease: [0.22, 1, 0.36, 1] as const,
+    } satisfies Transition,
+  });
 
   return (
     <section
-  className="relative min-h-screen flex items-center overflow-hidden"
-  style={{
-    backgroundImage: "url('https://png.pngtree.com/thumb_back/fh260/background/20210422/pngtree-technology-red-line-circuit-background-with-shine-light-image_647278.jpg')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-  }}
->
-
+      className="relative min-h-screen flex items-center overflow-hidden"
+      style={{
+        backgroundImage:
+          "url('https://png.pngtree.com/thumb_back/fh260/background/20210422/pngtree-technology-red-line-circuit-background-with-shine-light-image_647278.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       {/* ── Dot grid canvas ── */}
       <canvas
         ref={canvasRef}
@@ -125,10 +126,8 @@ export default function HeroSection() {
       {/* ── Content ── */}
       <div className="relative z-10 max-w-[1300px] mx-auto px-6 lg:px-10 w-full py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
           {/* ════ LEFT ════ */}
           <div className="flex flex-col gap-6">
-
             {/* eyebrow tag */}
             <motion.div {...fadeUp(0.1)} className="flex items-center gap-3">
               <span className="block w-8 h-px bg-red-500" />
@@ -167,7 +166,10 @@ export default function HeroSection() {
             {/* badge */}
             <motion.div {...fadeUp(0.5)} className="flex items-center gap-3">
               <div className="relative flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-300 px-4 py-2 rounded-sm text-sm font-mono">
-                <Corner pos="tl" /><Corner pos="tr" /><Corner pos="bl" /><Corner pos="br" />
+                <Corner pos="tl" />
+                <Corner pos="tr" />
+                <Corner pos="bl" />
+                <Corner pos="br" />
                 <span>🎁</span>
                 <span>{t("hero.badge")}</span>
               </div>
@@ -188,11 +190,14 @@ export default function HeroSection() {
             </motion.p>
 
             {/* CTA */}
-            <motion.div {...fadeUp(0.65)} className="flex items-center gap-4 pt-2">
+            <motion.div
+              {...fadeUp(0.65)}
+              className="flex items-center gap-4 pt-2"
+            >
               <Link
-    href="https://app.markeeai.com"
-    target="_blank"
-    className="
+                href="https://app.markeeai.com"
+                target="_blank"
+                className="
       group relative inline-flex items-center justify-center
       px-8 py-3.5
       text-sm font-semibold uppercase tracking-wider
@@ -201,10 +206,10 @@ export default function HeroSection() {
       border border-red-500/40
       transition-all duration-300
     "
-  >
-    {/* ===== hover energy background ===== */}
-    <span
-      className="
+              >
+                {/* ===== hover energy background ===== */}
+                <span
+                  className="
         absolute inset-0
         opacity-0
         group-hover:opacity-100
@@ -215,11 +220,11 @@ export default function HeroSection() {
         to-transparent
         animate-[shine_1.2s_linear]
       "
-    />
+                />
 
-    {/* ===== scanning line ===== */}
-    <span
-      className="
+                {/* ===== scanning line ===== */}
+                <span
+                  className="
         absolute top-0 left-[-100%]
         w-full h-full
         bg-gradient-to-r
@@ -229,11 +234,11 @@ export default function HeroSection() {
         group-hover:left-[120%]
         transition-all duration-700
       "
-    />
+                />
 
-    {/* ===== glow explosion ===== */}
-    <span
-      className="
+                {/* ===== glow explosion ===== */}
+                <span
+                  className="
         absolute inset-0
         opacity-0
         group-hover:opacity-100
@@ -241,11 +246,11 @@ export default function HeroSection() {
         blur-xl
         transition duration-500
       "
-    />
+                />
 
-    {/* ===== tech border animate ===== */}
-    <span
-      className="
+                {/* ===== tech border animate ===== */}
+                <span
+                  className="
         absolute inset-0
         rounded-sm
         border border-red-500/30
@@ -253,29 +258,29 @@ export default function HeroSection() {
         group-hover:shadow-[0_0_25px_rgba(255,60,60,0.9)]
         transition-all duration-300
       "
-    />
+                />
 
-    {/* ===== button content ===== */}
-    <span className="relative z-10 flex items-center gap-2">
-      {t("hero.cta")}
+                {/* ===== button content ===== */}
+                <span className="relative z-10 flex items-center gap-2">
+                  {t("hero.cta")}
 
-      <motion.svg
-        className="w-4 h-4"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2.5}
-        viewBox="0 0 24 24"
-        whileHover={{ x: 6 }}
-        transition={{ type: "spring", stiffness: 300 }}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-        />
-      </motion.svg>
-    </span>
-  </Link>
+                  <motion.svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                    viewBox="0 0 24 24"
+                    whileHover={{ x: 6 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                    />
+                  </motion.svg>
+                </span>
+              </Link>
 
               {/* pulse indicator */}
               <div className="flex items-center gap-2 text-white/30 text-xs font-mono">
@@ -301,7 +306,6 @@ export default function HeroSection() {
           >
             {/* outer frame */}
             <div className="relative w-full max-w-[560px]">
-
               {/* top bar */}
               <div className="flex items-center gap-2 bg-[#0f0f12] border border-red-900/40 border-b-0 px-4 py-2.5">
                 <div className="flex gap-1.5">
@@ -328,12 +332,12 @@ export default function HeroSection() {
 
               {/* screen */}
               <div className="relative border border-red-900/40 overflow-hidden bg-black">
-
                 {/* scanlines overlay */}
                 <div
                   className="absolute inset-0 z-10 pointer-events-none opacity-[0.08]"
                   style={{
-                    backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,1) 2px, rgba(0,0,0,1) 4px)",
+                    backgroundImage:
+                      "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,1) 2px, rgba(0,0,0,1) 4px)",
                   }}
                 />
 
@@ -371,46 +375,75 @@ export default function HeroSection() {
 
               {/* bottom status bar */}
               <div className="flex items-center justify-between bg-[#0a0a0c] border border-red-900/40 border-t-0 px-4 py-2">
-                <span className="text-[10px] font-mono text-red-500/60 tracking-widest">SYS:ONLINE</span>
+                <span className="text-[10px] font-mono text-red-500/60 tracking-widest">
+                  SYS:ONLINE
+                </span>
                 <div className="flex items-center gap-1">
-                  {Array.from({ length: 8 }).map((_, i) => (
+                  {[8, 14, 5, 11, 7, 13, 4, 10].map((h, i) => (
                     <motion.span
                       key={i}
                       className="block w-1 bg-red-500/50 rounded-sm"
-                      animate={{ height: [2, Math.random() * 12 + 3, 2] }}
-                      transition={{ duration: 0.6 + i * 0.1, repeat: Infinity, repeatType: "mirror" }}
+                      animate={{ height: [2, h, 2] }}
+                      transition={{
+                        duration: 0.6 + i * 0.1,
+                        repeat: Infinity,
+                        repeatType: "mirror",
+                      }}
                     />
                   ))}
                 </div>
-                <span className="text-[10px] font-mono text-white/20 tracking-widest">● REC</span>
+                <span className="text-[10px] font-mono text-white/20 tracking-widest">
+                  ● REC
+                </span>
               </div>
 
               {/* Corner brackets on whole card */}
-              <Corner pos="tl" /><Corner pos="tr" /><Corner pos="bl" /><Corner pos="br" />
+              <Corner pos="tl" />
+              <Corner pos="tr" />
+              <Corner pos="bl" />
+              <Corner pos="br" />
 
               {/* floating stat chip */}
               <motion.div
                 animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 className="absolute -bottom-5 -left-6 bg-[#0f0f12] border border-red-900/50 px-4 py-2.5 shadow-xl shadow-black/50"
               >
-                <Corner pos="tl" /><Corner pos="tr" /><Corner pos="bl" /><Corner pos="br" />
-                <p className="text-[10px] font-mono text-white/30 uppercase tracking-widest mb-0.5">Content Gen</p>
+                <Corner pos="tl" />
+                <Corner pos="tr" />
+                <Corner pos="bl" />
+                <Corner pos="br" />
+                <p className="text-[10px] font-mono text-white/30 uppercase tracking-widest mb-0.5">
+                  Content Gen
+                </p>
                 <p className="text-2xl font-black text-white">10×</p>
               </motion.div>
 
               <motion.div
                 animate={{ y: [0, 6, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                transition={{
+                  duration: 3.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 0.5,
+                }}
                 className="absolute -top-5 -right-6 bg-[#0f0f12] border border-red-900/50 px-4 py-2.5 shadow-xl shadow-black/50"
               >
-                <Corner pos="tl" /><Corner pos="tr" /><Corner pos="bl" /><Corner pos="br" />
-                <p className="text-[10px] font-mono text-white/30 uppercase tracking-widest mb-0.5">Accuracy</p>
+                <Corner pos="tl" />
+                <Corner pos="tr" />
+                <Corner pos="bl" />
+                <Corner pos="br" />
+                <p className="text-[10px] font-mono text-white/30 uppercase tracking-widest mb-0.5">
+                  Accuracy
+                </p>
                 <p className="text-2xl font-black text-red-400">98%</p>
               </motion.div>
             </div>
           </motion.div>
-
         </div>
       </div>
 
