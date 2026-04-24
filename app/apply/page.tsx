@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
+import { useRef } from "react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -16,6 +17,11 @@ export default function ApplyPage() {
   const [animatedGrades, setAnimatedGrades] = useState<number[]>([0, 0, 0]);
   const [gradeAnimated, setGradeAnimated] = useState(false);
   const lang = i18n.language;
+  const videoRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToVideo = () => {
+    videoRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   // Re-observe .anim elements after every language change
   // Key insight: on language switch, elements already in viewport must
@@ -414,7 +420,7 @@ export default function ApplyPage() {
           display:grid; grid-template-columns:repeat(4,1fr);
           gap:1px; background:rgba(255,255,255,0.07);
           border:1px solid rgba(255,255,255,0.07); border-radius:5px;
-          overflow:hidden; margin-top:4rem; max-width:800px; width:100%;
+          overflow:hidden; margin-top:2rem; max-width:800px; width:100%;
         }
         .stat-box { background:rgba(255,255,255,0.03); padding:0.75rem 1rem; text-align:center; transition:background 0.2s; }
         .stat-box:hover { background:rgba(229,62,62,0.08); }
@@ -626,6 +632,145 @@ export default function ApplyPage() {
           .grade-head,.grade-row { grid-template-columns:60px 1fr; }
           .grade-d { display:none; }
         }
+
+        .btn-watch-video {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 0;
+
+  padding: 12px 16px;
+  border-radius: 10px;
+
+  font-weight: 600;
+  letter-spacing: 0.03em;
+
+  margin-top: 20px;
+  color: #fff;
+  cursor: pointer;
+
+  border: 1px solid rgba(255,255,255,0.25);
+  background: linear-gradient(120deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+ 
+background-size: 300% 100%;
+animation: gradientMoveBtn 4s linear infinite;
+
+  backdrop-filter: blur(6px);
+
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+
+.btn-watch-video::after {
+  content: "";
+  position: absolute;
+  inset: -2px; /* cho viền tràn ra ngoài chút */
+  border-radius: 12px;
+
+  animation: rotateBorder 2s linear infinite;
+
+  z-index: 0;
+}
+
+/* lớp mask để chỉ giữ lại viền */
+.btn-watch-video::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 60%;
+  height: 100%;
+
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.6),
+    transparent
+  );
+
+  transform: skewX(-20deg);
+
+  animation: shineMove 1.5s linear infinite;
+}
+
+@keyframes shineMove {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+@keyframes rotateBorder {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes borderRun {
+  0% {
+    background-position: -200% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+
+/* icon animation */
+.btn-watch-video .icon {
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+/* hover */
+.btn-watch-video:hover {
+  border-color: #fc8181;
+  background: linear-gradient(120deg, rgba(229,62,62,0.25), rgba(255,255,255,0.05));
+  box-shadow: 0 10px 30px rgba(229, 62, 62, 0.35);
+  transform: translateY(-2px);
+}
+
+.btn-watch-video:hover .icon {
+  transform: scale(1.2) rotate(10deg);
+}
+
+/* shine effect */
+.btn-watch-video::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.6),
+    transparent
+  );
+  transform: skewX(-20deg);
+}
+
+.btn-watch-video:hover::before {
+  animation: shineBtn 0.8s ease forwards;
+}
+
+@keyframes shineBtn {
+  0% { left: -120%; }
+  100% { left: 140%; }
+}
+
+/* click ripple nhẹ */
+.btn-watch-video:active {
+  transform: scale(0.97);
+  box-shadow: 0 5px 15px rgba(229, 62, 62, 0.4);
+}
       `}</style>
 
       {/* HERO */}
@@ -651,10 +796,21 @@ export default function ApplyPage() {
 
         <p className="hero-desc">{t("apply.desc")}</p>
 
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "center" }}>
         <button className="cta-btn" onClick={() => setShowForm(true)}>
           {t("apply.cta")}
           <span className="btn-arrow">→</span>
         </button>
+
+        {/* Nút mới */}
+        <button
+          onClick={scrollToVideo}
+          className="btn-watch-video"
+        >
+          <span className="icon">🎬</span>
+          <span>{t("videoGuide.watchVideo")}</span>
+        </button>
+      </div>
 
         <div className="hero-stats">
           {[
@@ -894,7 +1050,9 @@ export default function ApplyPage() {
       </div>
 
 
-      <Video />
+      <div ref={videoRef}>
+        <Video />
+      </div>
 
       {/* FINAL CTA */}
       <section className="final-section">
