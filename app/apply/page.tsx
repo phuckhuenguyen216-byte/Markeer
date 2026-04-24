@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import Footer from "../components/Footer";
+import Video from "./Video";
+
 
 export default function ApplyPage() {
   const { t, i18n } = useTranslation("common");
@@ -891,6 +893,9 @@ export default function ApplyPage() {
         </div>
       </div>
 
+
+      <Video />
+
       {/* FINAL CTA */}
       <section className="final-section">
         <div
@@ -911,6 +916,7 @@ export default function ApplyPage() {
           </button>
         </div>
       </section>
+
 
       {/* MODAL */}
       {showForm && (
