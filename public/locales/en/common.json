@@ -981,5 +981,23 @@
       "errorCover": "Please enter a cover image URL!",
       "errorServer": "Server connection error"
     }
+  },
+
+  "videoGuide": {
+    "title": "Video Guide",
+    "description": "Watch videos to better understand policies and tools",
+    "watchVideo": "Watch video",
+    "videos": {
+      "policy": {
+        "title": "Company Policy, Regulations & Intern Roadmap",
+        "desc": "Overview of company culture, rules and important policies...",
+        "tag": "Policy & Roadmap"
+      },
+      "kpi": {
+        "title": "How to use PM and personal KPI file",
+        "desc": "Guide to using PM tools and KPI files to track productivity...",
+        "tag": "PM & Personal KPI"
+      }
+    }
   }
 }

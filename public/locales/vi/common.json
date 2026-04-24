@@ -987,5 +987,24 @@
       "errorCover": "Vui lòng nhập URL ảnh bìa!",
       "errorServer": "Lỗi kết nối server"
     }
+  },
+
+  "videoGuide": {
+    "title": "Video Hướng Dẫn",
+    "description": "Xem các video để hiểu rõ hơn về chính sách và cách sử dụng công cụ",
+    "watchVideo": "Xem video",
+    "videos": {
+      "policy": {
+        "title": "Chính Sách Công Ty, Quy Định & Roadmap Phát Triển Intern",
+        "desc": "Tổng quan về văn hóa, quy định làm việc và các chính sách quan trọng...",
+        "tag": "Chính Sách & Lộ Trình"
+      },
+      "kpi": {
+        "title": "Cách sử dụng PM và file KPI cá nhân",
+        "desc": "Hướng dẫn sử dụng PM và file KPI cá nhân để theo dõi năng suất...",
+        "tag": "PM & KPI cá nhân"
+      }
+    }
   }
+
 }
