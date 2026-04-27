@@ -4,11 +4,13 @@ import { useTranslation } from "react-i18next";
 const videos = [
   {
     key: "policy",
-    fileId: "1sMfeCbWkSmx6w1Uaa9gj2eY48e-l_P60",
+    videoUrl:
+      "https://drive.google.com/file/d/1sMfeCbWkSmx6w1Uaa9gj2eY48e-l_P60/preview",
   },
   {
     key: "kpi",
-    fileId: "1Wvb5Z6mVSx8OoZwMw6E9Tgc7PEesemPG",
+    videoUrl:
+      "https://drive.google.com/file/d/1Wvb5Z6mVSx8OoZwMw6E9Tgc7PEesemPG/preview",
   },
 ];
 
@@ -28,7 +30,7 @@ export default function VideoGuide() {
           {t("videoGuide.description")}
         </p>
 
-        {/* 🔴 BUTTON TRÊN */}
+        {/* 🔴 BUTTON TRÊN (center + animation đẹp) */}
         <div className="flex justify-center mb-12">
           <button
             className="relative px-8 py-3 rounded-xl text-white font-semibold overflow-hidden
@@ -41,37 +43,29 @@ export default function VideoGuide() {
               🏢 {t("videoGuide.watchVideo")}
             </span>
 
+            {/* shine */}
             <span className="absolute inset-0 bg-white/20 opacity-0 hover:opacity-100 transition"></span>
           </button>
         </div>
 
         {/* Grid */}
-        <div className="grid md:grid-cols-2 gap-20">
+        <div className="grid md:grid-cols-2 gap-25">
           {videos.map((item) => (
             <div
               key={item.key}
-              onClick={() =>
-                setActiveVideo(
-                  `https://drive.google.com/file/d/${item.fileId}/preview`
-                )
-              }
+              onClick={() => setActiveVideo(item.videoUrl)}
               className="group cursor-pointer bg-white rounded-2xl overflow-hidden border border-red-100 
               shadow-md transition-all duration-300
               hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-200"
             >
-              {/* 🖼 Thumbnail thật */}
-              <div className="h-90 relative overflow-hidden">
-                <img
-                  src={`https://drive.google.com/thumbnail?id=${item.fileId}`}
-                  alt=""
-                  className="w-full h-full object-cover group-hover:scale-105 transition"
-                />
-
-                {/* overlay */}
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                  <div className="bg-white p-4 rounded-full shadow-md group-hover:scale-110 transition">
-                    ▶
-                  </div>
+              {/* Thumbnail */}
+              <div className="h-90 bg-gradient-to-r from-red-200 to-red-100 flex items-center justify-center">
+                <div
+                  className="bg-white p-5 rounded-full shadow-md 
+                  transition-all duration-300 
+                  group-hover:scale-110 animate-pulse"
+                >
+                  ▶
                 </div>
               </div>
 
@@ -94,10 +88,10 @@ export default function VideoGuide() {
         </div>
       </div>
 
-      {/* 🎬 MODAL FULLSCREEN */}
+      {/* 🎬 MODAL FULLSCREEN VIDEO */}
       {activeVideo && (
-        <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
-          {/* Close */}
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+          {/* Nút X */}
           <button
             onClick={() => setActiveVideo(null)}
             className="absolute top-5 right-5 text-white text-3xl hover:scale-110 transition"
@@ -106,11 +100,13 @@ export default function VideoGuide() {
           </button>
 
           {/* Video */}
-          <iframe
-            src={activeVideo}
-            className="w-[90%] h-[90%]"
-            allow="autoplay"
-          />
+          <div className="w-full h-full flex items-center justify-center">
+            <iframe
+              src={activeVideo}
+              className="w-[90%] h-[90%] rounded-xl"
+              allow="autoplay"
+            />
+          </div>
         </div>
       )}
 
