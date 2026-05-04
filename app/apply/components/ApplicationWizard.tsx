@@ -50,7 +50,7 @@ const GUIDE: Record<GuideKey, GuideCfg> = {
   },
   positions: {
     pose: "presenting",
-    msg: "Chọn 1-2 vị trí hợp nhất trước, mình sẽ hỏi tiếp theo hướng đó.",
+    msg: "Chọn 1 category trước, rồi tick các hướng phù hợp bên trong category đó.",
   },
   interests: {
     pose: "presenting",
@@ -402,13 +402,22 @@ const CAREER_OPTIONS = [
 ];
 
 const TEAM_FILTERS = [
-  "Tất cả",
   "Infrastructure",
   "Dev/DevOps",
   "AI",
   "Marketing",
   "Sales",
 ];
+
+function getCareerTeam(label: string) {
+  return CAREER_OPTIONS.find((opt) => opt.label === label)?.team;
+}
+
+function getSelectedCareerTeams(labels: string[]) {
+  return Array.from(
+    new Set(labels.map(getCareerTeam).filter((team): team is string => !!team)),
+  );
+}
 
 const INTEREST_OPTIONS = [
   "Học hỏi & phát triển kỹ năng",
@@ -452,50 +461,22 @@ const LAST_STEP = STEPS.length - 1;
 /* ─────────────── validation ─────────────── */
 type StepErrors = Record<string, string>;
 
-const TEXT_MIN = {
-  why_apply: 42,
-  experience: 42,
-  skills: 14,
-  goal: 36,
-  note: 20,
-  strengths: 28,
-  weaknesses: 24,
-  expectation: 36,
-} as const;
-
-function textLength(value: string) {
-  return value.trim().replace(/\s+/g, " ").length;
-}
-
-function hasMinText(value: string, min: number) {
-  return textLength(value) >= min;
+function hasText(value: string) {
+  return value.trim().length > 0;
 }
 
 function textGuide(
   value: string,
-  min: number,
   empty: GuideCfg,
-  shortMsg: string,
   doneMsg: string,
   donePose: MascotState = "encourage",
 ): GuideCfg {
-  if (!value.trim()) return empty;
-  if (!hasMinText(value, min)) {
-    return { pose: "thinking", msg: shortMsg };
-  }
+  if (!hasText(value)) return empty;
   return { pose: donePose, msg: doneMsg };
 }
 
 function isValidTelegramUsername(value: string) {
   return /^@[A-Za-z0-9_]{5,32}$/.test(value.trim());
-}
-
-function hasSchoolCode(value: string) {
-  return /\([A-Za-z0-9]{2,}\)/.test(value.trim());
-}
-
-function hasSchoolMajor(value: string) {
-  return /[-–—,]|ngành|chuyên ngành/i.test(value.trim());
 }
 
 function hasWorkPreference(form: FormData) {
@@ -514,7 +495,9 @@ function validateStep(step: number, form: FormData): StepErrors {
   const e: StepErrors = {};
   if (step === 0) {
     if (!form.career_journey.length)
-      e.career_journey = "Vui lòng chọn ít nhất 1 vị trí";
+      e.career_journey = "Vui lòng chọn ít nhất 1 hướng trong 1 category";
+    else if (getSelectedCareerTeams(form.career_journey).length !== 1)
+      e.career_journey = "Chỉ chọn 1 category/team cho mỗi hồ sơ";
     if (Object.keys(e).length) return e;
 
     if (!form.interest_reason.length)
@@ -523,21 +506,13 @@ function validateStep(step: number, form: FormData): StepErrors {
 
     if (!form.why_apply.trim())
       e.why_apply = "Vui lòng cho biết lý do ứng tuyển";
-    else if (!hasMinText(form.why_apply, TEXT_MIN.why_apply))
-      e.why_apply = "Viết thêm 1-2 câu để team hiểu rõ hơn nhé";
   } else if (step === 1) {
     if (!form.experience.trim())
       e.experience = "Vui lòng chia sẻ kinh nghiệm liên quan";
-    else if (!hasMinText(form.experience, TEXT_MIN.experience))
-      e.experience = "Viết thêm vai trò hoặc kết quả bạn từng làm nhé";
     if (Object.keys(e).length) return e;
 
     if (!form.skills.trim()) e.skills = "Vui lòng liệt kê kỹ năng/công cụ";
-    else if (!hasMinText(form.skills, TEXT_MIN.skills))
-      e.skills = "Liệt kê thêm vài công cụ hoặc kỹ năng bạn đã dùng nhé";
     if (!form.goal.trim()) e.goal = "Vui lòng chia sẻ mục tiêu thực tập";
-    else if (!hasMinText(form.goal, TEXT_MIN.goal))
-      e.goal = "Viết thêm một chút về mục tiêu bạn muốn đạt nhé";
     if (Object.keys(e).length) return e;
 
     if (!hasWorkPreference(form))
@@ -545,22 +520,14 @@ function validateStep(step: number, form: FormData): StepErrors {
     if (Object.keys(e).length) return e;
 
     if (!form.note.trim()) e.note = "Vui lòng nhắn gửi thêm cho team";
-    else if (!hasMinText(form.note, TEXT_MIN.note))
-      e.note = "Lời nhắn hơi ngắn, thêm một ý team nên biết nhé";
   } else if (step === 2) {
     if (!form.strengths.trim()) e.strengths = "Vui lòng chia sẻ điểm mạnh";
-    else if (!hasMinText(form.strengths, TEXT_MIN.strengths))
-      e.strengths = "Thêm một chút ví dụ hoặc bối cảnh cho điểm mạnh nhé";
     if (!form.weaknesses.trim())
       e.weaknesses = "Vui lòng chia sẻ điểm cần cải thiện";
-    else if (!hasMinText(form.weaknesses, TEXT_MIN.weaknesses))
-      e.weaknesses = "Viết thêm cách bạn đang cải thiện điểm này nhé";
     if (Object.keys(e).length) return e;
 
     if (!form.expectation.trim())
       e.expectation = "Vui lòng chia sẻ mong muốn trong 3 tháng đầu";
-    else if (!hasMinText(form.expectation, TEXT_MIN.expectation))
-      e.expectation = "Thêm 1-2 ý về điều bạn muốn học trong 3 tháng đầu nhé";
     if (Object.keys(e).length) return e;
 
     if (!form.problem_solving.length)
@@ -581,11 +548,6 @@ function validateStep(step: number, form: FormData): StepErrors {
 
     if (!form.dob) e.dob = "Ngày sinh là bắt buộc";
     if (!form.school.trim()) e.school = "Trường là bắt buộc";
-    else if (!hasSchoolCode(form.school))
-      e.school = "Thêm mã trường trong ngoặc, VD: Đại học Bách Khoa (QSB)";
-    else if (!hasSchoolMajor(form.school))
-      e.school =
-        "Thêm ngành học, VD: Đại học Bách Khoa (QSB) – Ngành An toàn thông tin";
     if (Object.keys(e).length) return e;
 
     if (!form.enrollment) e.enrollment = "Năm nhập học là bắt buộc";
@@ -644,7 +606,7 @@ function getFirstErrorGuide(
     },
     career_journey: {
       pose: "presenting",
-      msg: `${hey}chọn ít nhất 1 vị trí trước, tốt nhất là 1-2 hướng chính.`,
+      msg: `${hey}chọn 1 category và ít nhất 1 hướng bên trong category đó nhé.`,
     },
     interest_reason: {
       pose: "presenting",
@@ -652,9 +614,7 @@ function getFirstErrorGuide(
     },
     why_apply: {
       pose: "thinking",
-      msg: form.why_apply.trim()
-        ? `${hey}ý này hơi ngắn, viết thêm 1-2 câu về vì sao bạn hợp vị trí nhé.`
-        : `${hey}viết ngắn vì sao bạn muốn vị trí này, 2-3 ý là được.`,
+      msg: `${hey}viết ngắn vì sao bạn muốn vị trí này, nhập bao nhiêu cũng được.`,
     },
     experience: {
       pose: "thinking",
@@ -670,9 +630,7 @@ function getFirstErrorGuide(
     },
     goal: {
       pose: "thinking",
-      msg: form.goal.trim()
-        ? `${hey}mục tiêu đang hơi ngắn, thêm điều bạn muốn học hoặc đạt được nhé.`
-        : `${hey}chia sẻ mục tiêu bạn muốn đạt sau kỳ thực tập này nhé.`,
+      msg: `${hey}chia sẻ mục tiêu bạn muốn đạt sau kỳ thực tập này nhé.`,
     },
     work_preference: {
       pose: "presenting",
@@ -680,9 +638,7 @@ function getFirstErrorGuide(
     },
     note: {
       pose: "listening",
-      msg: form.note.trim()
-        ? `${hey}lời nhắn hơi ngắn, thêm một ý team nên lưu ý về bạn nhé.`
-        : `${hey}nhắn team thêm một câu để hồ sơ có màu riêng hơn nhé.`,
+      msg: `${hey}nhắn team thêm một câu để hồ sơ có màu riêng hơn nhé.`,
     },
     strengths: {
       pose: "thinking",
@@ -698,9 +654,7 @@ function getFirstErrorGuide(
     },
     expectation: {
       pose: "thinking",
-      msg: form.expectation.trim()
-        ? `${hey}mong muốn đã có ý rồi, thêm 1-2 điều bạn muốn học trong 3 tháng đầu nhé.`
-        : `${hey}nói ngắn bạn mong học được gì trong 3 tháng đầu nhé.`,
+      msg: `${hey}nói ngắn bạn mong học được gì trong 3 tháng đầu nhé.`,
     },
     problem_solving: {
       pose: "presenting",
@@ -761,24 +715,22 @@ function getSmartGuide(
   const hasDirection =
     selectedCount > 0 &&
     form.interest_reason.length > 0 &&
-    hasMinText(form.why_apply, TEXT_MIN.why_apply);
+    hasText(form.why_apply);
   const hasCapability =
-    hasMinText(form.experience, TEXT_MIN.experience) &&
-    hasMinText(form.skills, TEXT_MIN.skills) &&
-    hasMinText(form.goal, TEXT_MIN.goal) &&
+    hasText(form.experience) &&
+    hasText(form.skills) &&
+    hasText(form.goal) &&
     hasWorkPreference(form) &&
-    hasMinText(form.note, TEXT_MIN.note);
+    hasText(form.note);
   const hasReflection =
-    hasMinText(form.strengths, TEXT_MIN.strengths) &&
-    hasMinText(form.weaknesses, TEXT_MIN.weaknesses);
+    hasText(form.strengths) && hasText(form.weaknesses);
   const hasBehavior =
     form.problem_solving.length > 0 && form.feedback_response.length > 0;
   const hasProfile =
     isValidPhone(form.phone.trim()) &&
     (!form.has_telegram || isValidTelegramUsername(form.telegram_username)) &&
     Boolean(form.dob) &&
-    hasSchoolCode(form.school) &&
-    hasSchoolMajor(form.school) &&
+    hasText(form.school) &&
     Boolean(form.enrollment) &&
     Boolean(form.graduation) &&
     Boolean(form.cv.trim());
@@ -810,7 +762,7 @@ function getSmartGuide(
       if (
         hasReflection &&
         hasBehavior &&
-        hasMinText(form.expectation, TEXT_MIN.expectation)
+        hasText(form.expectation)
       )
         return {
           pose: "encourage",
@@ -898,21 +850,9 @@ function getSmartGuide(
 
   if (key === "school") {
     if (!form.school.trim()) return GUIDE.school;
-    if (!hasSchoolCode(form.school)) {
-      return {
-        pose: "focused",
-        msg: `${hey}thêm mã trường trong ngoặc nhé. Ví dụ: Đại học Bách Khoa (QSB) – An toàn thông tin.`,
-      };
-    }
-    if (!hasSchoolMajor(form.school)) {
-      return {
-        pose: "focused",
-        msg: `${hey}thêm chuyên ngành sau tên trường để team hiểu nền học của bạn nhé.`,
-      };
-    }
     return {
       pose: "encourage",
-      msg: `${hey}trường và chuyên ngành đã rõ. Thêm mốc nhập học nữa nhé.`,
+      msg: `${hey}thông tin trường đã có. Thêm mốc nhập học nữa nhé.`,
     };
   }
 
@@ -938,16 +878,11 @@ function getSmartGuide(
     if (selectedCount === 0)
       return {
         pose: "presenting",
-        msg: `${hey}chọn 1-2 vị trí hợp nhất với bạn.`,
-      };
-    if (selectedCount <= 2)
-      return {
-        pose: "encourage",
-        msg: `${hey}mình sẽ hỏi theo hướng này. Tiếp theo chọn lý do bạn hứng thú nhé.`,
+        msg: `${hey}chọn 1 category, rồi tick các hướng phù hợp bên trong category đó nhé.`,
       };
     return {
-      pose: "thinking",
-      msg: `${hey}bạn đang mở khá nhiều hướng. Gợi ý là ưu tiên hướng bạn tự tin nhất để hồ sơ có điểm nhấn hơn.`,
+      pose: "encourage",
+      msg: `${hey}mình sẽ hỏi theo các hướng bạn đã chọn. Tiếp theo chọn lý do bạn hứng thú nhé.`,
     };
   }
 
@@ -963,9 +898,7 @@ function getSmartGuide(
   if (key === "why") {
     return textGuide(
       form.why_apply,
-      TEXT_MIN.why_apply,
       GUIDE.why,
-      `${hey}ý này hơi ngắn, thêm 1-2 câu về động lực và điểm phù hợp của bạn nhé.`,
       `${hey}lý do đã rõ rồi. Sang bước sau mình hỏi kinh nghiệm nhé.`,
     );
   }
@@ -973,9 +906,7 @@ function getSmartGuide(
   if (key === "experience") {
     return textGuide(
       form.experience,
-      TEXT_MIN.experience,
       GUIDE.experience,
-      `${hey}thêm vai trò, việc bạn làm hoặc kết quả để kinh nghiệm có sức nặng hơn nhé.`,
       `${hey}kinh nghiệm đã có. Giờ thêm kỹ năng hoặc công cụ bạn dùng nhé.`,
     );
   }
@@ -983,9 +914,7 @@ function getSmartGuide(
   if (key === "skills") {
     return textGuide(
       form.skills,
-      TEXT_MIN.skills,
       GUIDE.skills,
-      `${hey}thêm vài tool, nền tảng hoặc kỹ năng bạn tự tin dùng được nhé.`,
       `${hey}kỹ năng rõ hơn rồi. Thêm mục tiêu thực tập để team hiểu hơn.`,
     );
   }
@@ -993,9 +922,7 @@ function getSmartGuide(
   if (key === "goals") {
     return textGuide(
       form.goal,
-      TEXT_MIN.goal,
       GUIDE.goals,
-      `${hey}mục tiêu đang hơi ngắn, thêm điều bạn muốn học hoặc thử sức nhé.`,
       `${hey}mục tiêu ổn rồi. Giờ tick lịch và hình thức làm việc phù hợp.`,
     );
   }
@@ -1012,9 +939,7 @@ function getSmartGuide(
   if (key === "note") {
     return textGuide(
       form.note,
-      TEXT_MIN.note,
       GUIDE.note,
-      `${hey}lời nhắn hơi ngắn, thêm một ý team nên biết về bạn nhé.`,
       `${hey}xong phần năng lực rồi. Tiếp theo mình hỏi về tư duy làm việc.`,
       "celebrate",
     );
@@ -1023,9 +948,7 @@ function getSmartGuide(
   if (key === "strengths") {
     return textGuide(
       form.strengths,
-      TEXT_MIN.strengths,
       GUIDE.strengths,
-      `${hey}thêm một ví dụ nhỏ để điểm mạnh của bạn nổi bật hơn nhé.`,
       `${hey}điểm mạnh ổn rồi. Giờ thêm điểm bạn muốn cải thiện nhé.`,
     );
   }
@@ -1033,9 +956,7 @@ function getSmartGuide(
   if (key === "weaknesses") {
     return textGuide(
       form.weaknesses,
-      TEXT_MIN.weaknesses,
       GUIDE.weaknesses,
-      `${hey}thêm cách bạn đang cải thiện điểm này để câu trả lời tự nhiên hơn nhé.`,
       `${hey}tự nhìn nhận ổn rồi. Tiếp theo là kỳ vọng 3 tháng đầu.`,
     );
   }
@@ -1043,9 +964,7 @@ function getSmartGuide(
   if (key === "expectation") {
     return textGuide(
       form.expectation,
-      TEXT_MIN.expectation,
       GUIDE.expectation,
-      `${hey}mong muốn đã có ý rồi, thêm 1-2 điều bạn muốn học trong 3 tháng đầu nhé.`,
       `${hey}mong muốn 3 tháng đã rõ. Tiếp theo chọn cách bạn xử lý việc mới nhé.`,
     );
   }
@@ -1095,7 +1014,7 @@ export default function ApplicationWizard({
   const [checking, setChecking] = useState(false);
   const [errors, setErrors] = useState<StepErrors>({});
   const [direction, setDirection] = useState<"next" | "prev">("next");
-  const [teamFilter, setTeamFilter] = useState("Dev/DevOps");
+  const [teamFilter, setTeamFilter] = useState("Infrastructure");
   const csrfTokenRef = useRef<string>("");
   const bodyRef = useRef<HTMLDivElement>(null);
   const guideRailRef = useRef<HTMLDivElement>(null);
@@ -1962,25 +1881,8 @@ function FieldError({ error }: { error?: string }) {
   return <div className="wz-field-error">{error}</div>;
 }
 
-function TextFieldFooter({
-  error,
-  value,
-  min,
-}: {
-  error?: string;
-  value: string;
-  min: number;
-}) {
-  const len = textLength(value);
-  const ok = len >= min;
-  return (
-    <div className="wz-field-footer">
-      <FieldError error={error} />
-      <span className={`wz-char-count ${ok ? "ok" : ""}`}>
-        {len}/{min}+ ký tự
-      </span>
-    </div>
-  );
+function TextFieldFooter({ error }: { error?: string }) {
+  return <FieldError error={error} />;
 }
 
 /* ══════════════════════════════════════════════════
@@ -2001,18 +1903,21 @@ function Step1({
   setTeamFilter: (f: string) => void;
   errors: StepErrors;
 }) {
-  const filtered =
-    teamFilter === "Tất cả"
-      ? CAREER_OPTIONS
-      : CAREER_OPTIONS.filter((o) => o.team === teamFilter);
+  const selectedTeams = getSelectedCareerTeams(form.career_journey);
+  const selectedTeam = selectedTeams[0] ?? null;
+  const activeTeam = selectedTeam ?? teamFilter;
+  const filtered = CAREER_OPTIONS.filter((o) => o.team === activeTeam);
   const careerSelected = form.career_journey.length > 0;
   const interestSelected = form.interest_reason.length > 0;
   const selectedCount = form.career_journey.length;
-  const isOverRecommended = selectedCount > 2;
   const filterCount = (filter: string) =>
-    filter === "Tất cả"
-      ? CAREER_OPTIONS.length
-      : CAREER_OPTIONS.filter((o) => o.team === filter).length;
+    CAREER_OPTIONS.filter((o) => o.team === filter).length;
+  const handleTeamSelect = (team: string) => {
+    setTeamFilter(team);
+    if (selectedTeam && selectedTeam !== team) {
+      set("career_journey", []);
+    }
+  };
 
   return (
     <div className="wz-step-content">
@@ -2032,21 +1937,19 @@ function Step1({
               Career Journey / Team <span className="wz-req">*</span>
             </h3>
             <p className="wz-zone-sub">
-              Chọn 1 hướng chính, sau đó có thể tick thêm stream phù hợp.
+              Chọn 1 category duy nhất, rồi tick bao nhiêu hướng bên trong cũng được.
             </p>
           </div>
           <div className="wz-career-head-badge">
             <span>{filtered.length}</span>
-            vị trí đang xem
+            hướng trong category
           </div>
         </div>
         <FieldError error={errors.career_journey} />
         <div className="wz-career-guide">
           <span className="wz-career-guide-kicker">Gợi ý từ Markee</span>
           <span className="wz-career-guide-text">
-            {teamFilter === "Tất cả"
-              ? `Đang xem toàn bộ ${CAREER_OPTIONS.length} vị trí. Dùng filter để thu hẹp nhanh hơn.`
-              : `Đang xem ${filtered.length} vị trí thuộc ${teamFilter}.`}
+            Đang xem {filtered.length} hướng thuộc {activeTeam}. Đổi category sẽ bỏ chọn hướng cũ.
           </span>
         </div>
         <div className="wz-filter-tabs">
@@ -2054,24 +1957,20 @@ function Step1({
             <button
               key={f}
               type="button"
-              className={`wz-filter-tab ${teamFilter === f ? "active" : ""}`}
-              onClick={() => setTeamFilter(f)}
+              className={`wz-filter-tab ${activeTeam === f ? "active" : ""}`}
+              onClick={() => handleTeamSelect(f)}
             >
               <span>{f}</span>
               <span className="wz-filter-count">{filterCount(f)}</span>
             </button>
           ))}
         </div>
-        <div
-          className={`wz-selected-summary ${isOverRecommended ? "over" : ""}`}
-        >
+        <div className="wz-selected-summary">
           <span className="wz-selected-meter">
-            Đã chọn {selectedCount} hướng
+            Đã chọn {selectedCount} hướng trong {activeTeam}
           </span>
           <span>
-            {isOverRecommended
-              ? "Gợi ý ưu tiên hướng bạn tự tin nhất để hồ sơ có điểm nhấn hơn."
-              : "Có thể chọn thêm nếu bạn thật sự phù hợp."}
+            Chỉ dùng 1 category cho mỗi hồ sơ; bên trong category có thể chọn nhiều hướng.
           </span>
         </div>
         <div className="wz-career-grid">
@@ -2161,8 +2060,6 @@ function Step1({
             />
             <TextFieldFooter
               error={errors.why_apply}
-              value={form.why_apply}
-              min={TEXT_MIN.why_apply}
             />
           </div>
         </div>
@@ -2217,8 +2114,6 @@ function Step2({
         />
         <TextFieldFooter
           error={errors.experience}
-          value={form.experience}
-          min={TEXT_MIN.experience}
         />
       </div>
 
@@ -2240,8 +2135,6 @@ function Step2({
             />
             <TextFieldFooter
               error={errors.skills}
-              value={form.skills}
-              min={TEXT_MIN.skills}
             />
           </div>
 
@@ -2262,8 +2155,6 @@ function Step2({
             />
             <TextFieldFooter
               error={errors.goal}
-              value={form.goal}
-              min={TEXT_MIN.goal}
             />
           </div>
         </div>
@@ -2328,8 +2219,6 @@ function Step2({
             />
             <TextFieldFooter
               error={errors.note}
-              value={form.note}
-              min={TEXT_MIN.note}
             />
           </div>
         </div>
@@ -2381,8 +2270,6 @@ function Step3({
         />
         <TextFieldFooter
           error={errors.strengths}
-          value={form.strengths}
-          min={TEXT_MIN.strengths}
         />
       </div>
 
@@ -2402,8 +2289,6 @@ function Step3({
         />
         <TextFieldFooter
           error={errors.weaknesses}
-          value={form.weaknesses}
-          min={TEXT_MIN.weaknesses}
         />
       </div>
 
@@ -2425,8 +2310,6 @@ function Step3({
             />
             <TextFieldFooter
               error={errors.expectation}
-              value={form.expectation}
-              min={TEXT_MIN.expectation}
             />
           </div>
 
@@ -3153,8 +3036,6 @@ const wizardCSS = `
 .wz-req{color:#ef4444;font-weight:400;margin-left:2px}
 .wz-hint{font-size:12.5px;color:#64748b;margin:-2px 0 12px;line-height:1.55}
 .wz-field-footer{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-top:8px}
-.wz-char-count{font-size:11.5px;color:#94a3b8;white-space:nowrap;font-weight:500}
-.wz-char-count.ok{color:#10b981;font-weight:700}
 .wz-field-error{font-size:12px;color:#ef4444;font-weight:600;margin-top:6px;animation:wzShake .3s ease}
 @keyframes wzShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 .wz-divider{height:1px;background:linear-gradient(90deg,transparent,#e2e8f0,transparent);margin:4px 0 8px}

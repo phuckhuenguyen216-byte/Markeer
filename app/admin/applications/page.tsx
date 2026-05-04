@@ -36,7 +36,7 @@ const TEAM_POSITIONS: Record<string, string[]> = {
   ],
   AI: ["AI / ML Engineer", "Data Analyst / Engineer", "AI Product / Research"],
   Marketing: ["Content & Social", "Performance & Acquisition", "Marketing Ops"],
-  Sales: ["B2B Sales", "Business Development"],
+  Sales: ["B2B Sales", "Business Development", "Customer Success"],
 };
 
 function isStarred(app: Application) {
