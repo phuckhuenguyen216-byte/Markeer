@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/purity */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -7,6 +6,19 @@ import { motion, AnimatePresence, Easing, Variants } from "framer-motion";
 import "../i18n";
 
 /* ─────────────── Floating Particles ─────────────── */
+function createParticles(count: number) {
+  return Array.from({ length: count }, () => ({
+    w: Math.random() * 5 + 2,
+    h: Math.random() * 5 + 2,
+    l: Math.random() * 100,
+    t: Math.random() * 100,
+    dy: -(Math.random() * 40 + 20),
+    dx: (Math.random() - 0.5) * 20,
+    dur: Math.random() * 4 + 4,
+    del: Math.random() * 6,
+  }));
+}
+
 function Particles({
   count = 22,
   light = false,
@@ -14,7 +26,7 @@ function Particles({
   count?: number;
   light?: boolean;
 }) {
-  const [particles, setParticles] = useState<
+  const [particles] = useState<
     {
       w: number;
       h: number;
@@ -25,22 +37,7 @@ function Particles({
       dur: number;
       del: number;
     }[]
-  >([]);
-
-  useEffect(() => {
-    setParticles(
-      Array.from({ length: count }, () => ({
-        w: Math.random() * 5 + 2,
-        h: Math.random() * 5 + 2,
-        l: Math.random() * 100,
-        t: Math.random() * 100,
-        dy: -(Math.random() * 40 + 20),
-        dx: (Math.random() - 0.5) * 20,
-        dur: Math.random() * 4 + 4,
-        del: Math.random() * 6,
-      })),
-    );
-  }, [count]);
+  >(() => createParticles(count));
 
   if (particles.length === 0) return null;
 

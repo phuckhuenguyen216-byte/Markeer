@@ -1,8 +1,9 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { SUPABASE_PUBLIC_CONFIG } from "./lib/public-config";
 
-const SUPABASE_URL = "https://jfxnhcmxsplikldmjnvi.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_P6z5rGTLqJ-YU_bWg9J2Zw_x8K41MbX";
+const SUPABASE_URL = SUPABASE_PUBLIC_CONFIG.url;
+const SUPABASE_ANON_KEY = SUPABASE_PUBLIC_CONFIG.anonKey;
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

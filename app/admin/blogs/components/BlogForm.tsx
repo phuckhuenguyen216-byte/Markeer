@@ -178,7 +178,6 @@ export default function BlogForm({
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
       };
-      if (isNew) headers["x-api-key"] = "markee_blog_2026";
 
       const submitData = overrideStatus
         ? { ...post, status: overrideStatus }

@@ -55,3 +55,70 @@ CREATE POLICY "Service role full access markee blog"
   ON markee_blog_posts FOR ALL
   USING (true)
   WITH CHECK (true);
+
+-- ============================================================
+-- Applications Table
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS applications (
+  id              UUID        DEFAULT gen_random_uuid() PRIMARY KEY,
+  email           TEXT        NOT NULL,
+  career_journey  JSONB       DEFAULT '[]'::jsonb,
+  interest_reason JSONB       DEFAULT '[]'::jsonb,
+  why_apply       TEXT        DEFAULT '',
+  experience      TEXT        DEFAULT '',
+  skills          TEXT        DEFAULT '',
+  goal            TEXT        DEFAULT '',
+  work_preference JSONB       DEFAULT '{}'::jsonb,
+  note            TEXT        DEFAULT '',
+  strengths       TEXT        DEFAULT '',
+  weaknesses      TEXT        DEFAULT '',
+  expectation     TEXT        DEFAULT '',
+  problem_solving JSONB       DEFAULT '[]'::jsonb,
+  feedback_response JSONB     DEFAULT '[]'::jsonb,
+  full_name       TEXT        NOT NULL,
+  dob             TEXT        DEFAULT '',
+  phone           TEXT        DEFAULT '',
+  school          TEXT        DEFAULT '',
+  enrollment      TEXT        DEFAULT '',
+  graduation      TEXT        DEFAULT '',
+  cv              TEXT        DEFAULT '',
+  status          TEXT        DEFAULT 'new' CHECK (status IN ('new', 'reviewing', 'interviewed', 'accepted', 'rejected')),
+  admin_notes     TEXT        DEFAULT '',
+  created_at      TIMESTAMPTZ DEFAULT now(),
+  updated_at      TIMESTAMPTZ DEFAULT now()
+);
+
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_applications_status ON applications(status);
+CREATE INDEX IF NOT EXISTS idx_applications_email ON applications(email);
+CREATE INDEX IF NOT EXISTS idx_applications_created ON applications(created_at DESC);
+
+-- Auto-update updated_at
+CREATE OR REPLACE FUNCTION update_applications_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS applications_updated_at ON applications;
+CREATE TRIGGER applications_updated_at
+  BEFORE UPDATE ON applications
+  FOR EACH ROW
+  EXECUTE FUNCTION update_applications_updated_at();
+
+-- RLS
+ALTER TABLE applications ENABLE ROW LEVEL SECURITY;
+
+-- Anyone can insert (public form submission)
+CREATE POLICY "Public can insert applications"
+  ON applications FOR INSERT
+  WITH CHECK (true);
+
+-- Service role full access
+CREATE POLICY "Service role full access applications"
+  ON applications FOR ALL
+  USING (true)
+  WITH CHECK (true);

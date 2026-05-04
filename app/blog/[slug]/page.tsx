@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,7 +13,6 @@ import {
   Eye,
   User,
   Clock,
-  ArrowRight,
   Sparkles,
 } from "lucide-react";
 
@@ -30,6 +30,18 @@ function readingTime(html: string) {
 }
 
 /* ─── Floating particles ─── */
+function createParticles(count: number) {
+  return Array.from({ length: count }, () => ({
+    w: Math.random() * 4 + 2,
+    h: Math.random() * 4 + 2,
+    l: Math.random() * 100,
+    t: Math.random() * 100,
+    dy: -(Math.random() * 35 + 15),
+    dur: Math.random() * 4 + 4,
+    del: Math.random() * 5,
+  }));
+}
+
 function Particles({
   count = 14,
   light = false,
@@ -37,7 +49,7 @@ function Particles({
   count?: number;
   light?: boolean;
 }) {
-  const [particles, setParticles] = useState<
+  const [particles] = useState<
     {
       w: number;
       h: number;
@@ -47,21 +59,7 @@ function Particles({
       dur: number;
       del: number;
     }[]
-  >([]);
-
-  useEffect(() => {
-    setParticles(
-      Array.from({ length: count }, () => ({
-        w: Math.random() * 4 + 2,
-        h: Math.random() * 4 + 2,
-        l: Math.random() * 100,
-        t: Math.random() * 100,
-        dy: -(Math.random() * 35 + 15),
-        dur: Math.random() * 4 + 4,
-        del: Math.random() * 5,
-      })),
-    );
-  }, [count]);
+  >(() => createParticles(count));
 
   if (particles.length === 0) return null;
 
@@ -109,16 +107,17 @@ export default function BlogDetailPage() {
     content: string;
   } | null>(null);
   const lastTranslatedLang = useRef<string>("");
+  const postContent = post?.content ?? "";
+  const translatedContent = translatedData?.content ?? "";
 
   const sanitizedContent = useMemo(
-    () => (post?.content ? DOMPurify.sanitize(post.content) : ""),
-    [post?.content],
+    () => (postContent ? DOMPurify.sanitize(postContent) : ""),
+    [postContent],
   );
 
   const sanitizedTranslatedContent = useMemo(
-    () =>
-      translatedData?.content ? DOMPurify.sanitize(translatedData.content) : "",
-    [translatedData?.content],
+    () => (translatedContent ? DOMPurify.sanitize(translatedContent) : ""),
+    [translatedContent],
   );
 
   // Auto-translate when language changes away from "vi"
@@ -243,7 +242,6 @@ export default function BlogDetailPage() {
   }
 
   const mins = readingTime(post.content);
-  const tc = TAG_COLOR[post.tag] ?? { bg: "#f3f4f6", text: "#374151" };
 
   return (
     <main
