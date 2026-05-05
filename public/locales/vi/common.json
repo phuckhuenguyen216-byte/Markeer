@@ -4,6 +4,7 @@
     "description": "MARKEE AI là nền tảng AI Marketing giúp bạn tạo nội dung nhanh gấp 10 lần và tăng trưởng bằng dữ liệu thật. Dùng thử MIỄN PHÍ 1 tháng!"
   },
   "header": {
+    "home": "Trang chủ",
     "features": "Tính năng",
     "register": "Đăng ký",
     "app": "Truy cập ứng dụng",
@@ -23,7 +24,8 @@
   },
   "about": {
     "title": "MARKEE AI LÀ GÌ?",
-    "description": "MARKEE AI là nền tảng AI Marketing dành cho doanh nghiệp hiện đại, giúp bạn thay thế nhiều công cụ rời rạc bằng một hệ thống thông minh duy nhất.",
+    "description": "Markee AI hoạt động như một đội ngũ AI Agent marketing — không chỉ là công cụ hỗ trợ, mà là giải pháp giúp doanh nghiệp xây dựng hệ thống marketing bền vững và có thể mở rộng trong kỷ nguyên số.",
+    "introduce": "Markee AI hoạt động như một đội ngũ AI Agent marketing — không chỉ là công cụ hỗ trợ, mà là giải pháp giúp doanh nghiệp xây dựng hệ thống marketing bền vững và có thể mở rộng trong kỷ nguyên số.",
     "values": [
       {
         "title": "Tạo nội dung AI đa nền tảng",
@@ -60,8 +62,8 @@
     "cancelAnytime": "Hủy bất cứ lúc nào"
   },
   "registration": {
-    "title": "SẴN SÀNG BÙNG NỔ DOANH SỐ VỚI MARKEE AI?",
-    "description": "Gia nhập cộng đồng 10,000+ marketer thông minh đang sử dụng AI để tối ưu hóa công việc mỗi ngày.",
+    "title": "MARKEE AI  ·  app.markeeai.com",
+    "description": "AI Agent Marketing Platform  ·  B2B · Agency · Doanh nghiệp",
     "primary": "Bắt đầu miễn phí ngay",
     "secondary": "Xem demo sản phẩm",
 
@@ -89,6 +91,7 @@
         "group": "AUTO POST – TỰ ĐỘNG HÓA MARKETING",
         "name": "THEO",
         "logo": "/img/mascot/Theo-logo.png",
+        "video": "/videos/video.mp4",
         "items": [
           {
             "title": "Tự động đăng bài",
@@ -107,6 +110,7 @@
         "group": "PLAN & SCHEDULE – LẬP KẾ HOẠCH",
         "name": "MAX",
         "logo": "/img/mascot/Max-logo.png",
+        "video": "/videos/video.mp4",
         "items": [
           {
             "title": "Lịch nội dung trực quan",
@@ -120,7 +124,7 @@
           },
           {
             "title": "Theo dõi tiến độ",
-            "description": "Quản lý trạng thái: Nháp – Xử lý – Kiểm duyệt – Đã đăng.",
+            "description": "Quản lý trạng thái: Chờ xử lý – Đang đăng – Đã đăng – Thất bại.",
             "icon": "ListChecks"
           },
           {
@@ -135,6 +139,7 @@
         "group": "DASHBOARD – PHÂN TÍCH & BÁO CÁO",
         "name": "PIP",
         "logo": "/img/mascot/Pip-logo.png",
+        "video": "/videos/ANIMATION-BANNER.mp4",
         "items": [
           {
             "title": "Báo cáo đa nền tảng",
@@ -159,9 +164,120 @@
         ]
       }
     ],
-
     "ctaTitle": "MARKETING VẬN HÀNH TỰ ĐỘNG, TỐI ƯU HIỆU QUẢ THỰC",
     "ctaDescription": "MARKEE AI giúp bạn tự động hóa marketing, tối ưu chiến lược và ra quyết định dựa trên dữ liệu thực."
+  },
+  "Benefit":{
+    "title": "MARKEE AI MANG LẠI ĐIỀU GÌ KHÁC BIỆT?",
+    "description": [
+      {
+        "key": "All-in-one",
+        "value": "Một nền tảng duy nhất"
+      },
+      {
+        "key": "360°",
+        "value": "Kiểm soát toàn đội nhóm"
+      },
+      {
+        "key": "7 kênh",
+        "value": "Đa nền tảng đồng bộ"
+      },
+      {
+        "key": "AI Agent",
+        "value": "Thông minh & tự động"
+      }
+    ]
+  },
+  "deployment": {
+    "title": "TRIỂN KHAI MARKEE AI",
+    "description": "Linh hoạt theo nhu cầu — thuê đội AI outsource hoặc triển khai nền tảng công nghệ nội bộ cho team.",
+    "plans": [
+      {
+        "tag": "OUTSOURCE AI AGENT",
+        "title": "Đội ngũ AI Marketing thuê ngoài",
+        "description": "Markee cung cấp đội AI Agent marketing được custom theo đặc thù doanh nghiệp — hoạt động như bộ phận MKT bên ngoài, không cần team nội bộ.",
+        "features": [
+          "AI Agent customize theo ngành & brand voice",
+          "Sản xuất & phân phối nội dung tự động",
+          "Đăng bài tự động trên 7 nền tảng",
+          "Báo cáo hiệu quả định kỳ cho doanh nghiệp",
+          "Phù hợp doanh nghiệp không có team MKT nội bộ"
+        ]
+      },
+      {
+        "tag": "TECH SOLUTION",
+        "title": "Nền tảng công nghệ nội bộ",
+        "description": "Triển khai Markee AI cho doanh nghiệp tự vận hành — Admin & Manager kiểm soát toàn đội nhóm qua dashboard tập trung.",
+        "features": [
+          "Onboard & setup theo đặc thù doanh nghiệp",
+          "Hệ thống phân quyền Admin / Manager / Thành viên",
+          "Manager tracking hiệu suất từng nhân viên theo thời gian thực",
+          "Quản lý nhiều chiến dịch song song",
+          "Phù hợp Marketing Agency và team MKT nội bộ"
+        ]
+      }
+    ]
+  },
+  "problems": {
+    "title": "DOANH NGHIỆP ĐANG GẶP VẤN ĐỀ GÌ?",
+    "description": "Marketing hiện đại đòi hỏi quản lý nhiều kênh, nhiều người, nhiều chiến dịch — trong khi hầu hết doanh nghiệp vẫn đang làm thủ công và rời rạc.",
+    "cards": [
+      {
+        "title": "Quản lý nhiều nền tảng",
+        "description": "Facebook, TikTok, Instagram, LinkedIn... mỗi kênh một quy trình khác nhau, tốn sức quản lý."
+      },
+      {
+        "title": "Thiếu chiến lược nội dung",
+        "description": "Đăng bài theo cảm tính, không có kế hoạch dài hạn, hiệu quả không ổn định."
+      },
+      {
+        "title": "Vận hành tốn thời gian",
+        "description": "Viết nội dung, lên lịch, tổng hợp báo cáo — chiếm phần lớn thời gian của đội ngũ."
+      },
+      {
+        "title": "Khó theo dõi hiệu quả",
+        "description": "Dữ liệu phân tán trên nhiều nền tảng, không có bức tranh tổng thể để tối ưu chiến lược."
+      }
+    ]
+  },
+  "permission": {
+    "title": "BA CẤP QUYỀN — TỪ NHÂN VIÊN ĐẾN ADMIN",
+    "description": "Markee AI có hệ thống phân quyền rõ ràng, phù hợp với cơ cấu tổ chức của agency và doanh nghiệp có đội ngũ MKT.",
+    "roles": [
+      {
+        "tag": "ADMIN",
+        "title": "Quản lý toàn hệ thống",
+        "features": [
+          "Tạo và quản lý nhiều nhóm cùng lúc",
+          "Tạo, xóa và phân bổ chiến dịch",
+          "Thêm thành viên vào nhóm và chiến dịch",
+          "Bổ nhiệm Quản lý chiến dịch",
+          "Truy cập toàn bộ báo cáo và dữ liệu"
+        ]
+      },
+      {
+        "tag": "QUẢN LÝ CHIẾN DỊCH",
+        "title": "Manager / Team Lead",
+        "features": [
+          "Quản trị nhân sự trong chiến dịch phụ trách",
+          "Theo dõi bài đăng và hiệu suất từng thành viên",
+          "Thêm thành viên vào chiến dịch",
+          "Xem báo cáo hiệu quả chiến dịch",
+          "Thiết lập thương hiệu và kế hoạch ngân sách"
+        ]
+      },
+      {
+        "tag": "THÀNH VIÊN",
+        "title": "Content / Nhân viên MKT",
+        "features": [
+          "Tạo và đăng nội dung trên các kênh được phân công",
+          "Sử dụng AI Agent NIA để sản xuất nội dung",
+          "Lên lịch đăng bài và quản lý lịch cá nhân",
+          "Xem kết quả bài viết cá nhân",
+          "Tham gia nhiều chiến dịch cùng lúc"
+        ]
+      }
+    ]
   },
   "footer": {
     "brandTitle": "MARKEE AI ",
@@ -1006,5 +1122,4 @@
       }
     }
   }
-
 }
