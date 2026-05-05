@@ -73,17 +73,31 @@ import { t } from "i18next";
     }
   };
 
-  const features = t("features.groups", { returnObjects: true }) as FeatureGroup[];
+  // const features = t("features.groups", { returnObjects: true }) as FeatureGroup[];
+  // type FeatureItem = {
+  //   title: string;
+  //   description: string;
+  //   icon: string;
+  // };
+
+  // type FeatureGroup = {
+  //   group: string;
+  //   name: string;
+  //   logo: string;
+  //   items: FeatureItem[];
+  // };
+
   type FeatureItem = {
-    title: string;
-    description: string;
-    icon: string;
+  title: string;
+  description: string;
+  icon: string;
   };
 
   type FeatureGroup = {
     group: string;
     name: string;
     logo: string;
+    video: string;
     items: FeatureItem[];
   };
 
@@ -98,11 +112,21 @@ import { t } from "i18next";
   const CYCLE_DURATION = 5000;
 
   export default function FeaturesSection() {
+
+    const openVideo = (videoUrl: string) => {
+      window.open(videoUrl, "_blank");
+    };
+
     const { t } = useTranslation("common");
     const rawFeatures = t("features.groups", { returnObjects: true }) as unknown;
     const features: FeatureGroup[] = Array.isArray(rawFeatures)
       ? (rawFeatures as FeatureGroup[])
       : [];
+    const rawBenefits = t("Benefit.description", { returnObjects: true });
+
+    const benefits = Array.isArray(rawBenefits)
+      ? rawBenefits
+      : Object.values(rawBenefits || {});
 
     const [activeGroup, setActiveGroup] = useState(0);
     const [progress, setProgress] = useState(0);
@@ -117,6 +141,9 @@ import { t } from "i18next";
       startTimeRef.current = Date.now();
       setProgress(0);
     }, []);
+
+    const [activeVideo, setActiveVideo] = useState<string | null>(null);
+    const [isVideoOpen, setIsVideoOpen] = useState(false);
 
     // Auto cycle
     useEffect(() => {
@@ -222,8 +249,13 @@ import { t } from "i18next";
           .fs-eyebrow-line.rev { transform: scaleX(-1); }
           .fs-title {
             font-size: clamp(2rem, 4.5vw, 3.6rem);
-            font-weight: 900; color: var(--fs-text-hi);
+            font-weight: 900;
+            // color: var(--fs-text-hi);
             line-height: 1.1; letter-spacing: -.02em; margin-bottom: 14px;
+            background: linear-gradient(180deg, #252323, #3a0e0e, #6b0000, #b30000, #ff2a2a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
           }
           .fs-title-rule {
             width: 120px; height: 2px; background: var(--r500);
@@ -644,71 +676,84 @@ import { t } from "i18next";
   display: inline-block;
 }
 
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-}
+.glitch {
+  position: relative;
+  display: inline-block;
 
-.glitch::before {
-  left: 2px;
-  background-image: linear-gradient(135deg, var(--r500), var(--r800));
+  background: linear-gradient(135deg, var(--r500), var(--r800));
   -webkit-background-clip: text;
-  background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: g1 4.2s infinite steps(4);   /* steps để giữ cảm giác glitch digital */
+
+  animation: glitchMain 2.8s infinite steps(2);
+}
+@keyframes glitchMain {
+  0%   { transform: translate(0) skew(0deg); }
+  10%  { transform: translate(-2px, 1px) skew(-2deg); }
+  20%  { transform: translate(2px, -1px) skew(2deg); }
+  30%  { transform: translate(-3px, 2px) skew(0deg); }
+  40%  { transform: translate(3px, -2px) skew(1deg); }
+  50%  { transform: translate(0) skew(0deg); }
+  60%  { transform: translate(-4px, 1px) skew(-1deg); }
+  70%  { transform: translate(3px, 2px) skew(2deg); }
+  80%  { transform: translate(-2px, -1px) skew(0deg); }
+  90%  { transform: translate(2px, 1px) skew(-1deg); }
+  100% { transform: translate(0) skew(0deg); }
 }
 
-.glitch::after {
-  left: -2px;
-  background-image: linear-gradient(135deg, var(--r500), var(--r800));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: g2 5.1s infinite steps(4);   /* thời gian khác → không đồng bộ */
-}
+// .glitch::before {
+//   left: 2px;
+//   background-image: linear-gradient(135deg, var(--r500), var(--r800));
+//   -webkit-background-clip: text;
+//   background-clip: text;
+//   -webkit-text-fill-color: transparent;
+//   animation: g1 4.2s infinite steps(4);   /* steps để giữ cảm giác glitch digital */
+// }
 
-/* ──────────────────────────────────────────────── */
-/* g1 – layer trên, giật thường xuyên hơn            */
-/* ──────────────────────────────────────────────── */
-@keyframes g1 {
-  0%    { transform: translate(0);    clip-path: polygon(0 0, 100% 0, 100% 42%, 0 42%); }
-  8%    { transform: translate(-3px, 1px); clip-path: polygon(0 4%, 100% 4%, 100% 40%, 0 40%); }
-  16%   { transform: translate(3px, -2px); clip-path: polygon(0 0, 100% 0, 100% 44%, 0 44%); }
-  24%   { transform: translate(-2px, 2px); clip-path: polygon(0 6%, 100% 6%, 100% 38%, 0 38%); }
-  32%   { transform: translate(2px, -1px); }
-  40%   { transform: translate(-1px, 1px); clip-path: polygon(0 2%, 100% 2%, 100% 43%, 0 43%); }
-  48%   { transform: translate(0); }
-  56%   { transform: translate(-4px, 2px); clip-path: polygon(0 5%, 100% 5%, 100% 39%, 0 39%); }
-  64%   { transform: translate(3px, -3px); }
-  72%   { transform: translate(-2px, 1px); clip-path: polygon(0 3%, 100% 3%, 100% 41%, 0 41%); }
-  80%   { transform: translate(1px, -1px); }
-  88%   { transform: translate(-3px, 2px); }
-  96%   { transform: translate(2px, -2px); clip-path: polygon(0 7%, 100% 7%, 100% 37%, 0 37%); }
-  100%  { transform: translate(0);    clip-path: polygon(0 0, 100% 0, 100% 42%, 0 42%); }
-}
+// .glitch::after {
+//   left: -2px;
+//   background-image: linear-gradient(135deg, var(--r500), var(--r800));
+//   -webkit-background-clip: text;
+//   background-clip: text;
+//   -webkit-text-fill-color: transparent;
+//   animation: g2 5.1s infinite steps(4);   /* thời gian khác → không đồng bộ */
+// }
 
-/* ──────────────────────────────────────────────── */
-/* g2 – layer dưới, nhịp khác, vẫn giật liên tục     */
-/* ──────────────────────────────────────────────── */
-@keyframes g2 {
-  0%    { transform: translate(0);    clip-path: polygon(0 58%, 100% 58%, 100% 100%, 0 100%); }
-  10%   { transform: translate(3px, -1px); clip-path: polygon(0 56%, 100% 56%, 100% 98%, 0 98%); }
-  20%   { transform: translate(-3px, 2px); }
-  30%   { transform: translate(2px, -2px); clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%); }
-  40%   { transform: translate(-1px, 1px); }
-  50%   { transform: translate(3px, -1px); clip-path: polygon(0 57%, 100% 57%, 100% 99%, 0 99%); }
-  60%   { transform: translate(0); }
-  70%   { transform: translate(-4px, 3px); clip-path: polygon(0 59%, 100% 59%, 100% 97%, 0 97%); }
-  80%   { transform: translate(2px, -1px); }
-  90%   { transform: translate(-2px, 2px); }
-  100%  { transform: translate(0);    clip-path: polygon(0 58%, 100% 58%, 100% 100%, 0 100%); }
-}
+// /* ──────────────────────────────────────────────── */
+// /* g1 – layer trên, giật thường xuyên hơn            */
+// /* ──────────────────────────────────────────────── */
+// @keyframes g1 {
+//   0%    { transform: translate(0); }
+//   8%    { transform: translate(-3px, 1px); }
+//   16%   { transform: translate(3px, -2px); }
+//   24%   { transform: translate(-2px, 2px); }
+//   32%   { transform: translate(2px, -1px); }
+//   40%   { transform: translate(-1px, 1px); }
+//   48%   { transform: translate(0); }
+//   56%   { transform: translate(-4px, 2px); }
+//   64%   { transform: translate(3px, -3px); }
+//   72%   { transform: translate(-2px, 1px); }
+//   80%   { transform: translate(1px, -1px); }
+//   88%   { transform: translate(-3px, 2px); }
+//   96%   { transform: translate(2px, -2px); }
+//   100%  { transform: translate(0); }
+// }
+
+// /* ──────────────────────────────────────────────── */
+// /* g2 – layer dưới    */
+// /* ──────────────────────────────────────────────── */
+// @keyframes g2 {
+//   0%    { transform: translate(0); }
+//   10%   { transform: translate(3px, -1px); }
+//   20%   { transform: translate(-3px, 2px); }
+//   30%   { transform: translate(2px, -2px); }
+//   40%   { transform: translate(-1px, 1px); }
+//   50%   { transform: translate(3px, -1px); }
+//   60%   { transform: translate(0); }
+//   70%   { transform: translate(-4px, 3px); }
+//   80%   { transform: translate(2px, -1px); }
+//   90%   { transform: translate(-2px, 2px); }
+//   100%  { transform: translate(0); }
+// }
 
           
           /* CTA WRAPPER */
@@ -957,6 +1002,157 @@ import { t } from "i18next";
     display: none;
   }
 }
+
+.feature-highlight {
+  max-width: 1200px;
+  margin: 120px auto 0; 
+  padding: 60px 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* HEADER */
+.feature-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+// .feature-eyebrow {
+//   font-size: 15px;
+//   color: #ff2a2a;
+//   text-transform: uppercase;
+//   display: inline-block;
+//   margin-bottom: 12px;
+// }
+
+.feature-title {
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+
+  background: linear-gradient(
+    90deg,
+    #6f1a1a,
+    #993f3f,
+    #ff2a2a
+  );
+  background-size: 200%;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: titleFlow 6s linear infinite;
+
+  text-shadow: 0 0 18px rgba(176, 104, 104, 0.25);
+}
+
+@keyframes titleFlow {
+  0% { background-position: 0%; }
+  100% { background-position: 200%; }
+}
+
+/* GRID */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+/* CARD */
+.feature-card {
+  position: relative;
+  padding: 26px 20px;
+  border-radius: 16px;
+
+  background: rgba(249, 223, 223, 0.7);
+  border: 1px solid rgba(255, 42, 42, 0.15);
+  backdrop-filter: blur(10px);
+
+  transition: all 0.4s cubic-bezier(.22,1,.36,1);
+  overflow: hidden;
+}
+
+/* hover nâng */
+.feature-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(255, 42, 42, 0.5);
+  box-shadow: 0 25px 60px rgba(255, 42, 42, 0.15);
+}
+
+/* index number */
+.feature-index {
+  font-size: 18px;
+  letter-spacing: .25em;
+  color: #ff2a2a;
+  margin-bottom: 14px;
+}
+
+/* title */
+.feature-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 10px;
+}
+
+/* text */
+.feature-card p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* glow effect */
+.feature-glow {
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 42, 42, 0.15),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.feature-card:hover .feature-glow {
+  opacity: 1;
+}
+
+/* alternating tone */
+.feature-card.dark {
+  background: rgba(163, 52, 52, 0.47);
+  color: white;
+}
+
+.feature-card.dark h3 {
+  color: #fff;
+}
+
+.feature-card.dark p {
+  color: #cfcfcf;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .feature-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* responsive */
+/*@media (max-width: 768px) {
+  .feature-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}*/
         `}</style>
 
         <section className="fs-wrap" id="features">
@@ -997,7 +1193,11 @@ import { t } from "i18next";
                 <button
                   key={i}
                   className={`fs-tab-card ${isActive ? "active" : ""}`}
-                  onClick={() => handleTabClick(i)}
+                  onClick={() => {
+                    handleTabClick(i);
+                    setActiveVideo(group.video);
+                    setIsVideoOpen(true);
+                  }}
                   onMouseEnter={() => { isPausedRef.current = true; }}
                   onMouseLeave={() => { isPausedRef.current = false; }}
                 >
@@ -1033,7 +1233,7 @@ import { t } from "i18next";
           <div className="fs-content-panel">
             <div className="fs-content-header">
               <span className="fs-content-tag">
-                GROUP_{String(activeGroup + 1).padStart(2, "0")} — {features[activeGroup].group}
+                GROUP_{String(activeGroup + 1).padStart(2, "0")} — {features[activeGroup]?.group}
               </span>
               <div className="fs-content-rule" />
             </div>
@@ -1081,14 +1281,14 @@ import { t } from "i18next";
           </div>
 
           {/* CTA */}
-        <div className="fs-cta">
+        {/* <div className="fs-cta">
           <div className="fs-cta-inner">
             <div className="fs-cta-glow" />
             <div>
               <div className="fs-cta-eyebrow"></div>
               <div className="fs-cta-title">{t("features.ctaTitle")}</div>
               <p className="fs-cta-body">{t("features.ctaDescription")}</p>
-            </div>
+            </div> */}
             {/* <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:8, position:"relative" }}>
               <div className="fs-hex">
                 <div className="fs-hex-bg" />
@@ -1096,9 +1296,85 @@ import { t } from "i18next";
               </div>
               <div className="fs-hex-label">READY</div>
             </div> */}
+          {/* </div>
+        </div> */}
+
+        <div className="feature-highlight">
+  <div className="feature-header">
+    <h2 className="feature-title">
+      {t("Benefit.title")}
+    </h2>
+
+  </div>
+
+  <div className="feature-grid">
+    {benefits?.map((item, i) => (
+        <div
+          key={i}
+          className={`feature-card ${i % 2 === 0 ? "red" : "dark"}`}
+        >
+          <div className="feature-index">
+            0{i + 1}
           </div>
+
+          <h3>{item.key}</h3>
+          <p>{item.value}</p>
+
+          <div className="feature-glow" />
         </div>
+      )
+    )}
+  </div>
+</div>
+
         </section>
+
+        {isVideoOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ background: "rgba(255,34,34,0.18)" }} >
+
+            {/* click nền để đóng */}
+            <div
+              className="absolute inset-0"
+              onClick={() => setIsVideoOpen(false)}
+            />
+
+            {/* video box */}
+            <div className="relative z-10 w-[90%] max-w-4xl">
+
+              {/* video */}
+              <video
+                controls
+                autoPlay
+                className="w-full rounded-2xl shadow-2xl border border-red-500/30"
+              >
+                <source src={activeVideo || ""} type="video/mp4" />
+              </video>
+
+              {/* nút đóng */}
+              <button
+                onClick={() => setIsVideoOpen(false)}
+                className="
+                  absolute top-2 right-2
+                  w-5 h-5
+                  flex items-center justify-center
+                  rounded-full
+                  bg-black/50 backdrop-blur-md
+                  text-white
+                  text-[12px]
+                  border border-white/20
+                  hover:bg-red-500 hover:scale-110
+                  transition-all duration-300
+                  shadow-lg
+                "
+              >
+                ✕
+              </button>
+
+            </div>
+          </div>)
+        }
+
       </>
     );
   }
