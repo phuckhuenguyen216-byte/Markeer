@@ -312,7 +312,7 @@ export default function RegistrationForm() {
 
         /* ── DESCRIPTION ── */
         .rf-desc {
-          font-size: 1.05rem; color: rgba(17,24,39,0.6);
+          font-size: 1.05rem; color: #0a0a0a;
           line-height: 1.8; max-width: 520px; margin: 0 auto 20px;
         }
 
@@ -649,9 +649,8 @@ export default function RegistrationForm() {
           </svg>
         </Link>
 
-        <Link
-          href="https://app.markeeai.com"
-          target="_blank"
+        <a
+          href="/#features"
           className="rf-btn-primary"
         >
           <svg
@@ -665,7 +664,7 @@ export default function RegistrationForm() {
           </svg>
 
           <span>{t("registration.secondary")}</span>
-        </Link>
+        </a>
 
       </div>
 

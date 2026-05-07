@@ -1,6 +1,5 @@
 "use client"
 import HeroSection from './components/HeroSection';
-import AboutSection from './components/AboutSection';
 import FeaturesSection from './components/FeaturesSection';
 import CTASection from './components/CTASection';
 import RegistrationForm from './components/RegistrationForm';
@@ -15,7 +14,6 @@ export default function Home() {
   return (
     <main className="relative">
       <HeroBanner />
-      <AboutSection />
       <Problems />
       <FeaturesSection />
       <Permission />

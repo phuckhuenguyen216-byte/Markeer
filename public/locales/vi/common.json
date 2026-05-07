@@ -7,7 +7,6 @@
     "home": "Trang chủ",
     "features": "Tính năng",
     "register": "Đăng ký",
-    "app": "Truy cập ứng dụng",
     "documentation": "Tài liệu",
     "aboutMenu": "Về chúng tôi",
     "privacy": "Chính sách bảo mật",
@@ -62,7 +61,7 @@
     "cancelAnytime": "Hủy bất cứ lúc nào"
   },
   "registration": {
-    "title": "MARKEE AI  ·  app.markeeai.com",
+    "title": "MARKEE AI  -  app.markeeai.com",
     "description": "AI Agent Marketing Platform  ·  B2B · Agency · Doanh nghiệp",
     "primary": "Bắt đầu miễn phí ngay",
     "secondary": "Xem demo sản phẩm",
@@ -191,11 +190,13 @@
   "deployment": {
     "title": "TRIỂN KHAI MARKEE AI",
     "description": "Linh hoạt theo nhu cầu — thuê đội AI outsource hoặc triển khai nền tảng công nghệ nội bộ cho team.",
+    "button": "Nhận tư vấn",
     "plans": [
       {
         "tag": "OUTSOURCE AI AGENT",
         "title": "Đội ngũ AI Marketing thuê ngoài",
         "description": "Markee cung cấp đội AI Agent marketing được custom theo đặc thù doanh nghiệp — hoạt động như bộ phận MKT bên ngoài, không cần team nội bộ.",
+        "price": "500.000 VNĐ / tháng",
         "features": [
           "AI Agent customize theo ngành & brand voice",
           "Sản xuất & phân phối nội dung tự động",
@@ -208,6 +209,7 @@
         "tag": "TECH SOLUTION",
         "title": "Nền tảng công nghệ nội bộ",
         "description": "Triển khai Markee AI cho doanh nghiệp tự vận hành — Admin & Manager kiểm soát toàn đội nhóm qua dashboard tập trung.",
+        "price": "500.000 VNĐ / tháng",
         "features": [
           "Onboard & setup theo đặc thù doanh nghiệp",
           "Hệ thống phân quyền Admin / Manager / Thành viên",
@@ -1102,24 +1104,6 @@
       "errorTitle": "Vui lòng nhập tiêu đề bài viết!",
       "errorCover": "Vui lòng nhập URL ảnh bìa!",
       "errorServer": "Lỗi kết nối server"
-    }
-  },
-
-  "videoGuide": {
-    "title": "Video Hướng Dẫn",
-    "description": "Xem các video để hiểu rõ hơn về chính sách và cách sử dụng công cụ",
-    "watchVideo": "CHÍNH SÁCH CÔNG TY",
-    "videos": {
-      "policy": {
-        "title": "Chính Sách Công Ty, Quy Định & Roadmap Phát Triển Intern",
-        "desc": "Tổng quan về văn hóa, quy định làm việc và các chính sách quan trọng...",
-        "tag": "Chính Sách & Lộ Trình"
-      },
-      "kpi": {
-        "title": "Cách sử dụng PM và file KPI cá nhân",
-        "desc": "Hướng dẫn sử dụng PM và file KPI cá nhân để theo dõi năng suất...",
-        "tag": "PM & KPI cá nhân"
-      }
     }
   }
 }
