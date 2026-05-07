@@ -15,8 +15,14 @@
     Target,
     Sparkles
   } from "lucide-react";
-import { t } from "i18next";
+  import {
+  Combine,
+  Users,
+  Globe,
+  Bot
+} from "lucide-react";
 
+//import { t } from "i18next";
   const ICON_MAP: Record<
     string,
     { icon: React.ReactNode; color: string; bg: string }
@@ -73,6 +79,13 @@ import { t } from "i18next";
     }
   };
 
+  const benefitIcons = [
+  <Combine size={28} strokeWidth={2} />,
+  <Users size={28} strokeWidth={2} />,
+  <Globe size={28} strokeWidth={2} />,
+  <Bot size={28} strokeWidth={2} />
+];
+
   // const features = t("features.groups", { returnObjects: true }) as FeatureGroup[];
   // type FeatureItem = {
   //   title: string;
@@ -113,69 +126,70 @@ import { t } from "i18next";
 
   export default function FeaturesSection() {
 
-    const openVideo = (videoUrl: string) => {
-      window.open(videoUrl, "_blank");
-    };
+    const [hoveredCard, setHoveredCard] = useState<number>(0);
 
     const { t } = useTranslation("common");
     const rawFeatures = t("features.groups", { returnObjects: true }) as unknown;
     const features: FeatureGroup[] = Array.isArray(rawFeatures)
       ? (rawFeatures as FeatureGroup[])
       : [];
-    const rawBenefits = t("Benefit.description", { returnObjects: true });
-
-    const benefits = Array.isArray(rawBenefits)
-      ? rawBenefits
-      : Object.values(rawBenefits || {});
+    const benefits = t("Benefit.description", { returnObjects: true }) as {
+      key: string;
+      value: string;
+    }[];
 
     const [activeGroup, setActiveGroup] = useState(0);
-    const [progress, setProgress] = useState(0);
-    const startTimeRef = useRef<number>(Date.now());
-    const rafRef = useRef<number | null>(null);
-    const isPausedRef = useRef(false);
-    const activeGroupRef = useRef(0);
+    // const [progress, setProgress] = useState(0);
+    // const startTimeRef = useRef<number>(Date.now());
+    // const rafRef = useRef<number | null>(null);
+    // const isPausedRef = useRef(false);
+    // const activeGroupRef = useRef(0);
+
+    // const goToGroup = useCallback((idx: number) => {
+    //   activeGroupRef.current = idx;
+    //   setActiveGroup(idx);
+    //   startTimeRef.current = Date.now();
+    //   setProgress(0);
+    // }, []);
 
     const goToGroup = useCallback((idx: number) => {
-      activeGroupRef.current = idx;
-      setActiveGroup(idx);
-      startTimeRef.current = Date.now();
-      setProgress(0);
-    }, []);
+  setActiveGroup(idx);
+}, []);
 
     const [activeVideo, setActiveVideo] = useState<string | null>(null);
     const [isVideoOpen, setIsVideoOpen] = useState(false);
 
     // Auto cycle
-    useEffect(() => {
-      if (features.length <= 1) return;
+    // useEffect(() => {
+    //   if (features.length <= 1) return;
 
-      let advancing = false;
-      const tick = () => {
-        if (!isPausedRef.current) {
-          const elapsed = Date.now() - startTimeRef.current;
-          const p = Math.min((elapsed / CYCLE_DURATION) * 100, 100);
-          setProgress(p);
+    //   let advancing = false;
+    //   const tick = () => {
+    //     if (!isPausedRef.current) {
+    //       const elapsed = Date.now() - startTimeRef.current;
+    //       const p = Math.min((elapsed / CYCLE_DURATION) * 100, 100);
+    //       setProgress(p);
 
-          if (p >= 100 && !advancing) {
-            advancing = true;
-            const next = (activeGroupRef.current + 1) % features.length;
-            goToGroup(next);
-            setTimeout(() => { advancing = false; }, 400);
-          }
-        }
-        rafRef.current = requestAnimationFrame(tick);
-      };
-      rafRef.current = requestAnimationFrame(tick);
-      return () => {
-        if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      };
-    }, [features.length, goToGroup]);
+    //       if (p >= 100 && !advancing) {
+    //         advancing = true;
+    //         const next = (activeGroupRef.current + 1) % features.length;
+    //         goToGroup(next);
+    //         setTimeout(() => { advancing = false; }, 400);
+    //       }
+    //     }
+    //     rafRef.current = requestAnimationFrame(tick);
+    //   };
+    //   rafRef.current = requestAnimationFrame(tick);
+    //   return () => {
+    //     if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    //   };
+    // }, [features.length, goToGroup]);
 
-    const handleTabClick = (i: number) => {
-      if (i === activeGroupRef.current) return;
-      isPausedRef.current = false;
-      goToGroup(i);
-    };
+    // const handleTabClick = (i: number) => {
+    //   if (i === activeGroupRef.current) return;
+    //   isPausedRef.current = false;
+    //   goToGroup(i);
+    // };
 
     return (
       <>
@@ -251,10 +265,7 @@ import { t } from "i18next";
             font-size: clamp(2rem, 4.5vw, 3.6rem);
             font-weight: 900;
             // color: var(--fs-text-hi);
-            line-height: 1.1; letter-spacing: -.02em; margin-bottom: 14px;
-            background: linear-gradient(180deg, #252323, #3a0e0e, #6b0000, #b30000, #ff2a2a);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+            letter-spacing: -.02em; margin-bottom: 14px;
 
           }
           .fs-title-rule {
@@ -671,18 +682,23 @@ import { t } from "i18next";
             transform: scale(1.1) translateY(-6px);
           }
 
-          .glitch {
-  position: relative;
-  display: inline-block;
-}
 
 .glitch {
   position: relative;
   display: inline-block;
 
-  background: linear-gradient(135deg, var(--r500), var(--r800));
+    background: linear-gradient(
+    90deg,
+    #201e1e,
+    #350707,
+    #d63d3d,
+    #ad2e2e,
+    #ff2a2a
+  );
+
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 
   animation: glitchMain 2.8s infinite steps(2);
 }
@@ -1026,30 +1042,24 @@ import { t } from "i18next";
 // }
 
 .feature-title {
-  font-size: clamp(28px, 3.5vw, 42px);
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.3;
 
   background: linear-gradient(
     90deg,
-    #6f1a1a,
-    #993f3f,
+    #201e1e,
+    #350707,
+    #d63d3d,
+    #ad2e2e,
     #ff2a2a
   );
-  background-size: 200%;
 
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 
-  animation: titleFlow 6s linear infinite;
-
-  text-shadow: 0 0 18px rgba(176, 104, 104, 0.25);
-}
-
-@keyframes titleFlow {
-  0% { background-position: 0%; }
-  100% { background-position: 200%; }
 }
 
 /* GRID */
@@ -1134,6 +1144,70 @@ import { t } from "i18next";
   color: #cfcfcf;
 }
 
+.benefit-card {
+  background: linear-gradient(160deg, rgba(255,34,34,0.055) 0%, rgba(255,34,34,0.012) 100%);
+  border: 1px solid rgba(255,34,34,0.18);
+  border-radius: 0;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1), border-color 0.3s, box-shadow 0.35s;
+  cursor: default;
+}
+.benefit-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #ff2222, #ff6a6a, #ff2222);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.45s cubic-bezier(.22,1,.36,1);
+}
+.benefit-card:hover::before { transform: scaleX(1); }
+.benefit-card:hover {
+  border-color: rgba(255,34,34,0.45);
+  background: linear-gradient(160deg, rgba(255,34,34,0.08) 0%, rgba(255,34,34,0.025) 100%);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px rgba(255,34,34,0.15), 0 6px 16px rgba(255,34,34,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.benefit-icon-wrap {
+  flex-shrink: 0; width: 88px; height: 88px;
+  background: linear-gradient(135deg, var(--r50), var(--r100));
+  border: 1px solid var(--r200);
+  border-radius: 22px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+  transition: transform 0.4s cubic-bezier(.22,1,.36,1), box-shadow 0.35s, background 0.35s;
+}
+.benefit-card:hover .benefit-icon-wrap {
+  transform: scale(1.1);
+  box-shadow: 0 10px 28px rgba(255,34,34,0.28);
+  background: linear-gradient(135deg, var(--r100), var(--r200));
+}
+.benefit-icon-wrap i { font-size: 38px; color: var(--r600); }
+.benefit-badge {
+  position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%);
+  background: rgb(225, 29, 72); color: #fff;
+  font-size: 8px; font-weight: 700; letter-spacing: .12em;
+  padding: 2px 8px; border-radius: 4px; white-space: nowrap;
+}
+.benefit-body { flex: 1; position: relative; z-index: 1; }
+.benefit-key {
+  font-size: 22px; font-weight: 700; color: var(--fs-text-hi);
+  text-transform: uppercase; letter-spacing: .03em; line-height: 1.2;
+}
+.benefit-value { font-size: 14px; color: var(--fs-text-mid); font-weight: 300; line-height: 1.5; }
+.benefit-led-row { display: flex; align-items: center; gap: 5px; margin-top: 14px; }
+.benefit-led { width: 5px; height: 5px; border-radius: 50%; display: inline-block; background: var(--r500); animation: ledBlink 2.5s ease-in-out infinite; }
+.benefit-led.d2 { animation-delay: 0.4s; background: var(--r300); }
+.benefit-led.d3 { animation-delay: 0.8s; background: var(--r200); }
+.benefit-glow {
+  position: absolute; width: 200px; height: 200px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,34,34,0.07), transparent 70%);
+  bottom: -60px; right: -40px; pointer-events: none;
+}
+
 /* responsive */
 @media (max-width: 900px) {
   .feature-grid {
@@ -1193,13 +1267,21 @@ import { t } from "i18next";
                 <button
                   key={i}
                   className={`fs-tab-card ${isActive ? "active" : ""}`}
+                  // onClick={() => {
+                  //   handleTabClick(i);
+                  //   setActiveVideo(group.video);
+                  //   setIsVideoOpen(true);
+                  // }}
+                  // onMouseEnter={() => { isPausedRef.current = true; }}
+                  // onMouseLeave={() => { isPausedRef.current = false; }}
+                  onMouseEnter={() => {
+  goToGroup(i);
+  setHoveredCard(i);
+}}
                   onClick={() => {
-                    handleTabClick(i);
                     setActiveVideo(group.video);
                     setIsVideoOpen(true);
                   }}
-                  onMouseEnter={() => { isPausedRef.current = true; }}
-                  onMouseLeave={() => { isPausedRef.current = false; }}
                 >
                  <div className="fs-tab-card-visual">
 
@@ -1216,12 +1298,15 @@ import { t } from "i18next";
                   <div className="fs-tab-card-label">{group.group}</div>
                   <div className="fs-tab-card-count">{group.items.length} modules</div>
 
-                  {isActive && (
+                  {/* {isActive && (
                     <div
                       className="fs-tab-card-progress"
                       style={{ transform: `scaleX(${progress / 100})` }}
                     />
-                  )}
+                  )} */}
+                  {hoveredCard === i && (
+  <div className="fs-tab-card-progress" />
+)}
 
                   <div className="fs-tab-card-dot" />
                 </button>
@@ -1233,7 +1318,7 @@ import { t } from "i18next";
           <div className="fs-content-panel">
             <div className="fs-content-header">
               <span className="fs-content-tag">
-                GROUP_{String(activeGroup + 1).padStart(2, "0")} — {features[activeGroup]?.group}
+                GROUP_{String(activeGroup + 1).padStart(2, "0")} — {features[activeGroup].group}
               </span>
               <div className="fs-content-rule" />
             </div>
@@ -1301,29 +1386,34 @@ import { t } from "i18next";
 
         <div className="feature-highlight">
   <div className="feature-header">
-    <h2 className="feature-title">
-      {t("Benefit.title")}
-    </h2>
-
+    <h2 className="feature-title">{t("Benefit.title")}</h2>
   </div>
 
-  <div className="feature-grid">
-    {benefits?.map((item, i) => (
-        <div
-          key={i}
-          className={`feature-card ${i % 2 === 0 ? "red" : "dark"}`}
-        >
-          <div className="feature-index">
-            0{i + 1}
+  <div style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(clamp(280px, 30vw, 420px), 1fr))",
+    gap: "20px",
+  }}>
+    {benefits?.map((item, i) => {
+      return (
+        <div key={i} className="benefit-card">
+          <div className="benefit-icon-wrap">
+            {benefitIcons[i]}
+            <span className="benefit-badge">{item.key}</span>
           </div>
-
-          <h3>{item.key}</h3>
-          <p>{item.value}</p>
-
-          <div className="feature-glow" />
+          <div className="benefit-body">
+            <div className="benefit-key">{item.key}</div>
+            <div className="benefit-value">{item.value}</div>
+            <div className="benefit-led-row">
+              <span className="benefit-led" />
+              <span className="benefit-led d2" />
+              <span className="benefit-led d3" />
+            </div>
+          </div>
+          <div className="benefit-glow" />
         </div>
-      )
-    )}
+      );
+    })}
   </div>
 </div>
 

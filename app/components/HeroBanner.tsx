@@ -11,6 +11,9 @@ export default function HeroSection() {
       className="relative min-h-screen w-full flex -mt-16 items-center bg-cover bg-center"
       style={{
         backgroundImage: "url('/img/mascot/banner.png')",
+        position: "relative",
+        zIndex: 1,
+        isolation: "isolate",
       }}
     >
       {/* ==================== DESKTOP - GIỮ NGUYÊN 100% ==================== */}
@@ -18,6 +21,7 @@ export default function HeroSection() {
         className="hidden md:block absolute right-[0%] top-[8%] text-white max-w-[900px] text-center
         bg-[url('/images/tech-bg-red.jpg')] bg-cover bg-center bg-no-repeat
         p-8 rounded-2xl"
+        style={{ zIndex: 20 }}
       >
         <h2
           className="text-2xl md:text-3xl font-bold mb-6 max-w-xl mx-auto text-white"
@@ -52,7 +56,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-                  {/* ==================== MOBILE - CHỈNH CHUẨN, NỀN ĐEN MỜ NHẸ ==================== */}
+      {/* ==================== MOBILE - CHỈNH CHUẨN, NỀN ĐEN MỜ NHẸ ==================== */}
       <div className="block md:hidden relative w-full min-h-[85dvh] pt-20 pb-16 text-white text-center overflow-hidden">
         
         {/* Overlay nền đen - MỜ NHẸ như yêu cầu */}
@@ -66,13 +70,6 @@ export default function HeroSection() {
           {/* Brand */}
           <h1 
             className="text-5xl font-bold mb-4 leading-tight text-white"
-            // style={{
-            //   textShadow: `
-            //     0 4px 8px rgba(0,0,0,0.55),
-            //     0 8px 16px rgba(0,0,0,0.45),
-            //     0 12px 24px rgba(0,0,0,0.35)
-            //   `,
-            // }}
           >
             {t("hero.brand")}
           </h1>
@@ -80,13 +77,6 @@ export default function HeroSection() {
           {/* Headline */}
           <h2 
             className="text-[23px] font-bold mb-9 leading-tight px-3 text-center text-white"
-            // style={{
-            //   textShadow: `
-            //     0 4px 10px rgba(0,0,0,0.9),
-            //     0 8px 20px rgba(0,0,0,0.8),
-            //     0 14px 28px rgba(0,0,0,0.7)
-            //   `,
-            // }}
           >
             {t("hero.headline")}
           </h2>
@@ -133,7 +123,7 @@ export default function HeroSection() {
       </div>
 
       {/* ==================== BÊN TRÁI DƯỚI - CHỈ DESKTOP ==================== */}
-      <div className="hidden md:block absolute left-[8%] bottom-[12%] md:left-[10%] md:bottom-[12%] text-white max-w-[650px]">
+      <div className="hidden md:block absolute left-[8%] bottom-[12%] md:left-[10%] md:bottom-[12%] text-white max-w-[650px]" style={{ zIndex: 20 }}>
         <p className="text-lg md:text-2xl font-semibold mb-8 flex justify-center text-center">
           <Trans
             i18nKey="hero.offer"

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { ShieldCheck, Cpu, Zap, Fingerprint } from "lucide-react";
 import "../i18n";
 
-const PRIMARY_COLOR = "#ff2a2a";
+const PRIMARY_COLOR = "rgb(225, 29, 72)";
 
 const roles = [
   {
@@ -48,7 +48,7 @@ export default function Permission() {
           position: relative;
         }
 
-        /* ── grid background (giống FeaturesSection) ── */
+        /* ── grid background  ── */
         .pm-section::before {
           content: '';
           position: absolute;
@@ -60,7 +60,7 @@ export default function Permission() {
           pointer-events: none;
         }
 
-        /* ── scan line (giống FeaturesSection) ── */
+        /* ── scan line ── */
         .pm-scan {
           position: absolute; left: 0; right: 0; height: 1px;
           background: linear-gradient(90deg, transparent, rgba(255,80,80,0.55) 40%, rgba(255,80,80,0.55) 60%, transparent);
@@ -105,10 +105,18 @@ export default function Permission() {
           margin-bottom: 15px;
           //text-transform: uppercase;
           letter-spacing: -1px;
-          background: linear-gradient(180deg, #252323, #3a0e0e, #6b0000, #b30000, #ff2a2a);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+            background: linear-gradient(
+    90deg,
+    #201e1e,
+    #350707,
+    #d63d3d,
+    #ad2e2e,
+    #ff2a2a
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
         }
 
         .pm-header-text p {

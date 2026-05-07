@@ -14,7 +14,7 @@ const css = `
     --r500: #ff2222;
     --r800: #800000;
     --pb-bg:       #ffffff;
-    --pb-border:   rgba(255,34,34,0.12);
+    --pb-border:   rgb(225, 29, 72, 0.12);
     --pb-surface:  rgba(255,34,34,0.035);
     --pb-text-hi:  #0a0a0a;
     --pb-text-mid: #555555;
@@ -26,9 +26,12 @@ const css = `
     overflow: hidden;
     padding: 100px 0 120px;
     background: #ffffff;
+    z-index: 0;
+    isolation: isolate;
+    clear: both;
   }
 
-  /* ── grid background (giống FeaturesSection) ── */
+  /* ── grid background ── */
   .pb-root::before {
     content: '';
     position: absolute; inset: 0;
@@ -39,7 +42,7 @@ const css = `
     pointer-events: none;
   }
 
-  /* ── scan line (giống FeaturesSection) ── */
+  /* ── scan line ── */
   .pb-scan {
     position: absolute; left: 0; right: 0; height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255,80,80,0.55) 40%, rgba(255,80,80,0.55) 60%, transparent);
@@ -65,11 +68,18 @@ const css = `
     padding: 0 24px;
   }
   .pb-title {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    font-weight: 750;
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 700;
     letter-spacing: -.02em;
     margin: 0 0 18px;
-    background: linear-gradient(180deg, #252323, #3a0e0e, #6b0000, #b30000, #ff2a2a);
+    background: linear-gradient(
+      90deg,
+      #201e1e,
+      #350707,
+      #d63d3d,
+      #ad2e2e,
+      #ff2a2a
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -145,7 +155,6 @@ const css = `
     padding: 16px 24px 14px;
     border: 1px solid var(--pb-border);
     position: relative;
-    overflow: visible;
     background: #fff;
     z-index: 1;
     transition:
@@ -155,13 +164,14 @@ const css = `
       transform .4s cubic-bezier(.22,1,.36,1);
   }
 
+  /* shimmer + bottom line nằm trong .pb-row-card-inner có overflow:hidden */
   .pb-row-card-inner {
     position: absolute;
     inset: 0;
     overflow: hidden;
     pointer-events: none;
-    border-radius: inherit;
   }
+
   .pb-row-card-inner::before {
     content: '';
     position: absolute; inset: 0;
@@ -169,6 +179,7 @@ const css = `
     transform: translateX(-120%);
     transition: transform .6s cubic-bezier(.22,1,.36,1);
   }
+
   .pb-row-card-inner::after {
     content: '';
     position: absolute; bottom: 0; left: 0;
@@ -177,10 +188,13 @@ const css = `
     opacity: 0;
     transition: opacity .35s ease;
   }
+
   .pb-row-card:hover {
-    background: var(--pb-surface);
+    background: rgba(255,34,34,0.045);
     border-color: rgba(255,34,34,.35);
-    box-shadow: 0 20px 50px rgba(255,34,34,.1), 0 6px 16px rgba(0,0,0,.05);
+    box-shadow:
+      0 14px 44px rgba(239, 68, 68, 0.42),
+      0 4px 12px rgba(239, 68, 68, 0.18);
     transform: translateY(-4px);
   }
   .pb-row-card:hover .pb-row-card-inner::before { transform: translateX(120%); }
@@ -213,24 +227,18 @@ const css = `
 
   /* ── card content ── */
   .pb-index {
-    font-size: 64px; font-weight: 900; line-height: 1;
+    font-size: 64px;
+    font-weight: 900;
+    line-height: 1;
     letter-spacing: -.04em;
-    background: linear-gradient(135deg, var(--r500), var(--r200));
-    -webkit-background-clip: text; background-clip: text;
+    background: linear-gradient(135deg, rgb(225, 29, 72), rgb(239, 68, 68));
+    -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
-    opacity: .28; user-select: none;
+    user-select: none;
     transition: opacity .3s;
   }
-  .pb-row:hover .pb-index { opacity: .48; }
 
-  .pb-card-tag {
-    font-size: 9px; letter-spacing: .28em;
-    color: var(--r400);
-    //text-transform: uppercase;
-    border: 1px solid rgba(255,34,34,.2);
-    background: var(--r50); border-radius: 4px;
-    padding: 3px 3px; display: inline-block; margin-bottom: 5px;
-  }
   .pb-card-title {
     font-size: 18px; font-weight: 700;
     color: var(--pb-text-hi); line-height: 1; margin: 0 0 8px;
@@ -239,18 +247,6 @@ const css = `
     font-size: 12px; font-weight: 300;
     color: var(--pb-text-mid); line-height: 1.2; margin: 0;
   }
-  .pb-card-status {
-    display: flex; align-items: center; gap: 6px; margin-top: 5px;
-  }
-  .pb-led {
-    width: 5px; height: 5px; border-radius: 50%; background: var(--r200);
-  }
-  .pb-led.on {
-    background: var(--r500);
-    animation: ledBlink 2.5s ease-in-out infinite;
-  }
-  @keyframes ledBlink { 0%,100%{opacity:1} 50%{opacity:.3} }
-  .pb-led-txt { font-size: 7.5px; letter-spacing: .18em; color: var(--r400); }
 
   /* ── responsive ── */
   @media (max-width: 768px) {
@@ -258,7 +254,7 @@ const css = `
     .pb-row { grid-template-columns: 1fr; }
     .pb-row:nth-child(odd)  .pb-row-card,
     .pb-row:nth-child(even) .pb-row-card {
-      order: 2; border: 1px solid var(--pb-border); border-top: none;
+      order: 2; border: 1px solid var(--pb-border);
     }
     .pb-row:first-child .pb-row-card { border-top: 1px solid var(--pb-border); }
     .pb-row:nth-child(odd)  .pb-row-num,
@@ -301,7 +297,9 @@ export default function Problems() {
 
         {/* header */}
         <div className="pb-header">
-          <h2 className="pb-title">{t("problems.title")}</h2>
+          <h2 className="pb-title">
+            {t("problems.title")}
+          </h2>
           <div className="pb-title-rule">
             <div className="pb-title-rule-shine" />
           </div>
@@ -323,15 +321,8 @@ export default function Problems() {
                 <div className="pb-row-card">
                   <div className="pb-row-card-inner" />
                   <div className="pb-node" />
-                  <span className="pb-card-tag">ERR_{String(i + 1).padStart(3, "0")}</span>
                   <h3 className="pb-card-title">{card.title}</h3>
                   <p className="pb-card-desc">{card.description}</p>
-                  <div className="pb-card-status">
-                    <div className="pb-led on" />
-                    <span className="pb-led-txt">DETECTED</span>
-                    <div className="pb-led" />
-                    <div className="pb-led" />
-                  </div>
                 </div>
 
               </div>

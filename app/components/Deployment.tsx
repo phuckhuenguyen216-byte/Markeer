@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -9,7 +8,7 @@ const css = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;700;900&display=swap');
 
   :root {
-    --primary: #ff2a2a;
+    --primary: rgb(225, 29, 72);
     --primary-light: #FF2A2A15;
     --bg: #ffffff;
     --text-main: #222;
@@ -79,10 +78,18 @@ const css = `
     margin-bottom: 16px;
     //text-transform: uppercase;
     letter-spacing: -1px;
-    background: linear-gradient(180deg, #252323, #3a0e0e, #6b0000, #b30000, #ff2a2a);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    background: linear-gradient(
+    90deg,
+    #201e1e,
+    #350707,
+    #d63d3d,
+    #ad2e2e,
+    #ff2a2a
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   }
 
   .cp-desc {
@@ -237,7 +244,7 @@ const css = `
   }
 
   .cp-module.active .cp-body {
-    max-height: 500px;
+    max-height: 1000px;
     margin-top: 25px;
     opacity: 1;
     padding-bottom: 10px;
@@ -294,6 +301,70 @@ const css = `
     .cp-icon-mimic { width: 40px; height: 40px; font-size: 18px; margin-right: 10px; }
     .cp-name { font-size: 18px; }
   }
+
+  .cp-price {
+  margin-top: 10px;
+  font-size: clamp(18px, 4vw, 32px);
+  font-weight: 700;
+  color: var(--primary);
+}
+  .cp-btn {
+  margin-top: 14px;
+  width: 35%;
+  padding: clamp(10px, 2.5vw, 14px) clamp(12px, 3vw, 16px);
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 34, 34, 0.25);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 42, 42, 0.95),
+    rgba(214, 61, 61, 0.95)
+  );
+
+  color: white;
+  font-size: clamp(12px, 2.5vw, 20px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  transition: all 0.35s ease;
+  box-shadow: 0 12px 30px rgba(255, 34, 34, 0.25);
+}
+
+/* hover */
+.cp-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 45px rgba(255, 34, 34, 0.35);
+}
+
+/* click effect */
+.cp-btn:active {
+  transform: translateY(-1px);
+}
+
+/* shimmer effect */
+.cp-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 120%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  transition: all 0.6s ease;
+}
+
+.cp-btn:hover::before {
+  left: 120%;
+}
 `;
 
 const getPlanIcon = (index: number) => {
@@ -375,6 +446,12 @@ export default function Deployment() {
                       </div>
                     ))}
                   </div>
+                  <div className="cp-price">
+                    {plan.price}
+                  </div>
+                  <button className="cp-btn">
+                    {t("deployment.button")}
+                  </button>
                 </div>
               </div>
             );
