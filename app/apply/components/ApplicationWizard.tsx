@@ -1824,8 +1824,7 @@ export default function ApplicationWizard({
                   ? "Đã rõ"
                   : "Còn thiếu",
               done:
-                hasInterestReasonReady(form) &&
-                Boolean(form.why_apply.trim()),
+                hasInterestReasonReady(form) && Boolean(form.why_apply.trim()),
             },
             {
               label: "Năng lực",
@@ -3776,7 +3775,12 @@ function SuccessScreen({
           </div>
           {/* Profile row */}
           <div className="wz-fbs-profile">
-            <div className="wz-fbs-avatar wz-fbs-avatar-fallback">M</div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.png"
+              alt="Markee AI Marketing"
+              className="wz-fbs-avatar"
+            />
             <div className="wz-fbs-page-detail">
               <div className="wz-fbs-page-name">Markee AI Marketing</div>
               <div className="wz-fbs-page-meta">
@@ -3787,7 +3791,6 @@ function SuccessScreen({
           </div>
           {/* Body */}
           <div className="wz-fbs-body">
-            <h3 className="wz-fbs-heading">Tiếp tục đồng hành cùng Markee</h3>
             <p className="wz-fbs-sub">
               Internship mới, workshop AI/Marketing, behind-the-scenes và hoạt
               động nội bộ team.
@@ -4505,23 +4508,23 @@ const wizardCSS = `
 .wz-sc-hero-sub{font-size:13px;color:#475569;margin:0;line-height:1.6;max-width:400px}
 /* ── Facebook Showcase Card ── */
 .wz-fbs-wrap{width:100%;max-width:660px;margin:12px auto 0;padding:0 24px 16px}
-.wz-fbs{display:flex;flex-direction:column;background:#fff;border:1px solid #dde3ef;border-radius:22px;overflow:hidden;box-shadow:0 8px 40px rgba(15,23,42,.10),0 1px 0 rgba(255,255,255,.8) inset;text-decoration:none;color:inherit;transition:box-shadow .26s ease,transform .26s cubic-bezier(.34,1.56,.64,1)}
+.wz-fbs{display:flex;flex-direction:column;background:#fff;border:1px solid #dde3ef;border-radius:22px;overflow:hidden;box-shadow:0 8px 40px rgba(15,23,42,.10),0 1px 0 rgba(255,255,255,.8) inset;text-decoration:none;color:inherit;transition:box-shadow .26s ease,transform .26s cubic-bezier(.34,1.56,.64,1);text-align:left}
 .wz-fbs:hover{box-shadow:0 20px 56px rgba(15,23,42,.14);transform:translateY(-4px)}
 /* Cover */
-.wz-fbs-cover{height:128px;position:relative;overflow:hidden;background:linear-gradient(135deg,#0a2040 0%,#0d3b82 40%,#1877f2 75%,#42a5f5 100%);flex-shrink:0}
-.wz-fbs-cover-bg{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 1.5px,transparent 1.5px);background-size:22px 22px}
+.wz-fbs-cover{height:128px;position:relative;overflow:hidden;background:#f8fafc;background-image:linear-gradient(rgba(15,23,42,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(15,23,42,.07) 1px,transparent 1px);background-size:28px 28px;flex-shrink:0}
+.wz-fbs-cover-bg{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(241,245,249,.7) 100%)}
 .wz-fbs-cover-mascot{position:absolute;right:14px;bottom:0;height:116px;width:auto;object-fit:contain;filter:drop-shadow(-4px 0 16px rgba(10,32,64,.45))}
-.wz-fbs-cover-text{position:absolute;bottom:14px;left:18px;font-family:'Be Vietnam Pro',var(--font-geist-sans),sans-serif;font-size:11px;font-weight:800;color:rgba(255,255,255,.55);letter-spacing:.12em}
+.wz-fbs-cover-text{position:absolute;bottom:16px;left:18px;font-family:'Be Vietnam Pro',var(--font-geist-sans),sans-serif;font-size:10px;font-weight:800;color:rgba(15,23,42,.35);letter-spacing:.12em;text-transform:uppercase}
 /* Profile row — avatar overlaps cover bottom */
-.wz-fbs-profile{display:flex;align-items:center;gap:10px;padding:0 16px 0;margin-top:-22px;position:relative;z-index:2}
-.wz-fbs-avatar{width:56px;height:56px;border-radius:12px;border:3px solid #fff;box-shadow:0 3px 12px rgba(15,23,42,.14);object-fit:cover;background:#dbeafe;flex-shrink:0;display:block}
+.wz-fbs-profile{display:flex;align-items:center;gap:8px;padding:0 14px;margin-top:-26px;position:relative;z-index:2}
+.wz-fbs-avatar{width:68px;height:68px;border-radius:16px;border:3px solid #fff;box-shadow:0 4px 16px rgba(15,23,42,.18);object-fit:cover;background:#fff;flex-shrink:0;display:block}
 .wz-fbs-avatar-fallback{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ef4444,#e11d48);color:#fff;font-size:31px;font-weight:900;font-family:'Be Vietnam Pro',var(--font-geist-sans),sans-serif;line-height:1}
 .wz-fbs-page-detail{flex:1;min-width:0}
 .wz-fbs-follow-pill{flex-shrink:0;background:#1877f2;color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:8px;white-space:nowrap;margin-left:auto}
-.wz-fbs-page-name{font-size:13.5px;font-weight:800;color:#0f172a;line-height:1.2}
+.wz-fbs-page-name{font-size:16px;font-weight:800;color:#0f172a;line-height:1.2;letter-spacing:-.02em}
 .wz-fbs-page-meta{font-size:10.5px;color:#64748b;margin-top:2px}
 /* Body */
-.wz-fbs-body{padding:10px 18px 18px;display:flex;flex-direction:column;gap:9px}
+.wz-fbs-body{padding:12px 16px 16px;display:flex;flex-direction:column;gap:9px}
 .wz-fbs-heading{font-family:'Be Vietnam Pro',var(--font-geist-sans),sans-serif;font-size:16px;font-weight:800;color:#0f172a;margin:0;letter-spacing:-.02em;line-height:1.3}
 .wz-fbs-sub{font-size:13px;color:#475569;margin:0;line-height:1.65}
 .wz-fbs-benefits{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
@@ -4549,8 +4552,8 @@ const wizardCSS = `
 
 /* Footer */
 .wz-success-footer{padding:10px 20px 26px;display:flex;justify-content:center}
-.wz-btn-close-suc{display:inline-flex;align-items:center;gap:5px;padding:9px 36px;border-radius:11px;border:1.5px solid #cbd5e1;background:transparent;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;transition:background .18s,border-color .18s,color .18s;font-family:inherit;text-decoration:none}
-.wz-btn-close-suc:hover{background:#f1f5f9;border-color:#94a3b8;color:#334155}
+.wz-btn-close-suc{display:inline-flex;align-items:center;gap:5px;padding:11px 40px;border-radius:12px;border:none;background:linear-gradient(180deg,#ef4444 0%,#e03131 100%);font-size:13px;font-weight:700;color:#fff;cursor:pointer;transition:opacity .18s,box-shadow .18s,transform .18s;font-family:inherit;text-decoration:none;box-shadow:0 4px 14px rgba(239,68,68,.28)}
+.wz-btn-close-suc:hover{opacity:.9;box-shadow:0 6px 20px rgba(239,68,68,.36);transform:translateY(-1px)}
 
 /* ─── Calm premium pass: less red, less chrome, more breathing room ─── */
 .wz-side-panel{background:linear-gradient(180deg,#fbfcfe 0%,#f3f6fa 100%);padding:14px 11px}
