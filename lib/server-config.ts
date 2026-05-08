@@ -1,41 +1,17 @@
 import "server-only";
 
-export const SUPABASE_SERVICE_ROLE_KEY = "sb_secret_bHhYvSy29fxHKi_oXmlt6A_sr1RbX1d";
+function normalizePrivateKey(value = "") {
+  return value.replace(/\\n/g, "\n");
+}
+
+export const SUPABASE_SERVICE_ROLE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 
 export const GOOGLE_SHEETS_CONFIG = {
-  sheetId: "1demweJf6kgGDj-G_KcILVT6L6rf9d8ulzqfQfOXCvGQ",
-  serviceAccountEmail:
-    "markee-sheets-bot@yleapiaccount.iam.gserviceaccount.com",
-  privateKey: `-----BEGIN PRIVATE KEY-----
-MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCkTTNWzjBdYxYf
-w8VaNCrPAO6qVUxYnRmMTJEqdHb7jH02S6pBBmenqO1DAfpa6Pn+1Y8h2Hr1fiVK
-Cp0RNGBi+q5A02BVFtALg2HAMu9OTXSVtTBA3Qgrio5uyYphx2Okw292ZairCyrX
-WTvjH2W1/B0oi5SjL489YEw6wc2PwdWI+Isq025CY2rUq1MeV1HDfxVPc1ubVhWZ
-Nwj5p08khOVhxcqKBTnAtuOGJ0Cgtrg/UwFJt5VXZO/Xu13tHWtYRs1KAHeVP3TL
-81wsCsORGfkezXO2Uk03Z70OYxJqTZC//pSxFKD/k5WA8JC14Mq1uOzAHtm1yE8t
-zFCqsjYhAgMBAAECggEAAPT25YSXByU1htb1XFmRTgI0saLkal/0WxMDVaym2H9U
-h5tcVQt+MS2Yf6dYW50PnyyD3FPqH+nFmnM6P9RW8x6gAw5EGWzEBowj5qpZRtLI
-SPqsmrUa2AOTIamsc9Y1IiuV96nfCAt9KvLI6LFJLqyWqCK7eXGUh0xLN1yjd4jM
-Y6ZtorMMIfenLhfVy/Vwsmgq/Uc1tdViX4F4rgLU/GwPqdbRbysPKy9/xfaCmW6A
-UJUBAfNEuEbmnkAHDdxTsqAcPRoe4T3blEx8iJUMozcp5v4VxiLb7ApVQ6soVoDl
-woZg/7BaE/i3h2t4+oyBLaR/rD8J4AwbsZ7P6iWdsQKBgQDPzp1L+y8wRspQORJs
-8BoqHG67noiMi3mAVKZbZt4G2SFKLcevrOx9SBbkRCb3gb+9MvH3bqsE1f+NMsZD
-JPOSTVqAEV7o89+B2Z3TYcDcuXf2oWZoUjy1ewXWYjXKYXZpc4rokbKTjjuwSd0Z
-m6p0y0/gwj5/IoOx9X6LgzL1UQKBgQDKZ7BG2wKMBrl+CuHe0Lnitt/LM8fl4Pl+
-lFuRX6MYlnn5wXCneDOhxa9+LCOKLTEVO96GrffzspHujY18cc5XVcBrbaCa69Tb
-EtG6NWuVQf07BI7mBLaF52NU4HXhhKMqM4AwtY24jJpAwjRbIMNIcdum2CIV2qrc
-XVB4rek/0QKBgBDhrA2cHj1BwvW5bTHEX5vEK4q6WkVwnzI5rjoGpUrRIM8x4OL4
-nU2gKZvpnXDF7ZmlJdr/9oyyBcymr0yNF+xutEdrIday2RlnYFbnvg8wUfqLKhKX
-e68Si2rbF5uVR1VRuZsjGuq5x0eO+JM3/iT2z0pm/US+vQwb8WfMBLvBAoGAUbm4
-RYPc7WkxsKD4Pp2M0OwCROwthLZoRyHkLzishBsOOThQIm64elN13r43w20n6mj4
-Gu1XtsCdh/MD9AGHzV/EiBwFw0gB9EsO/97eB7BTbWcTw/CXOk4Jn5XaQyrpLvsI
-gaJtDN1I02kW9sytzSycAiw25xgZ8UyEV5XxHmECgYEAsqPnIgHLHQ9eLvLBpSq/
-CwlAq4yAuhxK76m2SQBSIMFeGpnbnhPVBPJBbG16axNzR2W6C4LMFcCjLbG+rTGl
-+Og4rPpBNUd61550gbH8QDJxMhqmZPsNYawkrODzdMNRqJqdsicVgwdFhx3K34gL
-ztqEBm8PcQ+7XMVO+4k7Rpg=
------END PRIVATE KEY-----
-`,
+  sheetId: process.env.GOOGLE_SHEETS_ID || "",
+  serviceAccountEmail: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || "",
+  privateKey: normalizePrivateKey(process.env.GOOGLE_PRIVATE_KEY),
 } as const;
 
-export const ADMIN_API_KEY = "markee_blog_2026";
-export const CSRF_SECRET = ADMIN_API_KEY;
+export const ADMIN_API_KEY = process.env.ADMIN_API_KEY || "";
+export const CSRF_SECRET = process.env.CSRF_SECRET || ADMIN_API_KEY;

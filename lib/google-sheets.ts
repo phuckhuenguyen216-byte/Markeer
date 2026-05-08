@@ -1,28 +1,14 @@
-/* ─────────────────────────────────────────────
-   Google Sheets integration – push applications
-   ───────────────────────────────────────────── */
-
 import { google } from "googleapis";
 import type { Application } from "./application";
 import { GOOGLE_SHEETS_CONFIG } from "./server-config";
 
-/*
- * Demo config is hardcoded in lib/server-config.ts.
- * Values live in source for the temporary demo build.
- *
- * Setup:
- *   1. Create a Google Cloud project → enable Sheets API
- *   2. Create a service account → download JSON key
- *   3. Share the target spreadsheet with the service account email (Editor)
- *   4. Copy the values into lib/server-config.ts for this demo build.
- */
-
-const SHEET_NAME = "Ứng viên"; // tab name in the spreadsheet
+const SHEET_NAME = process.env.GOOGLE_SHEETS_TAB_NAME || "Ứng viên";
 
 function getAuth() {
   const email = GOOGLE_SHEETS_CONFIG.serviceAccountEmail;
   const key = GOOGLE_SHEETS_CONFIG.privateKey;
   if (!email || !key) return null;
+
   return new google.auth.JWT({
     email,
     key,
@@ -30,7 +16,6 @@ function getAuth() {
   });
 }
 
-/** Header row – created automatically if the sheet is empty */
 const HEADERS = [
   "ID",
   "Họ tên",
@@ -61,6 +46,11 @@ const HEADERS = [
 
 function appToRow(app: Application): string[] {
   const isZalo = (app.admin_notes || "").toLowerCase().includes("zalo");
+  const linkedIn = (app.admin_notes || "")
+    .split("\n")
+    .find((line) => line.startsWith("LinkedIn:"))
+    ?.trim();
+  const profileLinks = [app.cv || "", linkedIn || ""].filter(Boolean).join("\n");
   const workPref = Object.entries(app.work_preference || {})
     .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`)
     .join(" | ");
@@ -87,37 +77,30 @@ function appToRow(app: Application): string[] {
     (app.problem_solving || []).join(", "),
     (app.feedback_response || []).join(", "),
     workPref,
-    app.cv || "",
+    profileLinks,
     app.note || "",
     app.status,
     app.created_at ? new Date(app.created_at).toLocaleString("vi-VN") : "",
   ];
 }
 
-/**
- * Append a single application row to the Google Sheet.
- * Creates the header row if the sheet is empty.
- * Returns true on success, false if not configured or on error.
- */
 export async function appendToSheet(app: Application): Promise<boolean> {
   const sheetId = GOOGLE_SHEETS_CONFIG.sheetId;
   const auth = getAuth();
   if (!sheetId || !auth) {
-    console.warn("[Google Sheets] Not configured – skipping sync");
+    console.warn("[Google Sheets] Not configured - skipping sync");
     return false;
   }
 
   try {
     const sheets = google.sheets({ version: "v4", auth });
 
-    // Check if header exists
     const existing = await sheets.spreadsheets.values.get({
       spreadsheetId: sheetId,
       range: `${SHEET_NAME}!A1:A1`,
     });
 
     if (!existing.data.values || existing.data.values.length === 0) {
-      // Write headers first
       await sheets.spreadsheets.values.append({
         spreadsheetId: sheetId,
         range: `${SHEET_NAME}!A1`,
@@ -126,7 +109,6 @@ export async function appendToSheet(app: Application): Promise<boolean> {
       });
     }
 
-    // Append the row
     await sheets.spreadsheets.values.append({
       spreadsheetId: sheetId,
       range: `${SHEET_NAME}!A1`,
@@ -142,9 +124,6 @@ export async function appendToSheet(app: Application): Promise<boolean> {
   }
 }
 
-/**
- * Delete a row from the sheet by application ID (column A).
- */
 export async function deleteFromSheet(appId: string): Promise<boolean> {
   const sheetId = GOOGLE_SHEETS_CONFIG.sheetId;
   const auth = getAuth();
@@ -153,7 +132,6 @@ export async function deleteFromSheet(appId: string): Promise<boolean> {
   try {
     const sheets = google.sheets({ version: "v4", auth });
 
-    // Find the row with this ID in column A
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: sheetId,
       range: `${SHEET_NAME}!A:A`,
@@ -161,17 +139,17 @@ export async function deleteFromSheet(appId: string): Promise<boolean> {
 
     const rows = res.data.values || [];
     const rowIndex = rows.findIndex((r) => r[0] === appId);
-    if (rowIndex === -1) return false; // not found
+    if (rowIndex === -1) return false;
 
-    // Get the sheet's gid to use batchUpdate
     const spreadsheet = await sheets.spreadsheets.get({
       spreadsheetId: sheetId,
     });
     const sheet = spreadsheet.data.sheets?.find(
       (s) => s.properties?.title === SHEET_NAME,
     );
-    if (!sheet?.properties?.sheetId && sheet?.properties?.sheetId !== 0)
+    if (!sheet?.properties?.sheetId && sheet?.properties?.sheetId !== 0) {
       return false;
+    }
 
     await sheets.spreadsheets.batchUpdate({
       spreadsheetId: sheetId,
@@ -199,10 +177,6 @@ export async function deleteFromSheet(appId: string): Promise<boolean> {
   }
 }
 
-/**
- * Update an existing row in the sheet by application ID.
- * Re-writes the entire row with fresh data.
- */
 export async function updateRowInSheet(app: Application): Promise<boolean> {
   const sheetId = GOOGLE_SHEETS_CONFIG.sheetId;
   const auth = getAuth();
@@ -211,7 +185,6 @@ export async function updateRowInSheet(app: Application): Promise<boolean> {
   try {
     const sheets = google.sheets({ version: "v4", auth });
 
-    // Find the row with this ID in column A
     const res = await sheets.spreadsheets.values.get({
       spreadsheetId: sheetId,
       range: `${SHEET_NAME}!A:A`,
@@ -220,13 +193,11 @@ export async function updateRowInSheet(app: Application): Promise<boolean> {
     const rows = res.data.values || [];
     const rowIndex = rows.findIndex((r) => r[0] === app.id);
     if (rowIndex === -1) {
-      // Row not found – append instead
       return appendToSheet(app);
     }
 
-    // Update the row (1-indexed for Sheets API)
     const rowNum = rowIndex + 1;
-    const lastCol = String.fromCharCode(64 + HEADERS.length); // A=1, B=2, ..., Y=25
+    const lastCol = String.fromCharCode(64 + HEADERS.length);
     await sheets.spreadsheets.values.update({
       spreadsheetId: sheetId,
       range: `${SHEET_NAME}!A${rowNum}:${lastCol}${rowNum}`,
@@ -242,26 +213,18 @@ export async function updateRowInSheet(app: Application): Promise<boolean> {
   }
 }
 
-/**
- * Sync ALL applications to the sheet (replaces all data).
- * Used for the admin "Sync to Sheet" button.
- * Writes data first, then clears leftover rows to avoid data loss on failure.
- */
 export async function syncAllToSheet(apps: Application[]): Promise<boolean> {
   const sheetId = GOOGLE_SHEETS_CONFIG.sheetId;
   const auth = getAuth();
   if (!sheetId || !auth) {
-    console.warn("[Google Sheets] Not configured – skipping sync");
+    console.warn("[Google Sheets] Not configured - skipping sync");
     return false;
   }
 
   try {
     const sheets = google.sheets({ version: "v4", auth });
-
-    // Build all rows (headers + data)
     const rows = [HEADERS, ...apps.map(appToRow)];
 
-    // Overwrite from A1 with the new data (safe — old data remains beyond if write fails)
     await sheets.spreadsheets.values.update({
       spreadsheetId: sheetId,
       range: `${SHEET_NAME}!A1`,
@@ -269,7 +232,6 @@ export async function syncAllToSheet(apps: Application[]): Promise<boolean> {
       requestBody: { values: rows },
     });
 
-    // Now clear any leftover rows beyond the new data
     const clearFrom = rows.length + 1;
     await sheets.spreadsheets.values.clear({
       spreadsheetId: sheetId,

@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 import { isValidEmail, isValidPhone, isValidUrl } from "@/lib/application";
 import { appendToSheet } from "@/lib/google-sheets";
+import { shareOnboardingFolderWithApplicant } from "@/lib/google-drive";
+import { notifyTelegramForApplication } from "@/lib/telegram";
+import { sendApplicationConfirmationEmail } from "@/lib/confirmation-email";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { validateCsrfToken } from "@/lib/csrf";
 import { validateAdminRequest } from "@/lib/admin-auth";
@@ -11,9 +14,26 @@ function stripHtml(str: string): string {
   return str.replace(/<[^>]*>/g, "").trim();
 }
 
-// ──────────────────────────────────────────────
-// GET /api/applications — List (admin)
-// ──────────────────────────────────────────────
+const SCHOOL_MAJOR_PATTERN =
+  /^[^()\n]{3,}\s*\([A-Za-z0-9._-]{2,20}\)\s*[-–—]\s*[^()\n]{2,}$/;
+
+function isValidSchoolMajorFormat(value: string) {
+  return SCHOOL_MAJOR_PATTERN.test(value.trim());
+}
+
+function normalizeInterestReasons(value: unknown, otherValue: unknown) {
+  if (!Array.isArray(value)) return [];
+  const other = typeof otherValue === "string" ? stripHtml(otherValue) : "";
+  return value
+    .map((item) => {
+      const text = typeof item === "string" ? stripHtml(item) : "";
+      if (text === "Khác" && other) return `Khác: ${other}`;
+      return text;
+    })
+    .filter(Boolean);
+}
+
+// GET /api/applications - List applications for admin
 export async function GET(request: NextRequest) {
   const user = await validateAdminRequest(request);
   if (!user) {
@@ -74,14 +94,11 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// ──────────────────────────────────────────────
-// POST /api/applications — Submit application (public)
-// ──────────────────────────────────────────────
+// POST /api/applications - Submit public application
 export async function POST(request: NextRequest) {
   try {
-    // Rate limit: 5 submissions per IP per 15 minutes
     const ip = getClientIp(request);
-    const { limited, remaining, resetAt } = rateLimit(ip, 5, 15 * 60 * 1000);
+    const { limited, resetAt } = rateLimit(ip, 5, 15 * 60 * 1000);
     if (limited) {
       return NextResponse.json(
         { errors: ["Bạn đã gửi quá nhiều lần. Vui lòng thử lại sau."] },
@@ -97,7 +114,6 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
-    // CSRF validation
     const csrfToken = request.headers.get("x-csrf-token");
     if (!csrfToken || !validateCsrfToken(csrfToken)) {
       return NextResponse.json(
@@ -106,8 +122,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ── Validate required fields ──
     const errors: string[] = [];
+    const interestReasons = normalizeInterestReasons(
+      body.interest_reason,
+      body.interest_other,
+    );
+    const selectedOtherInterest =
+      Array.isArray(body.interest_reason) &&
+      body.interest_reason.includes("Khác");
 
     if (!body.email?.trim()) errors.push("Email là bắt buộc");
     else if (!isValidEmail(body.email.trim()))
@@ -115,8 +137,10 @@ export async function POST(request: NextRequest) {
 
     if (!body.career_journey?.length)
       errors.push("Vui lòng chọn ít nhất 1 vị trí");
-    if (!body.interest_reason?.length)
+    if (!interestReasons.length)
       errors.push("Vui lòng chọn điều hứng thú");
+    if (selectedOtherInterest && !String(body.interest_other || "").trim())
+      errors.push("Vui lòng nhập lý do khác");
     if (!body.why_apply?.trim())
       errors.push("Vui lòng cho biết lý do ứng tuyển");
 
@@ -139,17 +163,24 @@ export async function POST(request: NextRequest) {
     )
       errors.push("Telegram username không hợp lệ");
     if (!body.school?.trim()) errors.push("Trường học là bắt buộc");
+    if (!body.enrollment?.trim()) errors.push("Thời điểm nhập học là bắt buộc");
+    if (!body.graduation?.trim()) errors.push("Dự kiến ra trường là bắt buộc");
 
-    if (body.cv?.trim() && !isValidUrl(body.cv.trim()))
-      errors.push("Link CV không hợp lệ");
+    if (!body.cv?.trim()) errors.push("Bạn chưa upload file CV");
+    else if (!isValidUrl(body.cv.trim()))
+      errors.push("File CV chưa upload thành công");
+
+    if (body.school?.trim() && !isValidSchoolMajorFormat(body.school))
+      errors.push("Trường học cần theo mẫu: Tên trường (Mã trường) - Ngành");
+
+    if (body.linkedin?.trim() && !isValidUrl(body.linkedin.trim()))
+      errors.push("Link LinkedIn không hợp lệ");
 
     if (errors.length > 0) {
       return NextResponse.json({ errors }, { status: 400 });
     }
 
     const supabase = getSupabaseAdmin();
-
-    // ── Duplicate check by email (within 24h) ──
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
     const { data: existing } = await supabase
       .from("applications")
@@ -174,15 +205,15 @@ export async function POST(request: NextRequest) {
       body.has_telegram && body.telegram_username
         ? `Telegram: ${body.telegram_username.trim()}`
         : "",
+      body.linkedin?.trim() ? `LinkedIn: ${body.linkedin.trim()}` : "",
     ]
       .filter(Boolean)
       .join("\n");
 
-    // ── Insert (sanitize text fields to prevent stored XSS) ──
     const insert = {
       email: body.email.trim().toLowerCase(),
       career_journey: body.career_journey || [],
-      interest_reason: body.interest_reason || [],
+      interest_reason: interestReasons,
       why_apply: stripHtml(body.why_apply || ""),
       experience: stripHtml(body.experience || ""),
       skills: stripHtml(body.skills || ""),
@@ -219,10 +250,78 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Auto-sync to Google Sheets (fire-and-forget)
     appendToSheet(data).catch(() => {});
 
-    return NextResponse.json({ success: true, id: data.id }, { status: 201 });
+    let telegramNotified = false;
+    let telegramTarget = "";
+
+    try {
+      const telegramResult = await notifyTelegramForApplication(data);
+      telegramNotified = telegramResult.sent;
+      telegramTarget =
+        "label" in telegramResult && typeof telegramResult.label === "string"
+          ? telegramResult.label
+          : "";
+    } catch (telegramError) {
+      console.error(
+        "[POST /api/applications] Telegram notify failed:",
+        telegramError,
+      );
+    }
+
+    let onboardingShared = false;
+    let onboardingAlreadyHadAccess = false;
+    let onboardingFolderUrl = "";
+
+    try {
+      const shareResult = await shareOnboardingFolderWithApplicant({
+        email: data.email,
+        fullName: data.full_name,
+      });
+      onboardingShared = shareResult.shared;
+      onboardingAlreadyHadAccess = shareResult.alreadyHadAccess;
+      onboardingFolderUrl = shareResult.folderUrl;
+    } catch (shareError) {
+      console.error(
+        "[POST /api/applications] Onboarding folder share failed:",
+        shareError,
+      );
+    }
+
+    let confirmationEmailSent = false;
+    let confirmationEmailReason = "";
+
+    try {
+      const emailResult = await sendApplicationConfirmationEmail({
+        to: data.email,
+        fullName: data.full_name,
+        position: data.career_journey,
+        videoUrl: onboardingFolderUrl,
+      });
+      confirmationEmailSent = emailResult.sent;
+      confirmationEmailReason =
+        "reason" in emailResult ? (emailResult.reason ?? "") : "";
+    } catch (emailError) {
+      console.error(
+        "[POST /api/applications] Confirmation email failed:",
+        emailError,
+      );
+      confirmationEmailReason = "send-failed";
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        id: data.id,
+        telegramNotified,
+        telegramTarget,
+        onboardingShared,
+        onboardingAlreadyHadAccess,
+        confirmationEmailSent,
+        confirmationEmailReason,
+      },
+      { status: 201 },
+    );
   } catch {
     return NextResponse.json({ error: "Lỗi server" }, { status: 500 });
   }
