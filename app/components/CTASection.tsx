@@ -57,10 +57,10 @@ function Particles({
           key={i}
           className={`absolute rounded-full ${light ? "bg-red-400/25" : "bg-white/15"}`}
           style={{
-            width: p.w,
-            height: p.h,
-            left: `${p.l}%`,
-            top: `${p.t}%`,
+            width: `${p.w.toFixed(3)}px`,
+            height: `${p.h.toFixed(3)}px`,
+            left: `${p.l.toFixed(3)}%`,
+            top: `${p.t.toFixed(3)}%`,
           }}
           animate={{
             y: [0, p.dy, 0],
