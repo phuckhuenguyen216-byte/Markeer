@@ -1700,6 +1700,8 @@ export default function ApplicationWizard({
           return;
         }
         cvUrl = uploadData.url;
+        pendingCvFileRef.current = null;
+        setForm((prev) => ({ ...prev, cv: cvUrl }));
       }
       const payload = {
         ...form,
@@ -1923,7 +1925,12 @@ export default function ApplicationWizard({
                 },
                 {
                   label: "CV",
-                  value: form.cv.trim() ? "Đã upload" : "Chưa upload",
+                  value:
+                    form.cv === "pending"
+                      ? "Đã chọn"
+                      : form.cv.trim()
+                        ? "Đã upload"
+                        : "Chưa upload",
                   done: Boolean(form.cv.trim()),
                 },
                 {
@@ -1952,7 +1959,12 @@ export default function ApplicationWizard({
                   },
                   {
                     label: "CV",
-                    value: form.cv.trim() ? "Đã upload" : "Chưa upload",
+                    value:
+                      form.cv === "pending"
+                        ? "Chờ gửi"
+                        : form.cv.trim()
+                          ? "Đã upload"
+                          : "Chưa upload",
                     done: Boolean(form.cv.trim()),
                   },
                   {
@@ -2024,7 +2036,10 @@ export default function ApplicationWizard({
       if (!isFullDateValue(form.enrollment)) items.push("Ngày nhập học");
       if (!isFullDateValue(form.graduation))
         items.push("Ngày ra trường dự kiến");
-      if (!form.cv.trim() || !isValidUrl(form.cv.trim()))
+      if (
+        !form.cv.trim() ||
+        (form.cv !== "pending" && !isValidUrl(form.cv.trim()))
+      )
         items.push("CV upload");
       if (form.linkedin.trim() && !isValidUrl(form.linkedin.trim()))
         items.push("LinkedIn hợp lệ");
@@ -2040,7 +2055,10 @@ export default function ApplicationWizard({
       if (!stepMindsetDone) items.push("Tư duy làm việc");
       if (!telegramDone) items.push("Telegram username");
       if (!studyProfileDone) items.push("Thông tin học tập");
-      if (!form.cv.trim() || !isValidUrl(form.cv.trim()))
+      if (
+        !form.cv.trim() ||
+        (form.cv !== "pending" && !isValidUrl(form.cv.trim()))
+      )
         items.push("CV upload");
       if (form.linkedin.trim() && !isValidUrl(form.linkedin.trim()))
         items.push("LinkedIn hợp lệ");
@@ -3367,7 +3385,7 @@ function Step4({
     set("cv", "pending");
     setCvUpload({
       status: "done",
-      message: `✓ ${file.name} – CV sẽ được tải lên khi bạn nhấn Gửi hồ sơ.`,
+      message: `✓ ${file.name} - CV sẽ chỉ được tải lên khi bạn nhấn Hoàn tất hồ sơ.`,
     });
     e.target.value = "";
   };
