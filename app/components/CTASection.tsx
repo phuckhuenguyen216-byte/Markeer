@@ -1,22 +1,31 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence, Easing, Variants } from "framer-motion";
 import "../i18n";
 
 /* ─────────────── Floating Particles ─────────────── */
-function createParticles(count: number) {
-  return Array.from({ length: count }, () => ({
-    w: Math.random() * 5 + 2,
-    h: Math.random() * 5 + 2,
-    l: Math.random() * 100,
-    t: Math.random() * 100,
-    dy: -(Math.random() * 40 + 20),
-    dx: (Math.random() - 0.5) * 20,
-    dur: Math.random() * 4 + 4,
-    del: Math.random() * 6,
-  }));
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
+function createParticles(count: number, variant: number) {
+  return Array.from({ length: count }, (_, i) => {
+    const pick = (salt: number) => seededRandom((i + 1) * 97 + variant * 131 + salt);
+
+    return {
+      w: pick(1) * 5 + 2,
+      h: pick(2) * 5 + 2,
+      l: pick(3) * 100,
+      t: pick(4) * 100,
+      dy: -(pick(5) * 40 + 20),
+      dx: (pick(6) - 0.5) * 20,
+      dur: pick(7) * 4 + 4,
+      del: pick(8) * 6,
+    };
+  });
 }
 
 function Particles({
@@ -26,7 +35,7 @@ function Particles({
   count?: number;
   light?: boolean;
 }) {
-  const [particles] = useState<
+  const particles = useMemo<
     {
       w: number;
       h: number;
@@ -37,7 +46,7 @@ function Particles({
       dur: number;
       del: number;
     }[]
-  >(() => createParticles(count));
+  >(() => createParticles(count, light ? 1 : 2), [count, light]);
 
   if (particles.length === 0) return null;
 
