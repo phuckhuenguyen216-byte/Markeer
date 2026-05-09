@@ -15,6 +15,17 @@ const DRIVE_FOLDER_INFRA_ID = process.env.GOOGLE_DRIVE_FOLDER_INFRA_ID || "";
 const DRIVE_FOLDER_DEV_AI_ID = process.env.GOOGLE_DRIVE_FOLDER_DEV_AI_ID || "";
 const DRIVE_ONBOARDING_FOLDER_ID =
   process.env.GOOGLE_DRIVE_ONBOARDING_FOLDER_ID || "";
+const DEFAULT_ONBOARDING_VIDEO_FILE_IDS = [
+  "1xv9UfkDFxBLxLkILoCf5UFB0lwuurb64",
+  "15KEzLkC1KRE5GNf5Dad89sjJuO4UzPAW",
+];
+const DRIVE_ONBOARDING_FILE_IDS = (
+  process.env.GOOGLE_DRIVE_ONBOARDING_FILE_IDS ||
+  DEFAULT_ONBOARDING_VIDEO_FILE_IDS.join(",")
+)
+  .split(",")
+  .map((id) => id.trim())
+  .filter(Boolean);
 const DRIVE_SEND_NOTIFICATION_EMAIL =
   process.env.GOOGLE_DRIVE_SEND_NOTIFICATION_EMAIL === "true";
 
@@ -163,6 +174,42 @@ function isServiceAccountQuotaError(error: unknown) {
   return /service accounts do not have storage quota/i.test(message);
 }
 
+async function grantReaderPermission({
+  drive,
+  fileId,
+  email,
+  emailMessage,
+}: {
+  drive: drive_v3.Drive;
+  fileId: string;
+  email: string;
+  emailMessage?: string;
+}) {
+  try {
+    await drive.permissions.create({
+      fileId,
+      sendNotificationEmail: DRIVE_SEND_NOTIFICATION_EMAIL,
+      emailMessage,
+      requestBody: {
+        type: "user",
+        role: "reader",
+        emailAddress: email,
+      },
+      fields: "id",
+      supportsAllDrives: true,
+    });
+
+    return { shared: true, alreadyHadAccess: false };
+  } catch (error) {
+    const { status, message } = getGoogleErrorInfo(error);
+    if (status === 409 || /already|duplicate|permission/i.test(message)) {
+      return { shared: false, alreadyHadAccess: true };
+    }
+
+    throw error;
+  }
+}
+
 export async function shareOnboardingFolderWithApplicant({
   email,
   fullName,
@@ -176,48 +223,45 @@ export async function shareOnboardingFolderWithApplicant({
   }
 
   if (!DRIVE_ONBOARDING_FOLDER_ID) {
-    throw new Error("Chưa cấu hình GOOGLE_DRIVE_ONBOARDING_FOLDER_ID.");
+    throw new Error("Chua cau hinh GOOGLE_DRIVE_ONBOARDING_FOLDER_ID.");
   }
 
   const auth = getAuth();
   if (!auth) {
-    throw new Error("Google Drive share chưa được cấu hình.");
+    throw new Error("Google Drive share chua duoc cau hinh.");
   }
 
   const drive = google.drive({ version: "v3", auth });
   const folderUrl = `https://drive.google.com/drive/folders/${DRIVE_ONBOARDING_FOLDER_ID}`;
-  const candidateName = fullName.trim() || "bạn";
+  const candidateName = fullName.trim() || "ban";
+  const emailMessage =
+    `Chao ${candidateName},\n\n` +
+    "Markee da nhan ho so ung tuyen cua ban. Day la thu muc gioi thieu cong ty va tai lieu onboarding danh cho ung vien.\n\n" +
+    "Ban co the xem truoc de hieu them ve Markee, quy trinh lam viec va cac thong tin danh cho intern.\n\n" +
+    "Hen gap ban,\nMarkee Recruitment";
+  const targets = Array.from(
+    new Set([DRIVE_ONBOARDING_FOLDER_ID, ...DRIVE_ONBOARDING_FILE_IDS]),
+  );
+  let sharedAny = false;
+  let alreadyHadAnyAccess = false;
 
-  try {
-    await drive.permissions.create({
-      fileId: DRIVE_ONBOARDING_FOLDER_ID,
-      sendNotificationEmail: DRIVE_SEND_NOTIFICATION_EMAIL,
-      emailMessage:
-        `Chào ${candidateName},\n\n` +
-        "Markee đã nhận hồ sơ ứng tuyển của bạn. Đây là thư mục giới thiệu công ty và tài liệu onboarding dành cho ứng viên.\n\n" +
-        "Bạn có thể xem trước để hiểu thêm về Markee, quy trình làm việc và các thông tin dành cho intern.\n\n" +
-        "Hẹn gặp bạn,\nMarkee Recruitment",
-      requestBody: {
-        type: "user",
-        role: "reader",
-        emailAddress: normalizedEmail,
-      },
-      fields: "id",
-      supportsAllDrives: true,
+  for (const [index, fileId] of targets.entries()) {
+    const result = await grantReaderPermission({
+      drive,
+      fileId,
+      email: normalizedEmail,
+      emailMessage: index === 0 ? emailMessage : undefined,
     });
 
-    return { shared: true, alreadyHadAccess: false, folderUrl };
-  } catch (error) {
-    const { status, message } = getGoogleErrorInfo(error);
-    if (
-      status === 409 ||
-      /already|duplicate|permission/i.test(message)
-    ) {
-      return { shared: false, alreadyHadAccess: true, folderUrl };
-    }
-
-    throw error;
+    sharedAny = sharedAny || result.shared;
+    alreadyHadAnyAccess = alreadyHadAnyAccess || result.alreadyHadAccess;
   }
+
+  return {
+    shared: sharedAny,
+    alreadyHadAccess: !sharedAny && alreadyHadAnyAccess,
+    folderUrl,
+  };
 }
 
 export async function uploadCvToDrive({
