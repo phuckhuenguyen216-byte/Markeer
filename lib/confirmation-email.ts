@@ -13,6 +13,10 @@ const MAIL_FROM_EMAIL =
   process.env.MAIL_FROM_EMAIL || process.env.GMAIL_DELEGATED_USER || "";
 const GMAIL_DELEGATED_USER =
   process.env.GMAIL_DELEGATED_USER || MAIL_FROM_EMAIL;
+const GMAIL_OAUTH_CLIENT_ID = process.env.GMAIL_OAUTH_CLIENT_ID || "";
+const GMAIL_OAUTH_CLIENT_SECRET = process.env.GMAIL_OAUTH_CLIENT_SECRET || "";
+const GMAIL_OAUTH_REFRESH_TOKEN =
+  process.env.GMAIL_OAUTH_REFRESH_TOKEN || "";
 const MAIL_FROM_NAME = process.env.MAIL_FROM_NAME || "Markee Recruitment";
 const MAIL_SUBJECT_PREFIX = (process.env.MAIL_SUBJECT_PREFIX || "").trim();
 const ZALO_COMMUNITY_URL = (process.env.ZALO_COMMUNITY_URL || "").trim();
@@ -55,6 +59,20 @@ function encodeRawMessage(value: string) {
 }
 
 function getGmailClient() {
+  if (
+    GMAIL_OAUTH_CLIENT_ID &&
+    GMAIL_OAUTH_CLIENT_SECRET &&
+    GMAIL_OAUTH_REFRESH_TOKEN &&
+    MAIL_FROM_EMAIL
+  ) {
+    const auth = new google.auth.OAuth2(
+      GMAIL_OAUTH_CLIENT_ID,
+      GMAIL_OAUTH_CLIENT_SECRET,
+    );
+    auth.setCredentials({ refresh_token: GMAIL_OAUTH_REFRESH_TOKEN });
+    return google.gmail({ version: "v1", auth });
+  }
+
   const email = GOOGLE_SHEETS_CONFIG.serviceAccountEmail;
   const key = GOOGLE_SHEETS_CONFIG.privateKey;
 
