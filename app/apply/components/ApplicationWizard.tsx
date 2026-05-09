@@ -725,8 +725,8 @@ function validateStep(step: number, form: FormData): StepErrors {
     if (!isFullDateValue(form.graduation))
       e.graduation = "Bạn chưa thêm ngày ra trường dự kiến";
 
-    if (!form.cv.trim()) e.cv = "Bạn chưa upload file CV";
-    if (form.cv.trim() && !isValidUrl(form.cv.trim()))
+    if (!form.cv.trim()) e.cv = "Bạn chưa chọn file CV";
+    else if (form.cv !== "pending" && !isValidUrl(form.cv.trim()))
       e.cv = "File CV chưa upload thành công";
     if (form.linkedin.trim() && !isValidUrl(form.linkedin.trim()))
       e.linkedin = "Link LinkedIn chưa đúng định dạng";
@@ -1214,6 +1214,7 @@ export default function ApplicationWizard({
   const guideRailRef = useRef<HTMLDivElement>(null);
   const guideScrollFrameRef = useRef<number | null>(null);
   const guideManualLockUntilRef = useRef(0);
+  const pendingCvFileRef = useRef<File | null>(null);
   const guideActiveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
@@ -1517,7 +1518,11 @@ export default function ApplicationWizard({
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) setForm((p) => ({ ...p, ...JSON.parse(saved) }));
+      if (saved) {
+        const restored = JSON.parse(saved);
+        if (restored.cv === "pending") restored.cv = "";
+        setForm((p) => ({ ...p, ...restored }));
+      }
     } catch {
       /* ignore */
     }
@@ -1668,8 +1673,37 @@ export default function ApplicationWizard({
     setSubmitting(true);
     setSubmitError("");
     try {
+      let cvUrl = form.cv;
+      if (form.cv === "pending" && pendingCvFileRef.current) {
+        const uploadFormData = new window.FormData();
+        uploadFormData.append("file", pendingCvFileRef.current);
+        uploadFormData.append("full_name", form.full_name);
+        uploadFormData.append("email", form.email);
+        uploadFormData.append(
+          "career_category",
+          getSelectedCareerTeams(form.career_journey)[0] || "",
+        );
+        uploadFormData.append(
+          "career_journey",
+          JSON.stringify(form.career_journey),
+        );
+        const uploadRes = await fetch("/api/applications/upload-cv", {
+          method: "POST",
+          headers: { "x-csrf-token": csrfTokenRef.current },
+          body: uploadFormData,
+        });
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok || !uploadData.url) {
+          setSubmitError(
+            uploadData.error || "Upload CV thất bại. Vui lòng thử lại.",
+          );
+          return;
+        }
+        cvUrl = uploadData.url;
+      }
       const payload = {
         ...form,
+        cv: cvUrl,
         interest_reason: getDisplayInterestReasons(form),
       };
       const res = await fetch("/api/applications", {
@@ -2217,7 +2251,7 @@ export default function ApplicationWizard({
                       form={form}
                       set={set}
                       errors={errors}
-                      csrfToken={csrfTokenRef.current}
+                      pendingCvRef={pendingCvFileRef}
                     />
                   )}
                   {step === 4 && (
@@ -3296,61 +3330,46 @@ function Step4({
   form,
   set,
   errors,
-  csrfToken,
+  pendingCvRef,
 }: {
   form: FormData;
   set: <K extends keyof FormData>(k: K, v: FormData[K]) => void;
   errors: StepErrors;
-  csrfToken: string;
+  pendingCvRef: React.MutableRefObject<File | null>;
 }) {
   const [cvUpload, setCvUpload] = useState<{
-    status: "idle" | "uploading" | "done" | "error";
+    status: "idle" | "done" | "error";
     message: string;
   }>({ status: "idle", message: "" });
 
-  const handleCvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setCvUpload({ status: "uploading", message: "Đang upload CV..." });
-
-    try {
-      const payload = new window.FormData();
-      payload.append("file", file);
-      payload.append("full_name", form.full_name);
-      payload.append("email", form.email);
-      payload.append(
-        "career_category",
-        getSelectedCareerTeams(form.career_journey)[0] || "",
-      );
-      payload.append("career_journey", JSON.stringify(form.career_journey));
-
-      const res = await fetch("/api/applications/upload-cv", {
-        method: "POST",
-        headers: csrfToken ? { "x-csrf-token": csrfToken } : {},
-        body: payload,
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.url) {
-        throw new Error(data.error || "Upload CV chưa thành công");
-      }
-
-      set("cv", data.url);
-      setCvUpload({
-        status: "done",
-        message: "CV đã upload lên Google Drive. Bạn có thể tiếp tục.",
-      });
-    } catch (err) {
+    const ALLOWED = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+    if (!ALLOWED.includes(file.type)) {
       setCvUpload({
         status: "error",
-        message:
-          err instanceof Error
-            ? err.message
-            : "Upload CV chưa thành công, thử chọn lại file giúp mình nhé.",
+        message: "Chỉ hỗ trợ PDF, DOC hoặc DOCX.",
       });
-    } finally {
       e.target.value = "";
+      return;
     }
+    if (file.size > 10 * 1024 * 1024) {
+      setCvUpload({ status: "error", message: "File CV cần nhỏ hơn 10MB." });
+      e.target.value = "";
+      return;
+    }
+    pendingCvRef.current = file;
+    set("cv", "pending");
+    setCvUpload({
+      status: "done",
+      message: `✓ ${file.name} – CV sẽ được tải lên khi bạn nhấn Gửi hồ sơ.`,
+    });
+    e.target.value = "";
   };
 
   return (
@@ -3495,12 +3514,12 @@ function Step4({
                 type="file"
                 accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 onChange={handleCvUpload}
-                disabled={cvUpload.status === "uploading"}
+                disabled={false}
               />
               <span className="wz-upload-icon">↑</span>
               <span>
-                {cvUpload.status === "uploading"
-                  ? "Đang upload..."
+                {form.cv === "pending"
+                  ? "CV đã chọn"
                   : form.cv
                     ? "CV đã sẵn sàng"
                     : "Chọn file CV"}
@@ -3512,7 +3531,7 @@ function Step4({
                 {cvUpload.message}
               </div>
             )}
-            {form.cv && (
+            {form.cv && form.cv !== "pending" && (
               <a
                 className="wz-upload-link"
                 href={form.cv}
@@ -3662,7 +3681,13 @@ function Step5({
           { label: "Trường", value: form.school },
           { label: "Nhập học", value: form.enrollment },
           { label: "Ra trường", value: form.graduation },
-          { label: "CV", value: form.cv },
+          {
+            label: "CV",
+            value:
+              form.cv === "pending"
+                ? "Đã chọn file – sẽ tải lên khi gửi"
+                : form.cv,
+          },
           { label: "LinkedIn", value: form.linkedin || "Không thêm" },
         ]}
       />
