@@ -227,17 +227,19 @@ function buildHtml({ fullName, position, videoUrl }: ConfirmationEmailInput) {
     ? `<a href="${safeZaloUrl}" style="color:#0068ff;text-decoration:underline;font-weight:900;">t\u1ea1i \u0111\u00e2y</a> <span style="display:inline-block;margin-left:5px;padding:3px 7px;border-radius:999px;background:#0068ff;color:#ffffff;font-size:11px;line-height:1;font-weight:900;vertical-align:1px;">Zalo</span>`
     : `<span style="color:#0068ff;font-weight:900;">k\u00eanh Zalo ph\u00f9 h\u1ee3p</span>`;
   const pmKpiCard = safePmKpiUrl
-    ? `<a href="${safePmKpiUrl}" style="display:block;min-height:128px;background:#ffffff;border:1px solid #e2e8f0;border-radius:18px;padding:16px;text-decoration:none;box-shadow:0 8px 24px rgba(15,23,42,.04);">
+    ? `<a href="${safePmKpiUrl}" style="display:block;min-height:156px;background:#ffffff;border:1.5px solid #fecaca;border-radius:18px;padding:16px;text-decoration:none;box-shadow:0 10px 26px rgba(239,68,68,.08);">
         <span style="display:block;width:28px;height:28px;line-height:28px;text-align:center;border-radius:999px;background:#fff1f2;color:#ef4444;font-size:13px;font-weight:900;margin-bottom:10px;">1</span>
         <strong style="display:block;color:#0f172a;font-size:14px;line-height:1.4;margin-bottom:6px;">C\u00e1ch s\u1eed d\u1ee5ng PM v\u00e0 file KPI c\u00e1 nh\u00e2n</strong>
         <span style="font-size:13px;line-height:1.55;color:#64748b;">N\u1eafm c\u00e1ch team theo d\u00f5i c\u00f4ng vi\u1ec7c, c\u1eadp nh\u1eadt ti\u1ebfn \u0111\u1ed9 v\u00e0 ph\u1ed1i h\u1ee3p trong k\u1ef3 th\u1ef1c t\u1eadp.</span>
+        <span style="display:inline-block;margin-top:14px;background:#ef4444;color:#ffffff;border-radius:999px;padding:9px 13px;font-size:12px;line-height:1;font-weight:900;">B\u1ea5m \u0111\u1ec3 xem video &rarr;</span>
       </a>`
     : "";
   const policyCard = safePolicyUrl
-    ? `<a href="${safePolicyUrl}" style="display:block;min-height:128px;background:#ffffff;border:1px solid #e2e8f0;border-radius:18px;padding:16px;text-decoration:none;box-shadow:0 8px 24px rgba(15,23,42,.04);">
+    ? `<a href="${safePolicyUrl}" style="display:block;min-height:156px;background:#ffffff;border:1.5px solid #fecaca;border-radius:18px;padding:16px;text-decoration:none;box-shadow:0 10px 26px rgba(239,68,68,.08);">
         <span style="display:block;width:28px;height:28px;line-height:28px;text-align:center;border-radius:999px;background:#fff1f2;color:#ef4444;font-size:13px;font-weight:900;margin-bottom:10px;">2</span>
         <strong style="display:block;color:#0f172a;font-size:14px;line-height:1.4;margin-bottom:6px;">Ch\u00ednh S\u00e1ch C\u00f4ng Ty, Quy \u0110\u1ecbnh & Roadmap Ph\u00e1t Tri\u1ec3n Intern</strong>
         <span style="font-size:13px;line-height:1.55;color:#64748b;">Hi\u1ec3u k\u1ef3 v\u1ecdng l\u00e0m vi\u1ec7c, ch\u00ednh s\u00e1ch n\u1ed9i b\u1ed9 v\u00e0 l\u1ed9 tr\u00ecnh ph\u00e1t tri\u1ec3n t\u1ea1i Markee.</span>
+        <span style="display:inline-block;margin-top:14px;background:#ef4444;color:#ffffff;border-radius:999px;padding:9px 13px;font-size:12px;line-height:1;font-weight:900;">B\u1ea5m \u0111\u1ec3 xem video &rarr;</span>
       </a>`
     : safeFallbackVideoUrl
       ? `<a href="${safeFallbackVideoUrl}" style="display:block;background:#ef4444;color:#ffffff;text-decoration:none;border-radius:15px;padding:15px 20px;font-size:15px;font-weight:900;box-shadow:0 14px 28px rgba(239,68,68,.20);">Xem video h\u01b0\u1edbng d\u1eabn</a>`
@@ -301,7 +303,8 @@ function buildHtml({ fullName, position, videoUrl }: ConfirmationEmailInput) {
                         </tr>
                       </table>
 
-                      <div style="font-size:16px;font-weight:900;color:#0f172a;text-align:center;margin:0 0 14px;">&#127916; Video H\u01b0\u1edbng D\u1eabn</div>
+                      <div style="font-size:16px;font-weight:900;color:#0f172a;text-align:center;margin:0 0 6px;">&#127916; Video H\u01b0\u1edbng D\u1eabn</div>
+                      <p style="margin:0 0 14px;text-align:center;font-size:13px;line-height:1.6;color:#64748b;">Nh\u1ea5n v\u00e0o t\u1eebng th\u1ebb b\u00ean d\u01b0\u1edbi \u0111\u1ec3 m\u1edf video tr\u00ean Google Drive.</p>
                       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:separate;border-spacing:0 12px;margin:0 0 24px;">
                         <tr>
                           <td width="50%" style="vertical-align:top;padding-right:6px;">
