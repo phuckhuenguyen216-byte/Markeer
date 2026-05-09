@@ -1,4 +1,5 @@
-import nodemailer from "nodemailer";
+import { google } from "googleapis";
+import { GOOGLE_SHEETS_CONFIG } from "./server-config";
 
 type ConfirmationEmailInput = {
   to: string;
@@ -7,13 +8,11 @@ type ConfirmationEmailInput = {
   videoUrl?: string;
 };
 
-const SMTP_HOST = process.env.SMTP_HOST || "";
-const SMTP_PORT = Number.parseInt(process.env.SMTP_PORT || "465", 10);
-const SMTP_SECURE =
-  process.env.SMTP_SECURE === "false" ? false : SMTP_PORT === 465;
-const SMTP_USER = process.env.SMTP_USER || "";
-const SMTP_PASS = process.env.SMTP_PASS || "";
-const MAIL_FROM_EMAIL = process.env.MAIL_FROM_EMAIL || SMTP_USER;
+const GMAIL_SEND_SCOPE = "https://www.googleapis.com/auth/gmail.send";
+const MAIL_FROM_EMAIL =
+  process.env.MAIL_FROM_EMAIL || process.env.GMAIL_DELEGATED_USER || "";
+const GMAIL_DELEGATED_USER =
+  process.env.GMAIL_DELEGATED_USER || MAIL_FROM_EMAIL;
 const MAIL_FROM_NAME = process.env.MAIL_FROM_NAME || "Markee Recruitment";
 const MAIL_SUBJECT_PREFIX = (process.env.MAIL_SUBJECT_PREFIX || "").trim();
 const ZALO_COMMUNITY_URL = (process.env.ZALO_COMMUNITY_URL || "").trim();
@@ -37,25 +36,41 @@ function getSubject() {
   return `${prefix}Markee đã nhận hồ sơ ứng tuyển của bạn`;
 }
 
-function getTransporter() {
-  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS || !MAIL_FROM_EMAIL) return null;
-
-  return nodemailer.createTransport({
-    host: SMTP_HOST,
-    port: SMTP_PORT,
-    secure: SMTP_SECURE,
-    auth: {
-      user: SMTP_USER,
-      pass: SMTP_PASS,
-    },
-  });
+function encodeHeader(value: string) {
+  return `=?UTF-8?B?${Buffer.from(value, "utf8").toString("base64")}?=`;
 }
 
-function buildText({
-  fullName,
-  position,
-  videoUrl,
-}: ConfirmationEmailInput) {
+function encodeMimePart(value: string) {
+  return Buffer.from(value, "utf8")
+    .toString("base64")
+    .replace(/(.{76})/g, "$1\r\n");
+}
+
+function encodeRawMessage(value: string) {
+  return Buffer.from(value, "utf8")
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+}
+
+function getGmailClient() {
+  const email = GOOGLE_SHEETS_CONFIG.serviceAccountEmail;
+  const key = GOOGLE_SHEETS_CONFIG.privateKey;
+
+  if (!email || !key || !GMAIL_DELEGATED_USER || !MAIL_FROM_EMAIL) return null;
+
+  const auth = new google.auth.JWT({
+    email,
+    key,
+    scopes: [GMAIL_SEND_SCOPE],
+    subject: GMAIL_DELEGATED_USER,
+  });
+
+  return google.gmail({ version: "v1", auth });
+}
+
+function buildText({ fullName, position, videoUrl }: ConfirmationEmailInput) {
   const name = getFirstName(fullName);
   const finalVideoUrl = ONBOARDING_VIDEO_URL || videoUrl || "";
   const positions = position?.length ? position.join(", ") : "vị trí thực tập";
@@ -67,7 +82,9 @@ function buildText({
     "Cảm ơn bạn đã dành thời gian chia sẻ định hướng, kinh nghiệm và mong muốn thực tập.",
     "",
     ZALO_COMMUNITY_URL ? `Tham gia Zalo ứng viên: ${ZALO_COMMUNITY_URL}` : "",
-    finalVideoUrl ? `Xem 2 video giới thiệu dành cho intern: ${finalVideoUrl}` : "",
+    finalVideoUrl
+      ? `Xem 2 video giới thiệu dành cho intern: ${finalVideoUrl}`
+      : "",
     "",
     "Lưu ý: quyền xem video đã được cấp cho đúng email bạn dùng để ứng tuyển. Nếu mở link bằng tài khoản Google khác, hãy đổi lại đúng email này.",
     "",
@@ -78,11 +95,7 @@ function buildText({
     .join("\n");
 }
 
-function buildHtml({
-  fullName,
-  position,
-  videoUrl,
-}: ConfirmationEmailInput) {
+function buildHtml({ fullName, position, videoUrl }: ConfirmationEmailInput) {
   const name = escapeHtml(getFirstName(fullName));
   const positions = escapeHtml(
     position?.length ? position.join(", ") : "vị trí thực tập",
@@ -189,22 +202,55 @@ function buildHtml({
 </html>`;
 }
 
+function buildRawEmail(input: ConfirmationEmailInput, to: string) {
+  const boundary = `markee_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  const from = `${encodeHeader(MAIL_FROM_NAME)} <${MAIL_FROM_EMAIL}>`;
+  const headers = [
+    `From: ${from}`,
+    `To: ${to}`,
+    `Reply-To: ${MAIL_FROM_EMAIL}`,
+    `Subject: ${encodeHeader(getSubject())}`,
+    "MIME-Version: 1.0",
+    `Content-Type: multipart/alternative; boundary="${boundary}"`,
+  ];
+
+  const textPart = [
+    `--${boundary}`,
+    'Content-Type: text/plain; charset="UTF-8"',
+    "Content-Transfer-Encoding: base64",
+    "",
+    encodeMimePart(buildText(input)),
+  ];
+
+  const htmlPart = [
+    `--${boundary}`,
+    'Content-Type: text/html; charset="UTF-8"',
+    "Content-Transfer-Encoding: base64",
+    "",
+    encodeMimePart(buildHtml(input)),
+  ];
+
+  return encodeRawMessage(
+    [...headers, "", ...textPart, "", ...htmlPart, "", `--${boundary}--`, ""].join(
+      "\r\n",
+    ),
+  );
+}
+
 export async function sendApplicationConfirmationEmail(
   input: ConfirmationEmailInput,
 ) {
   const to = input.to.trim().toLowerCase();
   if (!to) return { sent: false, reason: "missing-recipient" as const };
 
-  const transporter = getTransporter();
-  if (!transporter) return { sent: false, reason: "missing-smtp" as const };
+  const gmail = getGmailClient();
+  if (!gmail) return { sent: false, reason: "missing-gmail-config" as const };
 
-  await transporter.sendMail({
-    from: `"${MAIL_FROM_NAME}" <${MAIL_FROM_EMAIL}>`,
-    to,
-    subject: getSubject(),
-    text: buildText(input),
-    html: buildHtml(input),
-    replyTo: MAIL_FROM_EMAIL,
+  await gmail.users.messages.send({
+    userId: "me",
+    requestBody: {
+      raw: buildRawEmail(input, to),
+    },
   });
 
   return { sent: true as const };
