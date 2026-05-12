@@ -23,9 +23,10 @@ jobs:
       - name: Build
         run: |
           cd /app/ai-marketing
+          sudo chown -R $(whoami):$(whoami) .next || true
           npm run build
 
       - name: Restart app
         run: |
           cd /app/ai-marketing
-          pm2 restart ai-app
+          pm2 restart ai-app --update-env
