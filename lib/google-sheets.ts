@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import type { Application } from "./application";
 import { GOOGLE_SHEETS_CONFIG } from "./server-config";
 
-const SHEET_NAME = process.env.GOOGLE_SHEETS_TAB_NAME || "Ứng viên";
+const SHEET_NAME = process.env.GOOGLE_SHEETS_TAB_NAME || "Sheet1";
 
 function getAuth() {
   const email = GOOGLE_SHEETS_CONFIG.serviceAccountEmail;
@@ -50,7 +50,9 @@ function appToRow(app: Application): string[] {
     .split("\n")
     .find((line) => line.startsWith("LinkedIn:"))
     ?.trim();
-  const profileLinks = [app.cv || "", linkedIn || ""].filter(Boolean).join("\n");
+  const profileLinks = [app.cv || "", linkedIn || ""]
+    .filter(Boolean)
+    .join("\n");
   const workPref = Object.entries(app.work_preference || {})
     .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`)
     .join(" | ");
