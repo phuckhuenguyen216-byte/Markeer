@@ -95,6 +95,31 @@ const menu = [
       </svg>
     ),
   },
+  {
+    nameKey: "admin.sidebar.manageApplications",
+    href: "/admin/applications",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <rect
+          x="2"
+          y="2"
+          width="12"
+          height="12"
+          rx="2"
+          fill="currentColor"
+          opacity="0.2"
+        />
+        <path
+          d="M5 6h6M5 8.5h4M5 11h5"
+          stroke="currentColor"
+          strokeWidth="1.3"
+          strokeLinecap="round"
+          opacity="0.8"
+        />
+        <circle cx="12" cy="4" r="2.5" fill="#ef4444" />
+      </svg>
+    ),
+  },
 ];
 
 export default function AdminLayout({

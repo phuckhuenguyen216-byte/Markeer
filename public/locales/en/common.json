@@ -166,26 +166,26 @@
     "ctaTitle": "Automate Your Marketing with AI",
     "ctaDescription": "Markee helps you automate marketing workflows, optimize strategies, and make data-driven decisions with confidence."
   },
-  "Benefit":{
+  "Benefit": {
     "title": "WHAT MAKES MARKEE AI DIFFERENT?",
     "description": [
-        {
-          "key": "All-in-one",
-          "value": "A single platform"
-        },
-        {
-          "key": "360°",
-          "value": "Full team management"
-        },
-        {
-          "key": "7 channels",
-          "value": "Multi-platform sync"
-        },
-        {
-          "key": "AI Agent",
-          "value": "Intelligent & automated"
-        }
-      ]
+      {
+        "key": "All-in-one",
+        "value": "A single platform"
+      },
+      {
+        "key": "360°",
+        "value": "Full team management"
+      },
+      {
+        "key": "7 channels",
+        "value": "Multi-platform sync"
+      },
+      {
+        "key": "AI Agent",
+        "value": "Intelligent & automated"
+      }
+    ]
   },
   "deployment": {
     "title": "DEPLOY MARKEE AI",
@@ -836,37 +836,37 @@
       "heading": "5 CORE TEAM STRUCTURE",
       "subheading": "Operating in PODs for smooth Sales–Presale–Delivery collaboration.",
       "items": [
-          { 
-            "num": "01", 
-            "icon": "💼", 
-            "name": "Sales", 
-            "sub": "Full Solution Sales" 
-          },
-          { 
-            "num": "02", 
-            "icon": "📢", 
-            "name": "Marketing", 
-            "sub": "Agency + AI Marketing" 
-          },
-          { 
-            "num": "03", 
-            "icon": "🤖", 
-            "name": "AI Team", 
-            "sub": "AI Products + Enablement" 
-          },
-          { 
-            "num": "04", 
-            "icon": "⚙️", 
-            "name": "Dev + DevOps", 
-            "sub": "SaaS + Platform" 
-          },
-          { 
-            "num": "05", 
-            "icon": "🖥️", 
-            "name": "SI Delivery", 
-            "sub": "Network / System / Security" 
-          }
-        ]
+        {
+          "num": "01",
+          "icon": "💼",
+          "name": "Sales",
+          "sub": "Full Solution Sales"
+        },
+        {
+          "num": "02",
+          "icon": "📢",
+          "name": "Marketing",
+          "sub": "Agency + AI Marketing"
+        },
+        {
+          "num": "03",
+          "icon": "🤖",
+          "name": "AI Team",
+          "sub": "AI Products + Enablement"
+        },
+        {
+          "num": "04",
+          "icon": "⚙️",
+          "name": "Dev + DevOps",
+          "sub": "SaaS + Platform"
+        },
+        {
+          "num": "05",
+          "icon": "🖥️",
+          "name": "SI Delivery",
+          "sub": "Network / System / Security"
+        }
+      ]
     },
     "eval": {
       "tag": "Evaluation",
@@ -1022,6 +1022,7 @@
     "sidebar": {
       "dashboard": "Dashboard",
       "manageBlog": "Manage Blog",
+      "manageApplications": "Applications",
       "logout": "Logout"
     },
     "dashboard": {
@@ -1096,6 +1097,23 @@
       "errorTitle": "Please enter a post title!",
       "errorCover": "Please enter a cover image URL!",
       "errorServer": "Server connection error"
+    }
+  },
+  "videoGuide": {
+    "title": "Video Guide",
+    "description": "Watch videos to better understand policies and tools",
+    "watchVideo": "Watch video",
+    "videos": {
+      "policy": {
+        "tag": "Policy & Roadmap",
+        "title": "Company Policy, Regulations & Intern Roadmap",
+        "desc": "Overview of company culture, rules and important policies..."
+      },
+      "kpi": {
+        "tag": "PM & Personal KPI",
+        "title": "How to use PM and personal KPI file",
+        "desc": "Guide to using PM tools and KPI files to track productivity..."
+      }
     }
   }
 }

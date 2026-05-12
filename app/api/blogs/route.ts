@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabase, getSupabaseAdmin } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
+import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 // GET /api/blogs — Lấy danh sách bài viết
 export async function GET(request: NextRequest) {
@@ -15,7 +16,18 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const offset = (page - 1) * limit;
 
-    const supabase = adminMode ? getSupabaseAdmin() : getSupabase();
+    // Admin mode requires authentication
+    let supabase;
+    if (adminMode) {
+      const { validateAdminRequest } = await import("@/lib/admin-auth");
+      const user = await validateAdminRequest(request);
+      if (!user) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+      supabase = getSupabaseAdmin();
+    } else {
+      supabase = getSupabase();
+    }
     let query = supabase
       .from("markee_blog_posts")
       .select("*", { count: "exact" })
@@ -48,8 +60,9 @@ export async function GET(request: NextRequest) {
 
 // POST /api/blogs — Tạo bài viết mới (dùng cho autopost)
 export async function POST(request: NextRequest) {
-  const apiKey = request.headers.get("x-api-key");
-  if (apiKey !== "markee_blog_2026") {
+  const { validateAdminRequest } = await import("@/lib/admin-auth");
+  const user = await validateAdminRequest(request);
+  if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

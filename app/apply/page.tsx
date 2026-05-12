@@ -4,10 +4,16 @@
 import { useRef } from "react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import dynamic from "next/dynamic";
 
 import Footer from "../components/Footer";
 import Video from "./Video";
 
+
+const ApplicationWizard = dynamic(
+  () => import("./components/ApplicationWizard"),
+  { ssr: false },
+);
 
 export default function ApplyPage() {
   const { t, i18n } = useTranslation("common");
@@ -225,6 +231,7 @@ export default function ApplyPage() {
           background-size: cover;
           background-position: center;
           min-height: 85vh;
+          @media (max-width: 480px) { min-height: auto; }
           overflow: hidden;
           display: flex;
           flex-direction: column;
@@ -257,7 +264,7 @@ export default function ApplyPage() {
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
         .hero-title {
-          font-size: clamp(3rem, 8vw, 3rem); font-weight:700;
+          font-size: clamp(1.8rem, 8vw, 3rem); font-weight:700;
           line-height:1.0; letter-spacing:-0.04em; color:#fff; margin-bottom:1rem;
         }
         .hero-title span { color: var(--red); }
@@ -267,6 +274,8 @@ export default function ApplyPage() {
         .hero-path {
           display: inline-flex;
           align-items: center;
+          flex-wrap: wrap;
+          justify-content: center;
           padding: 12px 16px;
           margin-bottom: 2.5rem;
           gap: 0px;
@@ -614,7 +623,7 @@ export default function ApplyPage() {
         @keyframes mslide { from{opacity:0;transform:translateY(32px) scale(0.96)} to{opacity:1;transform:none} }
         .modal-head { display:flex; align-items:center; justify-content:space-between; padding:1.25rem 1.5rem; border-bottom:1px solid var(--gray-100); background:var(--gray-50); }
         .modal-head-title { font-size:1rem; font-weight:700; color:var(--gray-800); display:flex; align-items:center; gap:8px; }
-        .modal-close { width:34px; height:34px; border-radius:8px; border:1px solid var(--gray-200); background:#fff; cursor:pointer; font-size:1rem; color:var(--gray-400); display:flex; align-items:center; justify-content:center; transition:all 0.15s; font-family:var(--font); }
+        .modal-close { width:44px; height:44px; border-radius:8px; border:1px solid var(--gray-200); background:#fff; cursor:pointer; font-size:1rem; color:var(--gray-400); display:flex; align-items:center; justify-content:center; transition:all 0.15s; font-family:var(--font); }
         .modal-close:hover { background:var(--red); color:#fff; border-color:var(--red); }
         .modal-body { flex:1; overflow-y:auto; }
 
@@ -771,6 +780,26 @@ animation: gradientMoveBtn 4s linear infinite;
   transform: scale(0.97);
   box-shadow: 0 5px 15px rgba(229, 62, 62, 0.4);
 }
+        @media (max-width:480px) {
+          .hero { overflow-x:hidden; }
+          .hero-path { padding:8px; gap:4px; }
+          .path-step { padding:8px 10px; font-size:0.75rem; }
+          .path-div { font-size:1rem; padding:0 4px; }
+          .section-wrap { padding:2rem 1rem; }
+          .benefit-card-big { padding:1.25rem; }
+          .hero-stats { grid-template-columns:repeat(2,1fr); }
+          .stat-num { font-size:1.8rem; }
+          .guide-card { padding:1.25rem 1rem; }
+          .cta-btn { font-size:0.95rem; padding:10px 10px; }
+          .cta-btn::after { top:-12px; left:-12px; right:-12px; bottom:-12px; }
+          .cta-btn::before { top:-16px; left:-16px; right:-16px; bottom:-16px; }
+        }
+        @media (max-width:380px) {
+          .hero-path { flex-direction:column; align-items:stretch; }
+          .path-div { display:none; }
+          .path-step { text-align:center; border-radius:8px; }
+          .teams-layout { grid-template-columns:1fr; }
+        }
       `}</style>
 
       {/* HERO */}
@@ -1077,7 +1106,7 @@ animation: gradientMoveBtn 4s linear infinite;
 
 
       {/* MODAL */}
-      {showForm && (
+      {false && (
         <div
           className="modal-bg"
           onClick={(e) => {
@@ -1113,6 +1142,8 @@ animation: gradientMoveBtn 4s linear infinite;
           </div>
         </div>
       )}
+      {/* APPLICATION WIZARD */}
+      {showForm && <ApplicationWizard onClose={() => setShowForm(false)} />}
 
       <Footer />
     </>

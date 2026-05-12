@@ -166,7 +166,7 @@
     "ctaTitle": "MARKETING VẬN HÀNH TỰ ĐỘNG, TỐI ƯU HIỆU QUẢ THỰC",
     "ctaDescription": "MARKEE AI giúp bạn tự động hóa marketing, tối ưu chiến lược và ra quyết định dựa trên dữ liệu thực."
   },
-  "Benefit":{
+  "Benefit": {
     "title": "MARKEE AI MANG LẠI ĐIỀU GÌ KHÁC BIỆT?",
     "description": [
       {
@@ -844,38 +844,38 @@
       "heading": "CẤU TRÚC 5 TEAM CHÍNH",
       "subheading": "Vận hành theo POD để phối hợp trơn tru Sales–Presale–Delivery.",
       "items": [
-        { 
-          "num": "01", 
-          "icon": "💼", 
-          "name": "Sales", 
-          "sub": "Full Solution Sales" 
+        {
+          "num": "01",
+          "icon": "💼",
+          "name": "Sales",
+          "sub": "Full Solution Sales"
         },
-        { 
-          "num": "02", 
-          "icon": "📢", 
-          "name": "Marketing", 
-          "sub": "Agency + AI Marketing" 
+        {
+          "num": "02",
+          "icon": "📢",
+          "name": "Marketing",
+          "sub": "Agency + AI Marketing"
         },
-        { 
-          "num": "03", 
-          "icon": "🤖", 
-          "name": "AI Team", 
-          "sub": "AI Products + Enablement" 
+        {
+          "num": "03",
+          "icon": "🤖",
+          "name": "AI Team",
+          "sub": "AI Products + Enablement"
         },
-        { 
-          "num": "04", 
-          "icon": "⚙️", 
-          "name": "Dev + DevOps", 
-          "sub": "SaaS + Platform" 
+        {
+          "num": "04",
+          "icon": "⚙️",
+          "name": "Dev + DevOps",
+          "sub": "SaaS + Platform"
         },
-        { 
-          "num": "05", 
-          "icon": "🖥️", 
-          "name": "SI Delivery", 
-          "sub": "Network / System / Security" 
+        {
+          "num": "05",
+          "icon": "🖥️",
+          "name": "SI Delivery",
+          "sub": "Network / System / Security"
         }
       ]
-},
+    },
     "eval": {
       "tag": "Evaluation",
       "heading": "CÁCH ĐÁNH GIÁ — 100 ĐIỂM",
@@ -1030,6 +1030,7 @@
     "sidebar": {
       "dashboard": "Dashboard",
       "manageBlog": "Quản lý Blog",
+      "manageApplications": "Ứng viên",
       "logout": "Đăng xuất"
     },
     "dashboard": {
@@ -1104,6 +1105,23 @@
       "errorTitle": "Vui lòng nhập tiêu đề bài viết!",
       "errorCover": "Vui lòng nhập URL ảnh bìa!",
       "errorServer": "Lỗi kết nối server"
+    }
+  },
+  "videoGuide": {
+    "title": "Hướng dẫn Video",
+    "description": "Xem video để hiểu rõ hơn về chính sách và công cụ",
+    "watchVideo": "Xem video",
+    "videos": {
+      "policy": {
+        "tag": "Chính sách & Lộ trình",
+        "title": "Chính sách, Quy định Công ty & Lộ trình Thực tập",
+        "desc": "Tổng quan về văn hóa công ty, quy tắc và các chính sách quan trọng..."
+      },
+      "kpi": {
+        "tag": "PM & KPI Cá nhân",
+        "title": "Cách sử dụng PM và file KPI cá nhân",
+        "desc": "Hướng dẫn sử dụng công cụ PM và file KPI để theo dõi năng suất..."
+      }
     }
   }
 }
