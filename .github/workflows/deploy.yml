@@ -24,6 +24,8 @@ jobs:
         run: |
           cd /app/ai-marketing
           sudo rm -rf .next || true
+          sudo mkdir -p .next
+          sudo chown -R $(whoami):$(whoami) .next
           npm run build
 
       - name: Restart app
