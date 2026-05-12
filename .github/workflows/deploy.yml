@@ -2,7 +2,7 @@ name: Deploy Next.js (Self-hosted)
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
 
 jobs:
   deploy:
@@ -12,7 +12,8 @@ jobs:
       - name: Pull latest code
         run: |
           cd /app/ai-marketing
-          git pull origin master
+          git fetch origin
+          git reset --hard origin/master
 
       - name: Install deps
         run: |

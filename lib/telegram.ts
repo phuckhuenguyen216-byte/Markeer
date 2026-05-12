@@ -153,7 +153,8 @@ function buildMessage(
 
   const lines = [
     ...prefixLine,
-    `📬 🛡️ <b>Ứng viên mới - ${escapeHtml(target.label)}</b>`,
+    `📬 � <b>Có người mới điền form tuyển dụng ở Markee</b>`,
+    `🛡️ Team: <b>${escapeHtml(target.label)}</b>`,
     "",
     `📝 <b>Họ tên:</b> ${compact(application.full_name)}`,
     `📞 <b>SĐT/Zalo:</b> ${compact(application.phone)}`,
