@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../app/i18n";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -16,9 +17,11 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          <img
+          <Image
             src="/logo.svg"
             alt="Markee AI Marketing"
+            width={120}
+            height={32}
             className="h-8 w-auto"
           />
           <span className="text-lg font-semibold tracking-tight text-gray-900">
@@ -40,6 +43,15 @@ export default function Header() {
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             {t("header.home")}
+          </Link>
+
+          <Link
+            href="https://chat.markeeai.com/"
+            className="hover:text-gray-900 transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Markee Chat
           </Link>
 
           {/* About Dropdown */}
@@ -120,6 +132,27 @@ export default function Header() {
       {isOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
           <div className="px-6 py-8 flex flex-col gap-6 text-base">
+            <Link
+              href="/"
+              className="font-medium text-gray-700 hover:text-gray-900"
+              onClick={() => {
+                setIsOpen(false);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+            >
+              {t("header.home")}
+            </Link>
+
+            <Link
+              href="https://chat.markeeai.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-gray-700 hover:text-gray-900"
+              onClick={() => setIsOpen(false)}
+            >
+              Markee Chat
+            </Link>
+
             <a
               href="/#features"
               className="font-medium text-gray-700 hover:text-gray-900"
