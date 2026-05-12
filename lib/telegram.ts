@@ -199,23 +199,38 @@ export async function notifyTelegramForApplication(
     `[Telegram] Sending to bucket=${target.bucket} chat=${target.chatId} thread=${target.threadId}`,
   );
 
-  const response = await fetch(
-    `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    },
-  );
-
-  const responseText = await response.text();
-  if (!response.ok) {
-    throw new Error(
-      `Telegram notify failed: ${response.status} ${responseText}`,
-    );
+  let lastError: unknown;
+  let succeeded = false;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const response = await fetch(
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(10000),
+        },
+      );
+      const responseText = await response.text();
+      if (!response.ok) {
+        throw new Error(
+          `Telegram API error: ${response.status} ${responseText}`,
+        );
+      }
+      console.log(`[Telegram] Sent OK to ${target.label} (attempt ${attempt})`);
+      succeeded = true;
+      break;
+    } catch (err) {
+      lastError = err;
+      console.warn(
+        `[Telegram] Attempt ${attempt} failed:`,
+        (err as Error)?.message,
+      );
+      if (attempt < 3) await new Promise((r) => setTimeout(r, 1000 * attempt));
+    }
   }
-
-  console.log(`[Telegram] Sent OK to ${target.label}`);
+  if (!succeeded) throw lastError;
 
   return {
     sent: true,
