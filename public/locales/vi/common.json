@@ -1110,7 +1110,7 @@
   "videoGuide": {
     "title": "Hướng dẫn Video",
     "description": "Xem video để hiểu rõ hơn về chính sách và công cụ",
-    "watchVideo": "Xem video",
+    "watchVideo": "Xem video chính sách",
     "videos": {
       "policy": {
         "tag": "Chính sách & Lộ trình",
