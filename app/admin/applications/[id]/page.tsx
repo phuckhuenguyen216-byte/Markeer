@@ -243,9 +243,9 @@ export default function AdminApplicationDetailPage() {
       )}
 
       {/* ─── HERO SUMMARY ─── */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 mb-4">
         {/* top row: back + status */}
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-3">
           <Link
             href="/admin/applications"
             className="flex items-center gap-1.5 text-sm font-semibold text-gray-400 hover:text-gray-600 transition"
@@ -268,7 +268,7 @@ export default function AdminApplicationDetailPage() {
                 <button
                   key={s.value}
                   onClick={() => confirmStatusChange(s.value)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition cursor-pointer ${
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition cursor-pointer ${
                     active
                       ? ""
                       : "hover:border-gray-400 hover:text-gray-600 hover:bg-gray-50"
@@ -295,10 +295,10 @@ export default function AdminApplicationDetailPage() {
         </div>
 
         {/* hero content */}
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
+        <div className="flex flex-col lg:flex-row gap-4 items-start">
           {/* avatar */}
           <div
-            className="w-20 h-20 rounded-2xl flex items-center justify-center text-white text-2xl font-black shrink-0"
+            className="w-14 h-14 rounded-xl flex items-center justify-center text-white text-lg font-black shrink-0"
             style={{ background: st.color }}
           >
             {initials(app.full_name)}
@@ -306,12 +306,12 @@ export default function AdminApplicationDetailPage() {
 
           {/* info */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 mb-1">
-              <h1 className="text-2xl font-black text-gray-900 tracking-tight">
+            <div className="flex items-center gap-2 mb-1">
+              <h1 className="text-xl font-black text-gray-900 tracking-tight">
                 {app.full_name}
               </h1>
               <span
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
                 style={{ background: st.bg, color: st.color }}
               >
                 <span
@@ -329,7 +329,7 @@ export default function AdminApplicationDetailPage() {
                 return (
                   <span
                     key={t}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-sm font-bold"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold"
                     style={{ background: pc.bg, color: pc.color }}
                   >
                     {pc.abbr && (
@@ -347,7 +347,7 @@ export default function AdminApplicationDetailPage() {
             </div>
 
             {/* quick meta row */}
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-500">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-gray-500">
               {app.school && (
                 <span className="flex items-center gap-1.5 font-medium">
                   <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
@@ -383,10 +383,10 @@ export default function AdminApplicationDetailPage() {
             </div>
 
             {/* contact chips */}
-            <div className="flex flex-wrap items-center gap-3 mt-3">
+            <div className="flex flex-wrap items-center gap-2 mt-2">
               <a
                 href={`mailto:${app.email}`}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-50 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition cursor-pointer"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-50 text-xs font-semibold text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition cursor-pointer"
                 title="Gửi email"
               >
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -413,7 +413,7 @@ export default function AdminApplicationDetailPage() {
                   navigator.clipboard.writeText(app.phone);
                   addToast(`Đã copy: ${app.phone}`);
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-50 text-sm font-semibold text-gray-700 hover:bg-green-50 hover:text-green-600 transition cursor-pointer"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-50 text-xs font-semibold text-gray-700 hover:bg-green-50 hover:text-green-600 transition cursor-pointer"
                 title="Nhấn để copy số điện thoại"
               >
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -442,7 +442,7 @@ export default function AdminApplicationDetailPage() {
               </button>
 
               {app.dob && (
-                <span className="px-3 py-1.5 rounded-lg bg-gray-50 text-sm font-semibold text-gray-500">
+                <span className="px-2.5 py-1.5 rounded-lg bg-gray-50 text-xs font-semibold text-gray-500">
                   Sinh: {formatDate(app.dob)}
                 </span>
               )}
@@ -450,13 +450,13 @@ export default function AdminApplicationDetailPage() {
           </div>
 
           {/* CTA buttons */}
-          <div className="flex flex-col gap-2 shrink-0 lg:min-w-[140px]">
+          <div className="flex flex-row flex-wrap gap-2 shrink-0 lg:w-[120px] lg:flex-col">
             {app.cv && (
               <a
                 href={app.cv}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white transition hover:opacity-90"
+                className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-white transition hover:opacity-90"
                 style={{ background: "#4a2318" }}
               >
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
@@ -475,48 +475,14 @@ export default function AdminApplicationDetailPage() {
                 Xem CV
               </a>
             )}
-            <button
-              onClick={() => confirmStatusChange("interviewed")}
-              className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition hover:opacity-90"
-              style={{ background: "#f5f3ff", color: "#7c3aed" }}
-            >
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                <rect
-                  x="2"
-                  y="2"
-                  width="12"
-                  height="12"
-                  rx="3"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                />
-                <path d="M2 6h12" stroke="currentColor" strokeWidth="1.2" />
-                <circle cx="5" cy="9" r="1" fill="currentColor" />
-              </svg>
-              Đặt lịch PV
-            </button>
-            <button
-              onClick={() => confirmStatusChange("accepted")}
-              className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition hover:opacity-90"
-              style={{ background: "#f0fdf4", color: "#16a34a" }}
-            >
-              Đạt
-            </button>
-            <button
-              onClick={() => confirmStatusChange("rejected")}
-              className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition hover:opacity-90"
-              style={{ background: "#fef2f2", color: "#ef4444" }}
-            >
-              Loại
-            </button>
           </div>
         </div>
       </div>
 
       {/* ─── TWO-COLUMN BODY ─── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* LEFT — 2 cols */}
-        <div className="lg:col-span-2 flex flex-col gap-6">
+        <div className="lg:col-span-2 flex flex-col gap-4">
           {/* SECTION 1: Career Fit */}
           <Section title="Định hướng & Động lực">
             <div className="mb-5">
@@ -575,7 +541,7 @@ export default function AdminApplicationDetailPage() {
 
           {/* SECTION 3: Mindset & Traits */}
           <Section title="Tư duy & Làm việc">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <SLabel color="#16a34a">Điểm mạnh</SLabel>
                 <p className="text-sm text-gray-700 leading-relaxed mt-1 whitespace-pre-wrap">
@@ -592,7 +558,7 @@ export default function AdminApplicationDetailPage() {
 
             <ContentBlock label="Kỳ vọng 3 tháng đầu" value={app.expectation} />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <SLabel>Cách xử lý vấn đề</SLabel>
                 <div className="flex flex-wrap gap-2 mt-1.5">
@@ -679,7 +645,7 @@ export default function AdminApplicationDetailPage() {
         </div>
 
         {/* RIGHT PANEL */}
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-4 lg:sticky lg:top-20 lg:self-start">
           {/* Quick rating */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
             <h3 className="text-sm font-bold text-gray-800 mb-3">
@@ -715,9 +681,9 @@ export default function AdminApplicationDetailPage() {
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              rows={5}
+              rows={4}
               placeholder="Ghi chú nội bộ về ứng viên..."
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm leading-relaxed focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-50 resize-y"
+              className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm leading-relaxed focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-50 resize-y"
             />
             <button
               onClick={saveNotes}
@@ -787,7 +753,7 @@ function Section({
 }) {
   return (
     <div
-      className={`bg-white rounded-2xl border border-gray-100 shadow-sm ${compact ? "p-5" : "p-6"}`}
+      className={`bg-white rounded-2xl border border-gray-100 shadow-sm ${compact ? "p-4" : "p-5"}`}
     >
       <h2
         className={`font-bold text-gray-900 mb-4 ${compact ? "text-sm" : "text-base"}`}
