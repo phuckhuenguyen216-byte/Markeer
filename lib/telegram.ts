@@ -195,6 +195,10 @@ export async function notifyTelegramForApplication(
     payload.message_thread_id = target.threadId;
   }
 
+  console.log(
+    `[Telegram] Sending to bucket=${target.bucket} chat=${target.chatId} thread=${target.threadId}`,
+  );
+
   const response = await fetch(
     `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
     {
@@ -204,10 +208,14 @@ export async function notifyTelegramForApplication(
     },
   );
 
+  const responseText = await response.text();
   if (!response.ok) {
-    const detail = await response.text();
-    throw new Error(`Telegram notify failed: ${response.status} ${detail}`);
+    throw new Error(
+      `Telegram notify failed: ${response.status} ${responseText}`,
+    );
   }
+
+  console.log(`[Telegram] Sent OK to ${target.label}`);
 
   return {
     sent: true,
