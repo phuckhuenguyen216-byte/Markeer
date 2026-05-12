@@ -10,7 +10,8 @@ const ALLOWED_CV_MIME = new Set([
   "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ]);
-const DRIVE_FOLDER_MKT_SALES_ID = process.env.GOOGLE_DRIVE_FOLDER_MKT_SALES_ID || "";
+const DRIVE_FOLDER_MKT_SALES_ID =
+  process.env.GOOGLE_DRIVE_FOLDER_MKT_SALES_ID || "";
 const DRIVE_FOLDER_INFRA_ID = process.env.GOOGLE_DRIVE_FOLDER_INFRA_ID || "";
 const DRIVE_FOLDER_DEV_AI_ID = process.env.GOOGLE_DRIVE_FOLDER_DEV_AI_ID || "";
 const DRIVE_ONBOARDING_FOLDER_ID =
@@ -49,6 +50,12 @@ type CvBucket = keyof typeof CV_BUCKETS;
 function getAuth() {
   const email = GOOGLE_SHEETS_CONFIG.serviceAccountEmail;
   const key = GOOGLE_SHEETS_CONFIG.privateKey;
+  console.log(
+    "[Drive] getAuth email_len:",
+    email.length,
+    "key_len:",
+    key.length,
+  );
   if (!email || !key) return null;
 
   return new google.auth.JWT({
@@ -79,7 +86,10 @@ function escapeDriveQueryValue(value: string) {
   return value.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 }
 
-function getCvBucket(careerCategory: string, careerJourney: string[]): CvBucket {
+function getCvBucket(
+  careerCategory: string,
+  careerJourney: string[],
+): CvBucket {
   const text = `${careerCategory} ${careerJourney.join(" ")}`.toLowerCase();
 
   if (
