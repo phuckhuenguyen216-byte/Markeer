@@ -166,7 +166,7 @@
     "ctaTitle": "MARKETING VẬN HÀNH TỰ ĐỘNG, TỐI ƯU HIỆU QUẢ THỰC",
     "ctaDescription": "MARKEE AI giúp bạn tự động hóa marketing, tối ưu chiến lược và ra quyết định dựa trên dữ liệu thực."
   },
-  "Benefit":{
+  "Benefit": {
     "title": "MARKEE AI MANG LẠI ĐIỀU GÌ KHÁC BIỆT?",
     "description": [
       {
@@ -1105,6 +1105,23 @@
       "errorTitle": "Vui lòng nhập tiêu đề bài viết!",
       "errorCover": "Vui lòng nhập URL ảnh bìa!",
       "errorServer": "Lỗi kết nối server"
+    }
+  },
+  "videoGuide": {
+    "title": "Hướng dẫn Video",
+    "description": "Xem video để hiểu rõ hơn về chính sách và công cụ",
+    "watchVideo": "Xem video",
+    "videos": {
+      "policy": {
+        "tag": "Chính sách & Lộ trình",
+        "title": "Chính sách, Quy định Công ty & Lộ trình Thực tập",
+        "desc": "Tổng quan về văn hóa công ty, quy tắc và các chính sách quan trọng..."
+      },
+      "kpi": {
+        "tag": "PM & KPI Cá nhân",
+        "title": "Cách sử dụng PM và file KPI cá nhân",
+        "desc": "Hướng dẫn sử dụng công cụ PM và file KPI để theo dõi năng suất..."
+      }
     }
   }
 }
