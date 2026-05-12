@@ -23,7 +23,7 @@ jobs:
       - name: Build
         run: |
           cd /app/ai-marketing
-          sudo chown -R $(whoami):$(whoami) .next || true
+          sudo rm -rf .next || true
           npm run build
 
       - name: Restart app
