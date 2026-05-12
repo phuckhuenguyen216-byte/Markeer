@@ -1,13 +1,33 @@
-/* eslint-disable react-hooks/purity */
 "use client";
 
-import React, { useEffect, useState, useMemo, memo } from "react";
+import React, { useCallback, useEffect, useId, useMemo, useState, memo } from "react";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence, Easing, Variants } from "framer-motion";
 import "../i18n";
 
 /* ─────────────── Floating Particles ─────────────── */
-// memo + useMemo: particles generated once per mount, never re-created on parent re-render
+// memo + seeded RNG: deterministic particles to avoid hydration mismatch
+
+const hashStringToSeed = (value: string) => {
+  let hash = 2166136261;
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+};
+
+const createSeededRng = (seed: number) => {
+  let t = seed;
+  return () => {
+    t += 0x6d2b79f5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
 const Particles = memo(function Particles({
   count = 22,
   light = false,
@@ -15,20 +35,20 @@ const Particles = memo(function Particles({
   count?: number;
   light?: boolean;
 }) {
-  const particles = useMemo(
-    () =>
-      Array.from({ length: count }, () => ({
-        w: Math.random() * 5 + 2,
-        h: Math.random() * 5 + 2,
-        l: Math.random() * 100,
-        t: Math.random() * 100,
-        dy: -(Math.random() * 40 + 20),
-        dx: (Math.random() - 0.5) * 20,
-        dur: Math.random() * 4 + 4,
-        del: Math.random() * 6,
-      })),
-    [], // eslint-disable-line react-hooks/exhaustive-deps
-  );
+  const seedId = useId();
+  const particles = useMemo(() => {
+    const rand = createSeededRng(hashStringToSeed(`${seedId}-${count}`));
+    return Array.from({ length: count }, () => ({
+      w: rand() * 5 + 2,
+      h: rand() * 5 + 2,
+      l: rand() * 100,
+      t: rand() * 100,
+      dy: -(rand() * 40 + 20),
+      dx: (rand() - 0.5) * 20,
+      dur: rand() * 4 + 4,
+      del: rand() * 6,
+    }));
+  }, [count, seedId]);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -433,15 +453,15 @@ function RegistrationModal({
   onClose: () => void;
   t: (key: string) => string;
 }) {
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     onClose();
-  };
+  }, [onClose]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") handleClose(); };
     if (isOpen) document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [isOpen]);
+  }, [handleClose, isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -568,9 +588,12 @@ function RegistrationModal({
                   />
                   <div className="robot-float-2 scan-wrap w-full" style={{ filter: "drop-shadow(0 28px 56px rgba(0,0,0,0.3)) drop-shadow(0 0 50px rgba(255,255,255,0.08))" }}>
                     <div className="scan-line scan-line-w" style={{ animationDelay: "1.6s" }} />
-                    <img
+                    <Image
                       src="/img/mascot/zara-anh.png"
                       alt="ZARA AI"
+                      width={580}
+                      height={580}
+                      sizes="(max-width: 1024px) 90vw, 580px"
                       className="w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[500px] xl:max-w-[580px] mx-auto h-auto object-contain transition-transform duration-700 hover:scale-105"
                     />
                   </div>
@@ -621,7 +644,7 @@ export default function CTASection() {
       setActive((prev) => (prev + 1) % points.length);
     }, 2500);
     return () => clearInterval(interval);
-  }, []);
+  }, [points.length]);
 
   return (
     <section style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -744,9 +767,12 @@ export default function CTASection() {
                 }}
               >
                 <div className="scan-line" />
-                <img
+                <Image
                   src="/img/mascot/Dex-logo.png"
                   alt="AI Assistant"
+                  width={560}
+                  height={560}
+                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 70vw, 560px"
                   className="
                     w-full
                     max-w-[420px]
