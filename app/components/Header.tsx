@@ -28,20 +28,45 @@ export default function Header() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-6 text-sm text-gray-700">
-          <a
+          {/* <a
             href="/#features"
             className="hover:text-gray-900 transition-colors"
           >
             {t("header.features")}
-          </a>
+          </a> */}
 
           <Link
-            href="https://app.markeeai.com"
-            className="hover:text-gray-900 transition-colors"
-            target="_blank"
+            href="/"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
-            {t("header.app")}
+            {t("header.home")}
           </Link>
+
+          {/* About Dropdown */}
+          <div className="relative group">
+            <Link
+              href="/about"
+              className="flex items-center gap-1 hover:text-gray-900 transition-colors"
+            >
+              {t("header.aboutMenu")}
+              <span className="text-xs">▾</span>
+            </Link>
+
+            <div className="absolute left-0 top-full mt-2 w-56 rounded-xl bg-white shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-1">
+              <Link
+                href="/policy"
+                className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50"
+              >
+                {t("header.privacy")}
+              </Link>
+              <Link
+                href="/terms"
+                className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50"
+              >
+                {t("header.terms")}
+              </Link>
+            </div>
+          </div>
 
           <Link
             href="/docs/autopost/intro"
@@ -60,27 +85,7 @@ export default function Header() {
             Blog
           </Link>
 
-          {/* About Dropdown */}
-          <div className="relative group">
-            <button className="flex items-center gap-1 hover:text-gray-900 transition-colors">
-              {t("header.aboutMenu")}
-              <span className="text-xs">▾</span>
-            </button>
-            <div className="absolute left-0 top-full mt-2 w-56 rounded-xl bg-white shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-1">
-              <Link
-                href="/policy"
-                className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50"
-              >
-                {t("header.privacy")}
-              </Link>
-              <Link
-                href="/terms"
-                className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50"
-              >
-                {t("header.terms")}
-              </Link>
-            </div>
-          </div>
+          
 
           <Link href="/apply" className="hover:text-gray-900 transition-colors">
             {t("header.apply")}

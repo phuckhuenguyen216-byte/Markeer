@@ -15,8 +15,14 @@
     Target,
     Sparkles
   } from "lucide-react";
-import { t } from "i18next";
+  import {
+  Combine,
+  Users,
+  Globe,
+  Bot
+} from "lucide-react";
 
+//import { t } from "i18next";
   const ICON_MAP: Record<
     string,
     { icon: React.ReactNode; color: string; bg: string }
@@ -73,17 +79,38 @@ import { t } from "i18next";
     }
   };
 
-  const features = t("features.groups", { returnObjects: true }) as FeatureGroup[];
+  const benefitIcons = [
+  <Combine size={28} strokeWidth={2} />,
+  <Users size={28} strokeWidth={2} />,
+  <Globe size={28} strokeWidth={2} />,
+  <Bot size={28} strokeWidth={2} />
+];
+
+  // const features = t("features.groups", { returnObjects: true }) as FeatureGroup[];
+  // type FeatureItem = {
+  //   title: string;
+  //   description: string;
+  //   icon: string;
+  // };
+
+  // type FeatureGroup = {
+  //   group: string;
+  //   name: string;
+  //   logo: string;
+  //   items: FeatureItem[];
+  // };
+
   type FeatureItem = {
-    title: string;
-    description: string;
-    icon: string;
+  title: string;
+  description: string;
+  icon: string;
   };
 
   type FeatureGroup = {
     group: string;
     name: string;
     logo: string;
+    video: string;
     items: FeatureItem[];
   };
 
@@ -98,57 +125,71 @@ import { t } from "i18next";
   const CYCLE_DURATION = 5000;
 
   export default function FeaturesSection() {
+
+    const [hoveredCard, setHoveredCard] = useState<number>(0);
+
     const { t } = useTranslation("common");
     const rawFeatures = t("features.groups", { returnObjects: true }) as unknown;
     const features: FeatureGroup[] = Array.isArray(rawFeatures)
       ? (rawFeatures as FeatureGroup[])
       : [];
+    const benefits = t("Benefit.description", { returnObjects: true }) as {
+      key: string;
+      value: string;
+    }[];
 
     const [activeGroup, setActiveGroup] = useState(0);
-    const [progress, setProgress] = useState(0);
-    const startTimeRef = useRef<number>(Date.now());
-    const rafRef = useRef<number | null>(null);
-    const isPausedRef = useRef(false);
-    const activeGroupRef = useRef(0);
+    // const [progress, setProgress] = useState(0);
+    // const startTimeRef = useRef<number>(Date.now());
+    // const rafRef = useRef<number | null>(null);
+    // const isPausedRef = useRef(false);
+    // const activeGroupRef = useRef(0);
+
+    // const goToGroup = useCallback((idx: number) => {
+    //   activeGroupRef.current = idx;
+    //   setActiveGroup(idx);
+    //   startTimeRef.current = Date.now();
+    //   setProgress(0);
+    // }, []);
 
     const goToGroup = useCallback((idx: number) => {
-      activeGroupRef.current = idx;
-      setActiveGroup(idx);
-      startTimeRef.current = Date.now();
-      setProgress(0);
-    }, []);
+  setActiveGroup(idx);
+}, []);
+
+    const [activeVideo, setActiveVideo] = useState<string | null>(null);
+    const [isVideoOpen, setIsVideoOpen] = useState(false);
 
     // Auto cycle
-    useEffect(() => {
-      if (features.length <= 1) return;
+    // useEffect(() => {
+    //   if (features.length <= 1) return;
 
-      let advancing = false;
-      const tick = () => {
-        if (!isPausedRef.current) {
-          const elapsed = Date.now() - startTimeRef.current;
-          const p = Math.min((elapsed / CYCLE_DURATION) * 100, 100);
-          setProgress(p);
+    //   let advancing = false;
+    //   const tick = () => {
+    //     if (!isPausedRef.current) {
+    //       const elapsed = Date.now() - startTimeRef.current;
+    //       const p = Math.min((elapsed / CYCLE_DURATION) * 100, 100);
+    //       setProgress(p);
 
-          if (p >= 100 && !advancing) {
-            advancing = true;
-            const next = (activeGroupRef.current + 1) % features.length;
-            goToGroup(next);
-            setTimeout(() => { advancing = false; }, 400);
-          }
-        }
-        rafRef.current = requestAnimationFrame(tick);
-      };
-      rafRef.current = requestAnimationFrame(tick);
-      return () => {
-        if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      };
-    }, [features.length, goToGroup]);
+    //       if (p >= 100 && !advancing) {
+    //         advancing = true;
+    //         const next = (activeGroupRef.current + 1) % features.length;
+    //         goToGroup(next);
+    //         setTimeout(() => { advancing = false; }, 400);
+    //       }
+    //     }
+    //     rafRef.current = requestAnimationFrame(tick);
+    //   };
+    //   rafRef.current = requestAnimationFrame(tick);
+    //   return () => {
+    //     if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    //   };
+    // }, [features.length, goToGroup]);
 
-    const handleTabClick = (i: number) => {
-      if (i === activeGroupRef.current) return;
-      isPausedRef.current = false;
-      goToGroup(i);
-    };
+    // const handleTabClick = (i: number) => {
+    //   if (i === activeGroupRef.current) return;
+    //   isPausedRef.current = false;
+    //   goToGroup(i);
+    // };
 
     return (
       <>
@@ -222,8 +263,10 @@ import { t } from "i18next";
           .fs-eyebrow-line.rev { transform: scaleX(-1); }
           .fs-title {
             font-size: clamp(2rem, 4.5vw, 3.6rem);
-            font-weight: 900; color: var(--fs-text-hi);
-            line-height: 1.1; letter-spacing: -.02em; margin-bottom: 14px;
+            font-weight: 900;
+            // color: var(--fs-text-hi);
+            letter-spacing: -.02em; margin-bottom: 14px;
+
           }
           .fs-title-rule {
             width: 120px; height: 2px; background: var(--r500);
@@ -639,76 +682,94 @@ import { t } from "i18next";
             transform: scale(1.1) translateY(-6px);
           }
 
-          .glitch {
+
+.glitch {
   position: relative;
   display: inline-block;
-}
 
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-}
+    background: linear-gradient(
+    90deg,
+    #201e1e,
+    #350707,
+    #d63d3d,
+    #ad2e2e,
+    #ff2a2a
+  );
 
-.glitch::before {
-  left: 2px;
-  background-image: linear-gradient(135deg, var(--r500), var(--r800));
   -webkit-background-clip: text;
-  background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: g1 4.2s infinite steps(4);   /* steps để giữ cảm giác glitch digital */
-}
-
-.glitch::after {
-  left: -2px;
-  background-image: linear-gradient(135deg, var(--r500), var(--r800));
-  -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: g2 5.1s infinite steps(4);   /* thời gian khác → không đồng bộ */
+
+  animation: glitchMain 2.8s infinite steps(2);
+}
+@keyframes glitchMain {
+  0%   { transform: translate(0) skew(0deg); }
+  10%  { transform: translate(-2px, 1px) skew(-2deg); }
+  20%  { transform: translate(2px, -1px) skew(2deg); }
+  30%  { transform: translate(-3px, 2px) skew(0deg); }
+  40%  { transform: translate(3px, -2px) skew(1deg); }
+  50%  { transform: translate(0) skew(0deg); }
+  60%  { transform: translate(-4px, 1px) skew(-1deg); }
+  70%  { transform: translate(3px, 2px) skew(2deg); }
+  80%  { transform: translate(-2px, -1px) skew(0deg); }
+  90%  { transform: translate(2px, 1px) skew(-1deg); }
+  100% { transform: translate(0) skew(0deg); }
 }
 
-/* ──────────────────────────────────────────────── */
-/* g1 – layer trên, giật thường xuyên hơn            */
-/* ──────────────────────────────────────────────── */
-@keyframes g1 {
-  0%    { transform: translate(0);    clip-path: polygon(0 0, 100% 0, 100% 42%, 0 42%); }
-  8%    { transform: translate(-3px, 1px); clip-path: polygon(0 4%, 100% 4%, 100% 40%, 0 40%); }
-  16%   { transform: translate(3px, -2px); clip-path: polygon(0 0, 100% 0, 100% 44%, 0 44%); }
-  24%   { transform: translate(-2px, 2px); clip-path: polygon(0 6%, 100% 6%, 100% 38%, 0 38%); }
-  32%   { transform: translate(2px, -1px); }
-  40%   { transform: translate(-1px, 1px); clip-path: polygon(0 2%, 100% 2%, 100% 43%, 0 43%); }
-  48%   { transform: translate(0); }
-  56%   { transform: translate(-4px, 2px); clip-path: polygon(0 5%, 100% 5%, 100% 39%, 0 39%); }
-  64%   { transform: translate(3px, -3px); }
-  72%   { transform: translate(-2px, 1px); clip-path: polygon(0 3%, 100% 3%, 100% 41%, 0 41%); }
-  80%   { transform: translate(1px, -1px); }
-  88%   { transform: translate(-3px, 2px); }
-  96%   { transform: translate(2px, -2px); clip-path: polygon(0 7%, 100% 7%, 100% 37%, 0 37%); }
-  100%  { transform: translate(0);    clip-path: polygon(0 0, 100% 0, 100% 42%, 0 42%); }
-}
+// .glitch::before {
+//   left: 2px;
+//   background-image: linear-gradient(135deg, var(--r500), var(--r800));
+//   -webkit-background-clip: text;
+//   background-clip: text;
+//   -webkit-text-fill-color: transparent;
+//   animation: g1 4.2s infinite steps(4);   /* steps để giữ cảm giác glitch digital */
+// }
 
-/* ──────────────────────────────────────────────── */
-/* g2 – layer dưới, nhịp khác, vẫn giật liên tục     */
-/* ──────────────────────────────────────────────── */
-@keyframes g2 {
-  0%    { transform: translate(0);    clip-path: polygon(0 58%, 100% 58%, 100% 100%, 0 100%); }
-  10%   { transform: translate(3px, -1px); clip-path: polygon(0 56%, 100% 56%, 100% 98%, 0 98%); }
-  20%   { transform: translate(-3px, 2px); }
-  30%   { transform: translate(2px, -2px); clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%); }
-  40%   { transform: translate(-1px, 1px); }
-  50%   { transform: translate(3px, -1px); clip-path: polygon(0 57%, 100% 57%, 100% 99%, 0 99%); }
-  60%   { transform: translate(0); }
-  70%   { transform: translate(-4px, 3px); clip-path: polygon(0 59%, 100% 59%, 100% 97%, 0 97%); }
-  80%   { transform: translate(2px, -1px); }
-  90%   { transform: translate(-2px, 2px); }
-  100%  { transform: translate(0);    clip-path: polygon(0 58%, 100% 58%, 100% 100%, 0 100%); }
-}
+// .glitch::after {
+//   left: -2px;
+//   background-image: linear-gradient(135deg, var(--r500), var(--r800));
+//   -webkit-background-clip: text;
+//   background-clip: text;
+//   -webkit-text-fill-color: transparent;
+//   animation: g2 5.1s infinite steps(4);   /* thời gian khác → không đồng bộ */
+// }
+
+// /* ──────────────────────────────────────────────── */
+// /* g1 – layer trên, giật thường xuyên hơn            */
+// /* ──────────────────────────────────────────────── */
+// @keyframes g1 {
+//   0%    { transform: translate(0); }
+//   8%    { transform: translate(-3px, 1px); }
+//   16%   { transform: translate(3px, -2px); }
+//   24%   { transform: translate(-2px, 2px); }
+//   32%   { transform: translate(2px, -1px); }
+//   40%   { transform: translate(-1px, 1px); }
+//   48%   { transform: translate(0); }
+//   56%   { transform: translate(-4px, 2px); }
+//   64%   { transform: translate(3px, -3px); }
+//   72%   { transform: translate(-2px, 1px); }
+//   80%   { transform: translate(1px, -1px); }
+//   88%   { transform: translate(-3px, 2px); }
+//   96%   { transform: translate(2px, -2px); }
+//   100%  { transform: translate(0); }
+// }
+
+// /* ──────────────────────────────────────────────── */
+// /* g2 – layer dưới    */
+// /* ──────────────────────────────────────────────── */
+// @keyframes g2 {
+//   0%    { transform: translate(0); }
+//   10%   { transform: translate(3px, -1px); }
+//   20%   { transform: translate(-3px, 2px); }
+//   30%   { transform: translate(2px, -2px); }
+//   40%   { transform: translate(-1px, 1px); }
+//   50%   { transform: translate(3px, -1px); }
+//   60%   { transform: translate(0); }
+//   70%   { transform: translate(-4px, 3px); }
+//   80%   { transform: translate(2px, -1px); }
+//   90%   { transform: translate(-2px, 2px); }
+//   100%  { transform: translate(0); }
+// }
 
           
           /* CTA WRAPPER */
@@ -957,6 +1018,215 @@ import { t } from "i18next";
     display: none;
   }
 }
+
+.feature-highlight {
+  max-width: 1200px;
+  margin: 120px auto 0; 
+  padding: 60px 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* HEADER */
+.feature-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+// .feature-eyebrow {
+//   font-size: 15px;
+//   color: #ff2a2a;
+//   text-transform: uppercase;
+//   display: inline-block;
+//   margin-bottom: 12px;
+// }
+
+.feature-title {
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+
+  background: linear-gradient(
+    90deg,
+    #201e1e,
+    #350707,
+    #d63d3d,
+    #ad2e2e,
+    #ff2a2a
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+}
+
+/* GRID */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+/* CARD */
+.feature-card {
+  position: relative;
+  padding: 26px 20px;
+  border-radius: 16px;
+
+  background: rgba(249, 223, 223, 0.7);
+  border: 1px solid rgba(255, 42, 42, 0.15);
+  backdrop-filter: blur(10px);
+
+  transition: all 0.4s cubic-bezier(.22,1,.36,1);
+  overflow: hidden;
+}
+
+/* hover nâng */
+.feature-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(255, 42, 42, 0.5);
+  box-shadow: 0 25px 60px rgba(255, 42, 42, 0.15);
+}
+
+/* index number */
+.feature-index {
+  font-size: 18px;
+  letter-spacing: .25em;
+  color: #ff2a2a;
+  margin-bottom: 14px;
+}
+
+/* title */
+.feature-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 10px;
+}
+
+/* text */
+.feature-card p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* glow effect */
+.feature-glow {
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 42, 42, 0.15),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.feature-card:hover .feature-glow {
+  opacity: 1;
+}
+
+/* alternating tone */
+.feature-card.dark {
+  background: rgba(163, 52, 52, 0.47);
+  color: white;
+}
+
+.feature-card.dark h3 {
+  color: #fff;
+}
+
+.feature-card.dark p {
+  color: #cfcfcf;
+}
+
+.benefit-card {
+  background: linear-gradient(160deg, rgba(255,34,34,0.055) 0%, rgba(255,34,34,0.012) 100%);
+  border: 1px solid rgba(255,34,34,0.18);
+  border-radius: 0;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1), border-color 0.3s, box-shadow 0.35s;
+  cursor: default;
+}
+.benefit-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #ff2222, #ff6a6a, #ff2222);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.45s cubic-bezier(.22,1,.36,1);
+}
+.benefit-card:hover::before { transform: scaleX(1); }
+.benefit-card:hover {
+  border-color: rgba(255,34,34,0.45);
+  background: linear-gradient(160deg, rgba(255,34,34,0.08) 0%, rgba(255,34,34,0.025) 100%);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px rgba(255,34,34,0.15), 0 6px 16px rgba(255,34,34,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.benefit-icon-wrap {
+  flex-shrink: 0; width: 88px; height: 88px;
+  background: linear-gradient(135deg, var(--r50), var(--r100));
+  border: 1px solid var(--r200);
+  border-radius: 22px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+  transition: transform 0.4s cubic-bezier(.22,1,.36,1), box-shadow 0.35s, background 0.35s;
+}
+.benefit-card:hover .benefit-icon-wrap {
+  transform: scale(1.1);
+  box-shadow: 0 10px 28px rgba(255,34,34,0.28);
+  background: linear-gradient(135deg, var(--r100), var(--r200));
+}
+.benefit-icon-wrap i { font-size: 38px; color: var(--r600); }
+.benefit-badge {
+  position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%);
+  background: rgb(225, 29, 72); color: #fff;
+  font-size: 8px; font-weight: 700; letter-spacing: .12em;
+  padding: 2px 8px; border-radius: 4px; white-space: nowrap;
+}
+.benefit-body { flex: 1; position: relative; z-index: 1; }
+.benefit-key {
+  font-size: 22px; font-weight: 700; color: var(--fs-text-hi);
+  text-transform: uppercase; letter-spacing: .03em; line-height: 1.2;
+}
+.benefit-value { font-size: 14px; color: var(--fs-text-mid); font-weight: 300; line-height: 1.5; }
+.benefit-led-row { display: flex; align-items: center; gap: 5px; margin-top: 14px; }
+.benefit-led { width: 5px; height: 5px; border-radius: 50%; display: inline-block; background: var(--r500); animation: ledBlink 2.5s ease-in-out infinite; }
+.benefit-led.d2 { animation-delay: 0.4s; background: var(--r300); }
+.benefit-led.d3 { animation-delay: 0.8s; background: var(--r200); }
+.benefit-glow {
+  position: absolute; width: 200px; height: 200px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,34,34,0.07), transparent 70%);
+  bottom: -60px; right: -40px; pointer-events: none;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .feature-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* responsive */
+/*@media (max-width: 768px) {
+  .feature-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}*/
         `}</style>
 
         <section className="fs-wrap" id="features">
@@ -997,9 +1267,21 @@ import { t } from "i18next";
                 <button
                   key={i}
                   className={`fs-tab-card ${isActive ? "active" : ""}`}
-                  onClick={() => handleTabClick(i)}
-                  onMouseEnter={() => { isPausedRef.current = true; }}
-                  onMouseLeave={() => { isPausedRef.current = false; }}
+                  // onClick={() => {
+                  //   handleTabClick(i);
+                  //   setActiveVideo(group.video);
+                  //   setIsVideoOpen(true);
+                  // }}
+                  // onMouseEnter={() => { isPausedRef.current = true; }}
+                  // onMouseLeave={() => { isPausedRef.current = false; }}
+                  onMouseEnter={() => {
+  goToGroup(i);
+  setHoveredCard(i);
+}}
+                  onClick={() => {
+                    setActiveVideo(group.video);
+                    setIsVideoOpen(true);
+                  }}
                 >
                  <div className="fs-tab-card-visual">
 
@@ -1016,12 +1298,15 @@ import { t } from "i18next";
                   <div className="fs-tab-card-label">{group.group}</div>
                   <div className="fs-tab-card-count">{group.items.length} modules</div>
 
-                  {isActive && (
+                  {/* {isActive && (
                     <div
                       className="fs-tab-card-progress"
                       style={{ transform: `scaleX(${progress / 100})` }}
                     />
-                  )}
+                  )} */}
+                  {hoveredCard === i && (
+  <div className="fs-tab-card-progress" />
+)}
 
                   <div className="fs-tab-card-dot" />
                 </button>
@@ -1081,14 +1366,14 @@ import { t } from "i18next";
           </div>
 
           {/* CTA */}
-        <div className="fs-cta">
+        {/* <div className="fs-cta">
           <div className="fs-cta-inner">
             <div className="fs-cta-glow" />
             <div>
               <div className="fs-cta-eyebrow"></div>
               <div className="fs-cta-title">{t("features.ctaTitle")}</div>
               <p className="fs-cta-body">{t("features.ctaDescription")}</p>
-            </div>
+            </div> */}
             {/* <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:8, position:"relative" }}>
               <div className="fs-hex">
                 <div className="fs-hex-bg" />
@@ -1096,9 +1381,90 @@ import { t } from "i18next";
               </div>
               <div className="fs-hex-label">READY</div>
             </div> */}
+          {/* </div>
+        </div> */}
+
+        <div className="feature-highlight">
+  <div className="feature-header">
+    <h2 className="feature-title">{t("Benefit.title")}</h2>
+  </div>
+
+  <div style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(clamp(280px, 30vw, 420px), 1fr))",
+    gap: "20px",
+  }}>
+    {benefits?.map((item, i) => {
+      return (
+        <div key={i} className="benefit-card">
+          <div className="benefit-icon-wrap">
+            {benefitIcons[i]}
+            <span className="benefit-badge">{item.key}</span>
           </div>
+          <div className="benefit-body">
+            <div className="benefit-key">{item.key}</div>
+            <div className="benefit-value">{item.value}</div>
+            <div className="benefit-led-row">
+              <span className="benefit-led" />
+              <span className="benefit-led d2" />
+              <span className="benefit-led d3" />
+            </div>
+          </div>
+          <div className="benefit-glow" />
         </div>
+      );
+    })}
+  </div>
+</div>
+
         </section>
+
+        {isVideoOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ background: "rgba(255,34,34,0.18)" }} >
+
+            {/* click nền để đóng */}
+            <div
+              className="absolute inset-0"
+              onClick={() => setIsVideoOpen(false)}
+            />
+
+            {/* video box */}
+            <div className="relative z-10 w-[90%] max-w-4xl">
+
+              {/* video */}
+              <video
+                controls
+                autoPlay
+                className="w-full rounded-2xl shadow-2xl border border-red-500/30"
+              >
+                <source src={activeVideo || ""} type="video/mp4" />
+              </video>
+
+              {/* nút đóng */}
+              <button
+                onClick={() => setIsVideoOpen(false)}
+                className="
+                  absolute top-2 right-2
+                  w-5 h-5
+                  flex items-center justify-center
+                  rounded-full
+                  bg-black/50 backdrop-blur-md
+                  text-white
+                  text-[12px]
+                  border border-white/20
+                  hover:bg-red-500 hover:scale-110
+                  transition-all duration-300
+                  shadow-lg
+                "
+              >
+                ✕
+              </button>
+
+            </div>
+          </div>)
+        }
+
       </>
     );
   }

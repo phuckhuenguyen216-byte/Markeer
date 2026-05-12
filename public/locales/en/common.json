@@ -4,9 +4,9 @@
     "description": "MARKEE AI helps you create content 10x faster and grow with real data. Try it FREE for 1 month!"
   },
   "header": {
+    "home": "Home",
     "features": "Features",
     "register": "Sign up",
-    "app": "App",
     "documentation": "Documentation",
     "aboutMenu": "About us",
     "privacy": "Privacy Policy",
@@ -23,7 +23,8 @@
   },
   "about": {
     "title": "What is MARKEE AI?",
-    "description": "MARKEE AI is an AI Marketing platform for modern businesses, helping you replace many siloed tools with one intelligent system.",
+    "description": "Markee AI operates as a team of AI marketing agents—not just a supporting tool, but a solution that empowers businesses to build sustainable, scalable marketing systems in the digital era.",
+    "introduce": "Markee AI operates as a team of AI marketing agents—not just a supporting tool, but a solution that empowers businesses to build sustainable, scalable marketing systems in the digital era.",
     "values": [
       {
         "title": "Create AI content for multiple channels",
@@ -59,8 +60,8 @@
     "cancelAnytime": "Cancel anytime"
   },
   "registration": {
-    "title": "Ready to boost your revenue with Markee AI?",
-    "description": "Join 10,000+ smart marketers using AI to optimize their work every day.",
+    "title": "MARKEE AI  -  app.markeeai.com",
+    "description": "AI Agent Marketing Platform  ·  B2B · Agency · Business",
     "primary": "Start for free",
     "secondary": "Watch product demo",
 
@@ -88,6 +89,7 @@
         "group": "AUTO POST – MARKETING AUTOMATION",
         "name": "THEO",
         "logo": "/img/mascot/Theo-logo.png",
+        "video": "/videos/video.mp4",
         "items": [
           {
             "title": "Automated Posting",
@@ -106,6 +108,7 @@
         "group": "PLAN & SCHEDULE – CONTENT PLANNING",
         "name": "MAX",
         "logo": "/img/mascot/Max-logo.png",
+        "video": "/videos/video.mp4",
         "items": [
           {
             "title": "Visual Content Calendar",
@@ -134,6 +137,7 @@
         "group": "DASHBOARD – ANALYTICS & REPORTING",
         "name": "PIP",
         "logo": "/img/mascot/Pip-logo.png",
+        "video": "/videos/ANIMATION-BANNER.mp4",
         "items": [
           {
             "title": "Multi-Platform Reports",
@@ -161,6 +165,118 @@
 
     "ctaTitle": "Automate Your Marketing with AI",
     "ctaDescription": "Markee helps you automate marketing workflows, optimize strategies, and make data-driven decisions with confidence."
+  },
+  "Benefit":{
+    "title": "WHAT MAKES MARKEE AI DIFFERENT?",
+    "description": [
+        {
+          "key": "All-in-one",
+          "value": "A single platform"
+        },
+        {
+          "key": "360°",
+          "value": "Full team management"
+        },
+        {
+          "key": "7 channels",
+          "value": "Multi-platform sync"
+        },
+        {
+          "key": "AI Agent",
+          "value": "Intelligent & automated"
+        }
+      ]
+  },
+  "deployment": {
+    "title": "DEPLOY MARKEE AI",
+    "description": "Flexible to meet your needs — hire an outsourced AI team or deploy an in-house technology platform for your team.",
+    "plans": [
+      {
+        "tag": "OUTSOURCE AI AGENT",
+        "title": "Outsourced AI Marketing Team",
+        "description": "Markee provides a team of AI marketing agents customized to the specific needs of each business — functioning as an external marketing department, with no in-house team required.",
+        "features": [
+          "AI agents customized to your industry & brand voice",
+          "Automated content production & distribution",
+          "Automatically post on 7 platforms",
+          "Periodic performance reports for businesses",
+          "Ideal for businesses without an in-house marketing team."
+        ]
+      },
+      {
+        "tag": "TECH SOLUTION",
+        "title": "In-House Technology Platform",
+        "description": "Deploy Markee AI for self-operated businesses — Admin & Manager control the entire team through a centralized dashboard.",
+        "features": [
+          "Onboarding & setup tailored to specific business needs.",
+          "Role-Based Access System: Admin / Manager / Member",
+          "Real-Time Employee Performance Tracking for Managers",
+          "Manage multiple campaigns simultaneously.",
+          "Suitable for Marketing Agencies and In-House Marketing Teams"
+        ]
+      }
+    ]
+  },
+  "problems": {
+    "title": "WHAT PROBLEMS IS THE BUSINESS FACING?",
+    "description": "Modern marketing demands managing multiple channels, teams, and campaigns—yet most businesses still rely on manual, fragmented processes.",
+    "cards": [
+      {
+        "title": "Multi-platform management",
+        "description": "Facebook, TikTok, Instagram, LinkedIn... Each channel has a different process, which requires a lot of management effort."
+      },
+      {
+        "title": "Lack of a content strategy",
+        "description": "Posting content based on intuition, without a long-term plan, leading to inconsistent effectiveness."
+      },
+      {
+        "title": "Time-consuming operation",
+        "description": "Writing content, scheduling, compiling reports — these tasks take up a large portion of the team's time."
+      },
+      {
+        "title": "Difficult to track effectiveness",
+        "description": "Data is scattered across multiple platforms, lacking a comprehensive picture to optimize strategy."
+      }
+    ]
+  },
+  "permission": {
+    "title": "THREE ACCESS LEVELS — FROM STAFF TO ADMIN",
+    "description": "Markee AI has a clear permission system, suitable for the organizational structure of agencies and businesses with marketing teams.",
+    "roles": [
+      {
+        "tag": "ADMIN",
+        "title": "Full system access",
+        "features": [
+          "Create and manage multiple teams simultaneously",
+          "Create, delete, and assign campaigns",
+          "Add members to teams and campaigns",
+          "Appointing a Campaign Manager",
+          "Access all reports and data."
+        ]
+      },
+      {
+        "tag": "CAMPAIGN MANAGEMENT",
+        "title": "Manager / Team Lead",
+        "features": [
+          "Manage personnel assigned to campaigns",
+          "Track posts and performance of each member.",
+          "Add members to the campaign",
+          "View campaign performance reports",
+          "Set up branding and budget plans"
+        ]
+      },
+      {
+        "tag": "MEMBER",
+        "title": "Content / MKT staff",
+        "features": [
+          "Create and post content on assigned channels",
+          "Use NIA AI Agent to create content",
+          "Schedule posts and manage your personal schedule",
+          "View the results of your individual post",
+          "Join multiple campaigns simultaneously"
+        ]
+      }
+    ]
   },
   "footer": {
     "brandTitle": "Markee AI Marketing",
@@ -981,24 +1097,6 @@
       "errorTitle": "Please enter a post title!",
       "errorCover": "Please enter a cover image URL!",
       "errorServer": "Server connection error"
-    }
-  },
-
-  "videoGuide": {
-    "title": "Video Guide",
-    "description": "Watch videos to better understand policies and tools",
-    "watchVideo": "Watch video",
-    "videos": {
-      "policy": {
-        "title": "Company Policy, Regulations & Intern Roadmap",
-        "desc": "Overview of company culture, rules and important policies...",
-        "tag": "Policy & Roadmap"
-      },
-      "kpi": {
-        "title": "How to use PM and personal KPI file",
-        "desc": "Guide to using PM tools and KPI files to track productivity...",
-        "tag": "PM & Personal KPI"
-      }
     }
   }
 }
