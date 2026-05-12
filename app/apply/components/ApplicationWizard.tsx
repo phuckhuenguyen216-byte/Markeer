@@ -5039,3 +5039,5 @@ const wizardCSS = `
 .wz-back-link{background:none;border:none;color:#64748b;font-size:13px;cursor:pointer;padding:8px;display:block;width:100%;text-align:center}
 .wz-back-link:hover{color:#334155;text-decoration:underline}
 @media(max-width:400px){.wz-soc-grid{grid-template-columns:1fr}.wz-comm-title{font-size:18px}}
+
+`;
