@@ -54,6 +54,36 @@ const TELEGRAM_TARGETS: Record<
   },
 };
 
+const CAREER_LABEL_TO_CATEGORY: Record<string, string> = {
+  "Network Team": "Infrastructure",
+  "System Team": "Infrastructure",
+  "Security Team": "Infrastructure",
+  "Hội nghị & Tổng đài": "Infrastructure",
+  "Cloud & Datacenter": "Infrastructure",
+  BA: "Dev/DevOps",
+  "Backend Developer": "Dev/DevOps",
+  "Frontend Developer": "Dev/DevOps",
+  "Full-stack Developer": "Dev/DevOps",
+  "DevOps / Platform": "Dev/DevOps",
+  "AI / ML Engineer": "AI",
+  "Data Analyst / Engineer": "AI",
+  "AI Product / Research": "AI",
+  "Content & Social": "Marketing",
+  "Performance & Acquisition": "Marketing",
+  "Marketing Ops": "Marketing",
+  "B2B Sales": "Sales",
+  "Business Development": "Sales",
+  "Customer Success": "Sales",
+};
+
+function getCareerCategory(careerJourney: string[] = []): string {
+  for (const label of careerJourney) {
+    const cat = CAREER_LABEL_TO_CATEGORY[label];
+    if (cat) return cat;
+  }
+  return "";
+}
+
 function getTelegramBucket(careerJourney: string[] = []): TelegramBucket {
   const text = careerJourney.join(" ").toLowerCase();
 
@@ -158,6 +188,7 @@ function buildMessage(
     "",
     `📝 <b>Họ tên:</b> ${compact(application.full_name)}`,
     `📞 <b>SĐT/Zalo:</b> ${compact(application.phone)}`,
+    `🏢 <b>Lĩnh vực:</b> ${escapeHtml(getCareerCategory(careerJourney) || "Chưa xác định")}`,
     `🎯 <b>Vị trí:</b> ${escapeHtml(formatList(careerJourney))}`,
     `📍 <b>Location:</b> ${escapeHtml(formatWorkPreference(application.work_preference))}`,
     `🕐 <b>Thời gian:</b> ${escapeHtml(formatCreatedAt(application.created_at))}`,
