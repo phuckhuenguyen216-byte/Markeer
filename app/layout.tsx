@@ -31,6 +31,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
+      <Script id="chunk-error-reload" strategy="afterInteractive">{`
+        window.addEventListener('error', function(e) {
+          if (e && e.message && e.message.toLowerCase().includes('chunkloaderror')) {
+            window.location.reload();
+          }
+        });
+      `}</Script>
       <Script id="google-tag-manager" strategy="afterInteractive">
         {`
           (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

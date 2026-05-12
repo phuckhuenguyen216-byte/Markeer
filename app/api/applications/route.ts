@@ -137,8 +137,7 @@ export async function POST(request: NextRequest) {
 
     if (!body.career_journey?.length)
       errors.push("Vui lòng chọn ít nhất 1 vị trí");
-    if (!interestReasons.length)
-      errors.push("Vui lòng chọn điều hứng thú");
+    if (!interestReasons.length) errors.push("Vui lòng chọn điều hứng thú");
     if (selectedOtherInterest && !String(body.interest_other || "").trim())
       errors.push("Vui lòng nhập lý do khác");
     if (!body.why_apply?.trim())
@@ -250,7 +249,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    appendToSheet(data).catch(() => {});
+    appendToSheet(data).catch((e) =>
+      console.error("[Sheets] append failed:", e?.message ?? e),
+    );
 
     let telegramNotified = false;
     let telegramTarget = "";
