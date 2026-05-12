@@ -1,35 +1,33 @@
 "use client";
 
-import React, { useEffect, useMemo, useState, memo } from "react";
+import React, { useCallback, useEffect, useId, useMemo, useState, memo } from "react";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence, Easing, Variants } from "framer-motion";
 import "../i18n";
 
 /* ─────────────── Floating Particles ─────────────── */
-function seededRandom(seed: number) {
-  const x = Math.sin(seed) * 10000;
-  return x - Math.floor(x);
-}
+// memo + seeded RNG: deterministic particles to avoid hydration mismatch
 
-function createParticles(count: number, variant: number) {
-  return Array.from({ length: count }, (_, i) => {
-    const pick = (salt: number) =>
-      seededRandom((i + 1) * 97 + variant * 131 + salt);
+const hashStringToSeed = (value: string) => {
+  let hash = 2166136261;
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+};
 
-    return {
-      w: pick(1) * 5 + 2,
-      h: pick(2) * 5 + 2,
-      l: pick(3) * 100,
-      t: pick(4) * 100,
-      dy: -(pick(5) * 40 + 20),
-      dx: (pick(6) - 0.5) * 20,
-      dur: pick(7) * 4 + 4,
-      del: pick(8) * 6,
-    };
-  });
-}
+const createSeededRng = (seed: number) => {
+  let t = seed;
+  return () => {
+    t += 0x6d2b79f5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+};
 
-// memo + useMemo: particles generated once per mount, never re-created on parent re-render
 const Particles = memo(function Particles({
   count = 22,
   light = false,
@@ -37,18 +35,20 @@ const Particles = memo(function Particles({
   count?: number;
   light?: boolean;
 }) {
-  const particles = useMemo<
-    {
-      w: number;
-      h: number;
-      l: number;
-      t: number;
-      dy: number;
-      dx: number;
-      dur: number;
-      del: number;
-    }[]
-  >(() => createParticles(count, light ? 1 : 2), [count, light]);
+  const seedId = useId();
+  const particles = useMemo(() => {
+    const rand = createSeededRng(hashStringToSeed(`${seedId}-${count}`));
+    return Array.from({ length: count }, () => ({
+      w: rand() * 5 + 2,
+      h: rand() * 5 + 2,
+      l: rand() * 100,
+      t: rand() * 100,
+      dy: -(rand() * 40 + 20),
+      dx: (rand() - 0.5) * 20,
+      dur: rand() * 4 + 4,
+      del: rand() * 6,
+    }));
+  }, [count, seedId]);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -57,10 +57,10 @@ const Particles = memo(function Particles({
           key={i}
           className={`absolute rounded-full ${light ? "bg-red-400/25" : "bg-white/15"}`}
           style={{
-            width: `${p.w.toFixed(3)}px`,
-            height: `${p.h.toFixed(3)}px`,
-            left: `${p.l.toFixed(3)}%`,
-            top: `${p.t.toFixed(3)}%`,
+            width: p.w,
+            height: p.h,
+            left: `${p.l}%`,
+            top: `${p.t}%`,
           }}
           animate={{
             y: [0, p.dy, 0],
@@ -285,48 +285,26 @@ const ModalDecorations = memo(function ModalDecorations() {
     <>
       <motion.div
         className="absolute -top-32 -left-20 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,255,255,0.13) 0%, transparent 65%)",
-          filter: "blur(60px)",
-        }}
+        style={{ background: "radial-gradient(circle, rgba(255,255,255,0.13) 0%, transparent 65%)", filter: "blur(60px)" }}
         animate={{ scale: [1, 1.18, 1], opacity: [0.5, 0.9, 0.5] }}
         transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute -bottom-24 right-0 w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(253,164,175,0.18) 0%, transparent 70%)",
-          filter: "blur(50px)",
-        }}
+        style={{ background: "radial-gradient(circle, rgba(253,164,175,0.18) 0%, transparent 70%)", filter: "blur(50px)" }}
         animate={{ scale: [1.1, 1, 1.1] }}
-        transition={{
-          duration: 9,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2,
-        }}
+        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       />
       <motion.div
         className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)",
-        }}
+        style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)" }}
         animate={{ opacity: [0.4, 1, 0.4] }}
         transition={{ duration: 3, repeat: Infinity }}
       />
       <motion.div
         className="absolute inset-0 rounded-[28px] pointer-events-none"
         style={{ border: "1px solid rgba(255,255,255,0.1)" }}
-        animate={{
-          boxShadow: [
-            "0 0 0 0px rgba(239,68,68,0)",
-            "0 0 0 6px rgba(239,68,68,0.15)",
-            "0 0 0 0px rgba(239,68,68,0)",
-          ],
-        }}
+        animate={{ boxShadow: ["0 0 0 0px rgba(239,68,68,0)", "0 0 0 6px rgba(239,68,68,0.15)", "0 0 0 0px rgba(239,68,68,0)"] }}
         transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
       />
       <Particles count={30} light={false} />
@@ -356,16 +334,8 @@ const ModalFormContent = memo(function ModalFormContent({
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {[
-        {
-          type: "text",
-          placeholder: t("cta.namePlaceholder") || "Họ và tên",
-          required: true,
-        },
-        {
-          type: "email",
-          placeholder: t("cta.emailPlaceholder") || "Email của bạn",
-          required: true,
-        },
+        { type: "text", placeholder: t("cta.namePlaceholder") || "Họ và tên", required: true },
+        { type: "email", placeholder: t("cta.emailPlaceholder") || "Email của bạn", required: true },
       ].map((field, i) => (
         <motion.div
           key={i}
@@ -376,23 +346,10 @@ const ModalFormContent = memo(function ModalFormContent({
           <FancyInput {...field} />
         </motion.div>
       ))}
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.54 }}
-      >
-        <FancyInput
-          rows={4}
-          placeholder={
-            t("cta.messagePlaceholder") || "Bạn muốn bắt đầu từ đâu?"
-          }
-        />
+      <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.54 }}>
+        <FancyInput rows={4} placeholder={t("cta.messagePlaceholder") || "Bạn muốn bắt đầu từ đâu?"} />
       </motion.div>
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.66 }}
-      >
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.66 }}>
         <motion.button
           type="submit"
           disabled={isSubmitting}
@@ -400,50 +357,21 @@ const ModalFormContent = memo(function ModalFormContent({
           whileTap={!isSubmitting ? { scale: 0.98 } : {}}
           className={`cta-btn relative w-full py-[17px] rounded-2xl font-bold text-[17px] text-white ${isSubmitting ? "cursor-not-allowed" : ""}`}
           style={{
-            background: isSubmitting
-              ? "#9ca3af"
-              : "linear-gradient(135deg, #ef4444 0%, #e11d48 100%)",
-            boxShadow: isSubmitting
-              ? "none"
-              : "0 12px 36px rgba(239,68,68,0.45), inset 0 1px 0 rgba(255,255,255,0.15)",
+            background: isSubmitting ? "#9ca3af" : "linear-gradient(135deg, #ef4444 0%, #e11d48 100%)",
+            boxShadow: isSubmitting ? "none" : "0 12px 36px rgba(239,68,68,0.45), inset 0 1px 0 rgba(255,255,255,0.15)",
             transition: "background 0.3s ease, box-shadow 0.3s ease",
           }}
         >
           <AnimatePresence mode="wait">
             {isSubmitting ? (
-              <motion.span
-                key="loading"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex items-center justify-center gap-3"
-              >
-                <motion.span
-                  className="w-5 h-5 rounded-full border-2 border-white/40 border-t-white"
-                  animate={{ rotate: 360 }}
-                  transition={{
-                    duration: 0.75,
-                    repeat: Infinity,
-                    ease: "linear",
-                  }}
-                />
+              <motion.span key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center justify-center gap-3">
+                <motion.span className="w-5 h-5 rounded-full border-2 border-white/40 border-t-white" animate={{ rotate: 360 }} transition={{ duration: 0.75, repeat: Infinity, ease: "linear" }} />
                 Đang gửi...
               </motion.span>
             ) : (
-              <motion.span
-                key="idle"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex items-center justify-center gap-2"
-              >
+              <motion.span key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center justify-center gap-2">
                 {t("cta.button")}
-                <motion.span
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.4, repeat: Infinity }}
-                >
-                  →
-                </motion.span>
+                <motion.span animate={{ x: [0, 5, 0] }} transition={{ duration: 1.4, repeat: Infinity }}>→</motion.span>
               </motion.span>
             )}
           </AnimatePresence>
@@ -468,98 +396,43 @@ const ModalFormCard = memo(function ModalFormCard({
         background: "rgba(255,255,255,0.97)",
         backdropFilter: "blur(24px)",
         border: "1px solid rgba(255,255,255,0.3)",
-        boxShadow:
-          "0 32px 80px rgba(0,0,0,0.22), 0 8px 24px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9)",
+        boxShadow: "0 32px 80px rgba(0,0,0,0.22), 0 8px 24px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9)",
       }}
     >
-      <div
-        className="absolute top-0 left-10 right-10 h-[3px] rounded-b-full"
-        style={{
-          background: "linear-gradient(90deg, #ef4444, #f43f5e, #ef4444)",
-        }}
-      />
-      <div
-        className="absolute -top-8 -right-8 w-32 h-32 rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(239,68,68,0.08) 0%, transparent 70%)",
-        }}
-      />
+      <div className="absolute top-0 left-10 right-10 h-[3px] rounded-b-full" style={{ background: "linear-gradient(90deg, #ef4444, #f43f5e, #ef4444)" }} />
+      <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(239,68,68,0.08) 0%, transparent 70%)" }} />
 
       <AnimatePresence>
         {submitted && <SuccessOverlay onReset={() => setSubmitted(false)} />}
       </AnimatePresence>
 
       {/* Form header */}
-      <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.22 }}
-        className="mb-7"
-      >
+      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }} className="mb-7">
         <motion.div
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.28, type: "spring", stiffness: 280 }}
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4"
-          style={{
-            background:
-              "linear-gradient(135deg,rgba(239,68,68,0.1),rgba(244,63,94,0.06))",
-            border: "1px solid rgba(239,68,68,0.2)",
-            color: "#dc2626",
-          }}
+          style={{ background: "linear-gradient(135deg,rgba(239,68,68,0.1),rgba(244,63,94,0.06))", border: "1px solid rgba(239,68,68,0.2)", color: "#dc2626" }}
         >
-          <motion.span
-            animate={{ scale: [1, 1.4, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            ⚡
-          </motion.span>
+          <motion.span animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>⚡</motion.span>
           {t("cta.badge")}
         </motion.div>
         <h3 className="text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-[1.2] bg-gradient-to-r from-gray-900 via-red-600 to-rose-500 bg-clip-text text-transparent">
           {t("cta.headline")}
         </h3>
-        <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-          {t("cta.description")}
-        </p>
+        <p className="mt-2 text-sm text-gray-500 leading-relaxed">{t("cta.description")}</p>
       </motion.div>
 
-      {!submitted && (
-        <ModalFormContent t={t} onSubmitSuccess={() => setSubmitted(true)} />
-      )}
+      {!submitted && <ModalFormContent t={t} onSubmitSuccess={() => setSubmitted(true)} />}
 
       {/* Trust badges */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="mt-6 flex flex-wrap gap-5 justify-center lg:justify-start"
-      >
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="mt-6 flex flex-wrap gap-5 justify-center lg:justify-start">
         {[t("cta.noCard"), t("cta.cancelAnytime")].map((label, i) => (
-          <span
-            key={i}
-            className="flex items-center gap-2 text-sm text-gray-500 font-medium"
-          >
-            <span
-              className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{
-                background: "linear-gradient(135deg,#22c55e,#16a34a)",
-                boxShadow: "0 2px 8px rgba(34,197,94,0.3)",
-              }}
-            >
-              <svg
-                className="w-3 h-3 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={3}
-                  d="M5 13l4 4L19 7"
-                />
+          <span key={i} className="flex items-center gap-2 text-sm text-gray-500 font-medium">
+            <span className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "linear-gradient(135deg,#22c55e,#16a34a)", boxShadow: "0 2px 8px rgba(34,197,94,0.3)" }}>
+              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
               </svg>
             </span>
             {label}
@@ -580,17 +453,15 @@ function RegistrationModal({
   onClose: () => void;
   t: (key: string) => string;
 }) {
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     onClose();
-  };
+  }, [onClose]);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") handleClose();
-    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") handleClose(); };
     if (isOpen) document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [isOpen]);
+  }, [handleClose, isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -618,11 +489,7 @@ function RegistrationModal({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.35 }}
           className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
-          style={{
-            background: "rgba(0,0,0,0.72)",
-            backdropFilter: "blur(12px)",
-            padding: "12px",
-          }}
+          style={{ background: "rgba(0,0,0,0.72)", backdropFilter: "blur(12px)", padding: "12px" }}
           onClick={handleClose}
         >
           {/* ── Modal shell – near-fullscreen ── */}
@@ -638,10 +505,8 @@ function RegistrationModal({
               width: "calc(100vw - 24px)",
               maxHeight: "100vh",
               borderRadius: 28,
-              background:
-                "linear-gradient(148deg, #dc2626 0%, #be123c 55%, #9f1239 100%)",
-              boxShadow:
-                "0 48px 140px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.15)",
+              background: "linear-gradient(148deg, #dc2626 0%, #be123c 55%, #9f1239 100%)",
+              boxShadow: "0 48px 140px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.15)",
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -650,50 +515,26 @@ function RegistrationModal({
 
             {/* ── Close button ── */}
             <motion.button
-              whileHover={{
-                scale: 1.12,
-                rotate: 90,
-                background: "rgba(255,255,255,0.3)",
-              }}
+              whileHover={{ scale: 1.12, rotate: 90, background: "rgba(255,255,255,0.3)" }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 20 }}
               onClick={handleClose}
               className="absolute top-4 right-4 z-40 w-10 h-10 rounded-full flex items-center justify-center"
-              style={{
-                background: "rgba(255,255,255,0.18)",
-                backdropFilter: "blur(8px)",
-                border: "1px solid rgba(255,255,255,0.28)",
-              }}
+              style={{ background: "rgba(255,255,255,0.18)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.28)" }}
             >
-              <svg
-                className="w-4 h-4 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M6 18L18 6M6 6l12 12"
-                />
+              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </motion.button>
 
             {/* ── Two-column layout ── */}
-            <div
-              className="relative grid lg:grid-cols-2 gap-0 overflow-y-auto"
-              style={{ maxHeight: "94vh" }}
-            >
+            <div className="relative grid lg:grid-cols-2 gap-0 overflow-y-auto" style={{ maxHeight: "94vh" }}>
+
               {/* ════ LEFT: Form card ════ */}
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{
-                  delay: 0.12,
-                  duration: 0.65,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
+                transition={{ delay: 0.12, duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="flex flex-col justify-center p-6 sm:p-8 lg:p-10"
               >
                 {/* ModalFormCard owns submitted state – isolated so modal shell never re-renders */}
@@ -704,39 +545,17 @@ function RegistrationModal({
               <motion.div
                 initial={{ opacity: 0, x: 60 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{
-                  delay: 0.18,
-                  duration: 0.75,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
+                transition={{ delay: 0.18, duration: 0.75, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="hidden lg:flex flex-col items-center justify-end relative overflow-visible py-6 pr-4"
               >
                 <motion.div
                   initial={{ opacity: 0, scale: 0.7, y: 10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{
-                    delay: 0.7,
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 18,
-                  }}
+                  transition={{ delay: 0.7, type: "spring", stiffness: 200, damping: 18 }}
                   className="absolute top-10 right-6 px-5 py-4 rounded-2xl z-20"
-                  style={{
-                    background: "rgba(255,255,255,0.18)",
-                    backdropFilter: "blur(16px)",
-                    border: "1px solid rgba(255,255,255,0.28)",
-                    boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
-                  }}
+                  style={{ background: "rgba(255,255,255,0.18)", backdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.28)", boxShadow: "0 8px 32px rgba(0,0,0,0.12)" }}
                 >
-                  <motion.p
-                    animate={{ y: [0, -4, 0] }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="text-white text-sm font-semibold whitespace-nowrap"
-                  >
+                  <motion.p animate={{ y: [0, -4, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} className="text-white text-sm font-semibold whitespace-nowrap">
                     {t("cta.point3")} 🤖
                   </motion.p>
                 </motion.div>
@@ -744,86 +563,46 @@ function RegistrationModal({
                 <motion.div
                   initial={{ opacity: 0, scale: 0.7 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{
-                    delay: 0.85,
-                    type: "spring",
-                    stiffness: 220,
-                    damping: 18,
-                  }}
+                  transition={{ delay: 0.85, type: "spring", stiffness: 220, damping: 18 }}
                   whileHover={{ scale: 1.06, y: -3 }}
                   className="absolute bottom-[38%] left-2 z-20 flex items-center gap-3 px-4 py-3 rounded-2xl"
-                  style={{
-                    background: "rgba(255,255,255,0.94)",
-                    backdropFilter: "blur(16px)",
-                    border: "1px solid rgba(239,68,68,0.1)",
-                    boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-                  }}
+                  style={{ background: "rgba(255,255,255,0.94)", backdropFilter: "blur(16px)", border: "1px solid rgba(239,68,68,0.1)", boxShadow: "0 8px 32px rgba(0,0,0,0.1)" }}
                 >
-                  <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{
-                      background: "linear-gradient(135deg,#ef4444,#f43f5e)",
-                      boxShadow: "0 4px 12px rgba(239,68,68,0.4)",
-                    }}
-                  >
-                    <svg
-                      className="w-4 h-4 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "linear-gradient(135deg,#ef4444,#f43f5e)", boxShadow: "0 4px 12px rgba(239,68,68,0.4)" }}>
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   </div>
                   <div>
-                    <p className="text-[11px] text-gray-400 font-semibold uppercase tracking-wider leading-none">
-                      Độ hài lòng
-                    </p>
-                    <p className="text-sm font-extrabold text-gray-900 mt-0.5 leading-none">
-                      98.5%
-                    </p>
+                    <p className="text-[11px] text-gray-400 font-semibold uppercase tracking-wider leading-none">Độ hài lòng</p>
+                    <p className="text-sm font-extrabold text-gray-900 mt-0.5 leading-none">98.5%</p>
                   </div>
                 </motion.div>
 
                 <div className="relative w-full flex items-end justify-center overflow-visible">
                   <motion.div
                     className="absolute inset-0 rounded-full pointer-events-none"
-                    style={{
-                      background:
-                        "radial-gradient(circle, rgba(255,255,255,0.22) 0%, transparent 70%)",
-                      filter: "blur(40px)",
-                    }}
+                    style={{ background: "radial-gradient(circle, rgba(255,255,255,0.22) 0%, transparent 70%)", filter: "blur(40px)" }}
                     animate={{ opacity: [0.4, 0.9, 0.4], scale: [1, 1.1, 1] }}
-                    transition={{
-                      duration: 5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                   />
-                  <div
-                    className="robot-float-2 scan-wrap w-full"
-                    style={{
-                      filter:
-                        "drop-shadow(0 28px 56px rgba(0,0,0,0.3)) drop-shadow(0 0 50px rgba(255,255,255,0.08))",
-                    }}
-                  >
-                    <div
-                      className="scan-line scan-line-w"
-                      style={{ animationDelay: "1.6s" }}
-                    />
-                    <img
+                  <div className="robot-float-2 scan-wrap w-full" style={{ filter: "drop-shadow(0 28px 56px rgba(0,0,0,0.3)) drop-shadow(0 0 50px rgba(255,255,255,0.08))" }}>
+                    <div className="scan-line scan-line-w" style={{ animationDelay: "1.6s" }} />
+                    <Image
                       src="/img/mascot/zara-anh.png"
                       alt="ZARA AI"
+                      width={580}
+                      height={580}
+                      sizes="(max-width: 1024px) 90vw, 580px"
                       className="w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[500px] xl:max-w-[580px] mx-auto h-auto object-contain transition-transform duration-700 hover:scale-105"
                     />
                   </div>
-                  <p
-                    className="absolute bottom-4 left-1/2 -translate-x-1/2 text-3xl font-extrabold tracking-[0.18em] text-white"
-                    style={{ textShadow: "0 0 18px rgba(255,255,255,0.7)" }}
-                  >
+                  <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-3xl font-extrabold tracking-[0.18em] text-white" style={{ textShadow: "0 0 18px rgba(255,255,255,0.7)" }}>
                     ZARA
                   </p>
                 </div>
               </motion.div>
+
             </div>
           </motion.div>
         </motion.div>
@@ -865,7 +644,7 @@ export default function CTASection() {
       setActive((prev) => (prev + 1) % points.length);
     }, 2500);
     return () => clearInterval(interval);
-  }, []);
+  }, [points.length]);
 
   return (
     <section style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -988,9 +767,12 @@ export default function CTASection() {
                 }}
               >
                 <div className="scan-line" />
-                <img
+                <Image
                   src="/img/mascot/Dex-logo.png"
                   alt="AI Assistant"
+                  width={560}
+                  height={560}
+                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 70vw, 560px"
                   className="
                     w-full
                     max-w-[420px]
