@@ -39,6 +39,11 @@ const SocialMedia = () => {
   window.open("https://www.facebook.com/markeeaimarketing", "_blank");
 };
 
+const handleZaloClick = (e: React.MouseEvent) => {
+  e.stopPropagation();
+  window.open("https://zalo.me/2031335970632550296", "_blank");
+};
+
 const handleDiscordClick = (e: React.MouseEvent) => {
   e.stopPropagation();
   window.open("https://discord.com/channels/1443163286773170218/1443240299416522924", "_blank");
@@ -158,6 +163,25 @@ const handleTelegramClick = (e: React.MouseEvent) => {
 
         <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-sm px-3 py-2 rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
           Chat qua Facebook
+        </div>
+      </button>
+
+      <button
+        className="relative w-14 h-14 transition-all duration-300 flex items-center justify-center shake-phone ripple-auto hover:scale-105"
+        aria-label="Contact via Zalo"
+        onClick={handleZaloClick}
+      >
+        <span className="ripple-circle pointer-events-none"></span>
+        <span className="ripple-circle ripple-2 pointer-events-none"></span>
+
+        <img
+          src="/icons/zalo.svg"
+          alt="Zalo"
+          className="relative z-10 w-14 h-14 peer drop-shadow-lg"
+        />
+
+        <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-sm px-3 py-2 rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+          Chat qua Zalo
         </div>
       </button>
 

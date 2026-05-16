@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { isValidEmail, isValidPhone, isValidUrl } from "@/lib/application";
 import Mascot from "@/app/components/MascotGuide";
 import type { MascotState } from "@/app/components/Mascot";
@@ -1195,13 +1196,24 @@ function getSmartGuide(
 /* ═══════════════════════════════════════════════ */
 export default function ApplicationWizard({
   onClose,
+  startAtSuccess = false,
 }: {
   onClose: () => void;
+  startAtSuccess?: boolean;
 }) {
-  const [showIntro, setShowIntro] = useState(true);
+  const [showIntro, setShowIntro] = useState(!startAtSuccess);
   const [step, setStep] = useState(0);
-  const [form, setForm] = useState<FormData>(EMPTY);
-  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState<FormData>(
+    startAtSuccess
+      ? {
+          ...EMPTY,
+          full_name: "Nguyễn Văn Test",
+          email: "test@example.com",
+          career_journey: ["Frontend Developer", "DevOps / Platform"],
+        }
+      : EMPTY,
+  );
+  const [submitted, setSubmitted] = useState(startAtSuccess);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [checking, setChecking] = useState(false);
@@ -2115,7 +2127,12 @@ export default function ApplicationWizard({
       <div className="wz-overlay">
         <div className="wz-container">
           {submitted ? (
-            <SuccessScreen onClose={onClose} name={form.full_name} />
+            <SuccessScreen
+              onClose={onClose}
+              name={form.full_name}
+              email={form.email}
+              careerJourney={form.career_journey}
+            />
           ) : showIntro ? (
             <IntroScreen
               form={form}
@@ -3767,244 +3784,224 @@ function ReviewSection({
 function SuccessScreen({
   onClose,
   name,
+  email = "",
+  careerJourney = [],
 }: {
   onClose: () => void;
   name: string;
+  email?: string;
+  careerJourney?: string[];
 }) {
   const displayName = getCandidateName(name) || "bạn";
+  const positionText = careerJourney.length ? careerJourney.join(" · ") : "—";
+  const emailText = email || "—";
+  const now = new Date();
+  const timeStr =
+    now.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }) +
+    " · " +
+    now.toLocaleDateString("vi-VN");
+  const socials = [
+    {
+      key: "fb",
+      href: "https://www.facebook.com/markeeaimarketing",
+      mascot: "/img/mascot/Dex-logo.png",
+      name: "Markee AI Marketing",
+      meta: "2.4k người theo dõi",
+      desc: "Like & follow để nhận internship, workshop và tài liệu mới sớm nhất.",
+      button: "Theo dõi ngay",
+      icon: (
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+        </svg>
+      ),
+    },
+    {
+      key: "yt",
+      href: "https://www.youtube.com/@markeeai",
+      mascot: "/img/mascot/Theo-logo.png",
+      name: "YouTube · Markee AI",
+      meta: "Video thực chiến AI",
+      desc: "Subscribe để xem case study AI Marketing và chuẩn bị tốt hơn cho phỏng vấn.",
+      button: "Subscribe",
+      icon: (
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+        </svg>
+      ),
+    },
+    {
+      key: "li",
+      href: "https://www.linkedin.com/in/markee-ai-345489408/?isSelfProfile=true",
+      mascot: "/img/mascot/Max-logo.png",
+      name: "LinkedIn · Markee AI",
+      meta: "LinkedIn Company Page",
+      desc: "Follow page để cập nhật tuyển dụng và kết nối với team Markee.",
+      button: "Follow",
+      icon: (
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+        </svg>
+      ),
+    },
+    {
+      key: "tt",
+      href: "https://www.tiktok.com/@markee_ai",
+      mascot: "/img/mascot/Pip-logo.png",
+      name: "TikTok · Markee AI",
+      meta: "Tips AI hằng ngày",
+      desc: "Follow TikTok để nhận tips AI Marketing ngắn gọn mỗi ngày.",
+      button: "Follow TikTok",
+      icon: (
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+        </svg>
+      ),
+    },
+  ];
+
   return (
     <div className="wz-success">
-      {/* Marquee ticker */}
-      <div className="wz-success-marquee">
-        <span>
-          Chào mừng bạn đến với Markee AI &nbsp;&bull;&nbsp; Welcome to Markee
-          AI &nbsp;&bull;&nbsp; Chào mừng bạn đến với Markee AI
-          &nbsp;&bull;&nbsp; Welcome to Markee AI &nbsp;&bull;&nbsp;
-        </span>
-        <span aria-hidden="true">
-          Chào mừng bạn đến với Markee AI &nbsp;&bull;&nbsp; Welcome to Markee
-          AI &nbsp;&bull;&nbsp; Chào mừng bạn đến với Markee AI
-          &nbsp;&bull;&nbsp; Welcome to Markee AI &nbsp;&bull;&nbsp;
-        </span>
-      </div>
-
-      {/* Hero */}
-      <div className="wz-sc-hero">
-        <h2 className="wz-sc-hero-title">Hồ sơ đã được gửi! 🎉</h2>
-        <p className="wz-sc-hero-sub">
-          Cảm ơn <strong>{displayName}</strong>! Team sẽ review và phản hồi qua
-          email trong <strong>3–5 ngày làm việc</strong>.
-        </p>
-      </div>
-
-      {/* Next steps */}
-      <div className="wz-success-next">
-        <h3 className="wz-next-heading">Tiếp theo sẽ như thế nào?</h3>
-        <div className="wz-next-steps">
-          <div className="wz-next-step">
-            <div className="wz-ns-track">
-              <div className="wz-ns-num">1</div>
-              <div className="wz-ns-line" />
-            </div>
-            <div className="wz-ns-content">
-              <div className="wz-ns-title">Team review hồ sơ</div>
-              <div className="wz-ns-desc">
-                Team tuyển dụng sẽ đọc kỹ thông tin và hồ sơ bạn đã chia sẻ
+      <div className="wz-success-inner">
+        <div className="wz-success-scroll">
+          <div className="wz-success-page">
+            <section className="wz-result-hero">
+              <div className="wz-result-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
               </div>
+              <div className="wz-result-copy">
+                <div className="wz-result-badges">
+                  <span>Đã nhận hồ sơ</span>
+                  <span>Email tự động · dưới 30 giây</span>
+                </div>
+                <h2>
+                  Hồ sơ đã được gửi <em>thành công!</em>
+                </h2>
+                <p>
+                  Cảm ơn <strong>{displayName}</strong>. Trong lúc chờ email phản hồi,
+                  bạn có thể làm 2 việc nhanh bên dưới để không bỏ lỡ tin tuyển dụng
+                  mới và trải nghiệm sản phẩm của Markee.
+                </p>
+              </div>
+              <Image className="wz-result-mascot" src="/img/mascot/Dex-logo.png" alt="Dex" width={90} height={90} />
+              <div className="wz-result-summary">
+                <div>
+                  <span>Vị trí</span>
+                  <strong>{positionText}</strong>
+                </div>
+                <div>
+                  <span>Email</span>
+                  <strong>{emailText}</strong>
+                </div>
+                <div>
+                  <span>Thời gian gửi</span>
+                  <strong>{timeStr}</strong>
+                </div>
+              </div>
+            </section>
+
+            <div className="wz-result-layout">
+              <section className="wz-follow-panel">
+                <div className="wz-panel-eyebrow">Ưu tiên 1 · Tăng tương tác Markee</div>
+                <div className="wz-follow-head">
+                  <div>
+                    <h3>Like & follow Markee sau khi gửi hồ sơ</h3>
+                    <p>
+                      Follow kênh bạn dùng nhiều nhất để nhận workshop, tài liệu AI và tin tuyển dụng sớm. Nếu tiện,
+                      follow cả 4 kênh để ủng hộ Markee nhé.
+                    </p>
+                  </div>
+                  <div className="wz-follow-mascots">
+                    <Image src="/img/mascot/Dex-logo.png" alt="Dex" width={40} height={40} />
+                    <Image src="/img/mascot/Theo-logo.png" alt="Theo" width={40} height={40} />
+                    <Image src="/img/mascot/Max-logo.png" alt="Max" width={40} height={40} />
+                    <Image src="/img/mascot/Pip-logo.png" alt="Pip" width={40} height={40} />
+                  </div>
+                </div>
+
+                <div className="wz-follow-reason">
+                  <span>Vì sao nên follow?</span>
+                  <strong>Tin tuyển dụng và workshop thường được cập nhật trên social trước khi lên website.</strong>
+                </div>
+
+                <div className="wz-follow-list">
+                  {socials.map((social) => (
+                    <a key={social.key} href={social.href} target="_blank" rel="noopener noreferrer" className={`wz-follow-card wz-follow-card-${social.key}`}>
+                      <Image className="wz-follow-mascot" src={social.mascot} alt="" width={48} height={48} />
+                      <div className="wz-follow-icon">{social.icon}</div>
+                      <div className="wz-follow-copy">
+                        <strong>{social.name}</strong>
+                        <span>{social.meta}</span>
+                        <p>{social.desc}</p>
+                      </div>
+                      <div className="wz-follow-btn">{social.button}</div>
+                    </a>
+                  ))}
+                </div>
+              </section>
+
+              <aside className="wz-after-submit">
+                <section className="wz-app-trial-card">
+                  <Image src="/img/mascot/Dex-logo.png" alt="" width={96} height={96} />
+                  <div className="wz-panel-eyebrow">Ưu tiên 2 · Trải nghiệm app</div>
+                  <h3>Thử Markee AI trong lúc chờ kết quả</h3>
+                  <p>
+                    Tạo nội dung, lên lịch đa kênh và xem cách team Markee dùng AI Marketing trong công việc thật.
+                  </p>
+                  <a href="https://app.markeeai.com" target="_blank" rel="noopener noreferrer" className="wz-app-trial-btn">
+                    Dùng thử Markee AI miễn phí →
+                  </a>
+                  <div className="wz-app-trust">
+                    <span>Miễn phí 1 tháng</span>
+                    <span>1000 AI Credits</span>
+                    <span>Không cần thẻ tín dụng</span>
+                  </div>
+                </section>
+
+                <section className="wz-process-card">
+                  <div className="wz-process-title">Tiếp theo sẽ như thế nào?</div>
+                  <div className="wz-process-step">
+                    <span>1</span>
+                    <div>
+                      <strong>Team review hồ sơ</strong>
+                      <p>Tuyển dụng đọc kỹ thông tin bạn đã chia sẻ.</p>
+                    </div>
+                  </div>
+                  <div className="wz-process-step">
+                    <span>2</span>
+                    <div>
+                      <strong>Email phản hồi</strong>
+                      <p>Hệ thống gửi email tự động, nhớ check cả Spam.</p>
+                    </div>
+                  </div>
+                  <div className="wz-process-step">
+                    <span>3</span>
+                    <div>
+                      <strong>Phỏng vấn online nếu phù hợp</strong>
+                      <p>Buổi gặp ngắn để team và bạn hiểu nhau hơn.</p>
+                    </div>
+                  </div>
+                </section>
+              </aside>
             </div>
+
+            <div className="wz-sent-email-note">
+              <span>i</span>
+              <p>
+                Nhớ kiểm tra <strong>{email ? email : "email của bạn"}</strong> thường xuyên, kể cả thư mục <strong>Spam / Promotions</strong>.
+              </p>
+            </div>
+
+            <button onClick={onClose} className="wz-sent-back">
+              ← Quay lại trang tuyển dụng
+            </button>
           </div>
-          <div className="wz-next-step">
-            <div className="wz-ns-track">
-              <div className="wz-ns-num">2</div>
-              <div className="wz-ns-line" />
-            </div>
-            <div className="wz-ns-content">
-              <div className="wz-ns-title">
-                Email phản hồi trong 3–5 ngày làm việc
-              </div>
-              <div className="wz-ns-desc">
-                Markee gửi kết quả qua email — nhớ kiểm tra cả thư mục spam nhé
-              </div>
-            </div>
-          </div>
-          <div className="wz-next-step">
-            <div className="wz-ns-track">
-              <div className="wz-ns-num">3</div>
-            </div>
-            <div className="wz-ns-content">
-              <div className="wz-ns-title">Phỏng vấn online nếu phù hợp</div>
-              <div className="wz-ns-desc">
-                Một buổi gặp ngắn để team và bạn hiểu nhau hơn trước khi quyết
-                định
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
-
-      {/* Community join section */}
-      <div className="wz-comm-section">
-        <h3 className="wz-comm-title">
-          Tham gia cộng đồng
-          <br />
-          Markee AI ngay hôm nay!
-        </h3>
-        <p className="wz-comm-desc">
-          Đây là nơi <strong>internship mới, workshop thực chiến</strong> và tài
-          liệu AI Marketing được chia sẻ <strong>sớm nhất</strong> — trước cả
-          website!
-        </p>
-
-        <div className="wz-proof-bar">
-          <span className="wz-proof-logo">MARK</span>
-          🔥 Hàng nghìn bạn trẻ đã tham gia cộng đồng Markee
-        </div>
-
-        <div className="wz-tip-box">
-          <span className="wz-tip-icon">💡</span>
-          <span>
-            <strong>Mẹo nhỏ:</strong> Intern tại Markee thường được thông báo về
-            vị trí mới, tài liệu độc quyền và workshop thực chiến{" "}
-            <strong>sớm nhất qua các kênh dưới đây</strong> — trước cả website!
-          </span>
-        </div>
-
-        {/* 4 social cards */}
-        <div className="wz-soc-grid">
-          <a
-            href="https://www.facebook.com/markeeaimarketing"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="wz-soc-card"
-          >
-            <div className="wz-soc-card-header">
-              <div className="wz-soc-icon wz-soc-icon-fb">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                </svg>
-              </div>
-              <div>
-                <div className="wz-soc-name">Markee AI Marketing</div>
-                <div className="wz-soc-meta">2.4k người theo dõi</div>
-              </div>
-            </div>
-            <div className="wz-soc-body">
-              <strong>Internship mới nhất</strong> + workshop AI/Marketing được
-              thông báo sớm nhất tại đây.
-            </div>
-            <div className="wz-soc-btn wz-soc-btn-fb">👍 Theo dõi ngay</div>
-          </a>
-
-          <a
-            href="https://www.youtube.com/@markeeai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="wz-soc-card"
-          >
-            <div className="wz-soc-card-header">
-              <div className="wz-soc-icon wz-soc-icon-yt">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                </svg>
-              </div>
-              <div>
-                <div className="wz-soc-name">Markee AI</div>
-                <div className="wz-soc-meta">Video thực chiến AI</div>
-              </div>
-            </div>
-            <div className="wz-soc-body">
-              <strong>Case study &amp; hướng dẫn</strong> AI Marketing thực tế —
-              chuẩn bị tốt hơn cho buổi phỏng vấn!
-            </div>
-            <div className="wz-soc-btn wz-soc-btn-yt">▶ Subscribe</div>
-          </a>
-
-          <a
-            href="https://www.linkedin.com/company/markeeai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="wz-soc-card"
-          >
-            <div className="wz-soc-card-header">
-              <div className="wz-soc-icon wz-soc-icon-li">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                </svg>
-              </div>
-              <div>
-                <div className="wz-soc-name">Markee AI</div>
-                <div className="wz-soc-meta">LinkedIn Company Page</div>
-              </div>
-            </div>
-            <div className="wz-soc-body">
-              <strong>Network với team Markee</strong> — nổi bật hơn trong mắt
-              hiring manager khi bạn follow.
-            </div>
-            <div className="wz-soc-btn wz-soc-btn-li">🔗 Follow</div>
-          </a>
-
-          <a
-            href="https://www.tiktok.com/@markeeai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="wz-soc-card"
-          >
-            <div className="wz-soc-card-header">
-              <div className="wz-soc-icon wz-soc-icon-tt">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
-                </svg>
-              </div>
-              <div>
-                <div className="wz-soc-name">Markee AI</div>
-                <div className="wz-soc-meta">Tips AI hằng ngày</div>
-              </div>
-            </div>
-            <div className="wz-soc-body">
-              <strong>Tips AI Marketing ngắn</strong> mỗi ngày — nạp kiến thức
-              trong lúc chờ kết quả phỏng vấn!
-            </div>
-            <div className="wz-soc-btn wz-soc-btn-tt">♩ Follow TikTok</div>
-          </a>
-        </div>
-
-        <a
-          href="https://app.markeeai.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="wz-big-cta"
-        >
-          🚀 Khám phá thêm về Markee AI
-        </a>
-
-        <button onClick={onClose} className="wz-back-link">
-          ← Quay lại trang tuyển dụng
-        </button>
       </div>
     </div>
   );
 }
-
 /* ══════════════════════════════════════════════════
    CSS
    ══════════════════════════════════════════════════ */
@@ -4344,7 +4341,7 @@ const wizardCSS = `
 
 /* ─── Interest pills ─ stronger contrast for selected state ─── */
 .wz-interest-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
-.wz-interest-pill{display:flex;align-items:center;padding:9px 16px;border-radius:100px;border:1px solid #e2e8f0;background:#fff;font-size:13px;font-weight:500;color:#475569;cursor:pointer;transition:all .18s cubic-bezier(.22,1,.36,1)}
+.wz-interest-pill{display:flex;align-items:center;min-height:44px;padding:9px 16px;border-radius:100px;border:1px solid #e2e8f0;background:#fff;font-size:13px;font-weight:500;color:#475569;cursor:pointer;transition:all .18s cubic-bezier(.22,1,.36,1)}
 .wz-interest-pill:hover{border-color:#94a3b8;background:#f8fafc;color:#0f172a;transform:translateY(-1px)}
 .wz-interest-pill.checked{border-color:#ef4444;background:#fef2f2;color:#b91c1c;font-weight:700;box-shadow:0 2px 8px rgba(239,68,68,.12)}
 .wz-interest-other{display:grid;gap:7px;max-width:560px;margin-top:12px}
@@ -4384,7 +4381,7 @@ const wizardCSS = `
 .wz-work-card-head>span{width:26px;height:26px;border-radius:9px;background:#f1f5f9;color:#64748b;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0}
 .wz-work-card.checked .wz-work-card-head>span{background:#ef4444;color:#fff}
 .wz-work-location-pills{display:flex;flex-wrap:wrap;gap:7px}
-.wz-work-location-pill{display:inline-flex;align-items:center;gap:5px;min-height:34px;border-radius:999px;border:1px solid #dbe4ef;background:#fff;color:#475569;padding:0 11px;font-size:12px;font-weight:650;cursor:pointer;transition:all .18s ease}
+.wz-work-location-pill{display:inline-flex;align-items:center;gap:5px;min-height:42px;border-radius:999px;border:1px solid #dbe4ef;background:#fff;color:#475569;padding:0 12px;font-size:12px;font-weight:650;cursor:pointer;transition:all .18s ease}
 .wz-work-location-pill:hover{border-color:#fca5a5;background:#fff7f7;color:#b91c1c;transform:translateY(-1px)}
 .wz-work-location-pill.checked{border-color:#ef4444;background:#ef4444;color:#fff;box-shadow:0 5px 12px rgba(239,68,68,.16)}
 .wz-work-location-pill span{font-size:11px;font-weight:900}
@@ -4437,7 +4434,7 @@ const wizardCSS = `
 .wz-review-card.has-empty{border-color:#fde68a;background:#fffbeb}
 .wz-rc-head{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#f8fafc;border-bottom:1px solid #f1f5f9}
 .wz-rc-head-title{font-size:13px;font-weight:700;color:#0f172a;letter-spacing:-.01em}
-.wz-rc-edit-btn{padding:5px 12px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;font-size:12px;font-weight:600;color:#64748b;cursor:pointer;transition:all .18s}
+.wz-rc-edit-btn{min-height:40px;padding:8px 14px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;font-size:12px;font-weight:700;color:#64748b;cursor:pointer;transition:all .18s}
 .wz-rc-edit-btn:hover{background:#fef2f2;border-color:#fca5a5;color:#dc2626}
 .wz-rc-body{padding:14px 18px}
 .wz-rv-row{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid #f8fafc;font-size:13px}
@@ -4448,7 +4445,7 @@ const wizardCSS = `
 .wz-submit-notice{padding:14px 18px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0;font-size:13px;color:#64748b;margin-top:8px;line-height:1.5}
 
 /* ─── Success Screen ─── */
-.wz-success{display:flex;flex-direction:column;align-items:center;flex:1;overflow-y:auto;overflow-x:hidden;background:#fafafa;position:relative;text-align:center}
+.wz-success-_legacy{}
 .wz-success-marquee{display:none}
 .wz-success-marquee span{display:inline-block;white-space:nowrap;font-size:11px;font-weight:800;color:#fff;letter-spacing:.06em;text-transform:uppercase;animation:wzMarquee 26s linear infinite;flex-shrink:0}
 @keyframes wzMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -4897,10 +4894,11 @@ const wizardCSS = `
 .wz-section-card[data-guide="note"]{margin-bottom:36px}
 
 @media(max-width:640px){
+  .wz-intro{overflow-y:auto;-webkit-overflow-scrolling:touch}
   .wz-progress-section{padding:8px 18px 7px}
   .wz-step-btn{min-height:40px}
   .wz-intro-content{padding:0}
-  .wz-intro-panel{grid-template-columns:1fr;padding:22px;gap:18px;border-radius:0}
+  .wz-intro-panel{height:auto;min-height:100%;overflow:visible;grid-template-columns:1fr;padding:22px;gap:18px;border-radius:0}
   .wz-intro-mascot-stage{height:176px;padding-left:0}
   .wz-intro-mini-guide{left:50%;top:auto;bottom:0;width:min(280px,100%);transform:translateX(-50%);padding:8px 10px 8px 32px;text-align:left;animation:none}
   .wz-intro-mini-guide::before{display:none}
@@ -5009,35 +5007,372 @@ const wizardCSS = `
   .wz-progress-section{padding:8px 12px 7px}
 }
 
-/* ── Community Join Section ── */
-.wz-comm-section{padding:0 20px 28px;text-align:center}
-.wz-comm-title{font-size:21px;font-weight:800;line-height:1.3;color:#0f172a;margin:0 0 8px}
-.wz-comm-desc{font-size:13px;color:#475569;line-height:1.6;margin:0 0 14px}
-.wz-proof-bar{display:inline-flex;align-items:center;gap:8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:#c2410c;margin-bottom:14px}
-.wz-proof-logo{background:#ef4444;color:#fff;font-weight:800;font-size:10px;padding:2px 5px;border-radius:4px;letter-spacing:.5px}
-.wz-tip-box{display:flex;gap:10px;background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:11px 13px;text-align:left;font-size:12px;color:#92400e;line-height:1.55;margin-bottom:16px}
-.wz-tip-icon{font-size:15px;flex-shrink:0;margin-top:1px}
-.wz-soc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;text-align:left}
-.wz-soc-card{display:flex;flex-direction:column;gap:8px;background:#fff;border:1.5px solid #e2e8f0;border-radius:13px;padding:13px;text-decoration:none;color:inherit;transition:border-color .2s,box-shadow .2s}
-.wz-soc-card:hover{border-color:#cbd5e1;box-shadow:0 3px 12px rgba(0,0,0,.08)}
-.wz-soc-card-header{display:flex;align-items:center;gap:9px}
-.wz-soc-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff}
+/* Mobile touch pass: keep every important control comfortable inside the phone frame */
+@media(max-width:640px){
+  .wz-change-category-btn{min-height:42px}
+  .wz-interest-pill{min-height:44px;padding-block:10px}
+  .wz-work-location-pill{min-height:42px;padding-inline:13px}
+  .wz-selected-tag{min-height:44px;padding:4px 4px 4px 12px}
+  .wz-selected-tag button{width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;padding:0;border-radius:999px}
+  .wz-rc-edit-btn{min-height:42px;padding:9px 14px}
+  .wz-sent-back{min-height:44px;padding:9px 12px}
+}
+
+/* ════════════════════════════════════
+   SUCCESS SCREEN — DESKTOP 2-COL
+   ════════════════════════════════════ */
+.wz-success{display:flex;flex-direction:column;flex:1;overflow-y:auto;overflow-x:hidden;background:#f8fafc}
+.wz-success-inner{display:flex;flex-direction:column;width:100%;max-width:none;margin:0;min-height:100%;background:#fff;box-shadow:0 0 0 1px #e2e8f0}
+
+/* ── 1. Header (full width, horizontal on desktop) ── */
+.wz-sc-confirm{display:flex;align-items:center;gap:16px;padding:22px 28px;border-bottom:1px solid #f1f5f9;background:#fff}
+.wz-sc-check-ring{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#10b981,#059669);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(16,185,129,.28);animation:wzCheckPop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes wzCheckPop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.wz-sc-confirm-text{flex:1;min-width:0}
+.wz-sc-confirm-title{font-size:18px;font-weight:800;color:#0f172a;margin:0 0 3px;letter-spacing:-.02em}
+.wz-sc-confirm-sub{font-size:13px;color:#475569;margin:0;line-height:1.5}
+
+/* ── 2. Body: 2-col grid ── */
+.wz-success-body{display:grid;grid-template-columns:minmax(0,1fr) 320px;flex:1}
+.wz-success-left{padding:20px 24px;border-right:1px solid #f1f5f9;display:flex;flex-direction:column;gap:14px}
+.wz-success-right{background:#f8fafc;border-left:1px solid #f1f5f9}
+
+/* ── App summary ── */
+.wz-app-summary{padding:12px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:11px;display:flex;flex-direction:column;gap:5px}
+.wz-app-row{display:flex;align-items:baseline;gap:8px;font-size:12px;line-height:1.4}
+.wz-app-row-label{color:#94a3b8;font-weight:600;white-space:nowrap;min-width:120px;flex-shrink:0}
+.wz-app-row-val{color:#1e293b;font-weight:700;word-break:break-word}
+
+/* ── Next steps ── */
+.wz-success-next{display:flex;flex-direction:column;gap:8px}
+.wz-next-heading{font-size:10.5px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.07em;margin:0 0 2px}
+.wz-next-steps{display:flex;flex-direction:column;gap:0}
+.wz-next-step{display:flex;gap:10px;align-items:flex-start}
+.wz-ns-track{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.wz-ns-num{width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.wz-ns-line{width:2px;flex:1;min-height:8px;background:#e2e8f0;margin:2px 0}
+.wz-ns-content{padding-bottom:8px}
+.wz-ns-title{font-size:13px;font-weight:700;color:#0f172a;margin-bottom:2px}
+.wz-ns-desc{font-size:12px;color:#64748b;line-height:1.45}
+
+/* ── Reminder ── */
+.wz-sc-reminder{display:flex;align-items:flex-start;gap:8px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:10px 12px;font-size:12px;color:#1e40af;line-height:1.5}
+.wz-sc-reminder-icon{font-size:13px;flex-shrink:0;margin-top:1px}
+
+/* ── Community section (right column) ── */
+.wz-comm-section{padding:14px 14px 16px}
+.wz-comm-divider{display:flex;align-items:center;gap:8px;margin-bottom:8px;color:#94a3b8;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.wz-comm-divider::before,.wz-comm-divider::after{content:'';flex:1;height:1px;background:#e2e8f0}
+.wz-comm-desc{font-size:11.5px;color:#64748b;line-height:1.5;margin:0 0 10px;text-align:center}
+.wz-soc-grid{display:grid;grid-template-columns:1fr;gap:7px;margin-bottom:12px}
+.wz-soc-card{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;text-decoration:none;color:inherit;transition:border-color .2s,box-shadow .2s}
+.wz-soc-card:hover{border-color:#cbd5e1;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.wz-soc-card-primary{border-color:#dbeafe;background:#f0f7ff}
+.wz-soc-card-primary:hover{border-color:#93c5fd}
+.wz-soc-card-header{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.wz-soc-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff}
 .wz-soc-icon-fb{background:#1877f2}
 .wz-soc-icon-yt{background:#ff0000}
 .wz-soc-icon-li{background:#0a66c2}
 .wz-soc-icon-tt{background:#000}
-.wz-soc-name{font-size:12px;font-weight:700;color:#1e293b;line-height:1.2}
-.wz-soc-meta{font-size:10px;color:#94a3b8}
-.wz-soc-body{font-size:11px;color:#475569;line-height:1.5;flex:1}
-.wz-soc-btn{display:block;text-align:center;padding:7px 10px;border-radius:7px;font-size:12px;font-weight:600;color:#fff;margin-top:auto}
+.wz-soc-name{font-size:11px;font-weight:700;color:#1e293b;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wz-soc-meta{font-size:10px;color:#94a3b8;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wz-soc-btn{flex-shrink:0;padding:5px 10px;border-radius:6px;font-size:10.5px;font-weight:600;color:#fff;white-space:nowrap}
 .wz-soc-btn-fb{background:#1877f2}
 .wz-soc-btn-yt{background:#ff0000}
 .wz-soc-btn-li{background:#0a66c2}
 .wz-soc-btn-tt{background:#000}
-.wz-big-cta{display:block;background:linear-gradient(180deg,#ef4444,#dc2626);color:#fff;font-size:15px;font-weight:700;padding:14px 20px;border-radius:12px;text-decoration:none;text-align:center;margin-bottom:10px;box-shadow:0 4px 14px rgba(239,68,68,.28);transition:box-shadow .2s,transform .2s}
-.wz-big-cta:hover{box-shadow:0 8px 22px rgba(239,68,68,.38);transform:translateY(-1px)}
-.wz-back-link{background:none;border:none;color:#64748b;font-size:13px;cursor:pointer;padding:8px;display:block;width:100%;text-align:center}
-.wz-back-link:hover{color:#334155;text-decoration:underline}
-@media(max-width:400px){.wz-soc-grid{grid-template-columns:1fr}.wz-comm-title{font-size:18px}}
 
+/* ── CTA + footer ── */
+.wz-explore-cta{display:block;border:1.5px solid #e2e8f0;background:#fff;color:#374151;font-size:12.5px;font-weight:600;padding:9px 16px;border-radius:9px;text-decoration:none;text-align:center;transition:border-color .2s,background .2s}
+.wz-explore-cta:hover{border-color:#cbd5e1;background:#f8fafc;color:#0f172a}
+.wz-success-actions{padding:12px 24px;border-top:1px solid #f1f5f9;background:#fff;display:flex;justify-content:center}
+.wz-back-link{background:none;border:none;color:#94a3b8;font-size:12px;cursor:pointer;padding:6px 12px}
+.wz-back-link:hover{color:#475569;text-decoration:underline}
+
+/* ── Mobile: stack to 1 column ── */
+@media(max-width:640px){
+  .wz-success-inner{box-shadow:none}
+  .wz-sc-confirm{padding:16px 18px;gap:12px}
+  .wz-sc-confirm-title{font-size:16px}
+  .wz-success-body{grid-template-columns:1fr}
+  .wz-success-left{padding:16px 18px;border-right:none;border-bottom:1px solid #f1f5f9}
+  .wz-success-right{border-left:none}
+}
+
+/* ════════════════════════════════════
+   SUCCESS SCREEN — rebuilt post-application flow
+   ════════════════════════════════════ */
+.wz-container:has(.wz-success){
+  width:min(1180px,calc(100vw - 48px));
+  max-width:1180px;
+  height:min(860px,calc(100dvh - 40px));
+  max-height:calc(100dvh - 40px);
+  border-radius:30px;
+}
+.wz-success{height:100%;background:#f7f8fb;overflow:hidden}
+.wz-success-inner{height:100%;background:#f7f8fb;box-shadow:none;overflow:hidden}
+.wz-success-scroll{
+  height:100%;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  background-color:#f7f8fb;
+  background-image:linear-gradient(rgba(148,163,184,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.12) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+.wz-success-scroll::-webkit-scrollbar{width:5px}
+.wz-success-scroll::-webkit-scrollbar-track{background:transparent}
+.wz-success-scroll::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:999px}
+.wz-success-page{width:100%;max-width:none;margin:0;padding:26px;display:flex;flex-direction:column;gap:16px}
+.wz-result-hero{
+  position:relative;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  gap:16px;
+  align-items:center;
+  background:#fff;
+  border:1px solid #edf1f6;
+  border-radius:24px;
+  padding:22px 26px;
+  box-shadow:0 20px 54px rgba(15,23,42,.09);
+  overflow:hidden;
+}
+.wz-result-hero::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,#e5323b,#ff5a62,#ffb340,#ffd84d)}
+.wz-result-check{width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,#23b36b,#63c776);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 28px rgba(35,179,107,.24);flex-shrink:0}
+.wz-result-check svg{width:25px;height:25px}
+.wz-result-copy{min-width:0}
+.wz-result-badges{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:7px}
+.wz-result-badges span{display:inline-flex;align-items:center;min-height:24px;border-radius:999px;padding:3px 10px;font-size:10.5px;font-weight:900}
+.wz-result-badges span:first-child{background:#e8f5e9;color:#2e7d32}
+.wz-result-badges span:first-child::before{content:'';width:6px;height:6px;border-radius:999px;background:#4caf50;margin-right:5px}
+.wz-result-badges span:last-child{background:#fff8e1;border:1px solid #ffe082;color:#e65100}
+.wz-result-copy h2{font-size:25px;line-height:1.16;font-weight:900;color:#18182d;margin:0 0 6px;letter-spacing:-.03em}
+.wz-result-copy h2 em{font-style:normal;color:#e5323b}
+.wz-result-copy p{font-size:13px;line-height:1.62;color:#657083;font-weight:680;margin:0;max-width:820px}
+.wz-result-copy p strong{color:#1a1a2e}
+.wz-result-mascot{width:76px;filter:drop-shadow(0 12px 20px rgba(229,50,59,.12));opacity:.92}
+.wz-result-summary{grid-column:1 / -1;display:grid;grid-template-columns:1.2fr 1fr auto;gap:0;border:1px solid #e7edf5;border-radius:16px;background:#fbfdff;overflow:hidden}
+.wz-result-summary div{padding:11px 14px;border-right:1px solid #e7edf5;min-width:0}
+.wz-result-summary div:last-child{border-right:0}
+.wz-result-summary span{display:block;font-size:9.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#8a96aa;margin-bottom:4px}
+.wz-result-summary strong{display:block;font-size:12.5px;font-weight:900;color:#17172a;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wz-result-layout{width:100%;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:16px;align-items:start}
+.wz-follow-panel,.wz-app-trial-card,.wz-process-card{background:#fff;border:1px solid #e6ebf3;border-radius:22px;box-shadow:0 14px 34px rgba(15,23,42,.07)}
+.wz-follow-panel{padding:18px}
+.wz-panel-eyebrow{display:inline-flex;align-items:center;min-height:26px;padding:4px 12px;border-radius:999px;background:#fff1f1;color:#e5323b;font-size:10.5px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;border:1px solid #ffd6d8}
+.wz-follow-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin:13px 0 12px}
+.wz-follow-head h3{font-size:24px;line-height:1.16;font-weight:900;color:#1a1a2e;letter-spacing:-.03em;margin:0 0 7px;max-width:520px}
+.wz-follow-head p{font-size:13px;line-height:1.62;color:#667085;font-weight:680;margin:0;max-width:660px}
+.wz-follow-mascots{display:flex;align-items:center;flex-shrink:0;padding-top:2px}
+.wz-follow-mascots img{width:38px;height:38px;border-radius:999px;border:3px solid #fff;background:#f8fafc;box-shadow:0 8px 16px rgba(15,23,42,.08);object-fit:contain;margin-left:-10px}
+.wz-follow-mascots img:first-child{margin-left:0}
+.wz-follow-reason{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;background:#fffbea;border:1px solid #ffd84d;border-radius:14px;padding:10px 13px;margin-bottom:13px}
+.wz-follow-reason span{font-size:10.5px;font-weight:900;color:#8a6500;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.wz-follow-reason strong{font-size:12px;line-height:1.45;color:#634600}
+.wz-follow-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.wz-follow-card{position:relative;min-height:136px;display:grid;grid-template-columns:34px minmax(0,1fr);grid-template-rows:auto 1fr auto;gap:8px 10px;padding:13px;border-radius:16px;border:1px solid #e5ebf4;background:#fff;color:inherit;text-decoration:none;overflow:hidden;transition:transform .18s,box-shadow .18s,border-color .18s}
+.wz-follow-card:hover{transform:translateY(-3px);box-shadow:0 16px 30px rgba(15,23,42,.10)}
+.wz-follow-card-fb{background:linear-gradient(180deg,#eff6ff,#fff)}
+.wz-follow-card-yt{background:linear-gradient(180deg,#fff1f1,#fff)}
+.wz-follow-card-li{background:linear-gradient(180deg,#eef7ff,#fff)}
+.wz-follow-card-tt{background:linear-gradient(180deg,#f5f5f7,#fff)}
+.wz-follow-mascot{position:absolute;right:10px;top:8px;width:44px;height:44px;object-fit:contain;opacity:.78;filter:drop-shadow(0 8px 12px rgba(15,23,42,.10))}
+.wz-follow-icon{grid-column:1;grid-row:1;width:34px;height:34px;border-radius:11px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(15,23,42,.08);position:relative;z-index:1}
+.wz-follow-card-fb .wz-follow-icon{color:#1877f2}
+.wz-follow-card-yt .wz-follow-icon{color:#ff0000}
+.wz-follow-card-li .wz-follow-icon{color:#0a66c2}
+.wz-follow-card-tt .wz-follow-icon{color:#000}
+.wz-follow-copy{grid-column:2;grid-row:1 / span 2;min-width:0;padding-right:44px;position:relative;z-index:1}
+.wz-follow-copy strong{display:block;font-size:13px;font-weight:900;color:#1a1a2e;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wz-follow-copy span{display:block;font-size:10.5px;font-weight:800;color:#7a8598;margin-top:2px}
+.wz-follow-copy p{font-size:11.5px;font-weight:680;color:#586273;line-height:1.45;margin:8px 0 0}
+.wz-follow-btn{grid-column:1 / -1;grid-row:3;display:flex;align-items:center;justify-content:center;height:38px;border-radius:11px;color:#fff;font-size:12.5px;font-weight:900;position:relative;z-index:1}
+.wz-follow-card-fb .wz-follow-btn{background:#1877f2}
+.wz-follow-card-yt .wz-follow-btn{background:#ff0000}
+.wz-follow-card-li .wz-follow-btn{background:#0a66c2}
+.wz-follow-card-tt .wz-follow-btn{background:#000}
+.wz-after-submit{display:flex;flex-direction:column;gap:14px;min-width:0}
+.wz-app-trial-card{position:sticky;top:18px;overflow:hidden;padding:22px 20px 20px;color:#fff;background:radial-gradient(circle at 16% 100%,rgba(229,50,59,.36),transparent 38%),linear-gradient(135deg,#19182c,#2a2943);border-color:rgba(255,255,255,.08)}
+.wz-app-trial-card>img{position:absolute;right:-4px;top:-8px;width:86px;opacity:.18;filter:grayscale(1) brightness(3)}
+.wz-app-trial-card .wz-panel-eyebrow{background:#ffe27a;color:#6f4900;border:0;position:relative;z-index:1}
+.wz-app-trial-card h3{position:relative;z-index:1;font-size:22px;line-height:1.18;font-weight:900;letter-spacing:-.03em;margin:15px 0 10px}
+.wz-app-trial-card p{position:relative;z-index:1;font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.70);font-weight:700;margin:0 0 16px}
+.wz-app-trial-btn{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:52px;border-radius:14px;background:linear-gradient(135deg,#e5323b,#ff5a62);color:#fff;text-decoration:none;font-size:14.5px;font-weight:900;box-shadow:0 18px 36px rgba(229,50,59,.34)}
+.wz-app-trust{position:relative;z-index:1;display:flex;flex-wrap:wrap;justify-content:center;gap:7px 10px;margin-top:13px}
+.wz-app-trust span{font-size:10.5px;font-weight:800;color:rgba(255,255,255,.58)}
+.wz-app-trust span::before{content:'✓ ';color:#4caf50}
+.wz-process-card{padding:15px}
+.wz-process-title{font-size:11px;font-weight:900;color:#8a96aa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.wz-process-step{display:flex;gap:10px;padding:10px 0;border-top:1px solid #eef2f7}
+.wz-process-step:first-of-type{border-top:0;padding-top:0}
+.wz-process-step span{width:26px;height:26px;border-radius:999px;background:#fff1f1;border:2px solid #e5323b;color:#e5323b;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0}
+.wz-process-step strong{display:block;font-size:12.5px;font-weight:900;color:#1a1a2e;line-height:1.25;margin-bottom:3px}
+.wz-process-step p{font-size:11px;line-height:1.42;color:#667085;font-weight:650;margin:0}
+.wz-sent-email-note{display:flex;align-items:flex-start;gap:9px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:14px;padding:11px 15px;font-size:12px;color:#1d4ed8;line-height:1.55}
+.wz-sent-email-note span{width:18px;height:18px;border-radius:999px;background:#dbeafe;color:#1d4ed8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;margin-top:1px}
+.wz-sent-email-note p{margin:0;font-weight:650}
+.wz-sent-back{display:flex;align-items:center;justify-content:center;min-height:44px;margin:0 auto;background:transparent;border:none;font-size:13px;font-weight:750;color:#6b7280;text-decoration:none;padding:8px 10px;cursor:pointer;transition:color .18s}
+.wz-sent-back:hover{color:#e5323b}
+
+@media(max-width:899px){
+  .wz-container:has(.wz-success){width:calc(100vw - 18px);height:calc(100dvh - 18px);max-height:calc(100dvh - 18px);border-radius:22px}
+  .wz-success-page{padding:14px 12px 22px;gap:12px;max-width:none}
+  .wz-result-hero{grid-template-columns:auto minmax(0,1fr);gap:12px;padding:18px;border-radius:20px}
+  .wz-result-mascot{display:none}
+  .wz-result-check{width:46px;height:46px;border-radius:15px}
+  .wz-result-copy h2{font-size:19px}
+  .wz-result-copy p{font-size:12px}
+  .wz-result-summary{grid-column:1 / -1;grid-template-columns:1fr}
+  .wz-result-summary div{border-right:0;border-bottom:1px solid #e7edf5}
+  .wz-result-summary div:last-child{border-bottom:0}
+  .wz-result-summary strong{white-space:normal}
+  .wz-result-layout{grid-template-columns:1fr;gap:12px}
+  .wz-follow-panel{padding:15px;border-radius:18px}
+  .wz-panel-eyebrow{font-size:9.5px}
+  .wz-follow-head{flex-direction:column;gap:10px;margin-top:12px}
+  .wz-follow-head h3{font-size:20px}
+  .wz-follow-head p{font-size:12px}
+  .wz-follow-mascots img{width:34px;height:34px}
+  .wz-follow-reason{grid-template-columns:1fr;gap:4px}
+  .wz-follow-list{grid-template-columns:1fr}
+  .wz-follow-card{min-height:0}
+  .wz-after-submit{gap:12px}
+  .wz-app-trial-card{position:relative;top:auto;border-radius:18px;padding:18px 16px}
+  .wz-app-trial-card h3{font-size:19px}
+  .wz-app-trial-card p{font-size:12px}
+  .wz-process-card{border-radius:18px}
+}
+@media(max-width:420px){
+  .wz-success-page{padding:10px 9px 18px}
+  .wz-result-hero{padding:16px 14px}
+  .wz-result-check{width:42px;height:42px}
+  .wz-result-copy h2{font-size:17px}
+  .wz-result-badges span{font-size:9.5px}
+  .wz-follow-panel{padding:13px}
+  .wz-follow-head h3{font-size:18px}
+  .wz-follow-card{grid-template-columns:30px minmax(0,1fr);padding:12px}
+  .wz-follow-icon{width:30px;height:30px}
+  .wz-follow-mascot{display:none}
+  .wz-follow-copy{padding-right:0}
+  .wz-follow-copy strong{white-space:normal}
+  .wz-app-trial-btn{font-size:13px}
+}
+
+/* Fit success content to the user's viewport instead of leaving empty side gutters */
+@media(min-width:900px){
+  .wz-overlay:has(.wz-success){
+    padding:clamp(12px,2vh,22px) clamp(14px,2.6vw,42px);
+  }
+  .wz-container:has(.wz-success){
+    width:clamp(960px,72vw,1120px);
+    max-width:calc(100vw - clamp(28px,5.2vw,84px));
+    height:min(850px,calc(100dvh - clamp(24px,4vh,44px)));
+    max-height:calc(100dvh - clamp(24px,4vh,44px));
+    border-radius:28px;
+  }
+  .wz-success-page{
+    width:100%;
+    max-width:none;
+    padding:clamp(18px,2.2vw,26px);
+    gap:clamp(12px,1.3vw,16px);
+  }
+  .wz-result-layout{
+    grid-template-columns:minmax(0,1fr) clamp(318px,30%,356px);
+    gap:clamp(12px,1.4vw,16px);
+  }
+  .wz-result-hero{padding:20px clamp(20px,2.2vw,26px)}
+  .wz-follow-panel{padding:clamp(15px,1.6vw,18px)}
+  .wz-result-copy p{max-width:none}
+  .wz-follow-head h3{max-width:620px}
+  .wz-follow-head p{max-width:720px}
+}
+
+@media(min-width:1180px){
+  .wz-container:has(.wz-success){
+    width:min(1120px,calc(100vw - 96px));
+  }
+}
+
+@media(min-width:900px) and (max-width:1180px){
+  .wz-container:has(.wz-success){
+    width:calc(100vw - 40px);
+    max-width:1080px;
+  }
+}
+
+@media(min-width:900px) and (max-height:760px){
+  .wz-container:has(.wz-success){
+    height:calc(100dvh - 24px);
+    max-height:calc(100dvh - 24px);
+  }
+  .wz-success-page{padding:16px;gap:12px}
+  .wz-result-hero{padding:16px 18px}
+  .wz-result-check{width:48px;height:48px}
+  .wz-result-copy h2{font-size:22px}
+  .wz-result-copy p{font-size:12.3px;line-height:1.5}
+  .wz-result-summary div{padding:9px 12px}
+  .wz-follow-panel{padding:14px}
+  .wz-follow-head{margin:10px 0}
+  .wz-follow-head h3{font-size:21px}
+  .wz-follow-head p{font-size:12px;line-height:1.5}
+  .wz-follow-reason{padding:9px 11px;margin-bottom:10px}
+  .wz-follow-card{min-height:124px;padding:11px}
+  .wz-follow-copy p{font-size:11px;line-height:1.38}
+  .wz-follow-btn{height:34px}
+  .wz-app-trial-card{padding:18px}
+  .wz-app-trial-card h3{font-size:19px}
+  .wz-app-trial-card p{font-size:11.5px}
+  .wz-process-card{padding:13px}
+}
+
+/* Fill the success modal width: remove the visible empty gutters on desktop */
+.wz-success,
+.wz-success-inner,
+.wz-success-scroll,
+.wz-success-page{
+  width:100%!important;
+  max-width:none!important;
+}
+.wz-success-inner,
+.wz-success-page{
+  margin:0!important;
+}
+
+@media(min-width:900px){
+  .wz-container:has(.wz-success){
+    width:min(1320px,calc(100vw - 28px));
+    max-width:min(1320px,calc(100vw - 28px));
+  }
+  .wz-success-page{
+    width:100%;
+    max-width:none;
+    margin:0;
+    padding:clamp(12px,1.15vw,18px);
+    gap:clamp(12px,1.15vw,16px);
+  }
+  .wz-result-layout{
+    grid-template-columns:minmax(0,1fr) minmax(330px,34%);
+    gap:clamp(12px,1.15vw,16px);
+  }
+  .wz-result-hero{
+    padding:clamp(18px,1.65vw,24px);
+  }
+  .wz-follow-panel{
+    padding:clamp(16px,1.35vw,20px);
+  }
+  .wz-app-trial-card,
+  .wz-process-card{
+    width:100%;
+  }
+}
+
+@media(min-width:900px) and (max-width:1100px){
+  .wz-container:has(.wz-success){
+    width:calc(100vw - 20px);
+    max-width:calc(100vw - 20px);
+  }
+  .wz-result-layout{
+    grid-template-columns:minmax(0,1fr) 320px;
+  }
+}
 `;
