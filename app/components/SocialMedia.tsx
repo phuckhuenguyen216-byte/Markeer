@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import ChatwootWidget from "@/app/components/ChatwootWidget";
 const SocialMedia = () => {
@@ -123,7 +124,7 @@ const handleTelegramClick = (e: React.MouseEvent) => {
   }, [isChatwootOpen]);
 
   return (
-    <div className="fixed right-4 bottom-10 z-40 flex flex-col space-y-3">
+    <div className="fixed right-2 bottom-6 z-40 flex flex-col space-y-2 md:space-y-3 md:right-4 md:bottom-10">
       {/* Messenger Button */}
       <ChatwootWidget />
       {/* <button
@@ -148,16 +149,18 @@ const handleTelegramClick = (e: React.MouseEvent) => {
       </button> */}
 
       <button
-        className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
+        className="relative w-10 h-10 md:w-14 md:h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
         aria-label="Contact via Facebook"
       >
         <span className="ripple-circle pointer-events-none"></span>
         <span className="ripple-circle ripple-2 pointer-events-none"></span>
 
-        <img
+        <Image
           src="/img/facebook.webp"
           alt="Facebook"
-          className="w-12 h-12 peer"
+          width={48}
+          height={48}
+          className="w-9 h-9 md:w-12 md:h-12 peer"
           onClick={handleFacebookClick}
         />
 
@@ -167,17 +170,19 @@ const handleTelegramClick = (e: React.MouseEvent) => {
       </button>
 
       <button
-        className="relative w-14 h-14 transition-all duration-300 flex items-center justify-center shake-phone ripple-auto hover:scale-105"
+        className="relative w-10 h-10 md:w-14 md:h-14 transition-all duration-300 flex items-center justify-center shake-phone ripple-auto hover:scale-105"
         aria-label="Contact via Zalo"
         onClick={handleZaloClick}
       >
         <span className="ripple-circle pointer-events-none"></span>
         <span className="ripple-circle ripple-2 pointer-events-none"></span>
 
-        <img
+        <Image
           src="/icons/zalo.svg"
           alt="Zalo"
-          className="relative z-10 w-14 h-14 peer drop-shadow-lg"
+          width={56}
+          height={56}
+          className="relative z-10 w-10 h-10 md:w-14 md:h-14 peer drop-shadow-lg"
         />
 
         <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-gray-800 text-white text-sm px-3 py-2 rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
@@ -186,16 +191,18 @@ const handleTelegramClick = (e: React.MouseEvent) => {
       </button>
 
       <button
-        className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
+        className="relative w-10 h-10 md:w-14 md:h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
         aria-label="Contact via Discord"
       >
         <span className="ripple-circle pointer-events-none"></span>
         <span className="ripple-circle ripple-2 pointer-events-none"></span>
 
-        <img
+        <Image
           src="/img/discord.webp"
           alt="Discord"
-          className="w-12 h-12 peer"
+          width={48}
+          height={48}
+          className="w-9 h-9 md:w-12 md:h-12 peer"
           onClick={handleDiscordClick}
         />
 
@@ -205,16 +212,18 @@ const handleTelegramClick = (e: React.MouseEvent) => {
       </button>
 
       <button
-        className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
+        className="relative w-10 h-10 md:w-14 md:h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
         aria-label="Contact via Viber"
       >
         <span className="ripple-circle pointer-events-none"></span>
         <span className="ripple-circle ripple-2 pointer-events-none"></span>
 
-        <img
+        <Image
           src="/img/viber.png"
           alt="Viber"
-          className="w-12 h-12 peer"
+          width={48}
+          height={48}
+          className="w-9 h-9 md:w-12 md:h-12 peer"
           onClick={handleViberClick}
         />
 
@@ -224,16 +233,18 @@ const handleTelegramClick = (e: React.MouseEvent) => {
       </button>
 
       <button
-        className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
+        className="relative w-10 h-10 md:w-14 md:h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
         aria-label="Contact via Telegram"
       >
         <span className="ripple-circle pointer-events-none"></span>
         <span className="ripple-circle ripple-2 pointer-events-none"></span>
 
-        <img
+        <Image
           src="/img/tele.webp"
           alt="Telegram"
-          className="w-12 h-12 peer"
+          width={48}
+          height={48}
+          className="w-9 h-9 md:w-12 md:h-12 peer"
           onClick={handleTelegramClick}
         />
 
@@ -243,19 +254,19 @@ const handleTelegramClick = (e: React.MouseEvent) => {
       </button>
 
       <button
-        className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
+        className="relative w-10 h-10 md:w-14 md:h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto"
         aria-label="Contact via Instagram"
       >
         <span className="ripple-circle pointer-events-none"></span>
         <span className="ripple-circle ripple-2 pointer-events-none"></span>
         {/* <span className="ripple-circle ripple-3"></span> */}
         {/* Instagram Icon */}
-        <img
+        <Image
           src="/img/ig.png"
           alt="Instagram"
           width={50}
           height={50}
-          className="w-12 h-12 peer"
+          className="w-9 h-9 md:w-12 md:h-12 peer"
           onClick={handleInstagramClick}
         />
 
@@ -268,7 +279,7 @@ const handleTelegramClick = (e: React.MouseEvent) => {
 
       <button
         ref={chatwootBtnRef}
-        className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto bg-white"
+        className="relative w-10 h-10 md:w-14 md:h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center shake-phone ripple-auto bg-white"
         aria-label="Contact via Chatwoot"
       >
         <span className="ripple-circle pointer-events-none"></span>
@@ -282,7 +293,7 @@ const handleTelegramClick = (e: React.MouseEvent) => {
             viewBox="0 0 24 24"
             strokeWidth={2}
             stroke="black"
-            className="w-8 h-8 peer"
+            className="w-6 h-6 md:w-8 md:h-8 peer"
             onClick={handleChatwootClick}
           >
             <path
@@ -293,12 +304,12 @@ const handleTelegramClick = (e: React.MouseEvent) => {
           </svg>
         ) : (
           // Logo Chatwoot
-          <img
+          <Image
             src="/icons/chatwoot.svg"
             alt="Chatwoot"
             width={50}
             height={50}
-            className="w-12 h-12 peer"
+            className="w-9 h-9 md:w-12 md:h-12 peer"
             onClick={handleChatwootClick}
           />
         )}
@@ -313,7 +324,7 @@ const handleTelegramClick = (e: React.MouseEvent) => {
         {isScrollVisible && (
           <motion.button
             onClick={scrollToTop}
-            className="group relative w-14 h-14 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center transform hover:scale-110"
+            className="group relative w-10 h-10 md:w-14 md:h-14 bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center transform hover:scale-110"
             aria-label="Scroll to top"
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
