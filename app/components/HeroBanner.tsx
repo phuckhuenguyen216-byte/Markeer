@@ -7,172 +7,174 @@ export default function HeroSection() {
   const { t } = useTranslation("common");
 
   return (
-    <section
-      className="relative min-h-screen w-full flex -mt-16 items-center bg-cover bg-center"
-      style={{
-        backgroundImage: "url('/img/mascot/banner.png')",
-        position: "relative",
-        zIndex: 1,
-        isolation: "isolate",
-      }}
-    >
-      {/* ==================== DESKTOP - GIỮ NGUYÊN 100% ==================== */}
-      <div
-        className="hidden md:block absolute right-[0%] top-[8%] text-white max-w-[900px] text-center
-        bg-[url('/images/tech-bg-red.jpg')] bg-cover bg-center bg-no-repeat
-        p-8 rounded-2xl"
-        style={{ zIndex: 20 }}
-      >
-        <h2
-          className="text-2xl md:text-3xl font-bold mb-6 max-w-xl mx-auto text-white"
-          style={{
-            textShadow: `
-              0 2px 4px rgba(0,0,0,0.6),
-              0 4px 8px rgba(0,0,0,0.5),
-              0 8px 16px rgba(0,0,0,0.4),
-              0 12px 24px rgba(0,0,0,0.35)
-            `,
-          }}
-        >
-          {t("hero.headline")}
-        </h2>
+    <>
+      {/* ==================== MOBILE: redesigned hero ==================== */}
+      <div className="block md:hidden">
 
-        <div className="flex justify-center mt-10 mb-6 -translate-x-6">
+        {/* Banner image — starts at y=0, fixed header overlays top naturally */}
+        <div className="relative w-full" style={{ aspectRatio: "390 / 260" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/img/mascot/banner.png"
+            alt="Markee AI Banner"
+            className="absolute inset-0 w-full h-full object-cover object-left"
+          />
+          {/* Fade bottom → brand red */}
           <div
-            className="relative p-0 rounded-xl
-            bg-[url('/img/mascot/bieudo-logo.png')]
-            bg-contain bg-no-repeat bg-center"
-          >
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-[90vw] max-w-[950px] min-w-[750px] rounded-xl"
-            >
-              <source src="/videos/ANIMATION-LOGO.webm" type="video/webm" />
-            </video>
+            className="absolute bottom-0 left-0 right-0 h-16"
+            style={{ background: "linear-gradient(to bottom, transparent, #d42b4e)" }}
+          />
+        </div>
+
+        {/* Content section — seamless continuation from banner */}
+        <div style={{ background: "linear-gradient(135deg, #d42b4e 0%, #e8294c 60%, #c0392b 100%)" }}>
+          <div className="px-5 pt-3 pb-7 pr-16">
+
+            {/* Brand heading */}
+            <h1 className="text-3xl font-black text-white leading-none mb-2 tracking-tight">
+              {t("hero.brand")}
+            </h1>
+
+            {/* Headline */}
+            <p className="text-sm font-semibold text-white/90 leading-snug mb-4">
+              {t("hero.headline")}
+            </p>
+
+            {/* Offer highlight box */}
+            <div className="flex items-start gap-2 bg-yellow-400/20 border border-yellow-300/50 rounded-2xl px-3 py-2.5 mb-5">
+              <span className="text-yellow-300 shrink-0">🎁</span>
+              <p className="text-yellow-100 text-xs font-semibold leading-snug">
+                <Trans
+                  i18nKey="hero.offer"
+                  components={{
+                    strong: <span className="text-yellow-300 font-bold" />,
+                  }}
+                />
+              </p>
+            </div>
+
+            {/* CTA buttons */}
+            <div className="flex flex-col gap-3">
+              {/* Primary CTA */}
+              <Link
+                href="https://app.markeeai.com"
+                target="_blank"
+                className="relative flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full
+                bg-linear-to-r from-indigo-500 via-purple-500 to-cyan-400
+                text-white font-semibold text-sm shadow-lg border border-white/30 overflow-hidden"
+              >
+                <span>📝</span>
+                <span className="relative z-10">{t("hero.cta")}</span>
+                <span suppressHydrationWarning className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent animate-tech-shine" />
+              </Link>
+
+              {/* Secondary */}
+              <div
+                className="relative flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full
+                bg-linear-to-r from-indigo-500 via-purple-500 to-cyan-400
+                text-white font-semibold text-sm shadow-lg border border-white/30 overflow-hidden"
+              >
+                <span>🎁</span>
+                <span className="relative z-10">{t("hero.badge")}</span>
+                <span suppressHydrationWarning className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent animate-tech-shine" />
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
-      {/* ==================== MOBILE - CHỈNH CHUẨN, NỀN ĐEN MỜ NHẸ ==================== */}
-      <div className="block md:hidden relative w-full min-h-[85dvh] pt-20 pb-16 text-white text-center overflow-hidden">
-        
-        {/* Overlay nền đen - MỜ NHẸ như yêu cầu */}
-        <div 
-          className="absolute inset-0 bg-gradient-to-b 
-                     from-black/35 via-black/25 to-black/15 z-0" 
-        />
-
-        <div className="relative z-10 px-6 max-w-[360px] mx-auto flex flex-col justify-center min-h-[85dvh]">
-          
-          {/* Brand */}
-          <h1 
-            className="text-5xl font-bold mb-4 leading-tight text-white"
-          >
-            {t("hero.brand")}
-          </h1>
-
-          {/* Headline */}
-          <h2 
-            className="text-[23px] font-bold mb-9 leading-tight px-3 text-center text-white"
+      {/* ==================== DESKTOP: giữ nguyên ==================== */}
+      <section
+        className="hidden md:flex relative min-h-screen w-full -mt-16 items-center bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/img/mascot/banner.png')",
+          position: "relative",
+          zIndex: 1,
+          isolation: "isolate",
+        }}
+      >
+        {/* Góc trên phải */}
+        <div
+          className="absolute right-[0%] top-[8%] text-white max-w-[900px] text-center
+          bg-[url('/images/tech-bg-red.jpg')] bg-cover bg-center bg-no-repeat
+          p-8 rounded-2xl"
+          style={{ zIndex: 20 }}
+        >
+          <h2
+            className="text-2xl md:text-3xl font-bold mb-6 max-w-xl mx-auto text-white"
+            style={{
+              textShadow: `
+                0 2px 4px rgba(0,0,0,0.6),
+                0 4px 8px rgba(0,0,0,0.5),
+                0 8px 16px rgba(0,0,0,0.4),
+                0 12px 24px rgba(0,0,0,0.35)
+              `,
+            }}
           >
             {t("hero.headline")}
           </h2>
 
-          {/* Offer Text */}
-          <p className="text-[16.5px] font-semibold mb-11 px-4 leading-relaxed text-white drop-shadow-xl">
+          <div className="flex justify-center mt-10 mb-6 -translate-x-6">
+            <div
+              className="relative p-0 rounded-xl
+              bg-[url('/img/mascot/bieudo-logo.png')]
+              bg-contain bg-no-repeat bg-center"
+            >
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-[90vw] max-w-[950px] rounded-xl"
+              >
+                <source src="/videos/ANIMATION-LOGO.webm" type="video/webm" />
+              </video>
+            </div>
+          </div>
+        </div>
+
+        {/* Góc trái dưới */}
+        <div
+          className="absolute left-[8%] bottom-[12%] md:left-[10%] md:bottom-[12%] text-white max-w-[650px]"
+          style={{ zIndex: 20 }}
+        >
+          <p className="text-lg md:text-2xl font-semibold mb-8 flex justify-center text-center">
             <Trans
               i18nKey="hero.offer"
               components={{
-                strong: <span className="text-white-400 text-xl font-bold" />,
+                strong: <span className="text-red-500 font-bold" />,
               }}
             />
           </p>
 
-          {/* Buttons */}
-          <div className="flex flex-col items-center gap-5 w-full max-w-[310px]">
-            {/* BADGE */}
+          <div className="flex items-center justify-center gap-6 flex-wrap">
             <div
-              className="relative inline-flex items-center justify-center gap-3 w-full px-6 py-4 rounded-full
-              bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400
-              text-white font-semibold text-base shadow-lg
-              border border-white/30 backdrop-blur-md animate-tech-glow overflow-hidden"
+              className="relative inline-flex items-center justify-center gap-3 w-[220px] px-6 py-3 rounded-full
+              bg-linear-to-r from-indigo-500 via-purple-500 to-cyan-400
+              text-white font-semibold text-base border border-white/20 backdrop-blur-md
+              animate-tech-glow overflow-hidden"
             >
-              <span className="text-2xl">🎁</span>
+              <span className="text-lg">🎁</span>
               <span className="relative z-10">{t("hero.badge")}</span>
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-tech-shine"></span>
+              <span suppressHydrationWarning className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent animate-tech-shine" />
             </div>
 
-            {/* CTA BUTTON */}
             <Link
               href="https://app.markeeai.com"
               target="_blank"
-              className="relative inline-flex items-center justify-center gap-3 w-full px-6 py-4 rounded-full
-              bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400
-              text-white font-semibold text-base shadow-lg
-              border border-white/30 backdrop-blur-md animate-tech-glow overflow-hidden"
+              className="relative inline-flex items-center justify-center gap-3 w-[250px] px-6 py-3 rounded-full
+              bg-linear-to-r from-indigo-500 via-purple-500 to-cyan-400
+              text-white font-semibold text-base border border-white/20 backdrop-blur-md
+              animate-tech-glow overflow-hidden"
             >
-              <span className="text-2xl">📝</span>
+              <span className="text-lg">📝</span>
               <span className="relative z-10">{t("hero.cta")}</span>
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-tech-shine"></span>
+              <span suppressHydrationWarning className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent animate-tech-shine" />
             </Link>
           </div>
         </div>
-      </div>
-
-      {/* ==================== BÊN TRÁI DƯỚI - CHỈ DESKTOP ==================== */}
-      <div className="hidden md:block absolute left-[8%] bottom-[12%] md:left-[10%] md:bottom-[12%] text-white max-w-[650px]" style={{ zIndex: 20 }}>
-        <p className="text-lg md:text-2xl font-semibold mb-8 flex justify-center text-center">
-          <Trans
-            i18nKey="hero.offer"
-            components={{
-              strong: <span className="text-red-500 font-bold" />,
-            }}
-          />
-        </p>
-
-        <div className="flex items-center justify-center gap-6 flex-wrap">
-          {/* BADGE */}
-          <div
-            className="relative inline-flex items-center justify-center gap-3 w-[220px] px-6 py-3 rounded-full
-            bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400
-            text-white font-semibold text-base
-            border border-white/20
-            backdrop-blur-md
-            animate-tech-glow
-            overflow-hidden"
-          >
-            <span className="text-lg">🎁</span>
-            <span className="relative z-10">{t("hero.badge")}</span>
-            <span
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent
-              animate-tech-shine"
-            ></span>
-          </div>
-
-          {/* CTA */}
-          <Link
-            href="https://app.markeeai.com"
-            target="_blank"
-            className="relative inline-flex items-center justify-center gap-3 w-[250px] px-6 py-3 rounded-full
-            bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400
-            text-white font-semibold text-base
-            border border-white/20
-            backdrop-blur-md
-            animate-tech-glow
-            overflow-hidden"
-          >
-            <span className="text-lg">📝</span>
-            <span className="relative z-10">{t("hero.cta")}</span>
-            <span
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent
-              animate-tech-shine"
-            ></span>
-          </Link>
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

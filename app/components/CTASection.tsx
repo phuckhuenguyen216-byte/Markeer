@@ -111,7 +111,7 @@ function StatCard({
       }}
     >
       <div
-        className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
         style={{
           background: "linear-gradient(135deg, #ef4444, #f43f5e)",
           boxShadow: "0 4px 12px rgba(239,68,68,0.4)",
@@ -418,7 +418,7 @@ const ModalFormCard = memo(function ModalFormCard({
           <motion.span animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>⚡</motion.span>
           {t("cta.badge")}
         </motion.div>
-        <h3 className="text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-[1.2] bg-gradient-to-r from-gray-900 via-red-600 to-rose-500 bg-clip-text text-transparent">
+        <h3 className="text-2xl sm:text-3xl lg:text-[2rem] font-bold leading-[1.2] bg-linear-to-r from-gray-900 via-red-600 to-rose-500 bg-clip-text text-transparent">
           {t("cta.headline")}
         </h3>
         <p className="mt-2 text-sm text-gray-500 leading-relaxed">{t("cta.description")}</p>
@@ -430,7 +430,7 @@ const ModalFormCard = memo(function ModalFormCard({
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="mt-6 flex flex-wrap gap-5 justify-center lg:justify-start">
         {[t("cta.noCard"), t("cta.cancelAnytime")].map((label, i) => (
           <span key={i} className="flex items-center gap-2 text-sm text-gray-500 font-medium">
-            <span className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "linear-gradient(135deg,#22c55e,#16a34a)", boxShadow: "0 2px 8px rgba(34,197,94,0.3)" }}>
+            <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg,#22c55e,#16a34a)", boxShadow: "0 2px 8px rgba(34,197,94,0.3)" }}>
               <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
               </svg>
@@ -568,7 +568,7 @@ function RegistrationModal({
                   className="absolute bottom-[38%] left-2 z-20 flex items-center gap-3 px-4 py-3 rounded-2xl"
                   style={{ background: "rgba(255,255,255,0.94)", backdropFilter: "blur(16px)", border: "1px solid rgba(239,68,68,0.1)", boxShadow: "0 8px 32px rgba(0,0,0,0.1)" }}
                 >
-                  <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "linear-gradient(135deg,#ef4444,#f43f5e)", boxShadow: "0 4px 12px rgba(239,68,68,0.4)" }}>
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg,#ef4444,#f43f5e)", boxShadow: "0 4px 12px rgba(239,68,68,0.4)" }}>
                     <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
@@ -874,7 +874,7 @@ export default function CTASection() {
                 leading-[1.2]
                 tracking-[-0.015em]
                 max-w-[720px]
-                bg-gradient-to-r
+                bg-linear-to-r
                 from-gray-900
                 via-red-600
                 to-rose-600
@@ -900,17 +900,17 @@ export default function CTASection() {
         flex items-center gap-5 px-5 py-3.5 rounded-xl transition-all duration-500 ease-out
         ${
           active === i
-            ? "bg-gradient-to-r from-red-600/25 to-rose-600/15 border border-red-400/60 scale-[1.05] shadow-[0_12px_40px_rgba(239,68,68,0.4)] backdrop-blur-md"
+            ? "bg-linear-to-r from-red-600/25 to-rose-600/15 border border-red-400/60 scale-[1.05] shadow-[0_12px_40px_rgba(239,68,68,0.4)] backdrop-blur-md"
             : "bg-white/5 border border-transparent opacity-85 hover:opacity-100 hover:bg-white/10 hover:border-red-500/30 hover:scale-[1.02]"
         }
       `}
                 >
                   <span
                     className={`
-          flex-shrink-0 w-4 h-4 rounded-full transition-all duration-400
+          shrink-0 w-4 h-4 rounded-full transition-all duration-400
           ${
             active === i
-              ? "bg-gradient-to-br from-red-500 to-rose-500 scale-130 shadow-[0_0_20px_rgba(239,68,68,0.9)] ring-4 ring-red-500/50"
+              ? "bg-linear-to-br from-red-500 to-rose-500 scale-130 shadow-[0_0_20px_rgba(239,68,68,0.9)] ring-4 ring-red-500/50"
               : "bg-red-400/60"
           }
         `}
