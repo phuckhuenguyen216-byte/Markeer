@@ -17,6 +17,7 @@
   "hero": {
     "brand": "MARKEE AI",
     "headline": "MARKETING CỦA BẠN PHẢI THỰC SỰ RA KHÁCH",
+    "headlineMarketing": "NỀN TẢNG AI MARKETING GIÚP BẠN TẠO NỘI DUNG NHANH GẤP 10 LẦN & TĂNG TRƯỞNG BẰNG DỮ LIỆU THẬT",
     "subheadline": "Bạn đang tự chạy ads mà không ra khách? Hay thuê agency rồi thất vọng? Markee AI làm thay bạn — Markee làm, bạn xem kết quả.",
     "badge": "Ưu đãi đặc biệt",
     "offer": "<strong> DÙNG THỬ MIỄN PHÍ 1 THÁNG 1000 AI CREDITS </strong>",
@@ -218,6 +219,28 @@
           "Quản lý nhiều chiến dịch song song",
           "Phù hợp Marketing Agency và team MKT nội bộ"
         ]
+      }
+    ]
+  },
+  "problemsMarketing": {
+    "title": "DOANH NGHIỆP ĐANG GẶP VẤN ĐỀ GÌ?",
+    "description": "Marketing hiện đại đòi hỏi quản lý nhiều kênh, nhiều người, nhiều chiến dịch — trong khi hầu hết doanh nghiệp vẫn đang làm thủ công và rời rạc.",
+    "cards": [
+      {
+        "title": "Quản lý nhiều nền tảng",
+        "description": "Facebook, TikTok, Instagram, LinkedIn... mỗi kênh một quy trình khác nhau, tốn sức quản lý."
+      },
+      {
+        "title": "Thiếu chiến lược nội dung",
+        "description": "Đăng bài theo cảm tính, không có kế hoạch dài hạn, hiệu quả không ổn định."
+      },
+      {
+        "title": "Vận hành tốn thời gian",
+        "description": "Viết nội dung, lên lịch, tổng hợp báo cáo — chiếm phần lớn thời gian của đội ngũ."
+      },
+      {
+        "title": "Khó theo dõi hiệu quả",
+        "description": "Dữ liệu phân tán trên nhiều nền tảng, không có bức tranh tổng thể để tối ưu chiến lược."
       }
     ]
   },

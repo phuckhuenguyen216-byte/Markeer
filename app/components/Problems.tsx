@@ -266,10 +266,14 @@ const css = `
   }
 `;
 
-export default function Problems() {
+type ProblemsProps = {
+  namespace?: string;
+};
+
+export default function Problems({ namespace = "problems" }: ProblemsProps = {}) {
   const { t } = useTranslation("common");
 
-  const rawCards = t("problems.cards", { returnObjects: true });
+  const rawCards = t(`${namespace}.cards`, { returnObjects: true });
   const cards = Array.isArray(rawCards)
     ? (rawCards as { title: string; description: string; highlight?: string }[])
     : [];
@@ -298,12 +302,12 @@ export default function Problems() {
         {/* header */}
         <div className="pb-header">
           <h2 className="pb-title">
-            {t("problems.title")}
+            {t(`${namespace}.title`)}
           </h2>
           <div className="pb-title-rule">
             <div className="pb-title-rule-shine" />
           </div>
-          <p className="pb-desc">{t("problems.description")}</p>
+          <p className="pb-desc">{t(`${namespace}.description`)}</p>
         </div>
 
         {/* rows */}
