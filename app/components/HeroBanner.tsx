@@ -8,11 +8,18 @@ import "../i18n";
 export default function HeroSection() {
   const { t } = useTranslation("common");
   const [showConsultation, setShowConsultation] = useState(false);
+  const [mobileTab, setMobileTab] = useState<number | null>(null);
+
+  const mobileTabs = [
+    { icon: "🎯", label: t("consultation.tab1Title") },
+    { icon: "💻", label: t("consultation.tab2Title") },
+    { icon: "🔥", label: t("consultation.tab3Title") },
+  ];
 
   const consultationToggle = (
     <button
       type="button"
-      onClick={() => setShowConsultation((value) => !value)}
+      onClick={() => { setShowConsultation((v) => !v); setMobileTab(null); }}
       className="relative flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full
       bg-linear-to-r from-red-500 via-rose-500 to-orange-400
       text-white font-semibold text-sm shadow-lg border border-white/30 overflow-hidden cursor-pointer"
@@ -58,23 +65,105 @@ export default function HeroSection() {
               {t("hero.subheadline")}
             </p>
 
-            {/* Offer highlight box */}
-            <div className="flex items-start gap-2 bg-yellow-400/20 border border-yellow-300/50 rounded-2xl px-3 py-2.5 mb-5">
+            {/* Offer highlight box — click to app */}
+            <a
+              href="https://app.markeeai.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-yellow-400/20 border border-yellow-300/50 rounded-2xl px-3 py-2.5 mb-5 hover:bg-yellow-400/30 transition-colors"
+            >
               <span className="text-yellow-300 shrink-0">🎁</span>
-              <p className="text-yellow-100 text-xs font-semibold leading-snug">
+              <span className="text-yellow-100 text-xs font-semibold leading-snug">
                 <Trans
                   i18nKey="hero.offer"
                   components={{
                     strong: <span className="text-yellow-300 font-bold" />,
                   }}
                 />
-              </p>
-            </div>
+              </span>
+            </a>
 
-            {!showConsultation && consultationToggle}
+            {consultationToggle}
             {showConsultation && (
-              <div className="mt-5 -mx-1">
-                <ConsultationForm variant="embedded" onClose={() => setShowConsultation(false)} />
+              <div
+                className="mt-3 rounded-2xl overflow-hidden"
+                style={{
+                  background: "rgba(255,255,255,0.9)",
+                  border: "1px solid rgba(255,255,255,0.7)",
+                  boxShadow: "0 16px 40px rgba(15,23,42,0.18)",
+                  backdropFilter: "blur(14px)",
+                }}
+              >
+                {/* Header */}
+                <div className="flex items-start justify-between gap-3 px-4 pt-4 pb-3">
+                  <div>
+                    <p style={{
+                      fontSize: 11, fontWeight: 800, letterSpacing: "0.1em",
+                      textTransform: "uppercase", margin: "0 0 3px",
+                      background: "linear-gradient(90deg,#201e1e,#ad2e2e,#ff2a2a)",
+                      WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+                    }}>
+                      {t("solutions.title")}
+                    </p>
+                    <h2 style={{
+                      fontSize: 20, fontWeight: 800, lineHeight: 1.12, margin: 0,
+                      textTransform: "uppercase",
+                      background: "linear-gradient(90deg,#201e1e,#350707,#ad2e2e,#ff2a2a)",
+                      WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+                    }}>
+                      {t("consultation.sectionTitle")}
+                    </h2>
+                    <p style={{ color: "#64748b", fontSize: 12, marginTop: 4 }}>
+                      {t("consultation.sectionSubtitle")}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { setShowConsultation(false); setMobileTab(null); }}
+                    aria-label="Đóng"
+                    style={{
+                      width: 32, height: 32, borderRadius: "50%", border: "1px solid rgba(225,29,72,0.2)",
+                      background: "#fff", color: "#e11d48", fontSize: 18, fontWeight: 900,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      cursor: "pointer", flexShrink: 0,
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+
+                {/* Accordion items */}
+                <div className="px-3 pb-3 space-y-2">
+                  {mobileTabs.map((tab, i) => (
+                    <div key={i}>
+                      <button
+                        type="button"
+                        onClick={() => setMobileTab(mobileTab === i ? null : i)}
+                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl font-bold text-sm border transition-all duration-200 cursor-pointer ${
+                          mobileTab === i
+                            ? "bg-red-50 text-red-600 border-red-300 shadow-sm"
+                            : "bg-white text-gray-700 border-gray-200 hover:border-red-200"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2.5 text-left">
+                          <span className="text-base">{tab.icon}</span>
+                          <span>{tab.label}</span>
+                        </span>
+                        <span className={`transition-transform duration-200 shrink-0 text-xs ml-2 text-gray-400 ${mobileTab === i ? "rotate-180" : ""}`}>▼</span>
+                      </button>
+                      {mobileTab === i && (
+                        <div className="mt-2">
+                          <ConsultationForm
+                            variant="embedded"
+                            initialTab={i}
+                            hideTabs
+                            onClose={() => setMobileTab(null)}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
@@ -150,14 +239,18 @@ export default function HeroSection() {
           style={{ zIndex: 30 }}
         >
           {!showConsultation && (
-            <p className="text-lg md:text-2xl font-semibold mb-8 flex justify-center text-center">
-              <Trans
-                i18nKey="hero.offer"
-                components={{
-                  strong: <span className="text-red-500 font-bold" />,
-                }}
-              />
-            </p>
+            <a
+              href="https://app.markeeai.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full mb-4
+              bg-linear-to-r from-red-500 via-rose-500 to-orange-400
+              text-white font-semibold text-sm shadow-lg border border-white/30 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+            >
+              <span>🎁</span>
+              <span><Trans i18nKey="hero.offer" components={{ strong: <span className="font-bold" /> }} /></span>
+              <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent animate-tech-shine" />
+            </a>
           )}
 
           <div className={showConsultation ? "w-full" : "w-[min(620px,90vw)] mx-auto"}>

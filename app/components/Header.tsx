@@ -44,14 +44,33 @@ export default function Header() {
             {t("header.home")}
           </Link>
 
-          <Link
-            href="https://chat.markeeai.com/"
-            className="hover:text-gray-900 transition-colors"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Markee Chat
-          </Link>
+          {/* Services Dropdown */}
+          <div className="relative group">
+            <button
+              type="button"
+              className="flex items-center gap-1 hover:text-gray-900 transition-colors"
+            >
+              {t("header.services")}
+              <span className="text-xs">▾</span>
+            </button>
+
+            <div className="absolute left-0 top-full mt-2 w-56 rounded-xl bg-white shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-1">
+              <Link
+                href="https://chat.markeeai.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50"
+              >
+                Markee Chat
+              </Link>
+              <Link
+                href="/markee-marketing"
+                className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50"
+              >
+                Markee Marketing
+              </Link>
+            </div>
+          </div>
 
           {/* About Dropdown */}
           <div className="relative group">
@@ -107,13 +126,13 @@ export default function Header() {
         <div className="flex items-center gap-3">
           {/* Phone */}
           <a
-            href="tel:0392806307"
+            href="tel:0765055708"
             className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-red-500 transition-colors"
           >
             <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            <span className="hidden sm:inline">0392 806 307</span>
+            <span className="hidden sm:inline">0765 055 708</span>
           </a>
 
           <LanguageSwitcher />
@@ -154,15 +173,28 @@ export default function Header() {
               {t("header.home")}
             </Link>
 
-            <Link
-              href="https://chat.markeeai.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-gray-700 hover:text-gray-900"
-              onClick={() => setIsOpen(false)}
-            >
-              Markee Chat
-            </Link>
+            {/* Services Section in Mobile */}
+            <div className="pt-1">
+              <p className="text-sm text-gray-500 mb-2 px-1">
+                {t("header.services")}
+              </p>
+              <Link
+                href="https://chat.markeeai.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block py-3 px-1 text-gray-700 hover:text-gray-900"
+                onClick={() => setIsOpen(false)}
+              >
+                Markee Chat
+              </Link>
+              <Link
+                href="/markee-marketing"
+                className="block py-3 px-1 text-gray-700 hover:text-gray-900"
+                onClick={() => setIsOpen(false)}
+              >
+                Markee Marketing
+              </Link>
+            </div>
 
             <a
               href="/#features"

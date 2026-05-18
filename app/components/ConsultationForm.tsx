@@ -8,6 +8,8 @@ import "../i18n";
 type ConsultationFormProps = {
   variant?: "section" | "embedded";
   onClose?: () => void;
+  initialTab?: number;
+  hideTabs?: boolean;
 };
 
 type ConsultationTab = {
@@ -31,9 +33,9 @@ type ConsultationTab = {
   bundleDesc?: string;
 };
 
-export default function ConsultationForm({ variant = "section", onClose }: ConsultationFormProps) {
+export default function ConsultationForm({ variant = "section", onClose, initialTab = 0, hideTabs = false }: ConsultationFormProps) {
   const { t } = useTranslation("common");
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [mobileOpen, setMobileOpen] = useState<number | null>(null);
   const [phone, setPhone] = useState("");
   const [sending, setSending] = useState(false);
@@ -719,6 +721,7 @@ export default function ConsultationForm({ variant = "section", onClose }: Consu
       <>
         <style>{css}</style>
         <div className="cf-embedded cf-embedded-shell">
+          {!hideTabs && (
           <div className="cf-embedded-head">
             <div>
               <p className="cf-embedded-kicker">{t("solutions.title")}</p>
@@ -731,6 +734,8 @@ export default function ConsultationForm({ variant = "section", onClose }: Consu
               </button>
             )}
           </div>
+          )}
+          {!hideTabs && (
           <div className="cf-embedded-tabs" role="tablist" aria-label={t("consultation.sectionTitle")}>
             {tabsData.map((tab, i) => (
               <button
@@ -746,6 +751,7 @@ export default function ConsultationForm({ variant = "section", onClose }: Consu
               </button>
             ))}
           </div>
+          )}
           {renderHeroCard(tabsData[activeTab])}
         </div>
       </>

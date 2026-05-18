@@ -48,7 +48,7 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="md:col-span-1">
             <div className="mb-6">
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              <h3 className="text-2xl font-bold bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                 {t("footer.brandTitle")}
               </h3>
             </div>
@@ -123,10 +123,10 @@ export default function Footer() {
               <div>
                 {t("footer.contact.phoneLabel")}:{" "}
                 <a
-                  href="tel:0392806307"
+                  href="tel:0765055708"
                   className="text-blue-400 hover:text-blue-300 transition-colors"
                 >
-                  0392 806 307
+                  0765 055 708
                 </a>
               </div>
             </div>
@@ -175,7 +175,7 @@ export default function Footer() {
 
         {/* Slogan */}
         {/* <div className="text-center mt-8 pt-8 border-t border-gray-800">
-          <h3 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+          <h3 className="text-xl font-bold bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
             Markee – Trợ lý Marketing AI cho doanh nghiệp hiện đại
           </h3>
           <p className="text-gray-400">
