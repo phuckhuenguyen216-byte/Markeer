@@ -65,6 +65,8 @@ export default function Header() {
               </Link>
               <Link
                 href="/markee-marketing"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50"
               >
                 Markee Marketing
@@ -189,6 +191,8 @@ export default function Header() {
               </Link>
               <Link
                 href="/markee-marketing"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block py-3 px-1 text-gray-700 hover:text-gray-900"
                 onClick={() => setIsOpen(false)}
               >

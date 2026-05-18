@@ -29,7 +29,7 @@ export default function MarkeeMarketingHero() {
 
         {/* Content section — seamless continuation from banner */}
         <div style={{ background: "linear-gradient(135deg, #d42b4e 0%, #e8294c 60%, #c0392b 100%)" }}>
-          <div className="px-5 pt-3 pb-7 pr-16">
+          <div className="px-5 pt-3 pb-7">
 
             {/* Brand heading */}
             <h1 className="text-3xl font-black text-white leading-none mb-2 tracking-tight">
@@ -38,21 +38,30 @@ export default function MarkeeMarketingHero() {
 
             {/* Headline */}
             <p className="text-sm font-semibold text-white/90 leading-snug mb-4">
-              {t("hero.headline")}
+              {t("hero.headlineMarketing")}
             </p>
 
-            {/* Offer highlight box */}
-            <div className="flex items-start gap-2 bg-yellow-400/20 border border-yellow-300/50 rounded-2xl px-3 py-2.5 mb-5">
-              <span className="text-yellow-300 shrink-0">🎁</span>
-              <p className="text-yellow-100 text-xs font-semibold leading-snug">
+            {/* Offer CTA link */}
+            <a
+              href="https://app.markeeai.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full mb-4
+              bg-linear-to-r from-red-500 via-rose-500 to-orange-400
+              text-white font-semibold text-sm shadow-lg border border-white/30 overflow-hidden
+              cursor-pointer hover:opacity-90 transition-opacity"
+            >
+              <span>🎁</span>
+              <span className="text-center leading-snug">
                 <Trans
                   i18nKey="hero.offer"
                   components={{
-                    strong: <span className="text-yellow-300 font-bold" />,
+                    strong: <span className="font-bold" />,
                   }}
                 />
-              </p>
-            </div>
+              </span>
+              <span suppressHydrationWarning className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent animate-tech-shine" />
+            </a>
 
             {/* CTA buttons */}
             <div className="flex flex-col gap-3">
@@ -113,7 +122,7 @@ export default function MarkeeMarketingHero() {
               `,
             }}
           >
-            {t("hero.headline")}
+            {t("hero.headlineMarketing")}
           </h2>
 
           <div className="flex justify-center mt-10 mb-6 -translate-x-6">
@@ -140,14 +149,26 @@ export default function MarkeeMarketingHero() {
           className="absolute left-[8%] bottom-[12%] md:left-[10%] md:bottom-[12%] text-white max-w-[650px]"
           style={{ zIndex: 20 }}
         >
-          <p className="text-lg md:text-2xl font-semibold mb-8 flex justify-center text-center">
-            <Trans
-              i18nKey="hero.offer"
-              components={{
-                strong: <span className="text-red-500 font-bold" />,
-              }}
-            />
-          </p>
+          <a
+            href="https://app.markeeai.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full mb-4
+            bg-linear-to-r from-red-500 via-rose-500 to-orange-400
+            text-white font-semibold text-sm shadow-lg border border-white/30 overflow-hidden
+            cursor-pointer hover:opacity-90 transition-opacity"
+          >
+            <span>🎁</span>
+            <span>
+              <Trans
+                i18nKey="hero.offer"
+                components={{
+                  strong: <span className="font-bold" />,
+                }}
+              />
+            </span>
+            <span suppressHydrationWarning className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent animate-tech-shine" />
+          </a>
 
           <div className="flex items-center justify-center gap-6 flex-wrap">
             <div

@@ -14,7 +14,7 @@ export default function MarkeeMarketingPage() {
   return (
     <main className="relative">
       <MarkeeMarketingHero />
-      <Problems />
+      <Problems namespace="problemsMarketing" />
       <FeaturesSection />
       <Permission />
       <Deployment />

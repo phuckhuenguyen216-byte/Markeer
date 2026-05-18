@@ -16,6 +16,7 @@
   },
   "hero": {
     "brand": "MARKEE AI",
+    "headlineMarketing": "AI Marketing platform that helps you create content 10x faster & grow with real data",
     "headline": "YOUR MARKETING MUST ACTUALLY BRING CUSTOMERS",
     "subheadline": "Running ads yourself with no results? Or hired an agency and got disappointed? Markee AI does it for you — Markee works, you see the results.",
     "badge": "Special offer for new users",
@@ -215,6 +216,28 @@
           "Manage multiple campaigns simultaneously.",
           "Suitable for Marketing Agencies and In-House Marketing Teams"
         ]
+      }
+    ]
+  },
+  "problemsMarketing": {
+    "title": "WHAT PROBLEMS IS THE BUSINESS FACING?",
+    "description": "Modern marketing demands managing multiple channels, teams, and campaigns—yet most businesses still rely on manual, fragmented processes.",
+    "cards": [
+      {
+        "title": "Multi-platform management",
+        "description": "Facebook, TikTok, Instagram, LinkedIn... Each channel has a different process, which requires a lot of management effort."
+      },
+      {
+        "title": "Lack of a content strategy",
+        "description": "Posting content based on intuition, without a long-term plan, leading to inconsistent effectiveness."
+      },
+      {
+        "title": "Time-consuming operation",
+        "description": "Writing content, scheduling, compiling reports — these tasks take up a large portion of the team's time."
+      },
+      {
+        "title": "Difficult to track effectiveness",
+        "description": "Data is scattered across multiple platforms, lacking a comprehensive picture to optimize strategy."
       }
     ]
   },
