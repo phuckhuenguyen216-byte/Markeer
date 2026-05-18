@@ -18,6 +18,7 @@ export default function Solutions() {
       cta: t("solutions.plan1Cta"),
       ctaColor: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)",
       note: t("solutions.plan1Note"),
+      zaloMsg: "Xin chào Markee! Tôi muốn tư vấn dịch vụ AI Marketing Trọn Gói.",
     },
     {
       tag: "IT OUTSOURCING",
@@ -31,6 +32,7 @@ export default function Solutions() {
       cta: t("solutions.plan2Cta"),
       ctaColor: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
       note: t("solutions.plan2Note"),
+      zaloMsg: "Xin chào Markee! Tôi muốn nhận báo giá dịch vụ Phát Triển AI & Software.",
     },
   ];
 
@@ -163,15 +165,18 @@ export default function Solutions() {
                   <span className="text-3xl font-black text-red-500">{plan.price}</span>
                   <span className="text-gray-400 text-sm"> {plan.priceSuffix}</span>
                 </div>
-                <button
-                  className="w-full py-4 rounded-xl font-bold text-white text-base transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+                <a
+                  href={`https://zalo.me/2031335970632550296?message=${encodeURIComponent(plan.zaloMsg)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-4 rounded-xl font-bold text-white text-base text-center transition-all duration-300 hover:scale-[1.02] hover:shadow-lg block"
                   style={{
                     background: "linear-gradient(135deg, rgb(225,29,72) 0%, #ff4444 100%)",
                     boxShadow: "0 6px 20px rgba(225,29,72,0.25)",
                   }}
                 >
                   {plan.cta}
-                </button>
+                </a>
                 <p className="text-center text-xs text-gray-400 mt-3">{plan.note}</p>
               </div>
             ))}
