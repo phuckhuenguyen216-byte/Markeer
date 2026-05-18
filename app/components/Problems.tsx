@@ -271,7 +271,7 @@ export default function Problems() {
 
   const rawCards = t("problems.cards", { returnObjects: true });
   const cards = Array.isArray(rawCards)
-    ? (rawCards as { title: string; description: string }[])
+    ? (rawCards as { title: string; description: string; highlight?: string }[])
     : [];
 
   if (cards.length === 0) return null;
@@ -323,6 +323,11 @@ export default function Problems() {
                   <div className="pb-node" />
                   <h3 className="pb-card-title">{card.title}</h3>
                   <p className="pb-card-desc">{card.description}</p>
+                  {card.highlight && (
+                    <p className="pb-card-desc" style={{ marginTop: 8, color: "var(--r500)", fontWeight: 600, fontSize: 11 }}>
+                      ⚠ {card.highlight}
+                    </p>
+                  )}
                 </div>
 
               </div>

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Footer from "../components/Footer";
 import ChatwootWidget from "../components/ChatwootWidget";
-import SocialMedia from "../components/SocialMedia";
 import { useTranslation } from "react-i18next";
 
 export default function PrivacyPolicyPage() {
@@ -30,7 +29,6 @@ export default function PrivacyPolicyPage() {
   return (
     <>
     <ChatwootWidget />
-    <SocialMedia />
     <div className="relative lg:flex lg:gap-0">
 
 
@@ -193,7 +191,7 @@ export default function PrivacyPolicyPage() {
           text-gray-800
           leading-relaxed
           text-justify
-          break-words
+          wrap-break-word
           hyphens-auto
           [&>section]:scroll-mt-28
         ">

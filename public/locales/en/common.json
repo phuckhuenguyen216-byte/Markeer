@@ -15,8 +15,8 @@
   },
   "hero": {
     "brand": "MARKEE AI",
-    "headline": "AI Marketing platform that helps you create content 10x faster & grow with real data",
-    "subheadline": "MARKEE AI is an all-in-one AI platform for businesses, shops and agencies to create content, manage plans and analyze marketing performance in one place.",
+    "headline": "YOUR MARKETING MUST ACTUALLY BRING CUSTOMERS",
+    "subheadline": "Running ads yourself with no results? Or hired an agency and got disappointed? Markee AI does it for you — Markee works, you see the results.",
     "badge": "Special offer for new users",
     "offer": "Try <strong>1 month FREE</strong> – 1000 AI credits",
     "cta": "Claim your offer"
@@ -219,23 +219,27 @@
   },
   "problems": {
     "title": "WHAT PROBLEMS IS THE BUSINESS FACING?",
-    "description": "Modern marketing demands managing multiple channels, teams, and campaigns—yet most businesses still rely on manual, fragmented processes.",
+    "description": "4 most common issues draining your budget every day",
     "cards": [
       {
-        "title": "Multi-platform management",
-        "description": "Facebook, TikTok, Instagram, LinkedIn... Each channel has a different process, which requires a lot of management effort."
+        "title": "Internal marketing costs are too high",
+        "description": "Marketing team costs 50–100M VND/month, not including tools and training. ROI doesn't match the spend.",
+        "highlight": "Average loss: 80M/month"
       },
       {
-        "title": "Lack of a content strategy",
-        "description": "Posting content based on intuition, without a long-term plan, leading to inconsistent effectiveness."
+        "title": "Hiring a developer takes 3–6 months",
+        "description": "Searching, interviewing, onboarding a senior dev takes half a year. Projects miss deadlines by then.",
+        "highlight": "Average deadline delay: 4 months"
       },
       {
-        "title": "Time-consuming operation",
-        "description": "Writing content, scheduling, compiling reports — these tasks take up a large portion of the team's time."
+        "title": "Agency reports are vague, unmeasurable",
+        "description": "Money spent with no clarity on where it went. Reports lack data, no commitment to results.",
+        "highlight": "30% budget wasted"
       },
       {
-        "title": "Difficult to track effectiveness",
-        "description": "Data is scattered across multiple platforms, lacking a comprehensive picture to optimize strategy."
+        "title": "Competitors are already using AI, you're falling behind",
+        "description": "AI changes every month. Not enough resources to keep up while competitors are racing ahead.",
+        "highlight": "12–18 months behind the market"
       }
     ]
   },
@@ -1115,5 +1119,170 @@
         "desc": "Guide to using PM tools and KPI files to track productivity..."
       }
     }
+  },
+  "consultation": {
+    "sectionTitle": "WHAT PROBLEM ARE YOU FACING?",
+    "sectionSubtitle": "Pick your situation — get the right solution",
+    "sectionDesc": "No need to know what \u201cagency\u201d or \u201coutsourcing\u201d means. Just pick the problem you\u2019re facing.",
+    "tabBoth": "Both",
+    "placeholder": "Phone number",
+    "success": "Sent! We'll contact you within 5 minutes.",
+    "sendAnother": "Send another number",
+    "errorPhone": "Please enter a valid phone number",
+    "errorGeneral": "Failed to send, please try again",
+    "orContact": "Or message us via",
+    "priceSuffix": "/month",
+    "stat1": "Businesses",
+    "stat2": "Savings",
+    "stat3": "Setup",
+    "stat3Value": "7 days",
+    "stat4": "Satisfaction",
+    "testimonialQuote": "Markee AI saves my team 40 hours per week. Consistent content, optimized ads, clear reports.",
+    "testimonialName": "Nguyen Van A",
+    "testimonialRole": "CEO — eCommerce Startup",
+    "guaranteeTitle": "Our Guarantee",
+    "guaranteeItems": [
+      "Money back within 30 days if not satisfied",
+      "No long-term contract obligations",
+      "Full data handover upon completion"
+    ],
+    "tab1Title": "I want more customers",
+    "tab1Subtitle": "AI Marketing · Agency · Auto Content",
+    "tab1Desc": "Markee AI writes content, runs ads, and posts for you — AI works 24/7, you just check the weekly report. Perfect if you're facing any of these situations:",
+    "tab1PainPoints": [
+      "I run Facebook/TikTok Ads myself but get no customers, don't know why",
+      "I hired an agency but was disappointed — nice reports but no revenue",
+      "I'm too busy running operations, no time for proper marketing",
+      "My marketing staff quit and I don't know who can continue"
+    ],
+    "tab1Tags": ["AI writes content", "Auto-post 7 channels", "Optimized ads", "Weekly reports", "KPI commitment by contract"],
+    "tab1PricePrefix": "from only",
+    "tab1PriceSuffix": "/month",
+    "tab1PriceBadge": "Free 30-day trial",
+    "tab1FormTitle": "LEAVE YOUR NUMBER — FREE CONSULTATION IN 5 MINUTES",
+    "tab1Cta": "Consult",
+    "tab1Trusts": ["Callback in 5 min", "Completely free", "No spam"],
+    "tab2Title": "I need an app / software built",
+    "tab2Subtitle": "Custom IT · AI Chatbot · Automation",
+    "tab2Desc": "Senior dev team with 5+ years builds for you — from AI chatbots to web apps, mobile apps, automation systems. 100% source code handover, 6-month warranty.",
+    "tab2PainPoints": [
+      "I want a chatbot to auto-reply customers, handle orders 24/7",
+      "I need a website / app for my business but don't know who to ask",
+      "I want to automate internal processes — quotes, orders, reports",
+      "I have a product idea / startup that needs a quick MVP build"
+    ],
+    "tab2Tags": ["Senior dev 5+ years", "AI Chatbot", "Web / Mobile app", "Source code handover", "6-month warranty"],
+    "tab2PricePrefix": "from",
+    "tab2PriceSuffix": "/month",
+    "tab2PriceBadge": "Quote in 2 hours",
+    "tab2FormTitle": "LEAVE YOUR NUMBER — GET QUOTE IN 2 HOURS",
+    "tab2Cta": "Get quote",
+    "tab2Trusts": ["NDA signed immediately", "Free quote", "No obligation"],
+    "tab3Title": "I want both — full package",
+    "tab3Subtitle": "Marketing AI + Software · Full growth",
+    "tab3Desc": "Complete digital transformation package — attract customers while building automated systems to handle them. Perfect for businesses wanting to scale fast without hiring more staff.",
+    "tab3PainPoints": [
+      "I need both online customer acquisition and automated processing systems",
+      "I want to scale my business but don't want to hire more staff",
+      "I want AI to handle everything — from marketing to internal operations"
+    ],
+    "tab3Tags": ["Full Marketing AI", "Custom software", "Customer support chatbot", "Management dashboard"],
+    "tab3PricePrefix": "from only",
+    "tab3PriceSuffix": "/month",
+    "tab3PriceBadge": "Cheaper than buying separately",
+    "tab3Bundle": "Bundle package — save more than buying separately",
+    "tab3BundleDesc": "Contact us for a bundle quote that fits your business size",
+    "tab3ContactCta": "Contact us for a free bundle quote that fits your business",
+    "tab3FormTitle": "LEAVE YOUR NUMBER — FREE PACKAGE CONSULTATION",
+    "tab3Cta": "Consult",
+    "tab3Trusts": ["Callback in 5 min", "Bundle pricing", "No spam"]
+  },
+  "solutions": {
+    "title": "CHOOSE THE RIGHT SOLUTION FOR YOU",
+    "titleDark": "CHOOSE THE RIGHT SOLUTION",
+    "titleRed": "FOR YOU",
+    "description": "Markee AI offers 2 core services for every business need",
+    "plan1Title": "Full-Service AI Marketing",
+    "plan1Desc": "AI Agent team auto-produces content, schedules & analyzes 24/7 — functions as your in-house Marketing dept at 1/3 the cost.",
+    "plan1Features": [
+      "AI creates content matching your brand voice",
+      "Auto-post to 7 channels: FB, TT, IG, LI, YT, X, Web",
+      "30-day content plan in advance",
+      "Weekly KPI reports with clear data",
+      "AI suggests strategy optimization based on data",
+      "Dedicated 1-on-1 Account Manager"
+    ],
+    "plan1PriceSuffix": "/month",
+    "plan1PricePrefix": "from only",
+    "plan1Cta": "Free Marketing Consultation →",
+    "plan1Note": "No long-term commitment · Cancel anytime",
+    "plan2Title": "AI & Software Development",
+    "plan2Desc": "Senior developers with 5+ years experience deliver apps, AI chatbots, automation systems to spec — faster than hiring, 60% cheaper.",
+    "plan2Features": [
+      "AI chatbot customized for your business",
+      "Web app, mobile app end-to-end",
+      "AI integration into existing systems",
+      "Process automation (RPA, workflow)",
+      "100% source code handover, NDA protected",
+      "6-month warranty after delivery"
+    ],
+    "plan2PricePrefix": "projects from",
+    "plan2PriceSuffix": "/project",
+    "plan2Cta": "Get quote within 2 hours →",
+    "plan2Note": "NDA signed immediately · Free quote · No obligation"
+  },
+  "caseStudies": {
+    "title": "REAL PROJECT DATA — NO ESTIMATES",
+    "description": "Markee AI clients achieved these results within the first 30–90 days",
+    "cases": [
+      {
+        "category": "E-COMMERCE",
+        "name": "TechMart Vietnam",
+        "description": "Needed to increase leads for new products without increasing Marketing budget.",
+        "stats": [
+          { "value": "+247%", "label": "Potential customers from social" },
+          { "value": "-58%", "label": "Content creation cost" },
+          { "value": "40h", "label": "Saved per week for the team" }
+        ],
+        "tags": ["Marketing Agency", "Details →"]
+      },
+      {
+        "category": "HEALTHCARE",
+        "name": "MediCare Clinic",
+        "description": "Needed AI chatbot for appointment booking and customer support to reduce staff workload.",
+        "stats": [
+          { "value": "-72%", "label": "Customer support workload" },
+          { "value": "+180%", "label": "Auto-booked appointments" },
+          { "value": "30 days", "label": "From idea to go-live" }
+        ],
+        "tags": ["IT Outsourcing", "Details →"]
+      },
+      {
+        "category": "B2B SAAS STARTUP",
+        "name": "CloudBase Solutions",
+        "description": "Startup needed MVP in 45 days to pitch investors. No internal tech team.",
+        "stats": [
+          { "value": "45 days", "label": "From wireframe to complete MVP" },
+          { "value": "-65%", "label": "Cost vs. hiring internally" },
+          { "value": "$90K", "label": "Funding raised after MVP" }
+        ],
+        "tags": ["IT Outsourcing", "Details →"]
+      }
+    ]
+  },
+  "whyMarkee": {
+    "title": "WHY CHOOSE MARKEE AI?",
+    "description": "Direct comparison with other alternatives",
+    "colCriteria": "Criteria",
+    "colAgency": "Traditional Agency",
+    "colInternal": "Hire Internally",
+    "rows": [
+      { "criteria": "Monthly cost", "markee": "$250–600", "agency": "$1,200–3,200", "internal": "$2,000–6,000" },
+      { "criteria": "Time to start", "markee": "7 days", "agency": "2–4 weeks", "internal": "3–6 months" },
+      { "criteria": "KPI commitment by contract", "markee": "✓ Yes", "agency": "Rare", "internal": "✗" },
+      { "criteria": "Weekly reporting", "markee": "✓ Yes", "agency": "Monthly", "internal": "Self-managed" },
+      { "criteria": "AI automation integrated", "markee": "✓ Yes", "agency": "✗", "internal": "Requires extra investment" },
+      { "criteria": "Cancel without penalty", "markee": "✓ Anytime", "agency": "Usually has fees", "internal": "Notice required" }
+    ]
   }
 }

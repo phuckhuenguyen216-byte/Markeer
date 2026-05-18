@@ -15,8 +15,8 @@
   },
   "hero": {
     "brand": "MARKEE AI",
-    "headline": "NỀN TẢNG AI MARKETING GIÚP BẠN TẠO NỘI DUNG NHANH GẤP 10 LẦN & TĂNG TRƯỞNG BẰNG DỮ LIỆU THẬT",
-    "subheadline": "MARKEE AI là nền tảng AI tất cả trong một giúp doanh nghiệp, shop và agency tạo nội dung – quản lý kế hoạch – phân tích hiệu quả marketing chỉ trong một nơi duy nhất.",
+    "headline": "MARKETING CỦA BẠN PHẢI THỰC SỰ RA KHÁCH",
+    "subheadline": "Bạn đang tự chạy ads mà không ra khách? Hay thuê agency rồi thất vọng? Markee AI làm thay bạn — Markee làm, bạn xem kết quả.",
     "badge": "Ưu đãi đặc biệt",
     "offer": "<strong> DÙNG THỬ MIỄN PHÍ 1 THÁNG 1000 AI CREDITS </strong>",
     "cta": "Đăng ký nhận demo"
@@ -222,23 +222,27 @@
   },
   "problems": {
     "title": "DOANH NGHIỆP ĐANG GẶP VẤN ĐỀ GÌ?",
-    "description": "Marketing hiện đại đòi hỏi quản lý nhiều kênh, nhiều người, nhiều chiến dịch — trong khi hầu hết doanh nghiệp vẫn đang làm thủ công và rời rạc.",
+    "description": "4 vấn đề phổ biến nhất đang làm chảy máu ngân sách của bạn mỗi ngày",
     "cards": [
       {
-        "title": "Quản lý nhiều nền tảng",
-        "description": "Facebook, TikTok, Instagram, LinkedIn... mỗi kênh một quy trình khác nhau, tốn sức quản lý."
+        "title": "Chi phí Marketing nội bộ quá cao",
+        "description": "Team marketing tốn 50–100 triệu/tháng, chưa tính tool và training. Hiệu quả không tương xứng.",
+        "highlight": "Mất trung bình 80tr/tháng"
       },
       {
-        "title": "Thiếu chiến lược nội dung",
-        "description": "Đăng bài theo cảm tính, không có kế hoạch dài hạn, hiệu quả không ổn định."
+        "title": "Tuyển developer mất 3–6 tháng",
+        "description": "Tìm kiếm, phỏng vấn, onboard 1 senior dev mất nửa năm. Dự án đã cháy deadline từ lúc đó.",
+        "highlight": "Trễ deadline trung bình 4 tháng"
       },
       {
-        "title": "Vận hành tốn thời gian",
-        "description": "Viết nội dung, lên lịch, tổng hợp báo cáo — chiếm phần lớn thời gian của đội ngũ."
+        "title": "Agency báo cáo chung chung, không đo được",
+        "description": "Tiền đi mà không biết tiêu vào đâu. Báo cáo thiếu số liệu, không có cam kết kết quả.",
+        "highlight": "30% ngân sách bị lãng phí"
       },
       {
-        "title": "Khó theo dõi hiệu quả",
-        "description": "Dữ liệu phân tán trên nhiều nền tảng, không có bức tranh tổng thể để tối ưu chiến lược."
+        "title": "Đối thủ đã dùng AI, bạn chưa kịp theo",
+        "description": "AI thay đổi từng tháng. Không đủ nguồn lực cập nhật trong khi đối thủ đang bỏ xa.",
+        "highlight": "Tụt hậu 12–18 tháng so với thị trường"
       }
     ]
   },
@@ -1123,5 +1127,170 @@
         "desc": "Hướng dẫn sử dụng công cụ PM và file KPI để theo dõi năng suất..."
       }
     }
+  },
+  "consultation": {
+    "sectionTitle": "BẠN ĐANG GẶP VẤN ĐỀ GÌ?",
+    "sectionSubtitle": "Chọn đúng tình trạng — nhận giải pháp phù hợp",
+    "sectionDesc": "Không cần biết \u201cagency\u201d hay \u201coutsourcing\u201d là gì. Chỉ cần chọn vấn đề bạn đang gặp.",
+    "tabBoth": "Cả hai",
+    "placeholder": "Số điện thoại",
+    "success": "Đã gửi! Chúng tôi sẽ liên hệ bạn trong 5 phút.",
+    "sendAnother": "Gửi số khác",
+    "errorPhone": "Vui lòng nhập số điện thoại hợp lệ",
+    "errorGeneral": "Gửi thất bại, vui lòng thử lại",
+    "orContact": "Hoặc nhắn qua",
+    "priceSuffix": "/tháng",
+    "stat1": "Doanh nghiệp",
+    "stat2": "Tiết kiệm",
+    "stat3": "Triển khai",
+    "stat3Value": "7 ngày",
+    "stat4": "Hài lòng",
+    "testimonialQuote": "Markee AI giúp team tôi tiết kiệm 40 giờ/tuần. Content đều đặn, ads tối ưu, báo cáo rõ ràng.",
+    "testimonialName": "Nguyễn Văn A",
+    "testimonialRole": "CEO — Startup eCommerce",
+    "guaranteeTitle": "Cam kết",
+    "guaranteeItems": [
+      "Hoàn tiền nếu không hài lòng trong 30 ngày",
+      "Không ràng buộc hợp đồng dài hạn",
+      "Bàn giao toàn bộ data khi kết thúc"
+    ],
+    "tab1Title": "Tôi muốn có thêm khách hàng",
+    "tab1Subtitle": "AI Marketing · Agency · Content tự động",
+    "tab1Desc": "Markee AI viết content, chạy ads, đăng bài thay bạn — AI làm 24/7, bạn chỉ cần xem báo cáo cuối tuần. Phù hợp nếu bạn đang gặp một trong những tình huống sau:",
+    "tab1PainPoints": [
+      "Tôi tự chạy Facebook/TikTok Ads nhưng không ra khách, không biết vì sao",
+      "Tôi đã thuê agency rồi nhưng thất vọng — báo cáo đẹp mà không thấy doanh số",
+      "Tôi quá bận vận hành, không có thời gian làm marketing bài bản",
+      "Nhân viên marketing nghỉ việc, tôi không biết ai tiếp tục làm"
+    ],
+    "tab1Tags": ["AI viết content", "Đăng 7 kênh tự động", "Chạy ads tối ưu", "Báo cáo hàng tuần", "Cam kết KPI bằng HĐ"],
+    "tab1PricePrefix": "chỉ từ",
+    "tab1PriceSuffix": "/tháng",
+    "tab1PriceBadge": "Thử miễn phí 30 ngày",
+    "tab1FormTitle": "ĐỂ LẠI SĐT — TƯ VẤN MIỄN PHÍ TRONG 5 PHÚT",
+    "tab1Cta": "Tư vấn",
+    "tab1Trusts": ["Gọi lại trong 5 phút", "Hoàn toàn miễn phí", "Không spam"],
+    "tab2Title": "Tôi cần xây app / phần mềm",
+    "tab2Subtitle": "IT theo yêu cầu · Chatbot AI · Tự động hóa",
+    "tab2Desc": "Đội dev senior 5+ năm xây cho bạn — từ chatbot AI đến web app, mobile app, hệ thống tự động hóa. Bàn giao source code 100%, bảo hành 6 tháng.",
+    "tab2PainPoints": [
+      "Tôi muốn có chatbot tự động trả lời khách, chăm sóc đơn hàng 24/7",
+      "Tôi cần xây website / app cho doanh nghiệp mà không biết nhờ ai",
+      "Tôi muốn tự động hóa quy trình nội bộ — báo giá, đặt hàng, báo cáo",
+      "Tôi có ý tưởng sản phẩm / startup cần build MVP nhanh"
+    ],
+    "tab2Tags": ["Dev senior 5+ năm", "Chatbot AI", "Web / Mobile app", "Bàn giao source code", "Bảo hành 6 tháng"],
+    "tab2PricePrefix": "chỉ từ",
+    "tab2PriceSuffix": "/tháng",
+    "tab2PriceBadge": "Báo giá trong 2 giờ",
+    "tab2FormTitle": "ĐỂ LẠI SĐT — NHẬN BÁO GIÁ TRONG 2 GIỜ",
+    "tab2Cta": "Báo giá",
+    "tab2Trusts": ["NDA bảo mật ngay", "Báo giá miễn phí", "Không ràng buộc"],
+    "tab3Title": "Tôi muốn cả hai — trọn gói",
+    "tab3Subtitle": "Marketing AI + Phần mềm · Tăng trưởng toàn diện",
+    "tab3Desc": "Gói chuyển đổi số toàn diện — vừa kéo khách về, vừa xây hệ thống xử lý khách tự động. Phù hợp doanh nghiệp đang muốn scale nhanh mà không cần tuyển thêm người.",
+    "tab3PainPoints": [
+      "Tôi vừa cần tăng khách từ online, vừa cần hệ thống xử lý tự động",
+      "Tôi đang muốn scale doanh nghiệp nhưng không muốn tuyển thêm nhân sự",
+      "Tôi muốn AI lo toàn bộ — từ marketing đến vận hành nội bộ"
+    ],
+    "tab3Tags": ["Marketing AI trọn gói", "Phần mềm theo yêu cầu", "Chatbot CSKH", "Dashboard quản lý"],
+    "tab3PricePrefix": "chỉ từ",
+    "tab3PriceSuffix": "/tháng",
+    "tab3PriceBadge": "Tiết kiệm hơn mua lẻ",
+    "tab3Bundle": "Gói tích hợp — tiết kiệm hơn mua lẻ",
+    "tab3BundleDesc": "Liên hệ để nhận báo giá gói bundle phù hợp với quy mô của bạn",
+    "tab3ContactCta": "Liên hệ để nhận báo giá gói phù hợp miễn phí",
+    "tab3FormTitle": "ĐỂ LẠI SĐT — TƯ VẤN GÓI PHÙ HỢP MIỄN PHÍ",
+    "tab3Cta": "Tư vấn",
+    "tab3Trusts": ["Gọi lại trong 5 phút", "Báo giá gói bundle", "Không spam"]
+  },
+  "solutions": {
+    "title": "CHỌN ĐÚNG GIẢI PHÁP CHO BẠN",
+    "titleDark": "CHỌN ĐÚNG GIẢI PHÁP",
+    "titleRed": "CHO BẠN",
+    "description": "Markee AI cung cấp 2 dịch vụ cốt lõi cho từng nhu cầu doanh nghiệp",
+    "plan1Title": "AI Marketing Trọn Gói",
+    "plan1Desc": "Đội AI Agent tự động sản xuất content, lên lịch & phân tích 24/7 — hoạt động như phòng Marketing nội bộ với 1/3 chi phí.",
+    "plan1Features": [
+      "AI tạo content theo brand voice của bạn",
+      "Đăng tự động 7 kênh: FB, TT, IG, LI, YT, X, Web",
+      "Lên kế hoạch nội dung 30 ngày trước",
+      "Báo cáo KPI hàng tuần, rõ từng số",
+      "AI đề xuất tối ưu chiến lược theo dữ liệu",
+      "Account Manager riêng 1-1"
+    ],
+    "plan1PriceSuffix": "/tháng",
+    "plan1PricePrefix": "chỉ từ",
+    "plan1Cta": "Tư vấn Marketing miễn phí →",
+    "plan1Note": "Không cam kết dài hạn · Hủy bất kỳ lúc nào",
+    "plan2Title": "Phát Triển AI & Software",
+    "plan2Desc": "Senior developer 5+ năm kinh nghiệm triển khai app, chatbot AI, hệ thống tự động theo đúng yêu cầu — nhanh hơn tuyển nội bộ, rẻ hơn 60%.",
+    "plan2Features": [
+      "Chatbot AI theo nghiệp vụ doanh nghiệp",
+      "Web app, mobile app từ A đến Z",
+      "Tích hợp AI vào hệ thống sẵn có",
+      "Tự động hóa quy trình (RPA, workflow)",
+      "Bàn giao source code 100%, NDA bảo mật",
+      "Bảo hành 6 tháng sau bàn giao"
+    ],
+    "plan2PricePrefix": "dự án từ",
+    "plan2PriceSuffix": "/dự án",
+    "plan2Cta": "Nhận báo giá trong 2 giờ →",
+    "plan2Note": "NDA ký mật ngay · Báo giá miễn phí · Không ràng buộc"
+  },
+  "caseStudies": {
+    "title": "SỐ LIỆU TỪ DỰ ÁN THỰC — KHÔNG ƯỚC TÍNH",
+    "description": "Khách hàng của Markee AI đạt được điều này trong vòng 30–90 ngày đầu tiên",
+    "cases": [
+      {
+        "category": "THƯƠNG MẠI ĐIỆN TỬ",
+        "name": "TechMart Vietnam",
+        "description": "Cần tăng lead cho sản phẩm mới mà không tăng ngân sách Marketing.",
+        "stats": [
+          { "value": "+247%", "label": "Khách hàng tiềm năng từ social" },
+          { "value": "-58%", "label": "Chi phí tạo content" },
+          { "value": "40h", "label": "Tiết kiệm mỗi tuần cho team" }
+        ],
+        "tags": ["Marketing Agency", "Chi tiết →"]
+      },
+      {
+        "category": "Y TẾ & SỨC KHỎE",
+        "name": "MediCare Clinic",
+        "description": "Cần chatbot AI xử lý đặt lịch khám và CSKH đã giảm tải nhân sự.",
+        "stats": [
+          { "value": "-72%", "label": "Workload đội CSKH" },
+          { "value": "+180%", "label": "Lịch hẹn đặt tự động" },
+          { "value": "30 ngày", "label": "Từ ý tưởng đến go-live" }
+        ],
+        "tags": ["IT Outsourcing", "Chi tiết →"]
+      },
+      {
+        "category": "B2B SAAS STARTUP",
+        "name": "CloudBase Solutions",
+        "description": "Startup cần MVP trong 45 ngày để pitch investor. Không có team tech nội bộ.",
+        "stats": [
+          { "value": "45 ngày", "label": "Từ wireframe đến MVP hoàn chỉnh" },
+          { "value": "-65%", "label": "Chi phí so với thuê nội bộ" },
+          { "value": "2.1 tỷ", "label": "Funding raise được sau MVP" }
+        ],
+        "tags": ["IT Outsourcing", "Chi tiết →"]
+      }
+    ]
+  },
+  "whyMarkee": {
+    "title": "TẠI SAO CHỌN MARKEE AI?",
+    "description": "So sánh trực tiếp với các lựa chọn thay thế",
+    "colCriteria": "Tiêu chí",
+    "colAgency": "Agency truyền thống",
+    "colInternal": "Tuyển nội bộ",
+    "rows": [
+      { "criteria": "Chi phí hàng tháng", "markee": "6–15 triệu", "agency": "30–80 triệu", "internal": "50–150 triệu" },
+      { "criteria": "Thời gian bắt đầu", "markee": "7 ngày", "agency": "2–4 tuần", "internal": "3–6 tháng" },
+      { "criteria": "Cam kết KPI bằng HĐ", "markee": "✓ Có", "agency": "Hiếm gặp", "internal": "✗" },
+      { "criteria": "Báo cáo hàng tuần", "markee": "✓ Có", "agency": "Hàng tháng", "internal": "Tự quản lý" },
+      { "criteria": "Tích hợp AI tự động", "markee": "✓ Có", "agency": "✗", "internal": "Cần đầu tư thêm" },
+      { "criteria": "Hủy không phí phạt", "markee": "✓ Bất kỳ lúc nào", "agency": "Thường có phí", "internal": "Phải báo trước" }
+    ]
   }
 }

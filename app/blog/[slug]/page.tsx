@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 
 import Footer from "../../components/Footer";
-import SocialMedia from "../../components/SocialMedia";
 import type { BlogPost } from "@/lib/blog";
 import { TAG_COLOR } from "@/lib/blog";
 
@@ -617,7 +616,7 @@ export default function BlogDetailPage() {
                   RELATED
                 </span>
               </div>
-              <div className="flex-1 h-px bg-gradient-to-r from-red-200 to-transparent" />
+              <div className="flex-1 h-px bg-linear-to-r from-red-200 to-transparent" />
             </div>
             <h3 className="text-2xl font-black text-gray-900 mb-10">
               {t("blog.relatedTitle")}
@@ -638,7 +637,7 @@ export default function BlogDetailPage() {
                   >
                     <Link
                       href={`/blog/${r.slug}`}
-                      className="group block rounded-[18px] overflow-hidden transition-all duration-[450ms]"
+                      className="group block rounded-[18px] overflow-hidden transition-all duration-450"
                       style={{
                         background: "linear-gradient(180deg, #ffffff, #fff8f8)",
                         border: "1px solid rgba(255,34,34,0.1)",
@@ -697,7 +696,6 @@ export default function BlogDetailPage() {
       )}
 
       <Footer />
-      <SocialMedia />
     </main>
   );
 }
