@@ -1,10 +1,28 @@
-import React from "react";
-import Link from "next/link";
+"use client";
+
+import { useState } from "react";
 import { useTranslation, Trans } from "react-i18next";
+import ConsultationForm from "./ConsultationForm";
 import "../i18n";
 
 export default function HeroSection() {
   const { t } = useTranslation("common");
+  const [showConsultation, setShowConsultation] = useState(false);
+
+  const consultationToggle = (
+    <button
+      type="button"
+      onClick={() => setShowConsultation((value) => !value)}
+      className="relative flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full
+      bg-linear-to-r from-red-500 via-rose-500 to-orange-400
+      text-white font-semibold text-sm shadow-lg border border-white/30 overflow-hidden cursor-pointer"
+      aria-expanded={showConsultation}
+    >
+      <span>🎯</span>
+      <span className="relative z-10">{t("solutions.title")}</span>
+      <span suppressHydrationWarning className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent animate-tech-shine" />
+    </button>
+  );
 
   return (
     <>
@@ -12,12 +30,12 @@ export default function HeroSection() {
       <div className="block md:hidden">
 
         {/* Banner image — starts at y=0, fixed header overlays top naturally */}
-        <div className="relative w-full" style={{ aspectRatio: "390 / 260" }}>
+        <div className="relative w-full overflow-hidden" style={{ aspectRatio: "390 / 260" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/img/mascot/banner.png"
+            src="/img/bannermobile.png"
             alt="Markee AI Banner"
-            className="absolute inset-0 w-full h-full object-cover object-left"
+            className="absolute inset-0 w-full h-full object-cover object-center"
           />
           {/* Fade bottom → brand red */}
           <div
@@ -28,16 +46,16 @@ export default function HeroSection() {
 
         {/* Content section — seamless continuation from banner */}
         <div style={{ background: "linear-gradient(135deg, #d42b4e 0%, #e8294c 60%, #c0392b 100%)" }}>
-          <div className="px-5 pt-3 pb-7 pr-16">
-
-            {/* Brand heading */}
-            <h1 className="text-3xl font-black text-white leading-none mb-2 tracking-tight">
-              {t("hero.brand")}
-            </h1>
+          <div className="px-5 pt-3 pb-7">
 
             {/* Headline */}
-            <p className="text-sm font-semibold text-white/90 leading-snug mb-4">
+            <h1 className="text-2xl font-black text-white leading-tight mb-2 tracking-tight uppercase">
               {t("hero.headline")}
+            </h1>
+
+            {/* Subheadline */}
+            <p className="text-sm font-medium text-white/80 leading-snug mb-4">
+              {t("hero.subheadline")}
             </p>
 
             {/* Offer highlight box */}
@@ -53,32 +71,12 @@ export default function HeroSection() {
               </p>
             </div>
 
-            {/* CTA buttons */}
-            <div className="flex flex-col gap-3">
-              {/* Primary CTA */}
-              <Link
-                href="https://app.markeeai.com"
-                target="_blank"
-                className="relative flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full
-                bg-linear-to-r from-indigo-500 via-purple-500 to-cyan-400
-                text-white font-semibold text-sm shadow-lg border border-white/30 overflow-hidden"
-              >
-                <span>📝</span>
-                <span className="relative z-10">{t("hero.cta")}</span>
-                <span suppressHydrationWarning className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent animate-tech-shine" />
-              </Link>
-
-              {/* Secondary */}
-              <div
-                className="relative flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full
-                bg-linear-to-r from-indigo-500 via-purple-500 to-cyan-400
-                text-white font-semibold text-sm shadow-lg border border-white/30 overflow-hidden"
-              >
-                <span>🎁</span>
-                <span className="relative z-10">{t("hero.badge")}</span>
-                <span suppressHydrationWarning className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent animate-tech-shine" />
+            {!showConsultation && consultationToggle}
+            {showConsultation && (
+              <div className="mt-5 -mx-1">
+                <ConsultationForm variant="embedded" onClose={() => setShowConsultation(false)} />
               </div>
-            </div>
+            )}
 
           </div>
         </div>
@@ -96,13 +94,13 @@ export default function HeroSection() {
       >
         {/* Góc trên phải */}
         <div
-          className="absolute right-[0%] top-[8%] text-white max-w-[900px] text-center
+          className="absolute text-white text-center
           bg-[url('/images/tech-bg-red.jpg')] bg-cover bg-center bg-no-repeat
-          p-8 rounded-2xl"
+          p-8 rounded-2xl right-[0%] top-[8%] max-w-[820px]"
           style={{ zIndex: 20 }}
         >
           <h2
-            className="text-2xl md:text-3xl font-bold mb-6 max-w-xl mx-auto text-white"
+            className="font-black mb-3 mx-auto text-white leading-tight uppercase tracking-tight text-4xl md:text-5xl max-w-2xl"
             style={{
               textShadow: `
                 0 2px 4px rgba(0,0,0,0.6),
@@ -114,8 +112,16 @@ export default function HeroSection() {
           >
             {t("hero.headline")}
           </h2>
+          <p
+            className="text-base md:text-lg font-medium text-white/85 mx-auto mb-2 max-w-xl"
+            style={{
+              textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+            }}
+          >
+            {t("hero.subheadline")}
+          </p>
 
-          <div className="flex justify-center mt-10 mb-6 -translate-x-6">
+          <div className="flex justify-center -mt-5 mb-2 -translate-x-6">
             <div
               className="relative p-0 rounded-xl
               bg-[url('/img/mascot/bieudo-logo.png')]
@@ -126,7 +132,7 @@ export default function HeroSection() {
                 loop
                 muted
                 playsInline
-                className="w-[90vw] max-w-[950px] rounded-xl"
+                className="w-[76vw] max-w-[760px] rounded-xl"
               >
                 <source src="/videos/ANIMATION-LOGO.webm" type="video/webm" />
               </video>
@@ -136,42 +142,31 @@ export default function HeroSection() {
 
         {/* Góc trái dưới */}
         <div
-          className="absolute left-[8%] bottom-[12%] md:left-[10%] md:bottom-[12%] text-white max-w-[650px]"
-          style={{ zIndex: 20 }}
+          className={`absolute text-white ${
+            showConsultation
+              ? "left-[3%] top-[120px] w-[min(880px,calc(100vw-460px))]"
+              : "left-[5%] bottom-[12%] md:bottom-[12%] max-w-[650px]"
+          }`}
+          style={{ zIndex: 30 }}
         >
-          <p className="text-lg md:text-2xl font-semibold mb-8 flex justify-center text-center">
-            <Trans
-              i18nKey="hero.offer"
-              components={{
-                strong: <span className="text-red-500 font-bold" />,
-              }}
-            />
-          </p>
+          {!showConsultation && (
+            <p className="text-lg md:text-2xl font-semibold mb-8 flex justify-center text-center">
+              <Trans
+                i18nKey="hero.offer"
+                components={{
+                  strong: <span className="text-red-500 font-bold" />,
+                }}
+              />
+            </p>
+          )}
 
-          <div className="flex items-center justify-center gap-6 flex-wrap">
-            <div
-              className="relative inline-flex items-center justify-center gap-3 w-[220px] px-6 py-3 rounded-full
-              bg-linear-to-r from-indigo-500 via-purple-500 to-cyan-400
-              text-white font-semibold text-base border border-white/20 backdrop-blur-md
-              animate-tech-glow overflow-hidden"
-            >
-              <span className="text-lg">🎁</span>
-              <span className="relative z-10">{t("hero.badge")}</span>
-              <span suppressHydrationWarning className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent animate-tech-shine" />
-            </div>
-
-            <Link
-              href="https://app.markeeai.com"
-              target="_blank"
-              className="relative inline-flex items-center justify-center gap-3 w-[250px] px-6 py-3 rounded-full
-              bg-linear-to-r from-indigo-500 via-purple-500 to-cyan-400
-              text-white font-semibold text-base border border-white/20 backdrop-blur-md
-              animate-tech-glow overflow-hidden"
-            >
-              <span className="text-lg">📝</span>
-              <span className="relative z-10">{t("hero.cta")}</span>
-              <span suppressHydrationWarning className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent animate-tech-shine" />
-            </Link>
+          <div className={showConsultation ? "w-full" : "w-[min(620px,90vw)] mx-auto"}>
+            {!showConsultation && consultationToggle}
+            {showConsultation && (
+              <div className="origin-top-left scale-[0.98]">
+                <ConsultationForm variant="embedded" onClose={() => setShowConsultation(false)} />
+              </div>
+            )}
           </div>
         </div>
       </section>

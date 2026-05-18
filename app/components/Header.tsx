@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import "../../app/i18n";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useState } from "react";
-import { Menu, X } from "lucide-react"; // ← Cần cài: npm install lucide-react
 
 export default function Header() {
   const { t } = useTranslation("common");
@@ -106,6 +105,17 @@ export default function Header() {
 
         {/* Right Side */}
         <div className="flex items-center gap-3">
+          {/* Phone */}
+          <a
+            href="tel:0392806307"
+            className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-red-500 transition-colors"
+          >
+            <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            <span className="hidden sm:inline">0392 806 307</span>
+          </a>
+
           <LanguageSwitcher />
 
           {/* Desktop Register Button */}
@@ -120,10 +130,11 @@ export default function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-gray-700 hover:text-gray-900 transition-colors"
+            className="md:hidden px-2 py-1.5 text-gray-700 hover:text-gray-900 transition-colors"
             aria-label="Toggle menu"
+            aria-expanded={isOpen}
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            <span className="text-xs font-semibold">Menu</span>
           </button>
         </div>
       </div>

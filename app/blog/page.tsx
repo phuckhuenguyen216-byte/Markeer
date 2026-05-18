@@ -20,7 +20,6 @@ import type { BlogPost } from "@/lib/blog";
 import { TAG_OPTIONS, TAG_COLOR } from "@/lib/blog";
 
 import Footer from "../components/Footer";
-import SocialMedia from "../components/SocialMedia";
 
 function readingTime(html: string) {
   const text = html.replace(/<[^>]+>/g, "");
@@ -42,7 +41,7 @@ function BorderTrace({
 }) {
   return (
     <svg
-      className="absolute inset-0 w-full h-full pointer-events-none z-[2]"
+      className="absolute inset-0 w-full h-full pointer-events-none z-2"
       preserveAspectRatio="none"
     >
       {/* Faint static border */}
@@ -805,7 +804,7 @@ export default function BlogPage() {
                       {t("blog.latestLabel")}
                     </span>
                   </div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-red-200 to-transparent" />
+                  <div className="flex-1 h-px bg-linear-to-r from-red-200 to-transparent" />
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">
                   {t("blog.latestTitle")}
@@ -991,7 +990,7 @@ export default function BlogPage() {
                       SYS.POPULAR — TOP READS
                     </span>
                   </div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-white/25 to-transparent" />
+                  <div className="flex-1 h-px bg-linear-to-r from-white/25 to-transparent" />
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
                   {t("blog.popularTitle")}
@@ -1164,7 +1163,7 @@ export default function BlogPage() {
                     EXPLORE
                   </span>
                 </div>
-                <div className="flex-1 h-px bg-gradient-to-r from-red-200 to-transparent" />
+                <div className="flex-1 h-px bg-linear-to-r from-red-200 to-transparent" />
               </div>
               <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-8">
                 {t("blog.allTitle")}
@@ -1381,7 +1380,6 @@ export default function BlogPage() {
       )}
 
       <Footer />
-      <SocialMedia />
     </main>
   );
 }

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, DM_Sans } from "next/font/google";
 import "./globals.css";
 import ClientI18nProvider from "./components/ClientI18nProvider";
 import ConditionalHeader from "./components/ConditionalHeader";
+import SocialFloat from "./components/SocialFloat";
 import Script from "next/script";
 
 const geistSans = Geist({
@@ -12,6 +13,11 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin", "latin-ext"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin", "latin-ext"],
 });
 
@@ -48,11 +54,12 @@ export default function RootLayout({
         `}
       </Script>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-gray-900`}
+        className={`${geistSans.variable} ${geistMono.variable} ${dmSans.variable} antialiased bg-white text-gray-900`}
       >
         <ClientI18nProvider>
           <ConditionalHeader />
           {children}
+          <SocialFloat />
         </ClientI18nProvider>
       </body>
     </html>
