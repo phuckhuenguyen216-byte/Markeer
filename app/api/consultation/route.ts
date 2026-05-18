@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
-const TELEGRAM_CHAT_MKT_SALES_ID = process.env.TELEGRAM_CHAT_MKT_SALES_ID || "";
-const TELEGRAM_CHAT_MKT_SALES_THREAD_ID = process.env.TELEGRAM_CHAT_MKT_SALES_THREAD_ID || "";
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN_TIEN || "";
+const TELEGRAM_CHAT_MKT_SALES_ID = process.env.TELEGRAM_CHAT_MKT_SALES_ID_TIEN || "";
+const TELEGRAM_CHAT_MKT_SALES_THREAD_ID = process.env.TELEGRAM_CHAT_MKT_SALES_THREAD_ID_TIEN || "";
 
 function optionalInt(value?: string) {
   if (!value) return undefined;
