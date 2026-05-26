@@ -38,8 +38,8 @@ export default function PrivacyPolicyPage() {
         <div className="lg:hidden">
         <aside
             className={`
-            fixed top-16 left-[-40px] z-50
-            h-[calc(110vh-5rem)]
+            fixed top-16 left-0 z-50
+            h-[calc(100dvh-4rem)]
             bg-white
             transition-all duration-300 ease-in-out
             ${open ? "w-90" : "w-10"}

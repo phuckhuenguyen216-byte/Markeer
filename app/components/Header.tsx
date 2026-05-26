@@ -13,7 +13,7 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between px-5 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
           <Image
@@ -29,7 +29,7 @@ export default function Header() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-6 text-sm text-gray-700">
+        <nav className="hidden md:flex items-center gap-5 text-sm text-gray-700 lg:gap-6">
           {/* <a
             href="/#features"
             className="hover:text-gray-900 transition-colors"
@@ -163,7 +163,7 @@ export default function Header() {
       {/* ==================== MOBILE MENU ==================== */}
       {isOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
-          <div className="px-6 py-8 flex flex-col gap-6 text-base">
+          <div className="mx-auto w-full max-w-[1280px] px-5 py-7 flex flex-col gap-5 text-base sm:px-6">
             <Link
               href="/"
               className="font-medium text-gray-700 hover:text-gray-900"
