@@ -23,6 +23,46 @@
     "offer": "<strong> DÙNG THỬ MIỄN PHÍ 1 THÁNG 1000 AI CREDITS </strong>",
     "cta": "Đăng ký nhận demo"
   },
+  "insideMarkee": {
+    "hero": {
+      "badge": "BÊN TRONG MARKEE • SỔ TAY CÔNG TY • V1",
+      "headingLine1": "CHÚNG TA ĐANG XÂY",
+      "headingLine2Start": "CÁI GÌ",
+      "headingLine2Middle": "VÀ",
+      "headingLine2End": "TẠI SAO?",
+      "desc1": "Đây là tài liệu giúp bạn hiểu bức tranh lớn của hệ sinh thái Markee, từ Markee, GoDanang, Cloudgate đến SecurityZone.",
+      "desc2": "Đọc xong, bạn sẽ hiểu team mình đang đi đâu, đang làm gì, và vì sao mọi thứ được vận hành theo cách hiện tại.",
+      "note": "Một hệ sinh thái, chung định hướng, thực thi dài hạn.",
+      "primaryCta": "Tìm hiểu Markee",
+      "secondaryCta": "Xem tài liệu",
+      "imageAlt": "Sơ đồ hệ sinh thái Markee",
+      "cloudgateSoon": "Cloudgate (sắp có link)"
+    },
+    "floating": {
+      "goDanang": "GoDanang",
+      "cloudgate": "Cloudgate",
+      "securityZone": "SecurityZone",
+      "aiAutomation": "Tự động hóa AI"
+    },
+    "cards": {
+      "goDanang": {
+        "title": "GoDanang",
+        "subtitle": "Nền tảng trải nghiệm du lịch",
+        "description": "Nền tảng giới thiệu khách sạn và trải nghiệm du lịch Đà Nẵng theo thời gian thực."
+      },
+      "cloudgate": {
+        "title": "Cloudgate",
+        "subtitle": "Hạ tầng IT & bảo mật doanh nghiệp",
+        "description": "Giải pháp hạ tầng cloud và bảo mật giúp doanh nghiệp mở rộng ổn định."
+      },
+      "securityZone": {
+        "title": "SecurityZone",
+        "subtitle": "Tầng cộng đồng & niềm tin",
+        "description": "Cộng đồng chia sẻ kiến thức, cảnh báo rủi ro và tăng nhận thức an toàn số."
+      }
+    },
+    "bottomNote": "Đọc khoảng 10-15 phút nhưng sẽ giúp bạn hiểu cả năm làm việc."
+  },
   "about": {
     "title": "MARKEE AI LÀ GÌ?",
     "description": "Markee AI hoạt động như một đội ngũ AI Agent marketing — không chỉ là công cụ hỗ trợ, mà là giải pháp giúp doanh nghiệp xây dựng hệ thống marketing bền vững và có thể mở rộng trong kỷ nguyên số.",
@@ -67,16 +107,12 @@
     "description": "AI Agent Marketing Platform  ·  B2B · Agency · Doanh nghiệp",
     "primary": "Bắt đầu miễn phí ngay",
     "secondary": "Xem demo sản phẩm",
-
     "statusLive": "TRỰC TUYẾN",
     "usersOnline": "NGƯỜI DÙNG ONLINE",
-
     "users": "Người dùng",
-
     "trust1": "Không cần thẻ tín dụng",
     "trust2": "Hủy bất kỳ lúc nào",
     "trust3": "Bảo mật SSL 256-bit",
-
     "metricUsers": "Người dùng",
     "metricSatisfaction": "Hài lòng",
     "metricRating": "Đánh giá",
@@ -86,7 +122,6 @@
   "features": {
     "title": "TÍNH NĂNG NỔI BẬT",
     "description": "Nền tảng AI Marketing Automation giúp bạn tạo nội dung, lập kế hoạch và tối ưu hiệu suất toàn diện.",
-
     "groups": [
       {
         "group": "AUTO POST – TỰ ĐỘNG HÓA MARKETING",
@@ -106,7 +141,6 @@
           }
         ]
       },
-
       {
         "group": "PLAN & SCHEDULE – LẬP KẾ HOẠCH",
         "name": "MAX",
@@ -135,7 +169,6 @@
           }
         ]
       },
-
       {
         "group": "DASHBOARD – PHÂN TÍCH & BÁO CÁO",
         "name": "PIP",
@@ -802,7 +835,6 @@
       "title": "Danh mục"
     }
   },
-
   "apply": {
     "badge": "Đang tuyển sinh 2026",
     "title": "CHƯƠNG TRÌNH",
@@ -932,7 +964,11 @@
           "Mỗi log cần: hành vi cụ thể → impact → hướng xử lý"
         ]
       },
-      "gradeHead": ["Điểm", "Kết quả", "Ý nghĩa"],
+      "gradeHead": [
+        "Điểm",
+        "Kết quả",
+        "Ý nghĩa"
+      ],
       "grades": [
         {
           "label": "≥",
@@ -1009,9 +1045,14 @@
       "title": "Ứng tuyển Internship 2026",
       "loading": "Đang tải…"
     },
-    "path": ["Intern", "Fresher", "Junior", "Middle", "Senior"]
+    "path": [
+      "Intern",
+      "Fresher",
+      "Junior",
+      "Middle",
+      "Senior"
+    ]
   },
-
   "blog": {
     "title": "Blog AI Marketing",
     "heroDesc": "Kiến thức, chiến lược và xu hướng AI Marketing mới nhất giúp bạn tối ưu hoá hiệu quả kinh doanh.",
@@ -1053,7 +1094,6 @@
     "showOriginal": "Xem bản gốc",
     "translating": "Đang dịch..."
   },
-
   "admin": {
     "sidebar": {
       "dashboard": "Dashboard",
@@ -1155,7 +1195,7 @@
   "consultation": {
     "sectionTitle": "BẠN ĐANG GẶP VẤN ĐỀ GÌ?",
     "sectionSubtitle": "Chọn đúng tình trạng — nhận giải pháp phù hợp",
-    "sectionDesc": "Không cần biết \u201cagency\u201d hay \u201coutsourcing\u201d là gì. Chỉ cần chọn vấn đề bạn đang gặp.",
+    "sectionDesc": "Không cần biết “agency” hay “outsourcing” là gì. Chỉ cần chọn vấn đề bạn đang gặp.",
     "tabBoth": "Cả hai",
     "placeholder": "Số điện thoại",
     "success": "Đã gửi! Chúng tôi sẽ liên hệ bạn trong 5 phút.",
@@ -1187,13 +1227,23 @@
       "Tôi quá bận vận hành, không có thời gian làm marketing bài bản",
       "Nhân viên marketing nghỉ việc, tôi không biết ai tiếp tục làm"
     ],
-    "tab1Tags": ["AI viết content", "Đăng 7 kênh tự động", "Chạy ads tối ưu", "Báo cáo hàng tuần", "Cam kết KPI bằng HĐ"],
+    "tab1Tags": [
+      "AI viết content",
+      "Đăng 7 kênh tự động",
+      "Chạy ads tối ưu",
+      "Báo cáo hàng tuần",
+      "Cam kết KPI bằng HĐ"
+    ],
     "tab1PricePrefix": "chỉ từ",
     "tab1PriceSuffix": "/tháng",
     "tab1PriceBadge": "Thử miễn phí 30 ngày",
     "tab1FormTitle": "ĐỂ LẠI SĐT — TƯ VẤN MIỄN PHÍ TRONG 5 PHÚT",
     "tab1Cta": "Tư vấn",
-    "tab1Trusts": ["Gọi lại trong 5 phút", "Hoàn toàn miễn phí", "Không spam"],
+    "tab1Trusts": [
+      "Gọi lại trong 5 phút",
+      "Hoàn toàn miễn phí",
+      "Không spam"
+    ],
     "tab2Title": "Tôi cần xây app / phần mềm",
     "tab2Subtitle": "IT theo yêu cầu · Chatbot AI · Tự động hóa",
     "tab2Desc": "Đội dev senior 5+ năm xây cho bạn — từ chatbot AI đến web app, mobile app, hệ thống tự động hóa. Bàn giao source code 100%, bảo hành 6 tháng.",
@@ -1203,13 +1253,23 @@
       "Tôi muốn tự động hóa quy trình nội bộ — báo giá, đặt hàng, báo cáo",
       "Tôi có ý tưởng sản phẩm / startup cần build MVP nhanh"
     ],
-    "tab2Tags": ["Dev senior 5+ năm", "Chatbot AI", "Web / Mobile app", "Bàn giao source code", "Bảo hành 6 tháng"],
+    "tab2Tags": [
+      "Dev senior 5+ năm",
+      "Chatbot AI",
+      "Web / Mobile app",
+      "Bàn giao source code",
+      "Bảo hành 6 tháng"
+    ],
     "tab2PricePrefix": "chỉ từ",
     "tab2PriceSuffix": "/tháng",
     "tab2PriceBadge": "Báo giá trong 2 giờ",
     "tab2FormTitle": "ĐỂ LẠI SĐT — NHẬN BÁO GIÁ TRONG 2 GIỜ",
     "tab2Cta": "Báo giá",
-    "tab2Trusts": ["NDA bảo mật ngay", "Báo giá miễn phí", "Không ràng buộc"],
+    "tab2Trusts": [
+      "NDA bảo mật ngay",
+      "Báo giá miễn phí",
+      "Không ràng buộc"
+    ],
     "tab3Title": "Tôi muốn cả hai — trọn gói",
     "tab3Subtitle": "Marketing AI + Phần mềm · Tăng trưởng toàn diện",
     "tab3Desc": "Gói chuyển đổi số toàn diện — vừa kéo khách về, vừa xây hệ thống xử lý khách tự động. Phù hợp doanh nghiệp đang muốn scale nhanh mà không cần tuyển thêm người.",
@@ -1218,7 +1278,12 @@
       "Tôi đang muốn scale doanh nghiệp nhưng không muốn tuyển thêm nhân sự",
       "Tôi muốn AI lo toàn bộ — từ marketing đến vận hành nội bộ"
     ],
-    "tab3Tags": ["Marketing AI trọn gói", "Phần mềm theo yêu cầu", "Chatbot CSKH", "Dashboard quản lý"],
+    "tab3Tags": [
+      "Marketing AI trọn gói",
+      "Phần mềm theo yêu cầu",
+      "Chatbot CSKH",
+      "Dashboard quản lý"
+    ],
     "tab3PricePrefix": "chỉ từ",
     "tab3PriceSuffix": "/tháng",
     "tab3PriceBadge": "Tiết kiệm hơn mua lẻ",
@@ -1227,7 +1292,11 @@
     "tab3ContactCta": "Liên hệ để nhận báo giá gói phù hợp miễn phí",
     "tab3FormTitle": "ĐỂ LẠI SĐT — TƯ VẤN GÓI PHÙ HỢP MIỄN PHÍ",
     "tab3Cta": "Tư vấn",
-    "tab3Trusts": ["Gọi lại trong 5 phút", "Báo giá gói bundle", "Không spam"]
+    "tab3Trusts": [
+      "Gọi lại trong 5 phút",
+      "Báo giá gói bundle",
+      "Không spam"
+    ]
   },
   "solutions": {
     "title": "CHỌN ĐÚNG GIẢI PHÁP CHO BẠN",
@@ -1272,33 +1341,69 @@
         "name": "TechMart Vietnam",
         "description": "Cần tăng lead cho sản phẩm mới mà không tăng ngân sách Marketing.",
         "stats": [
-          { "value": "+247%", "label": "Khách hàng tiềm năng từ social" },
-          { "value": "-58%", "label": "Chi phí tạo content" },
-          { "value": "40h", "label": "Tiết kiệm mỗi tuần cho team" }
+          {
+            "value": "+247%",
+            "label": "Khách hàng tiềm năng từ social"
+          },
+          {
+            "value": "-58%",
+            "label": "Chi phí tạo content"
+          },
+          {
+            "value": "40h",
+            "label": "Tiết kiệm mỗi tuần cho team"
+          }
         ],
-        "tags": ["Marketing Agency", "Chi tiết →"]
+        "tags": [
+          "Marketing Agency",
+          "Chi tiết →"
+        ]
       },
       {
         "category": "Y TẾ & SỨC KHỎE",
         "name": "MediCare Clinic",
         "description": "Cần chatbot AI xử lý đặt lịch khám và CSKH đã giảm tải nhân sự.",
         "stats": [
-          { "value": "-72%", "label": "Workload đội CSKH" },
-          { "value": "+180%", "label": "Lịch hẹn đặt tự động" },
-          { "value": "30 ngày", "label": "Từ ý tưởng đến go-live" }
+          {
+            "value": "-72%",
+            "label": "Workload đội CSKH"
+          },
+          {
+            "value": "+180%",
+            "label": "Lịch hẹn đặt tự động"
+          },
+          {
+            "value": "30 ngày",
+            "label": "Từ ý tưởng đến go-live"
+          }
         ],
-        "tags": ["IT Outsourcing", "Chi tiết →"]
+        "tags": [
+          "IT Outsourcing",
+          "Chi tiết →"
+        ]
       },
       {
         "category": "B2B SAAS STARTUP",
         "name": "CloudBase Solutions",
         "description": "Startup cần MVP trong 45 ngày để pitch investor. Không có team tech nội bộ.",
         "stats": [
-          { "value": "45 ngày", "label": "Từ wireframe đến MVP hoàn chỉnh" },
-          { "value": "-65%", "label": "Chi phí so với thuê nội bộ" },
-          { "value": "2.1 tỷ", "label": "Funding raise được sau MVP" }
+          {
+            "value": "45 ngày",
+            "label": "Từ wireframe đến MVP hoàn chỉnh"
+          },
+          {
+            "value": "-65%",
+            "label": "Chi phí so với thuê nội bộ"
+          },
+          {
+            "value": "2.1 tỷ",
+            "label": "Funding raise được sau MVP"
+          }
         ],
-        "tags": ["IT Outsourcing", "Chi tiết →"]
+        "tags": [
+          "IT Outsourcing",
+          "Chi tiết →"
+        ]
       }
     ]
   },
@@ -1309,12 +1414,42 @@
     "colAgency": "Agency truyền thống",
     "colInternal": "Tuyển nội bộ",
     "rows": [
-      { "criteria": "Chi phí hàng tháng", "markee": "6–15 triệu", "agency": "30–80 triệu", "internal": "50–150 triệu" },
-      { "criteria": "Thời gian bắt đầu", "markee": "7 ngày", "agency": "2–4 tuần", "internal": "3–6 tháng" },
-      { "criteria": "Cam kết KPI bằng HĐ", "markee": "✓ Có", "agency": "Hiếm gặp", "internal": "✗" },
-      { "criteria": "Báo cáo hàng tuần", "markee": "✓ Có", "agency": "Hàng tháng", "internal": "Tự quản lý" },
-      { "criteria": "Tích hợp AI tự động", "markee": "✓ Có", "agency": "✗", "internal": "Cần đầu tư thêm" },
-      { "criteria": "Hủy không phí phạt", "markee": "✓ Bất kỳ lúc nào", "agency": "Thường có phí", "internal": "Phải báo trước" }
+      {
+        "criteria": "Chi phí hàng tháng",
+        "markee": "6–15 triệu",
+        "agency": "30–80 triệu",
+        "internal": "50–150 triệu"
+      },
+      {
+        "criteria": "Thời gian bắt đầu",
+        "markee": "7 ngày",
+        "agency": "2–4 tuần",
+        "internal": "3–6 tháng"
+      },
+      {
+        "criteria": "Cam kết KPI bằng HĐ",
+        "markee": "✓ Có",
+        "agency": "Hiếm gặp",
+        "internal": "✗"
+      },
+      {
+        "criteria": "Báo cáo hàng tuần",
+        "markee": "✓ Có",
+        "agency": "Hàng tháng",
+        "internal": "Tự quản lý"
+      },
+      {
+        "criteria": "Tích hợp AI tự động",
+        "markee": "✓ Có",
+        "agency": "✗",
+        "internal": "Cần đầu tư thêm"
+      },
+      {
+        "criteria": "Hủy không phí phạt",
+        "markee": "✓ Bất kỳ lúc nào",
+        "agency": "Thường có phí",
+        "internal": "Phải báo trước"
+      }
     ]
   }
 }

@@ -502,7 +502,7 @@ function RegistrationModal({
             className="relative w-full overflow-hidden"
             style={{
               maxWidth: "1200px",
-              width: "calc(100vw - 24px)",
+              width: "100%",
               maxHeight: "100vh",
               borderRadius: 28,
               background: "linear-gradient(148deg, #dc2626 0%, #be123c 55%, #9f1239 100%)",

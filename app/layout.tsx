@@ -54,7 +54,7 @@ export default function RootLayout({
         `}
       </Script>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${dmSans.variable} antialiased bg-white text-gray-900`}
+        className={`${geistSans.variable} ${geistMono.variable} ${dmSans.variable} overflow-x-hidden antialiased bg-white text-gray-900`}
       >
         <ClientI18nProvider>
           <ConditionalHeader />

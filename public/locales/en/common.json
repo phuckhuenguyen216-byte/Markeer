@@ -23,6 +23,46 @@
     "offer": "Try <strong>1 month FREE</strong> – 1000 AI credits",
     "cta": "Claim your offer"
   },
+  "insideMarkee": {
+    "hero": {
+      "badge": "INSIDE MARKEE • COMPANY PLAYBOOK • V1",
+      "headingLine1": "WHAT EXACTLY ARE WE BUILDING",
+      "headingLine2Start": "WHAT",
+      "headingLine2Middle": "AND",
+      "headingLine2End": "WHY?",
+      "desc1": "This page gives you the big picture of the Markee ecosystem, spanning Markee, GoDanang, Cloudgate, and SecurityZone.",
+      "desc2": "After reading, you will understand where the team is heading, what we are building, and why we operate this way.",
+      "note": "One ecosystem, shared direction, long-term execution.",
+      "primaryCta": "Explore Markee",
+      "secondaryCta": "Read docs",
+      "imageAlt": "Markee ecosystem diagram",
+      "cloudgateSoon": "Cloudgate (link coming soon)"
+    },
+    "floating": {
+      "goDanang": "GoDanang",
+      "cloudgate": "Cloudgate",
+      "securityZone": "SecurityZone",
+      "aiAutomation": "AI Automation"
+    },
+    "cards": {
+      "goDanang": {
+        "title": "GoDanang",
+        "subtitle": "Live hospitality showcase",
+        "description": "A live platform for hotels and real-time travel experiences in Danang."
+      },
+      "cloudgate": {
+        "title": "Cloudgate",
+        "subtitle": "Enterprise IT & security",
+        "description": "Cloud infrastructure and security solutions for stable business growth."
+      },
+      "securityZone": {
+        "title": "SecurityZone",
+        "subtitle": "Community & trust layer",
+        "description": "A knowledge-sharing community for alerts, trust, and digital safety awareness."
+      }
+    },
+    "bottomNote": "10-15 minutes to read, but it will save you months of alignment."
+  },
   "about": {
     "title": "What is MARKEE AI?",
     "description": "Markee AI operates as a team of AI marketing agents—not just a supporting tool, but a solution that empowers businesses to build sustainable, scalable marketing systems in the digital era.",
@@ -66,16 +106,12 @@
     "description": "AI Agent Marketing Platform  ·  B2B · Agency · Business",
     "primary": "Start for free",
     "secondary": "Watch product demo",
-
     "statusLive": "LIVE",
     "usersOnline": "USERS ONLINE",
-
     "users": "Users",
-
     "trust1": "No credit card required",
     "trust2": "Cancel anytime",
     "trust3": "256-bit SSL security",
-
     "metricUsers": "Users",
     "metricSatisfaction": "Satisfaction",
     "metricRating": "Rating",
@@ -85,7 +121,6 @@
   "features": {
     "title": "Key Features",
     "description": "An AI Marketing Automation platform that helps you create content, plan campaigns, and optimize performance efficiently.",
-
     "groups": [
       {
         "group": "AUTO POST – MARKETING AUTOMATION",
@@ -105,7 +140,6 @@
           }
         ]
       },
-
       {
         "group": "PLAN & SCHEDULE – CONTENT PLANNING",
         "name": "MAX",
@@ -134,7 +168,6 @@
           }
         ]
       },
-
       {
         "group": "DASHBOARD – ANALYTICS & REPORTING",
         "name": "PIP",
@@ -164,7 +197,6 @@
         ]
       }
     ],
-
     "ctaTitle": "Automate Your Marketing with AI",
     "ctaDescription": "Markee helps you automate marketing workflows, optimize strategies, and make data-driven decisions with confidence."
   },
@@ -320,7 +352,12 @@
     },
     "support": {
       "title": "Support",
-      "items": ["Help center", "Contact", "Privacy policy", "Terms of service"]
+      "items": [
+        "Help center",
+        "Contact",
+        "Privacy policy",
+        "Terms of service"
+      ]
     },
     "contact": {
       "emailLabel": "Email",
@@ -794,7 +831,6 @@
       "title": "Table of Contents"
     }
   },
-
   "apply": {
     "badge": "Now Enrolling 2026",
     "title": "INTERNSHIP",
@@ -924,7 +960,11 @@
           "Each log requires: specific behavior → impact → resolution path"
         ]
       },
-      "gradeHead": ["Score", "Result", "Meaning"],
+      "gradeHead": [
+        "Score",
+        "Result",
+        "Meaning"
+      ],
       "grades": [
         {
           "label": "≥",
@@ -1001,9 +1041,14 @@
       "title": "Apply for Internship 2026",
       "loading": "Loading…"
     },
-    "path": ["Intern", "Fresher", "Junior", "Middle", "Senior"]
+    "path": [
+      "Intern",
+      "Fresher",
+      "Junior",
+      "Middle",
+      "Senior"
+    ]
   },
-
   "blog": {
     "title": "AI Marketing Blog",
     "heroDesc": "Latest AI Marketing insights, strategies, and trends to help you optimize your business performance.",
@@ -1045,7 +1090,6 @@
     "showOriginal": "Show original",
     "translating": "Translating..."
   },
-
   "admin": {
     "sidebar": {
       "dashboard": "Dashboard",
@@ -1147,7 +1191,7 @@
   "consultation": {
     "sectionTitle": "WHAT PROBLEM ARE YOU FACING?",
     "sectionSubtitle": "Pick your situation — get the right solution",
-    "sectionDesc": "No need to know what \u201cagency\u201d or \u201coutsourcing\u201d means. Just pick the problem you\u2019re facing.",
+    "sectionDesc": "No need to know what “agency” or “outsourcing” means. Just pick the problem you’re facing.",
     "tabBoth": "Both",
     "placeholder": "Phone number",
     "success": "Sent! We'll contact you within 5 minutes.",
@@ -1179,13 +1223,23 @@
       "I'm too busy running operations, no time for proper marketing",
       "My marketing staff quit and I don't know who can continue"
     ],
-    "tab1Tags": ["AI writes content", "Auto-post 7 channels", "Optimized ads", "Weekly reports", "KPI commitment by contract"],
+    "tab1Tags": [
+      "AI writes content",
+      "Auto-post 7 channels",
+      "Optimized ads",
+      "Weekly reports",
+      "KPI commitment by contract"
+    ],
     "tab1PricePrefix": "from only",
     "tab1PriceSuffix": "/month",
     "tab1PriceBadge": "Free 30-day trial",
     "tab1FormTitle": "LEAVE YOUR NUMBER — FREE CONSULTATION IN 5 MINUTES",
     "tab1Cta": "Consult",
-    "tab1Trusts": ["Callback in 5 min", "Completely free", "No spam"],
+    "tab1Trusts": [
+      "Callback in 5 min",
+      "Completely free",
+      "No spam"
+    ],
     "tab2Title": "I need an app / software built",
     "tab2Subtitle": "Custom IT · AI Chatbot · Automation",
     "tab2Desc": "Senior dev team with 5+ years builds for you — from AI chatbots to web apps, mobile apps, automation systems. 100% source code handover, 6-month warranty.",
@@ -1195,13 +1249,23 @@
       "I want to automate internal processes — quotes, orders, reports",
       "I have a product idea / startup that needs a quick MVP build"
     ],
-    "tab2Tags": ["Senior dev 5+ years", "AI Chatbot", "Web / Mobile app", "Source code handover", "6-month warranty"],
+    "tab2Tags": [
+      "Senior dev 5+ years",
+      "AI Chatbot",
+      "Web / Mobile app",
+      "Source code handover",
+      "6-month warranty"
+    ],
     "tab2PricePrefix": "from",
     "tab2PriceSuffix": "/month",
     "tab2PriceBadge": "Quote in 2 hours",
     "tab2FormTitle": "LEAVE YOUR NUMBER — GET QUOTE IN 2 HOURS",
     "tab2Cta": "Get quote",
-    "tab2Trusts": ["NDA signed immediately", "Free quote", "No obligation"],
+    "tab2Trusts": [
+      "NDA signed immediately",
+      "Free quote",
+      "No obligation"
+    ],
     "tab3Title": "I want both — full package",
     "tab3Subtitle": "Marketing AI + Software · Full growth",
     "tab3Desc": "Complete digital transformation package — attract customers while building automated systems to handle them. Perfect for businesses wanting to scale fast without hiring more staff.",
@@ -1210,7 +1274,12 @@
       "I want to scale my business but don't want to hire more staff",
       "I want AI to handle everything — from marketing to internal operations"
     ],
-    "tab3Tags": ["Full Marketing AI", "Custom software", "Customer support chatbot", "Management dashboard"],
+    "tab3Tags": [
+      "Full Marketing AI",
+      "Custom software",
+      "Customer support chatbot",
+      "Management dashboard"
+    ],
     "tab3PricePrefix": "from only",
     "tab3PriceSuffix": "/month",
     "tab3PriceBadge": "Cheaper than buying separately",
@@ -1219,7 +1288,11 @@
     "tab3ContactCta": "Contact us for a free bundle quote that fits your business",
     "tab3FormTitle": "LEAVE YOUR NUMBER — FREE PACKAGE CONSULTATION",
     "tab3Cta": "Consult",
-    "tab3Trusts": ["Callback in 5 min", "Bundle pricing", "No spam"]
+    "tab3Trusts": [
+      "Callback in 5 min",
+      "Bundle pricing",
+      "No spam"
+    ]
   },
   "solutions": {
     "title": "CHOOSE THE RIGHT SOLUTION FOR YOU",
@@ -1264,33 +1337,69 @@
         "name": "TechMart Vietnam",
         "description": "Needed to increase leads for new products without increasing Marketing budget.",
         "stats": [
-          { "value": "+247%", "label": "Potential customers from social" },
-          { "value": "-58%", "label": "Content creation cost" },
-          { "value": "40h", "label": "Saved per week for the team" }
+          {
+            "value": "+247%",
+            "label": "Potential customers from social"
+          },
+          {
+            "value": "-58%",
+            "label": "Content creation cost"
+          },
+          {
+            "value": "40h",
+            "label": "Saved per week for the team"
+          }
         ],
-        "tags": ["Marketing Agency", "Details →"]
+        "tags": [
+          "Marketing Agency",
+          "Details →"
+        ]
       },
       {
         "category": "HEALTHCARE",
         "name": "MediCare Clinic",
         "description": "Needed AI chatbot for appointment booking and customer support to reduce staff workload.",
         "stats": [
-          { "value": "-72%", "label": "Customer support workload" },
-          { "value": "+180%", "label": "Auto-booked appointments" },
-          { "value": "30 days", "label": "From idea to go-live" }
+          {
+            "value": "-72%",
+            "label": "Customer support workload"
+          },
+          {
+            "value": "+180%",
+            "label": "Auto-booked appointments"
+          },
+          {
+            "value": "30 days",
+            "label": "From idea to go-live"
+          }
         ],
-        "tags": ["IT Outsourcing", "Details →"]
+        "tags": [
+          "IT Outsourcing",
+          "Details →"
+        ]
       },
       {
         "category": "B2B SAAS STARTUP",
         "name": "CloudBase Solutions",
         "description": "Startup needed MVP in 45 days to pitch investors. No internal tech team.",
         "stats": [
-          { "value": "45 days", "label": "From wireframe to complete MVP" },
-          { "value": "-65%", "label": "Cost vs. hiring internally" },
-          { "value": "$90K", "label": "Funding raised after MVP" }
+          {
+            "value": "45 days",
+            "label": "From wireframe to complete MVP"
+          },
+          {
+            "value": "-65%",
+            "label": "Cost vs. hiring internally"
+          },
+          {
+            "value": "$90K",
+            "label": "Funding raised after MVP"
+          }
         ],
-        "tags": ["IT Outsourcing", "Details →"]
+        "tags": [
+          "IT Outsourcing",
+          "Details →"
+        ]
       }
     ]
   },
@@ -1301,12 +1410,42 @@
     "colAgency": "Traditional Agency",
     "colInternal": "Hire Internally",
     "rows": [
-      { "criteria": "Monthly cost", "markee": "$250–600", "agency": "$1,200–3,200", "internal": "$2,000–6,000" },
-      { "criteria": "Time to start", "markee": "7 days", "agency": "2–4 weeks", "internal": "3–6 months" },
-      { "criteria": "KPI commitment by contract", "markee": "✓ Yes", "agency": "Rare", "internal": "✗" },
-      { "criteria": "Weekly reporting", "markee": "✓ Yes", "agency": "Monthly", "internal": "Self-managed" },
-      { "criteria": "AI automation integrated", "markee": "✓ Yes", "agency": "✗", "internal": "Requires extra investment" },
-      { "criteria": "Cancel without penalty", "markee": "✓ Anytime", "agency": "Usually has fees", "internal": "Notice required" }
+      {
+        "criteria": "Monthly cost",
+        "markee": "$250–600",
+        "agency": "$1,200–3,200",
+        "internal": "$2,000–6,000"
+      },
+      {
+        "criteria": "Time to start",
+        "markee": "7 days",
+        "agency": "2–4 weeks",
+        "internal": "3–6 months"
+      },
+      {
+        "criteria": "KPI commitment by contract",
+        "markee": "✓ Yes",
+        "agency": "Rare",
+        "internal": "✗"
+      },
+      {
+        "criteria": "Weekly reporting",
+        "markee": "✓ Yes",
+        "agency": "Monthly",
+        "internal": "Self-managed"
+      },
+      {
+        "criteria": "AI automation integrated",
+        "markee": "✓ Yes",
+        "agency": "✗",
+        "internal": "Requires extra investment"
+      },
+      {
+        "criteria": "Cancel without penalty",
+        "markee": "✓ Anytime",
+        "agency": "Usually has fees",
+        "internal": "Notice required"
+      }
     ]
   }
 }
