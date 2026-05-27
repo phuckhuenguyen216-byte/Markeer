@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import GrowthCommissionSection from "../components/growth-system/GrowthCommissionSection";
 import GrowthContributionSection from "../components/growth-system/GrowthContributionSection";
-import GrowthCultureSection from "../components/growth-system/GrowthCultureSection";
-import GrowthEveryoneSection from "../components/growth-system/GrowthEveryoneSection";
 import GrowthFaqSection from "../components/growth-system/GrowthFaqSection";
 import GrowthFinalSection from "../components/growth-system/GrowthFinalSection";
 import GrowthHeroSection from "../components/growth-system/GrowthHeroSection";
@@ -19,16 +17,14 @@ export const metadata: Metadata = {
 export default function GrowthSystemPage() {
   return (
     <main className="growth-system-page relative overflow-x-hidden bg-[#fffafc] text-[#0b1020]">
-      <div className="pointer-events-none fixed inset-0 -z-10 bg-[linear-gradient(to_right,rgba(255,98,120,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,98,120,0.08)_1px,transparent_1px)] bg-[size:58px_58px]" />
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_14%_10%,rgba(255,77,95,0.09)_0%,rgba(255,255,255,0)_32%),radial-gradient(circle_at_88%_0%,rgba(47,115,255,0.08)_0%,rgba(255,255,255,0)_30%),linear-gradient(180deg,#fffafc_0%,#ffffff_45%,#fff9fb_100%)]" />
       <GrowthHeroSection />
       <GrowthWhySection />
-      <GrowthEveryoneSection />
-      <GrowthLayersSection />
-      <GrowthContributionSection />
-      <GrowthLeadFlowSection />
       <GrowthCommissionSection />
+      <GrowthLeadFlowSection />
+      <GrowthContributionSection />
+      <GrowthLayersSection />
       <GrowthProtectionSection />
-      <GrowthCultureSection />
       <GrowthFaqSection />
       <GrowthFinalSection />
     </main>

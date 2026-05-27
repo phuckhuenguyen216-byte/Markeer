@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-markee: var(--font-dm-sans);
 }
 
 *,
@@ -16,6 +17,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-markee: var(--font-markee);
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -455,6 +457,151 @@ article {
   animation: gsProtectBlink 1.3s ease-in-out infinite;
 }
 
+/* Typography hardening for Vietnamese rendering on Growth + Inside */
+:where(.inside-markee-page, .growth-system-page) {
+  font-family: var(--font-markee), var(--font-dm-sans), "DM Sans", "Segoe UI", "Noto Sans", Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-kerning: normal;
+  font-feature-settings: "liga" 1, "kern" 1, "ccmp" 1;
+}
+
+:where(.inside-markee-page, .growth-system-page) :is(h1, h2, h3, h4) {
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  text-wrap: pretty;
+  overflow: visible;
+}
+
+:where(.inside-markee-page, .growth-system-page) :is(p, li, button, a, summary, label, span) {
+  line-height: 1.6;
+}
+
+@supports (text-wrap: balance) {
+  :where(.inside-markee-page, .growth-system-page) :is(h1, h2, h3) {
+    text-wrap: balance;
+  }
+}
+
+/* Shared typography tokens for Growth + Inside */
+:where(.inside-markee-page, .growth-system-page) .mk-eyebrow {
+  font-family: var(--font-markee), var(--font-dm-sans), "DM Sans", Arial, sans-serif;
+  font-size: clamp(0.72rem, 0.78vw, 0.84rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.25;
+}
+
+:where(.inside-markee-page, .growth-system-page) .mk-title-hero {
+  font-family: var(--font-markee), var(--font-dm-sans), "DM Sans", Arial, sans-serif;
+  font-size: clamp(2rem, 4.7vw, 3.95rem);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.022em;
+  overflow: visible;
+  padding-top: 0.14em;
+  padding-bottom: 0.05em;
+}
+
+:where(.inside-markee-page, .growth-system-page) .mk-section-title {
+  font-family: var(--font-markee), var(--font-dm-sans), "DM Sans", Arial, sans-serif;
+  font-size: clamp(2.125rem, 4vw, 3.625rem);
+  font-weight: 900;
+  line-height: 1.18;
+  letter-spacing: -0.021em;
+  overflow: visible;
+  padding-top: 0.16em;
+  padding-bottom: 0.05em;
+}
+
+:where(.inside-markee-page, .growth-system-page) .mk-section-title > span {
+  display: block;
+  line-height: 1.18;
+  padding-top: 0.1em;
+}
+
+:where(.inside-markee-page, .growth-system-page) .mk-section-title > span + span {
+  margin-top: 0;
+}
+
+:where(.inside-markee-page, .growth-system-page) .mk-section-title-accent {
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+.inside-markee-page .mk-title-hero.inside-hero-title-up {
+  font-size: clamp(2.16rem, 5.2vw, 4.36rem);
+}
+
+@media (min-width: 1024px) {
+  :where(.inside-markee-page, .growth-system-page) .mk-title-hero {
+    font-size: clamp(1.78rem, 3.75vw, 3.28rem);
+    line-height: 1.19;
+    letter-spacing: -0.016em;
+  }
+
+  :where(.inside-markee-page, .growth-system-page) .mk-section-title {
+    font-size: clamp(1.7rem, 3.2vw, 2.95rem);
+    line-height: 1.17;
+    letter-spacing: -0.014em;
+  }
+
+  .inside-markee-page .mk-title-hero.inside-hero-title-up {
+    font-size: clamp(1.96rem, 4.15vw, 3.66rem);
+  }
+}
+
+@media (max-width: 1023px) {
+  .growth-system-page > section,
+  .inside-markee-page > section {
+    padding-top: clamp(3.7rem, 8.5vw, 4.8rem) !important;
+    padding-bottom: clamp(3.7rem, 8.5vw, 4.8rem) !important;
+  }
+
+  .growth-system-page > section > .relative.mx-auto,
+  .inside-markee-page > section > .relative.mx-auto {
+    padding-left: clamp(1.1rem, 4.8vw, 1.45rem) !important;
+    padding-right: clamp(1.1rem, 4.8vw, 1.45rem) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  :where(.inside-markee-page, .growth-system-page) .mk-title-hero {
+    font-size: clamp(1.72rem, 7.4vw, 2.2rem);
+    line-height: 1.22;
+    letter-spacing: -0.01em;
+  }
+
+  :where(.inside-markee-page, .growth-system-page) .mk-section-title {
+    font-size: clamp(1.56rem, 6.9vw, 2.04rem);
+    line-height: 1.22;
+    letter-spacing: -0.008em;
+  }
+
+  :where(.inside-markee-page, .growth-system-page) .mk-section-title > span {
+    padding-top: 0.075em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (max-width: 767px) {
+  .gs-node-breathe,
+  .gs-signal-path,
+  .gs-link-path,
+  .gs-lead-step,
+  .gs-lead-arrow,
+  .gs-protect-item,
+  .gs-protect-alert,
+  .imfx-diagram-float,
+  .imfx-role-trace::before,
+  .imfx-edge-run::after {
+    animation: none !important;
+  }
+}
+
 /* Inside Markee scoped effects */
 @keyframes imfxSweepRail {
   0% {
@@ -548,44 +695,6 @@ article {
 .inside-markee-page {
   width: 100%;
   overflow-x: hidden;
-}
-
-/* Keep inside-markee typography closer to growth-system scale */
-.inside-markee-page > section:not(:first-of-type) h1 {
-  font-size: clamp(2.55rem, 5.2vw, 4.95rem) !important;
-  line-height: 1.14 !important;
-}
-
-.inside-markee-page > section:not(:first-of-type) h2 {
-  font-size: clamp(2rem, 3.7vw, 3.5rem) !important;
-  line-height: 1.1 !important;
-}
-
-.inside-markee-page > section:not(:first-of-type) h3 {
-  font-size: clamp(1.42rem, 2.35vw, 2.25rem) !important;
-  line-height: 1.2 !important;
-}
-
-.inside-markee-page > section:not(:first-of-type) p:not(.uppercase):not([class*="text-xs"]):not([class*="text-sm"]) {
-  font-size: clamp(1rem, 1.12vw, 1.12rem) !important;
-  line-height: 1.5 !important;
-}
-
-.inside-markee-page > section:not(:first-of-type) li:not([class*="text-xs"]):not([class*="text-sm"]) {
-  font-size: clamp(0.98rem, 1.04vw, 1.08rem) !important;
-  line-height: 1.48 !important;
-}
-
-.inside-markee-page > section:not(:first-of-type) [class*="text-[4."] {
-  font-size: clamp(2.45rem, 4.7vw, 4.6rem) !important;
-}
-
-.inside-markee-page > section:not(:first-of-type) [class*="text-[3."] {
-  font-size: clamp(2.05rem, 3.8vw, 3.65rem) !important;
-}
-
-.inside-markee-page > section:not(:first-of-type) [class*="text-[2."] {
-  font-size: clamp(1.52rem, 2.72vw, 2.52rem) !important;
 }
 
 .inside-markee-page > section > .relative.mx-auto {
@@ -1013,56 +1122,6 @@ article {
   .inside-markee-page .py-7 {
     padding-top: 1.05rem !important;
     padding-bottom: 1.05rem !important;
-  }
-
-  .inside-markee-page h1 {
-    font-size: clamp(1.56rem, 6.3vw, 2.02rem) !important;
-    line-height: 1.2 !important;
-  }
-
-  .inside-markee-page h2 {
-    font-size: clamp(1.28rem, 5.2vw, 1.66rem) !important;
-    line-height: 1.16 !important;
-  }
-
-  .inside-markee-page h3 {
-    font-size: clamp(1.08rem, 4.4vw, 1.36rem) !important;
-    line-height: 1.24 !important;
-  }
-
-  .inside-markee-page p:not(.uppercase):not(.font-bold):not(.font-extrabold):not([class*="text-xs"]):not([class*="text-sm"]) {
-    font-size: clamp(0.9rem, 3.2vw, 1rem) !important;
-    line-height: 1.52 !important;
-  }
-
-  .inside-markee-page p.font-bold:not(.uppercase):not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]),
-  .inside-markee-page p.font-extrabold:not(.uppercase):not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]) {
-    font-size: clamp(0.94rem, 3.5vw, 1.12rem) !important;
-    line-height: 1.22 !important;
-  }
-
-  .inside-markee-page li:not(.font-bold):not(.font-extrabold):not([class*="text-xs"]):not([class*="text-sm"]) {
-    font-size: clamp(0.9rem, 3.2vw, 0.98rem) !important;
-    line-height: 1.48 !important;
-  }
-
-  .inside-markee-page [class*="text-[4."] {
-    font-size: clamp(1.34rem, 6.1vw, 1.72rem) !important;
-    line-height: 1.14 !important;
-  }
-
-  .inside-markee-page [class*="text-[3."] {
-    font-size: clamp(1.18rem, 5.2vw, 1.54rem) !important;
-    line-height: 1.16 !important;
-  }
-
-  .inside-markee-page [class*="text-[2."] {
-    font-size: clamp(0.98rem, 4.1vw, 1.26rem) !important;
-    line-height: 1.2 !important;
-  }
-
-  .inside-markee-page [class*="text-[1.9"] {
-    font-size: clamp(0.95rem, 3.95vw, 1.18rem) !important;
   }
 
   .inside-markee-page [class*="max-w-[235px]"] {

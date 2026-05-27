@@ -1,461 +1,199 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import type { ReactNode } from "react";
-import {
-  ArrowDown,
-  CircleDollarSign,
-  Globe2,
-  Hotel,
-  ShieldCheck,
-} from "lucide-react";
+import { CircleDollarSign, Globe2, Hotel, ShieldCheck } from "lucide-react";
+import type { ComponentType } from "react";
 import { useInsideMarkeeLocale } from "./useInsideMarkeeLocale";
 
+type HouseCard = {
+  title: string;
+  domain: string;
+  roleVi: string;
+  roleEn: string;
+  detailVi: string;
+  detailEn: string;
+  Icon: ComponentType<{ className?: string }>;
+  toneClass: string;
+  borderClass: string;
+  titleClass: string;
+  domainClass: string;
+  textClass: string;
+};
+
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 22 },
+  initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
+  transition: { duration: 0.62, delay, ease: [0.22, 1, 0.36, 1] as const },
   viewport: { once: true, amount: 0.2 },
 });
-
-type ToneName = "markee" | "godanang" | "cloudgate" | "securityzone";
-
-const toneMap: Record<
-  ToneName,
-  {
-    shell: string;
-    iconWrap: string;
-    subtitle: string;
-    mini: string;
-    miniTitle: string;
-    miniText: string;
-  }
-> = {
-  markee: {
-    shell: "border-[#ffd0d7] bg-gradient-to-b from-[#fff8f9] to-white",
-    iconWrap: "border-[#ffd7df] bg-[#fff3f6]",
-    subtitle: "text-[#ff3d4f]",
-    mini: "border-[#ffd8df] bg-[#fff7f9]",
-    miniTitle: "text-[#d93648]",
-    miniText: "text-[#5f1e27]",
-  },
-  godanang: {
-    shell: "border-[#ffe2bd] bg-gradient-to-b from-[#fffaf3] to-white",
-    iconWrap: "border-[#ffe8cc] bg-[#fff6ea]",
-    subtitle: "text-[#ff8a00]",
-    mini: "border-[#ffe4bf] bg-[#fff9ef]",
-    miniTitle: "text-[#d97706]",
-    miniText: "text-[#6b3b05]",
-  },
-  cloudgate: {
-    shell: "border-[#cfe1ff] bg-gradient-to-b from-[#f4f8ff] to-white",
-    iconWrap: "border-[#dbe8ff] bg-[#f1f6ff]",
-    subtitle: "text-[#2563eb]",
-    mini: "border-[#d3e3ff] bg-[#f5f9ff]",
-    miniTitle: "text-[#1d4ed8]",
-    miniText: "text-[#1e3a8a]",
-  },
-  securityzone: {
-    shell: "border-[#e5d4ff] bg-gradient-to-b from-[#faf6ff] to-white",
-    iconWrap: "border-[#ebddff] bg-[#f8f2ff]",
-    subtitle: "text-[#9333ea]",
-    mini: "border-[#eadcff] bg-[#fbf7ff]",
-    miniTitle: "text-[#7e22ce]",
-    miniText: "text-[#4c1d95]",
-  },
-};
 
 export default function InsideMarkeeEcosystemSection() {
   const { tx } = useInsideMarkeeLocale();
 
-  const loopNodes = [
-    { key: "markee", label: "Markee", tone: "markee" as const, x: "50%", y: "8%" },
+  const houses: HouseCard[] = [
     {
-      key: "real-sme",
-      label: tx("Dữ liệu SME thật", "Real SME data"),
-      tone: "cloudgate" as const,
-      x: "78%",
-      y: "20%",
+      title: "Markee",
+      domain: "markee.vn · markeeai.com",
+      roleVi: "Máy tạo doanh thu",
+      roleEn: "Revenue engine",
+      detailVi: "Agency + AI automation cho SME, tạo dòng tiền hiện tại để nuôi toàn hệ sinh thái.",
+      detailEn: "Agency + AI automation for SMEs, generating current cashflow for the ecosystem.",
+      Icon: CircleDollarSign,
+      toneClass: "from-[#fff1f5] to-[#ffe6ee]",
+      borderClass: "border-[#ffc2d0]",
+      titleClass: "text-[#9f1239]",
+      domainClass: "text-[#be123c]/85",
+      textClass: "text-[#4c1d2f]",
     },
     {
-      key: "godanang-validation",
-      label: tx("GoDanang validation", "GoDanang validation"),
-      tone: "godanang" as const,
-      x: "90%",
-      y: "48%",
+      title: "GoDanang",
+      domain: "godanang.net",
+      roleVi: "Case study sống",
+      roleEn: "Live showcase",
+      detailVi: "Showroom thật trong ngành du lịch để chứng minh hệ thống marketing + automation chạy ngoài thị trường.",
+      detailEn: "Live hospitality showroom proving marketing + automation in real markets.",
+      Icon: Hotel,
+      toneClass: "from-[#fff6ec] to-[#ffedd8]",
+      borderClass: "border-[#ffd8a8]",
+      titleClass: "text-[#b45309]",
+      domainClass: "text-[#c26610]/85",
+      textClass: "text-[#5f3a0b]",
     },
     {
-      key: "security-trust",
-      label: tx("SecurityZone trust", "SecurityZone trust"),
-      tone: "securityzone" as const,
-      x: "78%",
-      y: "76%",
+      title: "Cloudgate",
+      domain: "cloudgate.vn",
+      roleVi: "Máy tạo deal lớn",
+      roleEn: "Enterprise engine",
+      detailVi: "Nhắm enterprise IT/security, deal lớn chu kỳ dài, bổ sung tầng tăng trưởng dài hạn.",
+      detailEn: "Targets enterprise IT/security with large, long-cycle deals for long-term growth.",
+      Icon: Globe2,
+      toneClass: "from-[#eef5ff] to-[#e3efff]",
+      borderClass: "border-[#bfd7ff]",
+      titleClass: "text-[#1d4ed8]",
+      domainClass: "text-[#2563eb]/85",
+      textClass: "text-[#1e3a8a]",
     },
     {
-      key: "cloudgate-leverage",
-      label: tx("Cloudgate leverage", "Cloudgate leverage"),
-      tone: "cloudgate" as const,
-      x: "50%",
-      y: "90%",
-    },
-    {
-      key: "better-systems",
-      label: tx("Better systems", "Better systems"),
-      tone: "markee" as const,
-      x: "22%",
-      y: "76%",
-    },
-    {
-      key: "better-outcomes",
-      label: tx("Better outcomes", "Better outcomes"),
-      tone: "godanang" as const,
-      x: "10%",
-      y: "48%",
-    },
-    {
-      key: "stronger-ecosystem",
-      label: tx("Stronger ecosystem", "Stronger ecosystem"),
-      tone: "securityzone" as const,
-      x: "22%",
-      y: "20%",
+      title: "SecurityZone",
+      domain: "securityzone.vn",
+      roleVi: "Máy tạo uy tín",
+      roleEn: "Trust engine",
+      detailVi: "Xây cộng đồng công nghệ để tích lũy trust, authority và network effect cho toàn hệ.",
+      detailEn: "Builds tech community to compound trust, authority, and network effects.",
+      Icon: ShieldCheck,
+      toneClass: "from-[#f5efff] to-[#ece2ff]",
+      borderClass: "border-[#d7c2ff]",
+      titleClass: "text-[#6d28d9]",
+      domainClass: "text-[#7c3aed]/85",
+      textClass: "text-[#4c1d95]",
     },
   ];
 
   return (
-    <section className="relative overflow-hidden bg-white py-24 sm:py-28 lg:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(11,16,32,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(11,16,32,0.035)_1px,transparent_1px)] bg-[size:58px_58px]" />
-      <div className="pointer-events-none absolute left-[-10rem] top-[8%] h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(255,77,77,0.14)_0%,rgba(255,255,255,0)_72%)] blur-3xl" />
-      <div className="pointer-events-none absolute right-[-13rem] bottom-[6%] h-[32rem] w-[32rem] rounded-full bg-[radial-gradient(circle,rgba(147,51,234,0.11)_0%,rgba(255,255,255,0)_76%)] blur-3xl" />
+    <section className="relative overflow-hidden bg-white py-24 text-[#0f172a] sm:py-28 lg:py-32">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_18%,rgba(255,77,95,0.08)_0%,rgba(255,255,255,0)_34%),radial-gradient(circle_at_84%_78%,rgba(255,120,150,0.07)_0%,rgba(255,255,255,0)_36%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-      <div className="relative mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-8">
-        <motion.p
-          {...fadeUp(0)}
-          className="text-sm font-semibold tracking-[0.16em] text-[#0b1020]/80 uppercase"
-        >
-          {tx("HỆ SINH THÁI", "THE ECOSYSTEM")}
+      <div className="relative mx-auto max-w-[1420px] px-4 sm:px-6 lg:px-8">
+        <motion.p {...fadeUp(0)} className="mk-eyebrow text-center text-[#7f1d35] uppercase">
+          {tx("03 · Cấu trúc", "03 · Structure")}
         </motion.p>
 
-        <div className="mt-8 grid items-center gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-          <motion.div {...fadeUp(0.04)}>
-            <h2 className="text-[3.2rem] leading-[1.03] font-extrabold tracking-[-0.03em] text-[#0b1020] sm:text-[4.3rem] lg:text-[5.45rem]">
-              {tx("Chúng ta có", "We have")}{" "}
-              <span className="bg-gradient-to-r from-[#ff3d4f] to-[#ff6b7a] bg-clip-text text-transparent">
-                {tx('4 "nhà".', '4 "houses".')}
-              </span>
-              <br />
-              {tx("Mỗi nhà", "Each house")}{" "}
-              <span className="bg-gradient-to-r from-[#ff3d4f] to-[#ff6b7a] bg-clip-text text-transparent">
-                {tx("một vai trò.", "has one role.")}
-              </span>
-            </h2>
+        <motion.div {...fadeUp(0.05)} className="mx-auto mt-7 max-w-[920px] text-center">
+          <h2 className="mk-section-title uppercase">
+            <span className="block text-[#3f1020]">{tx("4 NHÀ", "4 HOUSES")}</span>
+            <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff4d5f] via-[#ff6c88] to-[#ff8cab] bg-clip-text text-transparent">
+              {tx("MỖI NHÀ MỘT VAI TRÒ", "ONE ROLE EACH")}
+            </span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-[780px] text-[1.03rem] leading-8 text-[#3f1020]/76 sm:text-[1.12rem]">
+            {tx(
+              "Team không phải một công ty đơn lẻ. Đây là hệ gồm Markee, GoDanang, Cloudgate, SecurityZone cùng đi về một mục tiêu: tăng trưởng thực cho doanh nghiệp Việt Nam.",
+              "The team is not a single-company structure. It is an ecosystem of Markee, GoDanang, Cloudgate, and SecurityZone moving toward one goal: practical growth for Vietnamese businesses."
+            )}
+          </p>
+        </motion.div>
 
-            <div className="mt-6 h-1 w-12 rounded-full bg-gradient-to-r from-[#FF3B3B] to-[#FF7A93]" />
-            <p className="mt-6 max-w-[620px] text-xl leading-9 text-[#0b1020]/76">
-              {tx(
-                "Team mình không phải 1 công ty duy nhất. Mà là nhiều thực thể khác nhau cùng di chuyển về một mục tiêu chung.",
-                "We are not a single company structure. We are multiple entities moving toward one shared objective."
-              )}
-            </p>
-          </motion.div>
-
-          <motion.div
-            {...fadeUp(0.1)}
-            className="mx-auto w-full max-w-[760px] overflow-hidden rounded-[30px] border border-red-100 bg-white/95 p-3 shadow-[0_24px_70px_-34px_rgba(255,77,77,0.45)]"
-          >
-            <div className="relative h-[300px] w-full bg-white sm:h-[420px] lg:h-[500px]">
-              <Image
-                src="/banner4.png"
-                alt={tx("Markee ecosystem visual", "Markee ecosystem visual")}
-                fill
-                quality={100}
-                className="object-contain"
-                sizes="(min-width: 1024px) 56vw, 100vw"
-              />
-            </div>
-          </motion.div>
-        </div>
-
-        <div className="mt-10 grid gap-5 lg:grid-cols-2 lg:items-start">
-          <ExpandCard
-            delay={0.18}
-            toneName="markee"
-            icon={<CircleDollarSign className="h-5 w-5 text-[#ff3d4f]" />}
-            title="MARKEE"
-            subtitle={tx("Máy tạo doanh thu", "Revenue engine")}
-          >
-            <div className="grid gap-3 md:grid-cols-3">
-              <MiniBlock
-                toneName="markee"
-                title={tx("KHÁCH HÀNG", "MARKET")}
-                items={[
-                  tx("SME Việt Nam", "Vietnam SMEs"),
-                  tx("Lưu trú", "Hospitality"),
-                  tx("Phòng khám", "Clinic"),
-                  tx("Spa", "Spa"),
-                  tx("Thương mại điện tử", "Ecommerce"),
-                ]}
-              />
-              <MiniBlock
-                toneName="markee"
-                title={tx("MÔ HÌNH HIỆN TẠI", "CURRENT MODEL")}
-                items={[
-                  tx("Agency + tự động hóa AI", "Agency + AI Automation"),
-                  tx("50–70% con người · 30–50% AI", "50–70% human · 30–50% AI"),
-                  "↓",
-                  tx("<10% con người · 90% tự động hóa", "<10% human · 90% automation"),
-                ]}
-              />
-              <MiniBlock
-                toneName="markee"
-                title={tx("VAI TRÒ CHIẾN LƯỢC", "STRATEGIC ROLE")}
-                items={[
-                  tx("tạo dòng tiền", "generate cashflow"),
-                  tx("xây phân phối", "build distribution"),
-                  tx("nuôi hệ sinh thái", "fund ecosystem"),
-                  tx("kiểm thử workflow AI", "test AI workflows"),
-                ]}
-              />
-            </div>
-          </ExpandCard>
-
-          <ExpandCard
-            delay={0.22}
-            toneName="godanang"
-            icon={<Hotel className="h-5 w-5 text-[#ff8a00]" />}
-            title="GODANANG"
-            subtitle={tx("Showcase sống", "Live showcase")}
-          >
-            <div className="grid gap-3 md:grid-cols-2">
-              <MiniBlock
-                toneName="godanang"
-                title={tx("VÌ SAO NÓ TỒN TẠI", "WHY IT EXISTS")}
-                items={[
-                  tx("Không phải side project.", "Not a side project."),
-                  tx("Mà là real hospitality environment để test workflow thật.", "A real hospitality environment to test real workflows."),
-                ]}
-              />
-              <MiniBlock
-                toneName="godanang"
-                title={tx("GIÁ TRỊ", "VALUE")}
-                items={[
-                  tx("đặt phòng thực", "real bookings"),
-                  tx("vận hành thực", "real operations"),
-                  tx("hành vi khách hàng thực", "real customer behavior"),
-                  tx("dữ liệu du lịch thực", "real tourism data"),
-                ]}
-              />
-            </div>
-            <div className="mt-4 rounded-2xl border border-[#ffe2bd] bg-[#fff8f1] p-4">
-              <p className="text-sm font-semibold tracking-[0.08em] text-[#ff8a00] uppercase">
-                {tx("VÒNG LẶP", "LOOP")}
-              </p>
-              <p className="mt-2 text-sm leading-7 text-[#7c4906]">
+        <motion.div {...fadeUp(0.1)} className="mt-12 grid items-stretch gap-8 lg:grid-cols-[0.85fr_1.15fr]">
+          <div className="flex h-full flex-col gap-4">
+            <div className="rounded-[26px] border border-[#ffd1db] bg-white p-5 shadow-[0_22px_58px_-40px_rgba(255,77,95,0.32)] sm:p-6">
+              <p className="text-xs font-semibold tracking-[0.12em] text-[#9f1239] uppercase">{tx("Cách các nhà phối hợp", "How the houses connect")}</p>
+              <p className="mt-3 text-sm leading-7 text-[#4c1d2f] sm:text-base">
                 {tx(
-                  "Khách lưu trú → insight tốt hơn → tối ưu GoDanang → tình huống thực tế mạnh hơn → thu hút thêm khách lưu trú",
-                  "Hospitality clients → better insight → optimize GoDanang → stronger case study → attract more hospitality clients"
+                  "GoDanang tạo showcase sống trong hospitality. Markee dùng showcase này để phục vụ SME và tăng doanh thu. SecurityZone tạo trust và network cộng đồng. Cloudgate mở rộng vào enterprise IT/security.",
+                  "GoDanang provides a live hospitality showcase. Markee uses it to serve SMEs and drive revenue. SecurityZone builds trust and community network effects. Cloudgate expands into enterprise IT/security."
                 )}
               </p>
             </div>
-          </ExpandCard>
 
-          <ExpandCard
-            delay={0.26}
-            toneName="cloudgate"
-            icon={<Globe2 className="h-5 w-5 text-[#2563eb]" />}
-            title="CLOUDGATE"
-            subtitle={tx("Máy tạo deal lớn", "Enterprise engine")}
-          >
-            <div className="grid gap-3 md:grid-cols-3">
-              <MiniBlock toneName="cloudgate" title={tx("ĐỊNH VỊ", "POSITIONING")} items={["Enterprise IT", "Security", "Infrastructure"]} />
-              <MiniBlock toneName="cloudgate" title={tx("KHÁCH HÀNG", "CLIENTS")} items={["CTO", "CISO", "IT Director"]} />
-              <MiniBlock
-                toneName="cloudgate"
-                title={tx("THỰC TẾ", "REALITY")}
-                items={[
-                  tx("Deal lớn, nhưng cycle dài.", "Large deals, long cycle."),
-                  tx("Chưa phải growth engine chính.", "Not the primary growth engine yet."),
-                  tx("Cần Markee tạo cashflow trước.", "Needs Markee cashflow first."),
-                ]}
-              />
+            <div className="rounded-[26px] border border-[#ffd1db] bg-[#fff8fa] p-5 shadow-[0_20px_48px_-36px_rgba(255,77,95,0.34)] sm:p-6">
+              <p className="text-xs font-semibold tracking-[0.12em] text-[#9f1239] uppercase">{tx("Nguyên tắc", "Rule")}</p>
+              <p className="mt-2 text-sm leading-7 font-semibold text-[#4c1d2f] sm:text-base">
+                {tx(
+                  "Không nhà nào compete trực tiếp. Mỗi nhà tự nuôi sống mình và bổ trợ lẫn nhau.",
+                  "No house competes directly. Each house is financially independent and mutually reinforcing."
+                )}
+              </p>
             </div>
-          </ExpandCard>
 
-          <ExpandCard
-            delay={0.3}
-            toneName="securityzone"
-            icon={<ShieldCheck className="h-5 w-5 text-[#9333ea]" />}
-            title="SECURITYZONE"
-            subtitle={tx("Máy tạo uy tín", "Trust engine")}
-          >
-            <div className="grid gap-3 md:grid-cols-2">
-              <MiniBlock
-                toneName="securityzone"
-                title={tx("MỤC ĐÍCH", "PURPOSE")}
-                items={[
-                  tx("Không phải để bán hàng trực tiếp.", "Not for direct selling."),
-                  tx("Build trust · authority · network effect", "Build trust · authority · network effect"),
-                ]}
-              />
-              <MiniBlock
-                toneName="securityzone"
-                title={tx("HIỆU ỨNG", "EFFECT")}
-                items={["Community", "↓ Workshops", "↓ Relationships", "↓ Enterprise trust", "↓ Deals"]}
-              />
+            <div className="rounded-[26px] border border-[#ffd1db] bg-white p-5 shadow-[0_20px_44px_-34px_rgba(255,77,95,0.3)] sm:p-6">
+              <p className="text-xs font-semibold tracking-[0.12em] text-[#9f1239] uppercase">{tx("Mục tiêu chung", "Shared target")}</p>
+              <p className="mt-2 text-sm leading-7 text-[#4c1d2f] sm:text-base">
+                {tx(
+                  "Bốn nhà cùng đẩy về một hướng: tăng trưởng doanh thu thật, vận hành nhẹ hơn và tạo vòng lặp học hỏi liên tục từ thị trường.",
+                  "All four houses push toward one direction: real revenue growth, lighter operations, and a continuous market-learning loop."
+                )}
+              </p>
             </div>
-          </ExpandCard>
+          </div>
+
+          <div className="mx-auto w-full max-w-[720px]">
+            <motion.div
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="relative h-full overflow-hidden rounded-[28px] border border-[#ffd6df] bg-white p-3 shadow-[0_34px_80px_-48px_rgba(255,77,95,0.34)] sm:p-4"
+            >
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,0)_20%,rgba(255,255,255,0.45)_50%,rgba(255,255,255,0)_78%)]" />
+              <Image
+                src="/banner4.png"
+                alt={tx("Sơ đồ 4 nhà trong hệ sinh thái Markee", "4-house ecosystem map")}
+                width={1300}
+                height={900}
+                className="h-auto w-full rounded-[20px] object-contain"
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+
+        <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {houses.map((house, index) => {
+            const Icon = house.Icon;
+            return (
+              <motion.article
+                key={house.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.08 + index * 0.08 }}
+                viewport={{ once: true, amount: 0.3 }}
+                animate={{ y: [0, -3, 0] }}
+                whileHover={{ y: -10, scale: 1.02 }}
+                className={`group relative overflow-hidden rounded-2xl border ${house.borderClass} bg-gradient-to-br ${house.toneClass} p-4 shadow-[0_20px_45px_-34px_rgba(255,77,95,0.38)] transition-shadow duration-300 hover:shadow-[0_30px_55px_-30px_rgba(255,77,95,0.48)]`}
+              >
+                <div className="pointer-events-none absolute -left-24 top-0 h-full w-20 -skew-x-12 bg-white/50 opacity-0 blur-md transition-all duration-500 group-hover:left-[120%] group-hover:opacity-100" />
+                <p className={`inline-flex items-center gap-2 text-sm font-semibold ${house.titleClass}`}>
+                  <Icon className="h-4 w-4" />
+                  {house.title}
+                </p>
+                <p className={`mt-1 text-xs font-semibold tracking-[0.1em] uppercase ${house.domainClass}`}>{house.domain}</p>
+                <p className={`mt-2 text-sm font-semibold ${house.textClass}`}>{tx(house.roleVi, house.roleEn)}</p>
+                <p className={`mt-2 text-sm leading-6 ${house.textClass}`}>{tx(house.detailVi, house.detailEn)}</p>
+              </motion.article>
+            );
+          })}
         </div>
-
-        <motion.div
-          {...fadeUp(0.35)}
-          className="mt-9 rounded-[26px] border border-red-100 bg-gradient-to-r from-white to-[#fff8fa] p-7"
-        >
-          <p className="text-center text-[2rem] leading-[1.26] font-bold tracking-[-0.02em] text-[#0b1020] sm:text-[2.35rem]">
-            {tx("Không “nhà” nào compete với nhau.", "No “house” is competing with another.")}
-            <br />
-            {tx("Chúng hỗ trợ nhau, học từ nhau, và compound theo thời gian.", "They support each other, learn from each other, and compound over time.")}
-          </p>
-        </motion.div>
-
-        <motion.div
-          {...fadeUp(0.4)}
-          className="mt-7 rounded-[28px] border border-red-100/80 bg-white p-6 shadow-[0_22px_60px_-38px_rgba(15,23,42,0.45)] sm:p-8"
-        >
-          <p className="text-sm font-semibold tracking-[0.13em] text-red-500 uppercase">
-            {tx("HỆ SINH THÁI HOẠT ĐỘNG NHƯ 1 VÒNG LẶP TĂNG TRƯỞNG", "ECOSYSTEM COMPOUND LOOP")}
-          </p>
-
-          <div className="mt-6 hidden lg:block">
-            <div className="relative mx-auto h-[450px] max-w-[980px]">
-              <motion.div
-                className="absolute inset-[18%] rounded-full border border-dashed border-red-200/70"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 44, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-              />
-              <div className="absolute inset-[27%] rounded-full border border-red-100" />
-
-              {loopNodes.map((node) => (
-                <div
-                  key={node.key}
-                  className="absolute -translate-x-1/2 -translate-y-1/2"
-                  style={{ left: node.x, top: node.y }}
-                >
-                  <LoopBadge label={node.label} toneName={node.tone} />
-                </div>
-              ))}
-
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-red-200 bg-white px-6 py-3 text-sm font-bold tracking-[0.08em] text-red-500 uppercase shadow-[0_12px_28px_-18px_rgba(255,77,77,0.6)]">
-                {tx("Vòng lặp tích lũy", "Compound Loop")}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 grid gap-3 lg:hidden">
-            {[
-              "Markee",
-              tx("Dữ liệu SME thật", "Real SME data"),
-              tx("GoDanang validation", "GoDanang validation"),
-              tx("SecurityZone trust", "SecurityZone trust"),
-              tx("Cloudgate leverage", "Cloudgate leverage"),
-              tx("Better systems", "Better systems"),
-              tx("Better outcomes", "Better outcomes"),
-              tx("Stronger ecosystem", "Stronger ecosystem"),
-            ].map((item, idx, arr) => (
-              <div key={item} className="flex flex-col items-center gap-2">
-                <LoopBadge label={item} toneName={loopNodes[idx].tone} />
-                {idx !== arr.length - 1 ? <ArrowDown className="h-4 w-4 text-red-300" /> : null}
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          {...fadeUp(0.46)}
-          className="mt-7 rounded-[30px] border border-amber-200 bg-gradient-to-r from-[#fff9ee] to-[#fff6e8] p-7 sm:p-9"
-        >
-            <p className="text-[1.65rem] leading-[1.16] font-bold tracking-[-0.02em] text-[#0b1020] sm:text-[2.3rem] lg:text-[2.8rem]">
-              {tx("Chúng ta không build nhiều business riêng lẻ.", "We are not building isolated businesses.")}
-              <br />
-              <span className="bg-gradient-to-r from-[#ff3d4f] to-[#ff6b7a] bg-clip-text text-transparent">
-              {tx("Chúng ta đang build:", "We are building:")}
-            </span>
-            <br />
-            {tx("một operating system cho tăng trưởng doanh nghiệp Việt Nam.", "an operating system for Vietnamese business growth.")}
-          </p>
-          <p className="mt-5 text-lg text-[#0b1020]/76">
-            {tx("Và mỗi ecosystem chỉ là một layer trong hệ thống đó.", "And each ecosystem is only one layer of that system.")}
-          </p>
-        </motion.div>
       </div>
     </section>
   );
 }
 
-type ExpandCardProps = {
-  delay: number;
-  toneName: ToneName;
-  icon: ReactNode;
-  title: string;
-  subtitle: string;
-  children: ReactNode;
-};
-
-function ExpandCard({ delay, toneName, icon, title, subtitle, children }: ExpandCardProps) {
-  const tone = toneMap[toneName];
-
-  return (
-    <motion.article
-      {...fadeUp(delay)}
-      className={`group rounded-[26px] border p-5 shadow-[0_20px_50px_-36px_rgba(15,23,42,0.5)] ${tone.shell}`}
-    >
-      <div className="flex items-center gap-3">
-        <span className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border ${tone.iconWrap}`}>
-          {icon}
-        </span>
-        <div>
-          <p className="text-[1.85rem] leading-none font-bold tracking-[-0.02em] text-[#0b1020]">{title}</p>
-          <p className={`mt-1 text-sm font-semibold ${tone.subtitle}`}>{subtitle}</p>
-        </div>
-      </div>
-      <div className="mt-5">{children}</div>
-    </motion.article>
-  );
-}
-
-type MiniBlockProps = {
-  title: string;
-  items: string[];
-  toneName: ToneName;
-};
-
-function MiniBlock({ title, items, toneName }: MiniBlockProps) {
-  const tone = toneMap[toneName];
-
-  return (
-    <div className={`rounded-2xl border p-4 ${tone.mini}`}>
-      <p className={`text-xs font-bold tracking-[0.11em] uppercase ${tone.miniTitle}`}>{title}</p>
-      <ul className={`mt-2 space-y-1.5 text-sm leading-6 ${tone.miniText}`}>
-        {items.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-type LoopBadgeProps = {
-  label: string;
-  toneName: ToneName;
-};
-
-function LoopBadge({ label, toneName }: LoopBadgeProps) {
-  const tone = toneMap[toneName];
-
-  return (
-    <div
-      className={`rounded-full border px-4 py-2 text-sm font-semibold shadow-[0_8px_24px_-18px_rgba(15,23,42,0.4)] ${tone.mini}`}
-    >
-      <span className={tone.miniTitle}>{label}</span>
-    </div>
-  );
-}

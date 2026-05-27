@@ -1,79 +1,148 @@
-﻿"use client";
+"use client";
 
-import GrowthSectionTitle from "./GrowthSectionTitle";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  CircleDollarSign,
+  Clock3,
+  HandCoins,
+  MessageSquareText,
+  TrendingUp,
+  UserCheck,
+  Users,
+  Wrench,
+} from "lucide-react";
 import { useGrowthLocale } from "./useGrowthLocale";
+
+const fadeNarrative = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
+  viewport: { once: true, amount: 0.22 },
+});
 
 export default function GrowthCommissionSection() {
   const { tx } = useGrowthLocale();
 
-  const commissionRoles = [
-    tx("CHỦ LEAD", "LEAD OWNER"),
-    tx("NGƯỜI CHỐT", "CLOSER"),
-    tx("BÀN GIAO", "DELIVERY"),
-    tx("HỖ TRỢ TĂNG TRƯỞNG", "GROWTH SUPPORT"),
+  const left = [
+    { label: "Lead Owner", Icon: UserCheck },
+    { label: "Closer", Icon: HandCoins },
+    { label: "Delivery", Icon: Wrench },
+    { label: "Growth Support", Icon: Users },
   ];
-  const submissionSteps = [
-    tx("Tìm prospect và ghi: Tên + SĐT + ngành + nỗi đau cụ thể.", "Find prospects and record: Name + Phone + Industry + specific pain."),
-    tx("Submit ngay vào nhóm Sales theo format chuẩn.", "Submit immediately to Sales group using the standard format."),
-    tx("Sales Lead log CRM trong 24h.", "Sales Lead logs CRM within 24h."),
-    tx("Chờ close + xác nhận thanh toán để mở reward.", "Wait for close + payment confirmation to unlock reward."),
+
+  const right = [
+    { labelVi: "Deal chốt nhanh hơn", labelEn: "Faster closing", Icon: CircleDollarSign },
+    { labelVi: "Onboard mượt hơn", labelEn: "Smoother onboarding", Icon: MessageSquareText },
+    { labelVi: "Retention khỏe hơn", labelEn: "Stronger retention", Icon: Clock3 },
+    { labelVi: "Thu nhập tăng rõ", labelEn: "Clear income upside", Icon: TrendingUp },
   ];
 
   return (
-    <section className="py-16 sm:py-20">
-      <div className="mx-auto max-w-[1320px] px-4 sm:px-6 lg:px-8">
-        <GrowthSectionTitle label={tx("CÁCH COMMISSION VẬN HÀNH", "HOW COMMISSION WORKS")} title={tx("TẠI SAO HỆ SINH THÁI CÓ INCENTIVE TĂNG TRƯỞNG?", "WHY DOES THE ECOSYSTEM HAVE GROWTH INCENTIVES?")} />
+    <section className="relative overflow-hidden py-18 sm:py-22 lg:py-26">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_16%,rgba(66,126,255,0.1)_0%,rgba(255,255,255,0)_36%),radial-gradient(circle_at_78%_66%,rgba(255,77,95,0.1)_0%,rgba(255,255,255,0)_34%)]" />
 
-        <div className="mt-7 grid gap-6 lg:grid-cols-[1fr_1fr]">
-          <article className="rounded-[24px] border border-[#ffdbe3] bg-white p-6">
-            <p className="text-base leading-7 text-[#0b1020]/78">
-              {tx("Nếu ai đó tạo giá trị thật, giúp hệ sinh thái tăng trưởng, hoặc mở ra cơ hội thật thì hệ sinh thái cần reward đóng góp đó.", "If someone creates real value, helps ecosystem growth, or opens real opportunities, the ecosystem should reward that contribution.")}
-            </p>
-            <p className="mt-4 text-sm font-semibold tracking-[0.13em] text-[#ff4d5f] uppercase">{tx("COMMISSION KHÔNG TỒN TẠI ĐỂ", "COMMISSION DOES NOT EXIST TO")}</p>
-            <ul className="mt-2 space-y-2 text-sm text-[#0b1020]/78">
-              <li>{tx("tạo cạnh tranh nội bộ,", "create internal competition,")}</li>
-              <li>{tx("biến hệ sinh thái thành culture chỉ bán hàng,", "turn the ecosystem into a sales-only culture,")}</li>
-              <li>{tx("khuyến khích spam lead chất lượng thấp.", "encourage low-quality lead spam.")}</li>
-            </ul>
-            <p className="mt-5 rounded-2xl border border-[#ffdbe3] bg-[#fff7fa] px-4 py-3 text-lg font-bold text-[#2b0f1d] uppercase">
-              {tx("MỤC TIÊU LÀ: ĐỒNG BỘ INCENTIVE VỚI TĂNG TRƯỞNG HỆ SINH THÁI.", "THE GOAL IS: ALIGN INCENTIVES WITH ECOSYSTEM GROWTH.")}
-            </p>
-          </article>
+      <div className="relative mx-auto max-w-[1320px] px-4 sm:px-6 lg:px-8">
+        <motion.p {...fadeNarrative(0)} className="mk-eyebrow text-center text-[#ff4d5f] uppercase">
+          {tx("02 · Thu nhập thêm", "02 · Extra income")}
+        </motion.p>
 
-          <article className="rounded-[24px] border border-[#dce6ff] bg-[#f8faff] p-6">
-            <p className="text-xs font-semibold tracking-[0.16em] text-[#23427a] uppercase">{tx("GIÁ TRỊ ĐÓNG GÓP → REWARD HỆ SINH THÁI", "CONTRIBUTION VALUE → ECOSYSTEM REWARD")}</p>
-            <div className="mt-3 space-y-2.5">
-              {commissionRoles.map((role) => (
-                <div key={role} className="rounded-xl border border-[#cfe0ff] bg-white px-3 py-2 text-sm font-semibold text-[#0b1020]">{role}</div>
+        <motion.h2
+          {...fadeNarrative(0.04)}
+          className="mk-section-title mx-auto mt-4 max-w-[980px] text-center uppercase"
+        >
+          <span className="block text-[#0b1020]">{tx("ĐÓNG GÓP ĐÚNG CÁCH", "CONTRIBUTION DONE RIGHT")}</span>
+          <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff7b94] bg-clip-text text-transparent">
+            {tx("THÌ THU NHẬP TĂNG RÕ.", "CREATES CLEAR INCOME UPSIDE.")}
+          </span>
+        </motion.h2>
+
+        <motion.p
+          {...fadeNarrative(0.1)}
+          className="mx-auto mt-5 max-w-[780px] text-center text-[1.03rem] leading-8 text-[#0b1020]/78 sm:text-[1.12rem]"
+        >
+          {tx(
+            "Có hai nguồn độc lập: commission khi deal thành công, và KPI bonus theo chất lượng đóng góp hàng tháng. Kết quả thật có thể mở double reward.",
+            "Two independent streams: commission on closed deals and KPI bonus from monthly quality contribution. Real outcomes can unlock double reward."
+          )}
+        </motion.p>
+
+        <motion.article
+          {...fadeNarrative(0.16)}
+          className="relative mt-9 overflow-hidden rounded-[34px] bg-[linear-gradient(170deg,#fff8fb_0%,#ffffff_60%,#fff7fa_100%)] p-5 shadow-[0_34px_82px_-56px_rgba(15,23,42,0.6)] sm:p-8"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,77,95,0.16)_0%,rgba(255,255,255,0)_60%)]" />
+
+          <div className="relative hidden h-[410px] lg:block">
+            {left.map((item, index) => {
+              const Icon = item.Icon;
+              return (
+                <motion.div
+                  key={item.label}
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 4.8 + index * 0.25, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute left-4 z-20 flex min-w-[220px] items-center justify-between rounded-2xl bg-white/92 px-4 py-3 text-sm font-medium text-[#2b0f1d] shadow-[0_12px_28px_-20px_rgba(15,23,42,0.45)]"
+                  style={{ top: `${34 + index * 84}px` }}
+                >
+                  <span>{item.label}</span>
+                  <Icon className="h-4 w-4 text-[#ff4d5f]" />
+                </motion.div>
+              );
+            })}
+
+            {right.map((item, index) => {
+              const Icon = item.Icon;
+              return (
+                <motion.div
+                  key={item.labelVi}
+                  animate={{ x: [0, -5, 0] }}
+                  transition={{ duration: 4.8 + index * 0.25, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute right-4 z-20 flex min-w-[240px] items-center justify-between rounded-2xl bg-white/92 px-4 py-3 text-sm font-medium text-[#2b0f1d] shadow-[0_12px_28px_-20px_rgba(15,23,42,0.45)]"
+                  style={{ top: `${34 + index * 84}px` }}
+                >
+                  <span>{tx(item.labelVi, item.labelEn)}</span>
+                  <Icon className="h-4 w-4 text-[#ff4d5f]" />
+                </motion.div>
+              );
+            })}
+
+            <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
+              {[18, 37, 56, 75].map((y) => (
+                <path
+                  key={y}
+                  d={`M26 ${y} C40 ${y}, 43 50, 50 50 C57 50, 60 ${y}, 74 ${y}`}
+                  stroke="rgba(255,77,95,0.24)"
+                  strokeWidth="0.28"
+                  fill="none"
+                />
               ))}
-            </div>
-            <p className="mt-4 text-sm leading-6 text-[#0b1020]/72">
-              {tx("Tỷ lệ % chi tiết không công khai trong tài liệu này. Mỗi version policy có thể thay đổi theo phase scale của công ty.", "Detailed % rates are not public in this document. Each policy version may change by company scale phase.")}
-            </p>
-          </article>
-        </div>
+            </svg>
 
-        <article className="mt-6 rounded-[24px] border border-[#dce2f0] bg-white p-6">
-          <p className="text-sm font-semibold tracking-[0.14em] text-[#23427a] uppercase">{tx("LEAD OWNERSHIP VÀ LUỒNG SUBMIT", "LEAD OWNERSHIP AND SUBMISSION FLOW")}</p>
-          <div className="mt-4 grid gap-4 lg:grid-cols-2">
-            <div className="rounded-2xl border border-[#e5eaf6] bg-[#fbfcff] p-4">
-              <p className="font-semibold text-[#0b1020] uppercase">{tx("RULE ƯU TIÊN", "PRIORITY RULES")}</p>
-              <ul className="mt-2 space-y-2 text-sm text-[#0b1020]/78">
-                <li>L1: {tx("Quan hệ trước đó", "Prior relationship")}</li>
-                <li>L2: {tx("Chất lượng khám phá", "Discovery quality")}</li>
-                <li>L3: CRM Timestamp ({tx("phân xử", "tiebreaker")})</li>
-              </ul>
-            </div>
-            <div className="rounded-2xl border border-[#e5eaf6] bg-[#fbfcff] p-4">
-              <p className="font-semibold text-[#0b1020] uppercase">{tx("4 BƯỚC SUBMIT LEAD", "4 LEAD SUBMISSION STEPS")}</p>
-              <ol className="mt-2 space-y-2 text-sm text-[#0b1020]/78">
-                {submissionSteps.map((step, index) => (
-                  <li key={step}>{index + 1}. {step}</li>
-                ))}
-              </ol>
+            <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
+              <motion.div
+                animate={{ scale: [1, 1.07, 1], boxShadow: ["0 14px 34px -16px rgba(255,77,95,0.62)", "0 20px 44px -16px rgba(255,77,95,0.78)", "0 14px 34px -16px rgba(255,77,95,0.62)"] }}
+                transition={{ duration: 3.1, repeat: Infinity, ease: "easeInOut" }}
+                className="inline-flex h-24 w-24 items-center justify-center rounded-full border border-white/60 bg-white shadow-[0_18px_34px_-16px_rgba(255,77,95,0.72)]"
+              >
+                <Image src="/logo.png" alt="Markee Logo" width={62} height={62} className="h-14 w-14 object-contain" />
+              </motion.div>
             </div>
           </div>
-        </article>
+
+          <div className="relative z-20 grid gap-3 lg:hidden">
+            {[...left.map((item) => item.label), ...right.map((item) => tx(item.labelVi, item.labelEn))].map((item) => (
+              <p key={item} className="rounded-xl bg-white/92 px-4 py-3 text-sm text-[#2b0f1d] shadow-[0_12px_24px_-20px_rgba(15,23,42,0.5)]">
+                {item}
+              </p>
+            ))}
+          </div>
+        </motion.article>
+
+        <motion.p {...fadeNarrative(0.24)} className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[#7f2b3a] sm:text-base">
+          {tx("Không trả tiền cho noise. Trả tiền cho tác động.", "Do not reward noise. Reward impact.")}
+          <ArrowRight className="h-3.5 w-3.5 text-[#ff4d5f]" />
+        </motion.p>
       </div>
     </section>
   );
