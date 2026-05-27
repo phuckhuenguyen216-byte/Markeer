@@ -1,88 +1,133 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { ArrowRight, CirclePlay, Sparkles } from "lucide-react";
 import { useGrowthLocale } from "./useGrowthLocale";
+
+const lineReveal = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as const },
+  viewport: { once: true, amount: 0.4 },
+});
+
+const orbitDots = [
+  "left-[8%] top-[18%]",
+  "left-[20%] top-[10%]",
+  "left-[84%] top-[20%]",
+  "right-[8%] top-[42%]",
+  "left-[12%] bottom-[18%]",
+  "right-[18%] bottom-[14%]",
+];
 
 export default function GrowthHeroSection() {
   const { tx } = useGrowthLocale();
 
-  const chips = [
-    tx("hạ tầng", "infrastructure"),
-    tx("hệ sinh thái", "ecosystem"),
-    tx("lớp vận hành", "operations layer"),
-    tx("lớp thông minh", "intelligence layer"),
-    tx("động cơ tăng trưởng", "growth engine"),
-  ];
-
   return (
-    <section className="relative overflow-hidden border-b border-[#ffdbe3] bg-[radial-gradient(circle_at_12%_10%,rgba(255,77,95,0.2)_0%,rgba(255,255,255,0)_42%),radial-gradient(circle_at_86%_0%,rgba(59,130,246,0.18)_0%,rgba(255,255,255,0)_36%),linear-gradient(160deg,#fff5f8_0%,#ffffff_48%,#fff9fb_100%)] py-20 sm:py-24 lg:py-28">
-      <div className="mx-auto max-w-[1340px] px-4 sm:px-6 lg:px-8">
-        <p className="inline-flex items-center gap-2 rounded-full border border-[#ffd4dd] bg-white/95 px-4 py-2 text-xs font-semibold tracking-[0.16em] text-[#ff4d5f] uppercase">
-          <Sparkles className="h-3.5 w-3.5" /> {tx("Hệ thống tăng trưởng · Lớp vận hành nội bộ · V1", "Growth system · Internal operations layer · V1")}
+    <section className="relative overflow-hidden border-b border-[#ffe0e8] bg-[linear-gradient(160deg,#fff6fa_0%,#ffffff_42%,#fff8fb_100%)] py-16 sm:py-20 lg:py-32">
+      <motion.div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(255,77,95,0.2)_0%,rgba(255,255,255,0)_42%),radial-gradient(circle_at_86%_10%,rgba(66,126,255,0.18)_0%,rgba(255,255,255,0)_38%)]"
+        animate={{ opacity: [0.9, 1, 0.9] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {orbitDots.map((cls, index) => (
+        <motion.span
+          key={cls}
+          className={`pointer-events-none absolute ${cls} h-1.5 w-1.5 rounded-full bg-[#ff7f95]/80`}
+          animate={{ y: [0, -6, 0], opacity: [0.3, 0.9, 0.3] }}
+          transition={{ duration: 2.7 + index * 0.2, repeat: Infinity, ease: "easeInOut" }}
+        />
+      ))}
+
+      <div className="relative mx-auto max-w-[1360px] px-5 sm:px-6 lg:px-8">
+        <p className="mk-eyebrow inline-flex items-center gap-2 rounded-full border border-[#ffd4dd] bg-white/90 px-4 py-2 text-[#ff4d5f] uppercase">
+          <Sparkles className="h-3.5 w-3.5" />
+          {tx("Growth System · Operating Story · V1", "Growth System · Operating Story · V1")}
         </p>
 
-        <div className="mt-8 grid items-start gap-8 lg:grid-cols-[0.98fr_1.02fr]">
+        <div className="mt-8 grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
           <div>
-            <h1 className="text-[2.45rem] leading-[1.03] font-black tracking-[-0.035em] text-[#0b1020] uppercase sm:text-[3.5rem] lg:text-[4.35rem]">
-              <span className="block">{tx("MARKEE KHÔNG CHẠY TIẾP THỊ.", "MARKEE DOES NOT JUST DO MARKETING.")}</span>
-              <span className="block text-[#ff4d5f]">{tx("MARKEE XÂY HỆ THỐNG TĂNG TRƯỞNG.", "MARKEE BUILDS GROWTH SYSTEMS.")}</span>
-            </h1>
+            <motion.h1
+              {...lineReveal(0.02)}
+              className="mk-title-hero max-w-[21rem] uppercase sm:max-w-[780px]"
+            >
+              <span className="block text-[#0b1020]">{tx("KHÔNG PHẢI MỘT", "NOT A SINGLE")}</span>
+              <span className="block text-[#0b1020]">{tx("CHIẾN DỊCH -", "CAMPAIGN -")}</span>
+              <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff7b94] bg-clip-text text-transparent">
+                {tx("LÀ MỘT HỆ VẬN", "IT IS A GROWTH")}
+              </span>
+              <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff7b94] bg-clip-text text-transparent">
+                {tx("HÀNH TĂNG TRƯỞNG.", "OPERATING SYSTEM.")}
+              </span>
+            </motion.h1>
 
-            <p className="mt-6 max-w-[760px] text-lg leading-8 text-[#0b1020]/82 sm:text-xl sm:leading-9">
+            <motion.p
+              {...lineReveal(0.12)}
+              className="mt-6 max-w-[700px] text-[1.05rem] leading-8 text-[#0b1020]/80 sm:text-[1.18rem] sm:leading-9"
+            >
               {tx(
-                "Khi nội dung, hệ thống, tự động hóa và quan hệ bắt đầu kết nối với nhau, tăng trưởng không còn là chiến dịch mà trở thành một lớp vận hành.",
-                "When content, systems, automation, and relationships start connecting, growth is no longer a campaign but an operating layer."
+                "Khi content, automation, CRM và delivery cùng chạy theo một nhịp, growth không còn là campaign. Growth trở thành lớp vận hành của cả team.",
+                "When content, automation, CRM, and delivery run in one rhythm, growth is no longer a campaign. It becomes an operating layer for the whole team."
               )}
-            </p>
+            </motion.p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-2.5">
-              {chips.map((item) => (
-                <span key={item} className="rounded-full border border-[#ffd6de] bg-white px-3 py-1.5 text-sm font-semibold text-[#0b1020]/82">
-                  {item}
-                </span>
-              ))}
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-3">
+            <motion.div {...lineReveal(0.2)} className="mt-8 flex flex-wrap gap-3">
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-2xl border border-[#ff6f86] bg-[#ff4d5f] px-6 py-3 text-base font-semibold text-white shadow-[0_18px_34px_-20px_rgba(255,77,95,0.6)] transition hover:translate-y-[-1px]"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#ff4d5f] px-6 py-3 text-base font-semibold text-white shadow-[0_18px_34px_-20px_rgba(255,77,95,0.62)] transition hover:-translate-y-0.5 sm:w-auto"
               >
-                {tx("Khám phá hệ thống", "Explore the system")} <ArrowRight className="h-4 w-4" />
+                {tx("Khám phá hệ thống", "Explore the system")}
+                <ArrowRight className="h-4 w-4" />
               </button>
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-2xl border border-[#d8deec] bg-white px-6 py-3 text-base font-semibold text-[#0b1020] transition hover:border-[#c8d0e4]"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8deec] bg-white px-6 py-3 text-base font-semibold text-[#0b1020] transition hover:border-[#c8d0e4] sm:w-auto"
               >
-                {tx("Xem luồng hệ sinh thái", "View ecosystem flow")} <CirclePlay className="h-4 w-4" />
+                {tx("Xem flow chapter", "View chapter flow")}
+                <CirclePlay className="h-4 w-4" />
               </button>
-            </div>
-
-            <p className="mt-5 text-base text-[#0b1020]/72">
-              {tx(
-                "Không phải trang giới thiệu dịch vụ. Đây là lớp hạ tầng tăng trưởng của hệ sinh thái.",
-                "This is not a service intro page. This is the growth infrastructure layer of the ecosystem."
-              )}
-            </p>
+            </motion.div>
           </div>
 
-          <article className="relative overflow-hidden rounded-[32px] border border-[#ffd9e2] bg-white/92 p-3 shadow-[0_24px_56px_-42px_rgba(15,23,42,0.58)] sm:p-4">
-            <div className="relative aspect-[1.08/1] overflow-hidden rounded-[24px] border border-[#ffe1e8]">
-              <Image src="/bannergrowth.png" alt={tx("Mô tả hệ sinh thái tăng trưởng", "Growth ecosystem overview")} fill className="object-cover object-center" priority />
-            </div>
-          </article>
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true, amount: 0.35 }}
+            className="relative"
+          >
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 6.2, repeat: Infinity, ease: "easeInOut" }}
+              className="relative"
+            >
+              <div className="pointer-events-none absolute -inset-6 rounded-[36px] bg-[radial-gradient(circle,rgba(255,77,95,0.22)_0%,rgba(255,255,255,0)_66%)] blur-xl" />
+              <Image
+                src="/bannergrowth.png"
+                alt={tx("Mô tả hệ sinh thái tăng trưởng", "Growth ecosystem overview")}
+                width={1500}
+                height={1180}
+                priority
+                className="relative h-auto w-full rounded-[30px] object-contain drop-shadow-[0_34px_76px_rgba(15,23,42,0.28)]"
+              />
+            </motion.div>
+          </motion.div>
         </div>
 
-        <div className="mt-8 rounded-[24px] border border-[#ffd8e1] bg-[#2b0f1d] p-5 text-[#ffdce4] sm:p-6">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[#ff4d5f] uppercase">{tx("TƯ DUY GIAI ĐOẠN 1", "PHASE 1 MINDSET")}</p>
-          <p className="mt-2 text-lg font-bold text-white sm:text-xl">
+        <motion.div
+          {...lineReveal(0.28)}
+          className="mt-9 rounded-[24px] bg-[#220c18] px-5 py-5 text-[#ffdce4] shadow-[0_24px_52px_-34px_rgba(34,12,24,0.72)] sm:px-6"
+        >
+          <p className="text-xs font-semibold tracking-[0.16em] text-[#ff7f95] uppercase">{tx("Mindset", "Mindset")}</p>
+          <p className="mt-2 text-lg font-semibold leading-8 text-white sm:text-xl">
             {tx(
-              "Markee không xây công ty để chạy quảng cáo. Markee xây hạ tầng để hệ thống tạo tăng trưởng bền vững.",
-              "Markee is not building a company to run ads. Markee is building infrastructure for sustainable system growth."
+              "Core trước, growth sau. Nhưng khi hệ thống đủ khỏe, growth sẽ khuếch đại toàn bộ năng lực team.",
+              "Core first, growth second. But once the system is healthy, growth amplifies the whole team's capability."
             )}
           </p>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

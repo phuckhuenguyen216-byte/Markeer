@@ -1,53 +1,70 @@
 ﻿"use client";
 
-import GrowthSectionTitle from "./GrowthSectionTitle";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { useGrowthLocale } from "./useGrowthLocale";
 
 export default function GrowthFaqSection() {
   const { tx } = useGrowthLocale();
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqItems = [
     {
-      q: tx("Tăng trưởng có bắt buộc không?", "Is growth mandatory?"),
-      a: tx("Không bắt buộc ở Lớp 2. Lớp 1 luôn là ưu tiên. Khi công việc cốt lõi chưa ổn thì không chạy task tăng trưởng.", "Not mandatory in Layer 2. Layer 1 is always priority. If core jobs are unstable, do not chase growth tasks."),
+      q: tx("INTERN CÓ ĐƯỢC NHẬN HOA HỒNG KHÔNG?", "CAN INTERNS RECEIVE COMMISSION?"),
+      a: tx("Có. Hệ thống reward theo đóng góp thật, không theo level.", "Yes. The system rewards real contribution, not seniority level."),
     },
     {
-      q: tx("Intern có đóng góp được không?", "Can interns contribute?"),
-      a: tx("Có. Intern có thể đóng góp qua phát hiện lead, seeding nội dung, cải tiến workflow, hoặc hỗ trợ onboarding.", "Yes. Interns can contribute through lead detection, content seeding, workflow improvements, or onboarding support."),
+      q: tx("HAI NGƯỜI CÙNG BIẾT MỘT LEAD THÌ SAO?", "WHAT IF TWO PEOPLE KNOW THE SAME LEAD?"),
+      a: tx("Ưu tiên prior relationship và discovery quality. Timestamp chỉ là tiebreaker.", "Prior relationship and discovery quality come first. Timestamp is only a tiebreaker."),
     },
     {
-      q: tx("Đóng góp đo bằng gì?", "How is contribution measured?"),
-      a: tx("Đo bằng chất lượng tín hiệu và tác động thực: chất lượng lead, tín hiệu niềm tin, kết quả bàn giao, case study, và mức cải thiện hệ thống.", "By signal quality and real impact: lead quality, trust signals, delivery outcomes, case studies, and system improvement level."),
+      q: tx("BỊ OVERLOAD CORE JOB THÌ GROWTH KPI THẾ NÀO?", "WHAT IF CORE JOB BECOMES OVERLOADED?"),
+      a: tx("Core luôn ưu tiên. Khi quá tải, Growth KPI sẽ pause để bảo vệ delivery.", "Core always comes first. Under overload, Growth KPI pauses to protect delivery."),
     },
     {
-      q: tx("Nếu không làm sales thì sao?", "What if I am not in sales?"),
-      a: tx("Tăng trưởng không phải việc riêng của sales. Bạn vẫn đóng góp qua nội dung, vận hành, chất lượng bàn giao, tự động hóa, và quan hệ.", "Growth is not only sales work. You can still contribute through content, operations, delivery quality, automation, and relationships."),
+      q: tx("KHÔNG THÍCH VIẾT CONTENT CÓ ĐÓNG GÓP ĐƯỢC KHÔNG?", "CAN I CONTRIBUTE WITHOUT WRITING CONTENT?"),
+      a: tx("Có. Bạn vẫn đóng góp qua lead discovery, referral, workflow insight hoặc delivery support.", "Yes. You can contribute through lead discovery, referrals, workflow insight, or delivery support."),
     },
     {
-      q: tx("Tại sao không tối ưu lợi nhuận trước?", "Why not optimize profit first?"),
-      a: tx("Phase 1 ưu tiên thị phần và tốc độ học. Tối ưu lợi nhuận quá sớm sẽ chặn tăng trưởng dài hạn.", "Phase 1 prioritizes market share and learning speed. Optimizing profit too early can block long-term growth."),
-    },
-    {
-      q: tx("Điều gì quan trọng nhất trong tăng trưởng?", "What matters most in growth?"),
-      a: tx("Niềm tin và hệ thống. Nếu tăng trưởng phá niềm tin hoặc phá bàn giao thì đó không phải tăng trưởng tốt.", "Trust and systems. If growth breaks trust or delivery, it is not good growth."),
+      q: tx("HỎI AI VỀ OWNERSHIP VÀ PAYOUT?", "WHO HANDLES OWNERSHIP AND PAYOUT QUESTIONS?"),
+      a: tx("Ownership/KPI: Sales Lead. Timeline và payout: Finance.", "Ownership/KPI: Sales Lead. Timeline and payout: Finance."),
     },
   ];
 
   return (
     <section className="py-16 sm:py-20">
-      <div className="mx-auto max-w-[1320px] px-4 sm:px-6 lg:px-8">
-        <GrowthSectionTitle label="FAQ" title={tx("HỎI THẲNG, TRẢ LỜI THẲNG.", "ASK DIRECTLY, ANSWER DIRECTLY.")} />
+      <div className="mx-auto max-w-[1120px] px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <p className="mk-eyebrow text-[#ff4d5f] uppercase">{tx("07 · FAQ", "07 · FAQ")}</p>
+          <h2 className="mk-section-title mx-auto mt-3 max-w-[760px] uppercase">
+            <span className="block text-[#0b1020]">{tx("HỎI NHANH, TRẢ LỜI", "QUICK QUESTIONS,")}</span>
+          </h2>
+        </div>
 
-        <div className="mt-7 space-y-3">
-          {faqItems.map((item) => (
-            <details key={item.q} className="group rounded-[20px] border border-[#ffdce4] bg-white p-4 open:bg-[#fff8fa]">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-bold tracking-[-0.01em] text-[#2b0f1d]">
-                {item.q}
-                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#ffd6de] text-[#ff4d5f] transition-transform group-open:rotate-45">+</span>
-              </summary>
-              <p className="mt-3 text-sm leading-7 text-[#0b1020]/78">{item.a}</p>
-            </details>
-          ))}
+        <div className="mt-8 divide-y divide-[#ffe2e8] rounded-[22px] bg-white px-5 shadow-[0_18px_46px_-38px_rgba(15,23,42,0.48)] sm:px-7">
+          {faqItems.map((item, index) => {
+            const isOpen = openIndex === index;
+            return (
+              <div key={item.q} className="py-4">
+                <button
+                  type="button"
+                  onClick={() => setOpenIndex(isOpen ? null : index)}
+                  className="flex w-full cursor-pointer items-center justify-between gap-4 text-left text-[1.02rem] font-semibold text-[#2b0f1d]"
+                >
+                  <span>{item.q}</span>
+                  <span className={`text-[#ff4d5f] transition-transform ${isOpen ? "rotate-45" : "rotate-0"}`}>+</span>
+                </button>
+                <motion.div
+                  initial={false}
+                  animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+                  transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+                  className="overflow-hidden"
+                >
+                  <p className="mt-2 pr-6 text-sm leading-7 text-[#0b1020]/76 sm:text-base sm:leading-7">{item.a}</p>
+                </motion.div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

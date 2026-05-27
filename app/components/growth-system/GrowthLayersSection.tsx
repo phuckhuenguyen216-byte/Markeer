@@ -1,119 +1,137 @@
-﻿"use client";
+"use client";
 
-import { CircleDot } from "lucide-react";
-import GrowthSectionTitle from "./GrowthSectionTitle";
+import { motion } from "framer-motion";
+import { CalendarClock } from "lucide-react";
 import { useGrowthLocale } from "./useGrowthLocale";
+
+const rise = (delay = 0) => ({
+  initial: { opacity: 0, y: 18 },
+  whileInView: { opacity: 1, y: 0 },
+  transition: { duration: 0.58, delay, ease: [0.22, 1, 0.36, 1] as const },
+  viewport: { once: true, amount: 0.25 },
+});
 
 export default function GrowthLayersSection() {
   const { tx } = useGrowthLocale();
 
-  const layerCards = [
+  const model = [
     {
-      id: tx("LỚP 1 · BẮT BUỘC", "LAYER 1 · REQUIRED"),
-      title: tx("CÔNG VIỆC CỐT LÕI", "CORE JOB"),
-      text: tx("Đây là lý do bạn được trả lương. Đây là KPI đánh giá hiệu suất chính.", "This is why you are paid. This is your primary performance KPI."),
-      points: [
-        tx("Dev: bàn giao sản phẩm, fix bug, build tính năng đúng hạn", "Dev: ship product, fix bugs, build features on time"),
-        tx("Marketing: nội dung, chiến dịch, nhận diện thương hiệu", "Marketing: content, campaigns, brand presence"),
-        tx("Sales: demo, chốt deal, quản lý pipeline", "Sales: demo, close deals, manage pipeline"),
-        tx("Ops/HR/Finance: vận hành hệ thống, tuyển dụng, tài chính", "Ops/HR/Finance: run systems, hiring, finance"),
-        tx("Intern: học, hỗ trợ team, hoàn thành task được giao", "Intern: learn, support the team, complete assigned tasks"),
-      ],
-      tone: "text-[#0b1020]",
-      border: "border-[#d7dce8]",
-      bg: "bg-white",
+      phaseVi: "Tháng 1",
+      phaseEn: "Month 1",
+      titleVi: "Build Habit",
+      titleEn: "Build Habit",
+      descVi: "Tạo nhịp submit và tracking ổn định trước.",
+      descEn: "Establish stable submission and tracking rhythm first.",
     },
     {
-      id: tx("LỚP 2 · KHÔNG BẮT BUỘC", "LAYER 2 · OPTIONAL"),
-      title: tx("MỞ RỘNG TĂNG TRƯỞNG", "GROWTH EXTENSION"),
-      text: tx("Không ảnh hưởng đánh giá core nếu bạn không làm. Nhưng làm tốt thì có reward thật.", "Your core evaluation is unchanged if you skip this. Do it well and you get real rewards."),
-      points: [
-        tx("Giới thiệu khách", "Lead referrals"),
-        tx("Tìm lead chất lượng", "Qualified lead discovery"),
-        tx("Seeding nội dung", "Content seeding"),
-        tx("Hỗ trợ hệ sinh thái có tác động trực tiếp", "Direct ecosystem support with impact"),
-      ],
-      tone: "text-[#ff4d5f]",
-      border: "border-[#ffd6de]",
-      bg: "bg-[#fff7fa]",
+      phaseVi: "Tháng 2+",
+      phaseEn: "Month 2+",
+      titleVi: "Quality Mode",
+      titleEn: "Quality Mode",
+      descVi: "Ưu tiên chất lượng lead/content thay vì spam volume.",
+      descEn: "Prioritize lead/content quality over volume spam.",
     },
     {
-      id: tx("LỚP 3 · LEADER & CULTURE", "LAYER 3 · LEADER & CULTURE"),
-      title: tx("ĐÓNG GÓP DÀI HẠN", "LONG-TERM CONTRIBUTION"),
-      text: tx("Không đo trực tiếp bằng doanh thu ngay lập tức nhưng ảnh hưởng mạnh tới khả năng scale dài hạn.", "Not measured by immediate revenue, but critical for long-term scale."),
-      points: [
-        tx("cải tiến workflow", "workflow improvement"),
-        tx("mentor", "mentoring"),
-        tx("tài liệu hóa hệ thống", "system documentation"),
-        tx("hỗ trợ onboarding", "onboarding support"),
-      ],
-      tone: "text-[#7c3aed]",
-      border: "border-[#e7ddff]",
-      bg: "bg-[#faf7ff]",
+      phaseVi: "Cuối tháng",
+      phaseEn: "Month End",
+      titleVi: "Verify & Reward",
+      titleEn: "Verify & Reward",
+      descVi: "Sales Lead verify, Finance payout theo điều kiện.",
+      descEn: "Sales Lead verifies, Finance pays by eligibility.",
     },
   ];
 
-  const roleCoreJobs = [
-    ["DEV", tx("Bàn giao sản phẩm, fix bug, build tính năng đúng hạn", "Ship product, fix bugs, build features on time")],
-    ["MARKETING", tx("Nội dung, chiến dịch, nhận diện thương hiệu", "Content, campaigns, brand presence")],
-    ["SALES", tx("Demo, chốt deal, quản lý pipeline", "Demo, close deals, manage pipeline")],
-    ["OPS / HR / FINANCE", tx("Vận hành hệ thống, tuyển dụng, quản lý tài chính", "Run systems, hiring, manage finance")],
-    ["INTERN", tx("Học, hỗ trợ team, hoàn thành task được giao", "Learn, support team, complete assigned tasks")],
+  const weekly = [
+    tx("Đầu tuần: chốt focus lane rõ ràng.", "Week start: set clear focus lane."),
+    tx("Giữa tuần: log tín hiệu vào hệ thống.", "Mid-week: log signals into the system."),
+    tx("Cuối tuần: review quality, chốt bài học.", "Week end: review quality and lock learnings."),
   ];
 
   return (
-    <section className="py-16 sm:py-20">
-      <div className="mx-auto max-w-[1320px] px-4 sm:px-6 lg:px-8">
-        <GrowthSectionTitle label={tx("CẤU TRÚC 3 LỚP", "3-LAYER STRUCTURE")} title={tx("HỆ THỐNG TĂNG TRƯỞNG HIỆN TẠI ĐƯỢC CHIA THÀNH 3 LỚP.", "THE CURRENT GROWTH SYSTEM HAS 3 LAYERS.")} />
+    <section className="relative overflow-hidden py-18 sm:py-22 lg:py-26">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,92,118,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,92,118,0.045)_1px,transparent_1px)] bg-[size:64px_64px]" />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -left-24 top-16 h-52 w-52 rounded-full bg-[radial-gradient(circle,rgba(255,77,95,0.24)_0%,rgba(255,255,255,0)_70%)] blur-2xl"
+        animate={{ x: [0, 36, 0], y: [0, 24, 0], opacity: [0.35, 0.7, 0.35] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-        <div className="mt-7 grid gap-4 lg:grid-cols-3">
-          {layerCards.map((layer, index) => (
-            <article key={layer.id} className={`rounded-[24px] border p-5 shadow-[0_14px_30px_-24px_rgba(15,23,42,0.35)] ${layer.border} ${layer.bg}`}>
-              <div className="flex items-center justify-between gap-3">
-                <p className={`text-xs font-semibold tracking-[0.16em] uppercase ${layer.tone}`}>{layer.id}</p>
-                <span style={{ animationDelay: `${index * 0.18}s` }} className="inline-flex h-2.5 w-2.5 rounded-full bg-[#ff4d5f] animate-pulse" />
-              </div>
-              <h3 className="mt-2 text-2xl font-extrabold tracking-[-0.02em] text-[#0b1020] uppercase">{layer.title}</h3>
-              <p className="mt-2 text-sm leading-7 text-[#0b1020]/78">{layer.text}</p>
-              <ul className="mt-3 space-y-2 text-sm text-[#0b1020]/84">
-                {layer.points.map((point, pointIndex) => (
-                  <li key={point} className="flex items-start gap-2">
-                    <CircleDot style={{ animationDelay: `${pointIndex * 0.12}s` }} className="mt-1 h-4 w-4 shrink-0 text-[#ff4d5f] animate-pulse" />
-                    {point}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
+      <div className="relative mx-auto max-w-[1320px] px-4 sm:px-6 lg:px-8">
+        <motion.div {...rise(0)} className="max-w-[980px]">
+          <p className="mk-eyebrow text-[#ff4d5f] uppercase">
+            {tx("05 · Theo dõi & Tính thưởng", "05 · Tracking & Rewards")}
+          </p>
+          <h2 className="mk-section-title mt-4 uppercase">
+            <span className="block text-[#0b1020]">{tx("ĐO CHẤT LƯỢNG TRƯỚC.", "MEASURE QUALITY FIRST.")}</span>
+            <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff7b94] bg-clip-text text-transparent">
+              {tx("ĐO TỐC ĐỘ SAU.", "THEN MEASURE SPEED.")}
+            </span>
+          </h2>
+        </motion.div>
+
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1.04fr_0.96fr] lg:items-start">
+          <motion.article
+            {...rise(0.08)}
+            className="relative overflow-hidden rounded-[32px] bg-[linear-gradient(170deg,#ffffff_0%,#fff8fb_100%)] p-6 shadow-[0_30px_68px_-50px_rgba(15,23,42,0.56)] sm:p-8"
+          >
+            <motion.div
+              aria-hidden
+              className="pointer-events-none absolute -left-[38%] top-0 h-full w-1/3 -skew-x-12 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(255,116,141,0.2)_50%,rgba(255,255,255,0)_100%)]"
+              animate={{ x: ["0%", "420%"] }}
+              transition={{ duration: 5.6, repeat: Infinity, ease: "linear" }}
+            />
+            <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.14em] text-[#ff4d5f] uppercase">
+              <CalendarClock className="h-3.5 w-3.5" />
+              {tx("Monthly progression", "Monthly progression")}
+            </p>
+
+            <div className="mt-5 space-y-4">
+              {model.map((item, index) => (
+                <motion.article
+                  key={item.phaseVi}
+                  initial={{ opacity: 0, x: -14 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.45, delay: 0.1 + index * 0.08 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  className="relative rounded-2xl bg-white px-4 py-4 shadow-[0_12px_30px_-22px_rgba(15,23,42,0.48)]"
+                >
+                  <p className="text-[11px] font-semibold tracking-[0.12em] text-[#ff4d5f] uppercase">{tx(item.phaseVi, item.phaseEn)}</p>
+                  <p className="mt-1 text-[1.08rem] font-bold text-[#2b0f1d]">{tx(item.titleVi, item.titleEn)}</p>
+                  <p className="mt-1.5 text-sm leading-6 text-[#0b1020]/74 sm:text-base sm:leading-7">{tx(item.descVi, item.descEn)}</p>
+                </motion.article>
+              ))}
+            </div>
+          </motion.article>
+
+          <motion.article
+            {...rise(0.14)}
+            className="relative overflow-hidden rounded-[32px] bg-[#190f2a] p-6 text-[#dfe8ff] shadow-[0_30px_72px_-48px_rgba(25,15,42,0.8)] sm:p-8"
+          >
+            <motion.div
+              className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(255,255,255,0.06)_50%,transparent_100%)]"
+              animate={{ y: ["-100%", "100%"] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+            />
+
+            <p className="text-xs font-semibold tracking-[0.14em] text-[#8fb6ff] uppercase">{tx("Weekly rhythm", "Weekly rhythm")}</p>
+
+            <div className="relative mt-5 space-y-3">
+              {weekly.map((item) => (
+                <p key={item} className="rounded-xl bg-white/8 px-4 py-3 text-sm leading-6 sm:text-base sm:leading-7">
+                  {item}
+                </p>
+              ))}
+            </div>
+
+            <p className="mt-6 text-sm leading-7 text-[#dfe8ff]/82 sm:text-base">
+              {tx(
+                "Mục tiêu không phải số đẹp ngắn hạn. Mục tiêu là nhịp tăng trưởng có thể lặp lại mà không làm team mệt rã.",
+                "The goal is not short-term vanity metrics. The goal is repeatable growth rhythm without breaking the team."
+              )}
+            </p>
+          </motion.article>
         </div>
-
-        <article className="mt-6 overflow-hidden rounded-[24px] border border-[#dce2f0] bg-white">
-          <div className="border-b border-[#e7ebf4] bg-[#f8faff] px-5 py-3">
-            <p className="text-sm font-semibold tracking-[0.14em] text-[#23427a] uppercase">{tx("BẢN ĐỒ VAI TRÒ LỚP 1", "LAYER 1 ROLE MAP")}</p>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead>
-                <tr className="border-b border-[#eef1f7] bg-[#fcfdff] text-[#0b1020]/68">
-                  <th className="px-5 py-3 font-semibold">{tx("Vai trò", "Role")}</th>
-                  <th className="px-5 py-3 font-semibold">{tx("Công việc cốt lõi (Lớp 1)", "Core Job (Layer 1)")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {roleCoreJobs.map(([role, job]) => (
-                  <tr key={role} className="border-b border-[#f1f3f8] last:border-0">
-                    <td className="px-5 py-3 font-semibold text-[#0b1020]">{role}</td>
-                    <td className="px-5 py-3 text-[#0b1020]/78">{job}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
-
-        <p className="mt-6 rounded-[22px] border border-[#ffd8e1] bg-[#fff7fa] px-5 py-4 text-lg font-bold text-[#2b0f1d] uppercase sm:text-xl">
-          {tx("KHÔNG PHẢI ĐÓNG GÓP NÀO CŨNG ĐO BẰNG DOANH THU NGAY LẬP TỨC.", "NOT EVERY CONTRIBUTION IS MEASURED BY IMMEDIATE REVENUE.")}
-        </p>
       </div>
     </section>
   );

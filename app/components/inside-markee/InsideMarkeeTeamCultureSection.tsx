@@ -1,7 +1,6 @@
 ﻿"use client";
 
 import { motion } from "framer-motion";
-import { AlertTriangle, CalendarClock, FileText, Megaphone, ShieldCheck, Target, UserRound, Users, Wrench, XCircle } from "lucide-react";
 import { useInsideMarkeeLocale } from "./useInsideMarkeeLocale";
 
 const fadeUp = (delay = 0) => ({
@@ -14,160 +13,101 @@ const fadeUp = (delay = 0) => ({
 export default function InsideMarkeeTeamCultureSection() {
   const { tx } = useInsideMarkeeLocale();
 
-  const alwaysDo = [
-    { title: tx("BÁN KẾT QUẢ", "SELL OUTCOMES"), text: tx("Bán kết quả, không bán từ ngữ hào nhoáng.", "Sell outcomes, not buzzwords."), Icon: Target },
-    { title: tx("HỌC LIÊN TỤC", "LEARN CONTINUOUSLY"), text: tx("Ghi lại bài học, cải tiến quy trình, chuẩn hóa hệ thống.", "Log learning, improve workflows, document systems."), Icon: FileText },
-    { title: tx("XÂY NIỀM TIN", "BUILD TRUST"), text: tx("Niềm tin quan trọng hơn hiệu ứng ngắn hạn.", "Trust matters more than short-term hype."), Icon: ShieldCheck },
-    { title: tx("CẢI TIẾN HỆ THỐNG", "IMPROVE SYSTEMS"), text: tx("Nếu workflow có thể tốt hơn, team sẽ nâng cấp ngay.", "If workflows can improve, the team upgrades them."), Icon: Wrench },
-    { title: tx("TƯ DUY DÀI HẠN", "THINK LONG-TERM"), text: tx("Không tối ưu cho cảm xúc ngắn hạn.", "Do not optimize for short-term dopamine."), Icon: CalendarClock },
-    { title: tx("HỖ TRỢ HỆ SINH THÁI", "HELP THE ECOSYSTEM"), text: tx("Mỗi người đang đóng góp vào thứ lớn hơn task hiện tại.", "Everyone contributes to something larger than a single task."), Icon: Users },
-  ];
-
-  const neverDo = [
-    { title: tx("AI HÀO NHOÁNG GIẢ", "FAKE AI BUZZWORDS"), text: tx("Không dùng AI chỉ để tiếp thị cho có vẻ tương lai.", "Do not use AI as fake futuristic marketing."), Icon: AlertTriangle },
-    { title: tx("HỨA QUÁ MỨC", "OVERPROMISE"), text: tx("Không hứa thứ team không thể bàn giao.", "Do not promise what the team cannot deliver."), Icon: XCircle },
-    { title: tx("TĂNG TRƯỞNG KIỂU SPAM", "SPAM GROWTH"), text: tx("Không tăng trưởng bằng spam hoặc tương tác giả.", "Do not build growth via spam or fake engagement."), Icon: Megaphone },
-    { title: tx("TÙY BIẾN GÂY HỖN LOẠN", "CUSTOM CHAOS"), text: tx("Không nhận mọi yêu cầu nếu nó phá hệ thống.", "Do not accept custom requests that break systems."), Icon: Wrench },
-    { title: tx("TƯ DUY NGẮN HẠN", "SHORT-TERM THINKING"), text: tx("Không chỉ tối ưu cho doanh thu ngắn hạn.", "Do not optimize only for short-term revenue."), Icon: CalendarClock },
-    { title: tx("VĂN HÓA CÁI TÔI", "EGO-FIRST CULTURE"), text: tx("Hệ thống quan trọng hơn cái tôi cá nhân.", "Systems matter more than individual ego."), Icon: UserRound },
-  ];
-
   const principles = [
-    { id: "01", title: tx("TỐC ĐỘ ƯU TIÊN HƠN CẦU TOÀN", "SPEED OVER PERFECTION"), text: tx("Di chuyển nhanh, lặp nhanh, cải tiến liên tục.", "Move fast, iterate fast, improve continuously.") },
-    { id: "02", title: tx("THỰC TẾ QUAN TRỌNG HƠN GIẢ ĐỊNH", "REALITY OVER ASSUMPTIONS"), text: tx("Thực tế luôn thắng lý thuyết.", "Reality beats theory.") },
-    { id: "03", title: tx("ĐƠN GIẢN MỚI MỞ RỘNG ĐƯỢC", "SIMPLICITY SCALES"), text: tx("Hệ thống đơn giản mở rộng tốt hơn hệ thống quá phức tạp.", "Simple systems scale better than over-complex systems.") },
-    { id: "04", title: tx("RÕ RÀNG TRƯỚC KHI TỰ ĐỘNG HÓA", "CLARITY BEFORE AUTOMATION"), text: tx("Quy trình chưa rõ thì tự động hóa chỉ tạo hỗn loạn.", "If workflows are unclear, automation adds chaos.") },
-    { id: "05", title: tx("LỢI THẾ DÀI HẠN SẼ TÍCH LŨY", "LONG-TERM ADVANTAGE COMPOUNDS"), text: tx("Những thứ build đúng sẽ tích lũy theo thời gian.", "Well-built systems compound over time.") },
+    {
+      titleA: "EXECUTION",
+      titleB: "OVER NOISE",
+      textVi: "Ít khẩu hiệu, nhiều kết quả thật. Mỗi quyết định phải đi về hành động đo được.",
+      textEn: "Less slogans, more real outcomes. Every decision must convert into measurable action.",
+    },
+    {
+      titleA: "SYSTEMS",
+      titleB: "OVER CHAOS",
+      textVi: "Không chạy theo việc rời rạc. Chuẩn hóa quy trình để tăng tốc mà không vỡ delivery.",
+      textEn: "No scattered execution. Standardize workflows to speed up without breaking delivery.",
+    },
+    {
+      titleA: "OWNERSHIP",
+      titleB: "OVER EXCUSES",
+      textVi: "Chạm vào vấn đề là cùng chịu trách nhiệm đưa nó về trạng thái tốt hơn.",
+      textEn: "Whoever touches the problem co-owns improving its state.",
+    },
+    {
+      titleA: "LONG-TERM TRUST",
+      titleB: "OVER HYPE",
+      textVi: "Không đánh đổi uy tín dài hạn lấy lợi ích ngắn hạn. Trust là tài sản lõi của ecosystem.",
+      textEn: "Never trade long-term credibility for short-term hype. Trust is core ecosystem capital.",
+    },
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#fff8fb] via-white to-[#fff7f7] py-24 sm:py-28 lg:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,92,118,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,92,118,0.08)_1px,transparent_1px)] bg-[size:58px_58px]" />
-      <div className="pointer-events-none absolute right-[-10rem] top-[-6rem] h-[31rem] w-[31rem] rounded-full bg-[radial-gradient(circle,rgba(255,77,77,0.2)_0%,rgba(255,176,190,0.12)_38%,rgba(255,255,255,0)_78%)] blur-3xl" />
+    <section className="relative overflow-hidden bg-[#120d14] py-24 sm:py-28 lg:py-32">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_8%,rgba(255,102,128,0.26)_0%,rgba(18,13,20,0)_42%),linear-gradient(to_right,rgba(255,144,165,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,144,165,0.06)_1px,transparent_1px)] bg-[size:auto,64px_64px,64px_64px]" />
+      <div className="pointer-events-none absolute left-1/2 top-[18%] h-[26rem] w-[26rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,77,95,0.2)_0%,rgba(18,13,20,0)_72%)] blur-3xl" />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-[32%] h-px bg-gradient-to-r from-transparent via-[#ff7b95]/70 to-transparent"
+        animate={{ opacity: [0.2, 0.8, 0.2] }}
+        transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute top-0 h-full w-[28rem] -skew-x-12 bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(255,157,177,0.24)_48%,rgba(255,255,255,0)_100%)] blur-2xl"
+        animate={{ x: ["-40vw", "120vw"] }}
+        transition={{ duration: 6.2, repeat: Infinity, ease: "linear" }}
+      />
 
-      <div className="relative mx-auto max-w-[1380px] px-4 sm:px-6 lg:px-8">
-        <motion.p
-          {...fadeUp(0)}
-          className="text-center text-sm font-semibold tracking-[0.17em] text-[#0b1020]/80 uppercase"
-        >
-          {tx("VĂN HÓA ĐỘI", "TEAM CULTURE")}
+      <div className="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+        <motion.p {...fadeUp(0)} className="mk-eyebrow text-center text-white/70 uppercase">
+          {tx("07 · Văn hóa team", "07 · Team culture")}
         </motion.p>
 
-        <motion.div {...fadeUp(0.05)} className="mx-auto mt-7 max-w-[1240px] text-center">
-          <h2 className="mt-4 text-[1.95rem] leading-[1.06] font-extrabold tracking-[-0.03em] text-[#2d0d18] sm:text-[2.75rem] lg:text-[3.3rem]">
-            <span className="block">
-              {tx("VĂN HÓA KHÔNG PHẢI KHẨU HIỆU.", "CULTURE IS NOT A SLOGAN.")}
-            </span>
-            <span className="block text-[#ff4d5f]">
-              {tx("VĂN HÓA LÀ CÁCH ĐỘI RA QUYẾT ĐỊNH.", "IT IS HOW THE TEAM DECIDES.")}
+        <motion.div {...fadeUp(0.05)} className="mx-auto mt-7 max-w-[880px] text-center">
+          <h2 className="mk-section-title">
+            <span className="block text-white">{tx("ĐÂY LÀ CÁCH ECOSYSTEM", "THIS IS HOW THE ECOSYSTEM")}</span>
+            <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff627a] via-[#ff4d5f] to-[#ff9cae] bg-clip-text text-transparent">
+              {tx("VẬN HÀNH VÀ RA QUYẾT ĐỊNH", "OPERATES AND DECIDES")}
             </span>
           </h2>
-          <p className="mt-5 text-lg leading-8 text-[#2d0d18]/78">
-            {tx(
-              "Hệ thống và tự động hóa rất quan trọng. Nhưng nếu văn hóa sai, mọi hệ thống rồi cũng sẽ đổ vỡ.",
-              "Systems and automation matter. But if culture is wrong, every system eventually breaks down."
-            )}
-          </p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            {[
-              tx("RÕ RÀNG", "CLARITY"),
-              tx("TRÁCH NHIỆM", "OWNERSHIP"),
-              tx("KỶ LUẬT", "DISCIPLINE"),
-            ].map((tag) => (
-              <span
-                key={tag}
-                className="rounded-xl border border-red-100 bg-[#fff8fa] px-3 py-2 text-center text-sm font-semibold tracking-[0.08em] text-[#8f2f3f]"
-              >
-                {tag}
-              </span>
-            ))}
+          <div className="mx-auto mt-4 max-w-[1180px] overflow-visible">
+            <p className="text-center text-[0.9rem] leading-7 text-white/80 sm:text-[0.96rem] lg:text-[1rem]">
+              {tx(
+                "Văn hóa không phải poster giá trị. Văn hóa là bộ lọc chiến lược giúp team scale có kỷ luật và giữ trust dài hạn.",
+                "Culture is not a values poster. It is the strategic filter that keeps scaling disciplined and trust durable."
+              )}
+            </p>
           </div>
         </motion.div>
 
-        <div className="mt-10 grid gap-5 xl:grid-cols-2">
-          <motion.article {...fadeUp(0.16)} className="rounded-[24px] border border-red-100/80 bg-white p-6">
-            <p className="text-sm font-semibold tracking-[0.16em] text-[#ff4d4d] uppercase">{tx("THỨ BỌN MÌNH LUÔN LÀM", "WHAT WE ALWAYS DO")}</p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              {alwaysDo.map((item) => {
-                const Icon = item.Icon;
-                return (
-                  <div key={item.title} className="rounded-2xl border border-red-100 bg-[#fffafb] p-4">
-                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-red-100 bg-white text-[#ff4d4d]">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <p className="mt-3 text-xl font-bold text-[#2d0d18]">{item.title}</p>
-                    <p className="mt-2 text-sm leading-6 text-[#2d0d18]/76">{item.text}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.article>
-
-          <motion.article {...fadeUp(0.2)} className="rounded-[24px] border border-red-100/80 bg-[#fff9fa] p-6">
-            <p className="text-sm font-semibold tracking-[0.16em] text-[#ff4d4d] uppercase">{tx("THỨ BỌN MÌNH KHÔNG LÀM", "WHAT WE NEVER DO")}</p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              {neverDo.map((item) => {
-                const Icon = item.Icon;
-                return (
-                  <div key={item.title} className="rounded-2xl border border-red-100 bg-white p-4">
-                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-red-100 bg-[#fff8fa] text-[#ff4d4d]">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <p className="mt-3 text-xl font-bold text-[#2d0d18]">{item.title}</p>
-                    <p className="mt-2 text-sm leading-6 text-[#2d0d18]/76">{item.text}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.article>
+        <div className="mt-10 space-y-6">
+          {principles.map((item, index) => (
+            <motion.article
+              key={item.titleA}
+              {...fadeUp(0.1 + index * 0.06)}
+              whileHover={{ y: -6 }}
+              className="rounded-[28px] bg-white/[0.03] px-5 py-6 backdrop-blur-[2px] shadow-[0_18px_44px_-30px_rgba(0,0,0,0.6)] sm:px-8 sm:py-8"
+            >
+              <p className="text-[1.18rem] leading-[1.1] font-black tracking-[-0.014em] sm:text-[1.7rem] lg:text-[2rem]">
+                <span className="block text-white">{item.titleA}</span>
+                <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff627a] via-[#ff4d5f] to-[#ff9cae] bg-clip-text text-transparent">
+                  {item.titleB}
+                </span>
+              </p>
+              <p className="mt-3 max-w-[880px] text-sm leading-7 text-white/78 sm:text-base sm:leading-8">
+                {tx(item.textVi, item.textEn)}
+              </p>
+            </motion.article>
+          ))}
         </div>
 
-        <motion.article {...fadeUp(0.26)} className="mt-9 rounded-[28px] border border-red-100/80 bg-white p-6 sm:p-8">
-          <p className="text-sm font-semibold tracking-[0.16em] text-[#ff4d4d] uppercase">
-            {tx("NGUYÊN TẮC VẬN HÀNH", "OPERATING PRINCIPLES")}
+        <motion.div {...fadeUp(0.38)} className="mt-6">
+          <p className="mx-auto max-w-[1220px] text-center text-[0.9rem] font-semibold text-white/92 sm:text-[0.98rem] lg:text-[1.03rem]">
+            {tx(
+              "Team mạnh không phải team ồn ào. Team mạnh là team ra quyết định đúng, vận hành chắc, và đi đường dài cùng nhau.",
+              "Strong teams are not noisy teams. Strong teams make better decisions, operate with discipline, and build for the long run."
+            )}
           </p>
-          <div className="mt-4 divide-y divide-red-100">
-            {principles.map((item) => (
-              <div key={item.id} className="grid gap-3 py-4 sm:grid-cols-[24px_1fr_1.1fr]">
-                <span className="mt-2 inline-flex h-2.5 w-2.5 rounded-full bg-[#ff4d4d]" />
-                <p className="text-lg font-semibold text-[#2d0d18]">{item.title}</p>
-                <p className="text-sm leading-6 text-[#2d0d18]/76">{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </motion.article>
-
-        <div className="mt-8 grid gap-5 xl:grid-cols-[1fr_1fr]">
-          <motion.article {...fadeUp(0.32)} className="rounded-[24px] border border-red-100/80 bg-gradient-to-br from-[#fff7fa] via-white to-[#fff3f6] p-7">
-            <p className="text-[2.5rem] leading-[1.1] font-extrabold tracking-[-0.03em] text-[#2d0d18] sm:text-[3.2rem]">
-              {tx("HỆ THỐNG MỚI MỞ RỘNG ĐƯỢC.", "SYSTEMS SCALE.")}
-              <br />
-              <span className="text-[#ff4d5f]">{tx("NIỀM TIN SẼ TÍCH LŨY.", "TRUST COMPOUNDS.")}</span>
-            </p>
-            <p className="mt-4 text-base leading-7 text-[#2d0d18]/78">
-              {tx(
-                "Nhiều startup không chết vì thiếu năng lực. Họ chết vì văn hóa đổ vỡ và hệ thống mất kỷ luật.",
-                "Many startups do not fail from talent gaps. They fail from culture breakdown and weak system discipline."
-              )}
-            </p>
-          </motion.article>
-
-          <motion.article {...fadeUp(0.36)} className="rounded-[24px] border border-red-100/80 bg-white p-7">
-            <p className="text-sm font-semibold tracking-[0.16em] text-[#ff4d4d] uppercase">{tx("ĐIỀU QUAN TRỌNG", "IMPORTANT")}</p>
-            <p className="mt-4 text-base leading-7 text-[#2d0d18]/82">
-              {tx(
-                "Văn hóa không được viết ra một lần rồi tự tồn tại. Nó được định hình mỗi ngày bởi giao tiếp, quyết định và hành vi.",
-                "Culture is not written once and self-sustained. It is shaped daily through communication, decisions, and behavior."
-              )}
-            </p>
-            <p className="mt-4 rounded-xl border border-red-100 bg-[#fff8fa] px-4 py-3 text-sm leading-6 text-[#2d0d18]/78">
-              {tx(
-                "Đó là lý do team bảo vệ sự rõ ràng, niềm tin, tinh thần trách nhiệm và tư duy hệ thống ngay cả khi tăng trưởng nhanh.",
-                "That is why the team protects clarity, trust, ownership, and systems thinking even in fast growth phases."
-              )}
-            </p>
-          </motion.article>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

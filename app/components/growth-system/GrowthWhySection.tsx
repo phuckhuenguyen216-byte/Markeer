@@ -1,119 +1,121 @@
-﻿"use client";
+"use client";
 
-import Image from "next/image";
-import { Activity, Bot, Layers3, MessageCircleMore, ShieldCheck, Users } from "lucide-react";
-import GrowthSectionTitle from "./GrowthSectionTitle";
+import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
 import { useGrowthLocale } from "./useGrowthLocale";
+
+const chapterReveal = (delay = 0) => ({
+  initial: { opacity: 0, y: 18 },
+  whileInView: { opacity: 1, y: 0 },
+  transition: { duration: 0.62, delay, ease: [0.22, 1, 0.36, 1] as const },
+  viewport: { once: true, amount: 0.25 },
+});
 
 export default function GrowthWhySection() {
   const { tx } = useGrowthLocale();
 
-  const dynamicLayers = [
-    tx("Lớp nội dung", "Content layer"),
-    tx("Lớp niềm tin", "Trust layer"),
-    tx("Lớp tự động hóa", "Automation layer"),
-    tx("Lớp bàn giao", "Delivery layer"),
-    tx("Lớp quan hệ", "Relationship layer"),
-  ];
-
-  const liveSignals = [
-    { label: tx("Niềm tin tăng", "Trust up"), value: "+32%", Icon: ShieldCheck },
-    { label: tx("Vòng giới thiệu", "Referral loop"), value: tx("Đang chạy", "Active"), Icon: Activity },
-    { label: tx("Nội dung đến hội thoại", "Content to conversation"), value: tx("Đồng bộ", "Synchronized"), Icon: MessageCircleMore },
-    { label: tx("Tự động hóa", "Automation"), value: tx("Tuyến sống", "Core lane"), Icon: Bot },
+  const layers = [
+    {
+      layer: "Layer 1",
+      nameVi: "Core Job",
+      nameEn: "Core Job",
+      textVi: "Bắt buộc và ưu tiên số 1. Core yếu thì growth chỉ là ảo giác.",
+      textEn: "Mandatory and priority #1. Weak core makes growth an illusion.",
+    },
+    {
+      layer: "Layer 2",
+      nameVi: "Growth Expansion",
+      nameEn: "Growth Expansion",
+      textVi: "Optional nhưng có thưởng rõ. Đóng góp thật thì thu nhập tăng thật.",
+      textEn: "Optional but reward-based. Real contribution creates real upside.",
+    },
+    {
+      layer: "Layer 3",
+      nameVi: "Leader & Culture",
+      nameEn: "Leader & Culture",
+      textVi: "Mentor, chia sẻ và nâng cấp hệ thống để team scale không vỡ nhịp.",
+      textEn: "Mentor, share, and upgrade systems so scaling does not break rhythm.",
+    },
   ];
 
   return (
-    <section className="py-16 sm:py-20">
-      <div className="mx-auto max-w-[1320px] px-4 sm:px-6 lg:px-8">
-        <GrowthSectionTitle
-          label={tx("VÌ SAO HỆ THỐNG NÀY TỒN TẠI", "WHY THIS SYSTEM EXISTS")}
-          title={tx("TẠI SAO HỆ SINH THÁI CẦN MỘT HỆ THỐNG TĂNG TRƯỞNG?", "WHY DOES THE ECOSYSTEM NEED A GROWTH SYSTEM?")}
-          centered
-        />
+    <section className="relative overflow-hidden py-18 sm:py-22 lg:py-26">
+      <motion.div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_14%,rgba(255,77,95,0.12)_0%,rgba(255,255,255,0)_42%)]"
+        animate={{ opacity: [0.7, 1, 0.7] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-        <div className="mt-7 grid items-stretch gap-6 lg:grid-cols-2">
-          <article className="flex h-full flex-col rounded-[24px] border border-[#ffdbe3] bg-white p-6">
-            <h3 className="text-[1.22rem] leading-8 font-bold text-[#0b1020] sm:text-[1.42rem]">
-              {tx("Hệ sinh thái không tăng trưởng chỉ bằng sales.", "An ecosystem cannot grow through sales alone.")}
-            </h3>
-            <p className="mt-2 text-[1rem] leading-7 text-[#0b1020]/76">
+      <div className="relative mx-auto max-w-[1320px] px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-start">
+          <motion.article {...chapterReveal(0)} className="lg:pt-4">
+            <p className="mk-eyebrow text-[#ff4d5f] uppercase">
+              {tx("01 · Đọc cái này trước tất cả", "01 · Read this before all")}
+            </p>
+
+            <h2 className="mk-section-title mt-4 uppercase">
+              <span className="block text-[#0b1020]">{tx("GROWTH KHÔNG PHẢI", "GROWTH IS NOT")}</span>
+              <span className="block text-[#0b1020]">{tx("VIỆC CỦA RIÊNG SALES.", "A SALES-ONLY JOB.")}</span>
+              <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff7c95] bg-clip-text text-transparent">
+                {tx("GROWTH LÀ HỆ THỐNG", "GROWTH IS AN")}
+              </span>
+              <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff7c95] bg-clip-text text-transparent">
+                {tx("CỦA CẢ TEAM.", "ALL-TEAM SYSTEM.")}
+              </span>
+            </h2>
+
+            <p className="mt-6 max-w-[760px] text-[1.04rem] leading-8 text-[#0b1020]/78 sm:text-[1.12rem]">
               {tx(
-                "Tăng trưởng xuất hiện khi các lớp vận hành bắt đầu kết nối thành một vòng lặp.",
-                "Growth appears when operational layers connect into one loop."
+                "Đây là Growth System v1.0 cho Phase 1: làm tốt việc chính trước, mở rộng growth khi đủ lực, và giữ văn hóa để hệ thống đi đường dài.",
+                "This is Growth System v1.0 for Phase 1: execute core work first, expand growth with real capacity, and protect culture for the long run."
               )}
             </p>
 
-            <ul className="mt-5 space-y-2.5 text-base leading-7 text-[#0b1020]/82">
-              <li className="flex items-center gap-3"><MessageCircleMore className="h-4 w-4 text-[#ff4d5f]" />{tx("nội dung tạo niềm tin", "content builds trust")}</li>
-              <li className="flex items-center gap-3"><Layers3 className="h-4 w-4 text-[#ff4d5f]" />{tx("hệ thống tạo khả năng mở rộng", "systems create scalability")}</li>
-              <li className="flex items-center gap-3"><ShieldCheck className="h-4 w-4 text-[#ff4d5f]" />{tx("bàn giao tạo giới thiệu", "delivery generates referrals")}</li>
-              <li className="flex items-center gap-3"><Users className="h-4 w-4 text-[#ff4d5f]" />{tx("con người tạo mạng lưới", "people build networks")}</li>
-            </ul>
-
-            <div className="mt-6 rounded-2xl border border-[#ffdbe3] bg-[#fff7fa] p-5">
-              <p className="text-lg font-bold text-[#ff4d5f]">{tx("Tăng trưởng không phải: đi bán hàng.", "Growth is not: just selling.")}</p>
-              <p className="mt-1.5 text-[1.28rem] leading-9 font-bold text-[#0b1020]">
-                {tx("Tăng trưởng là: tạo thêm giá trị cho hệ sinh thái theo thời gian.", "Growth is: creating more value for the ecosystem over time.")}
-              </p>
-            </div>
-
-            <p className="mt-6 text-sm font-semibold tracking-[0.13em] text-[#ff4d5f] uppercase">{tx("LỚP ĐỘNG CỦA HỆ", "ACTIVE LAYERS")}</p>
-            <div className="mt-3 flex flex-wrap gap-2.5">
-              {dynamicLayers.map((item) => (
-                <span key={item} className="inline-flex items-center gap-2 rounded-full border border-[#ffdce4] bg-white px-3 py-1.5 text-sm font-semibold text-[#0b1020]/82">
-                  <span className="h-2 w-2 rounded-full bg-[#ff6f86] animate-pulse" />
+            <div className="mt-7 space-y-3 max-w-[720px]">
+              {[
+                tx("Core trước. Không core thì không growth bền.", "Core first. No core means no durable growth."),
+                tx("Muốn kiếm thêm? Đóng góp growth có chất lượng.", "Want more upside? Contribute quality growth."),
+                tx("Muốn team scale? Bắt đầu từ hệ thống và văn hóa.", "Want team scale? Start with systems and culture."),
+              ].map((item) => (
+                <p key={item} className="rounded-xl bg-white/78 px-4 py-3 text-sm leading-7 text-[#2b0f1d] shadow-[0_10px_28px_-24px_rgba(15,23,42,0.58)] sm:text-base">
                   {item}
-                </span>
+                </p>
               ))}
             </div>
+          </motion.article>
 
-            <p className="mt-6 text-sm font-semibold tracking-[0.13em] text-[#ff4d5f] uppercase">{tx("TÍN HIỆU ĐANG CHẠY", "LIVE SIGNALS")}</p>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              {liveSignals.map((item) => {
-                const Icon = item.Icon;
-                return (
-                  <div key={item.label} className="rounded-xl border border-[#ffdce4] bg-white px-3 py-2.5">
-                    <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.08em] text-[#0b1020]/64 uppercase">
-                      <Icon className="h-3.5 w-3.5 text-[#ff4d5f]" />
-                      {item.label}
-                    </p>
-                    <p className="mt-1 text-sm font-bold text-[#0b1020]">{item.value}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </article>
+          <motion.article
+            {...chapterReveal(0.08)}
+            className="relative overflow-hidden rounded-[30px] bg-[linear-gradient(170deg,#ffffff_0%,#fff7fa_100%)] p-6 shadow-[0_26px_64px_-48px_rgba(15,23,42,0.58)] sm:p-7"
+          >
+            <motion.div
+              className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(255,77,95,0.2)_0%,rgba(255,255,255,0)_70%)] blur-xl"
+              animate={{ scale: [1, 1.08, 1] }}
+              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+            />
 
-          <article className="flex h-full flex-col rounded-[24px] border border-[#ffdbe3] bg-gradient-to-br from-[#fff8fa] to-white p-6">
-            <div className="mt-4 overflow-hidden rounded-[20px] border border-[#ffdce4] bg-white">
-              <div className="relative aspect-square min-h-[320px] sm:min-h-[420px]">
-                <Image src="/banner2.png" alt={tx("Mô hình động cơ đóng góp", "Contribution engine model")} fill className="object-contain object-top" />
-              </div>
-            </div>
-
-            <div className="mt-4 grid gap-3 sm:grid-cols-3">
-              <div className="rounded-xl border border-[#ffdce4] bg-white px-3 py-2.5">
-                <p className="text-[11px] font-semibold tracking-[0.08em] text-[#0b1020]/62 uppercase">{tx("Nhịp niềm tin", "Trust rhythm")}</p>
-                <p className="mt-1 text-sm font-bold text-[#0b1020]">{tx("Ổn định và tích lũy", "Stable and compounding")}</p>
-              </div>
-              <div className="rounded-xl border border-[#ffdce4] bg-white px-3 py-2.5">
-                <p className="text-[11px] font-semibold tracking-[0.08em] text-[#0b1020]/62 uppercase">{tx("Tuyến tự động hóa", "Automation lane")}</p>
-                <p className="mt-1 text-sm font-bold text-[#0b1020]">{tx("Hệ thống đồng bộ", "Synchronized systems")}</p>
-              </div>
-              <div className="rounded-xl border border-[#ffdce4] bg-white px-3 py-2.5">
-                <p className="text-[11px] font-semibold tracking-[0.08em] text-[#0b1020]/62 uppercase">{tx("Vòng giới thiệu", "Referral loop")}</p>
-                <p className="mt-1 text-sm font-bold text-[#0b1020]">{tx("Đang hoạt động", "Running")}</p>
-              </div>
-            </div>
-
-            <p className="mt-3 rounded-xl border border-[#ffdce4] bg-white px-3 py-2.5 text-sm text-[#0b1020]/74">
-              {tx(
-                "Động cơ tăng trưởng chỉ chạy tốt khi lớp đóng góp, lớp bàn giao và lớp niềm tin giữ cùng một nhịp.",
-                "The growth engine works best when contribution, delivery, and trust layers stay in one rhythm."
-              )}
+            <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.15em] text-[#ff4d5f] uppercase">
+              <Sparkles className="h-3.5 w-3.5" />
+              {tx("3-layer operating model", "3-layer operating model")}
             </p>
-          </article>
+
+            <div className="mt-5 space-y-4">
+              {layers.map((item, index) => (
+                <motion.article
+                  key={item.layer}
+                  initial={{ opacity: 0, x: 16 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 + index * 0.08 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  className="relative rounded-2xl bg-white/86 px-4 py-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.5)]"
+                >
+                  <p className="text-[11px] font-semibold tracking-[0.14em] text-[#ff4d5f] uppercase">{item.layer}</p>
+                  <p className="mt-1 text-[1.05rem] font-bold text-[#2b0f1d]">{tx(item.nameVi, item.nameEn)}</p>
+                  <p className="mt-1.5 text-sm leading-6 text-[#0b1020]/74 sm:text-base sm:leading-7">{tx(item.textVi, item.textEn)}</p>
+                </motion.article>
+              ))}
+            </div>
+          </motion.article>
         </div>
       </div>
     </section>
