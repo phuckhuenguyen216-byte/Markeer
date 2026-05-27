@@ -41,7 +41,7 @@ export default function InsideMarkeeTeamCultureSection() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-[#120d14] py-24 sm:py-28 lg:py-32">
+    <section className="relative overflow-hidden bg-[#120d14] py-20 sm:py-24 lg:py-20">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_8%,rgba(255,102,128,0.26)_0%,rgba(18,13,20,0)_42%),linear-gradient(to_right,rgba(255,144,165,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,144,165,0.06)_1px,transparent_1px)] bg-[size:auto,64px_64px,64px_64px]" />
       <div className="pointer-events-none absolute left-1/2 top-[18%] h-[26rem] w-[26rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,77,95,0.2)_0%,rgba(18,13,20,0)_72%)] blur-3xl" />
       <motion.div
@@ -62,7 +62,7 @@ export default function InsideMarkeeTeamCultureSection() {
           {tx("07 · Văn hóa team", "07 · Team culture")}
         </motion.p>
 
-        <motion.div {...fadeUp(0.05)} className="mx-auto mt-7 max-w-[880px] text-center">
+        <motion.div {...fadeUp(0.05)} className="mx-auto mt-6 max-w-[880px] text-center">
           <h2 className="mk-section-title">
             <span className="block text-white">{tx("ĐÂY LÀ CÁCH ECOSYSTEM", "THIS IS HOW THE ECOSYSTEM")}</span>
             <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff627a] via-[#ff4d5f] to-[#ff9cae] bg-clip-text text-transparent">
@@ -79,28 +79,28 @@ export default function InsideMarkeeTeamCultureSection() {
           </div>
         </motion.div>
 
-        <div className="mt-10 space-y-6">
+        <div className="mt-7 space-y-4 lg:space-y-4">
           {principles.map((item, index) => (
             <motion.article
               key={item.titleA}
               {...fadeUp(0.1 + index * 0.06)}
               whileHover={{ y: -6 }}
-              className="rounded-[28px] bg-white/[0.03] px-5 py-6 backdrop-blur-[2px] shadow-[0_18px_44px_-30px_rgba(0,0,0,0.6)] sm:px-8 sm:py-8"
+              className="rounded-[28px] bg-white/[0.03] px-5 py-6 backdrop-blur-[2px] shadow-[0_18px_44px_-30px_rgba(0,0,0,0.6)] sm:px-7 sm:py-7 lg:px-7 lg:py-5"
             >
-              <p className="text-[1.18rem] leading-[1.1] font-black tracking-[-0.014em] sm:text-[1.7rem] lg:text-[2rem]">
+              <p className="text-[1.08rem] leading-[1.15] font-black tracking-[-0.01em] sm:text-[1.42rem] lg:text-[1.34rem]">
                 <span className="block text-white">{item.titleA}</span>
                 <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff627a] via-[#ff4d5f] to-[#ff9cae] bg-clip-text text-transparent">
                   {item.titleB}
                 </span>
               </p>
-              <p className="mt-3 max-w-[880px] text-sm leading-7 text-white/78 sm:text-base sm:leading-8">
+              <p className="mt-2 max-w-[880px] text-sm leading-6 text-white/78 sm:text-[0.96rem] sm:leading-7">
                 {tx(item.textVi, item.textEn)}
               </p>
             </motion.article>
           ))}
         </div>
 
-        <motion.div {...fadeUp(0.38)} className="mt-6">
+        <motion.div {...fadeUp(0.38)} className="mt-5">
           <p className="mx-auto max-w-[1220px] text-center text-[0.9rem] font-semibold text-white/92 sm:text-[0.98rem] lg:text-[1.03rem]">
             {tx(
               "Team mạnh không phải team ồn ào. Team mạnh là team ra quyết định đúng, vận hành chắc, và đi đường dài cùng nhau.",
