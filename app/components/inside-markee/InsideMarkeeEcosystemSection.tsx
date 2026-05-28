@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { CircleDollarSign, Globe2, Hotel, ShieldCheck } from "lucide-react";
-import type { ComponentType } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CircleDollarSign, Globe2, Hotel, ShieldCheck, X, ChevronRight } from "lucide-react";
+import { useState, type ComponentType, ReactNode } from "react";
 import { useInsideMarkeeLocale } from "./useInsideMarkeeLocale";
 
 type HouseCard = {
@@ -19,6 +19,9 @@ type HouseCard = {
   titleClass: string;
   domainClass: string;
   textClass: string;
+  positionClass: string;
+  popupContentVi: ReactNode;
+  popupContentEn: ReactNode;
 };
 
 const fadeUp = (delay = 0) => ({
@@ -30,6 +33,8 @@ const fadeUp = (delay = 0) => ({
 
 export default function InsideMarkeeEcosystemSection() {
   const { tx } = useInsideMarkeeLocale();
+  const [selectedHouse, setSelectedHouse] = useState<HouseCard | null>(null);
+  const [hoveredHouse, setHoveredHouse] = useState<string | null>(null);
 
   const houses: HouseCard[] = [
     {
@@ -37,63 +42,107 @@ export default function InsideMarkeeEcosystemSection() {
       domain: "markee.vn · markeeai.com",
       roleVi: "Máy tạo doanh thu",
       roleEn: "Revenue engine",
-      detailVi: "Agency + AI automation cho SME, tạo dòng tiền hiện tại để nuôi toàn hệ sinh thái.",
-      detailEn: "Agency + AI automation for SMEs, generating current cashflow for the ecosystem.",
+      detailVi: "Marketing Agency + AI Automation.",
+      detailEn: "Marketing Agency + AI Automation.",
       Icon: CircleDollarSign,
       toneClass: "from-[#fff1f5] to-[#ffe6ee]",
       borderClass: "border-[#ffc2d0]",
       titleClass: "text-[#9f1239]",
       domainClass: "text-[#be123c]/85",
       textClass: "text-[#4c1d2f]",
+      positionClass: "bottom-4 -left-3 sm:-left-6 lg:-left-16",
+      popupContentVi: (
+        <div className="space-y-3">
+          <div><p className="font-semibold text-gray-900">🎯 Khách hàng</p><p className="text-gray-700 mt-1 text-[0.95rem]">Chủ homestay, khách sạn, tour du lịch, shop online. Ưu tiên mảng hospitality nhờ showcase GoDanang.</p></div>
+          <div><p className="font-semibold text-gray-900">💼 Dịch vụ (Phase 1)</p><p className="text-gray-700 mt-1 text-[0.95rem]">Đội marketing & tech thuê ngoài. Team chạy ads, web, content, automation. Dùng AI làm vũ khí để nhanh và hiệu quả hơn.</p></div>
+          <div><p className="font-semibold text-gray-900">🔄 Mô hình tiến hóa</p><p className="text-gray-700 mt-1 text-[0.95rem]">Từ 70% con người (Phase 1) → 90% AI tự động (Phase 3). Mỗi tháng dev team số hóa thêm 1-2 quy trình.</p></div>
+        </div>
+      ),
+      popupContentEn: (
+        <div className="space-y-4 text-gray-700">Detailed English translation coming soon.</div>
+      )
     },
     {
       title: "GoDanang",
       domain: "godanang.net",
       roleVi: "Case study sống",
       roleEn: "Live showcase",
-      detailVi: "Showroom thật trong ngành du lịch để chứng minh hệ thống marketing + automation chạy ngoài thị trường.",
-      detailEn: "Live hospitality showroom proving marketing + automation in real markets.",
+      detailVi: "Đặt phòng · Tour du lịch Đà Nẵng.",
+      detailEn: "Booking · Da Nang Tours.",
       Icon: Hotel,
       toneClass: "from-[#fff6ec] to-[#ffedd8]",
       borderClass: "border-[#ffd8a8]",
       titleClass: "text-[#b45309]",
       domainClass: "text-[#c26610]/85",
       textClass: "text-[#5f3a0b]",
+      positionClass: "bottom-4 -right-3 sm:-right-6 lg:-right-16",
+      popupContentVi: (
+        <div className="space-y-3">
+          <div><p className="font-semibold text-gray-900">🏖️ GoDanang là gì?</p><p className="text-gray-700 mt-1 text-[0.95rem]">Nền tảng đặt phòng và tour Đà Nẵng (B2C). Đây là dự án nội bộ dùng để test công nghệ và học hỏi thị trường thực tế.</p></div>
+          <div><p className="font-semibold text-gray-900">🎯 Tại sao quan trọng?</p><p className="text-gray-700 mt-1 text-[0.95rem]">Là "showroom sống". Pitching với khách B2B bằng kết quả doanh thu thực tế trên GoDanang.net, hoàn toàn không cần slide giấy.</p></div>
+          <div><p className="font-semibold text-gray-900">🔄 Vòng lặp dữ liệu</p><p className="text-gray-700 mt-1 text-[0.95rem]">Serve khách B2B → Có insight tối ưu GoDanang B2C → Showcase mạnh hơn → Thu hút thêm khách B2B mới.</p></div>
+        </div>
+      ),
+      popupContentEn: (
+        <div className="space-y-4 text-gray-700">Detailed English translation coming soon.</div>
+      )
     },
     {
       title: "Cloudgate",
-      domain: "cloudgate.vn",
+      domain: "getcloudgate.com",
       roleVi: "Máy tạo deal lớn",
       roleEn: "Enterprise engine",
-      detailVi: "Nhắm enterprise IT/security, deal lớn chu kỳ dài, bổ sung tầng tăng trưởng dài hạn.",
-      detailEn: "Targets enterprise IT/security with large, long-cycle deals for long-term growth.",
+      detailVi: "Enterprise IT & Security.",
+      detailEn: "Enterprise IT & Security.",
       Icon: Globe2,
       toneClass: "from-[#eef5ff] to-[#e3efff]",
       borderClass: "border-[#bfd7ff]",
       titleClass: "text-[#1d4ed8]",
       domainClass: "text-[#2563eb]/85",
       textClass: "text-[#1e3a8a]",
+      positionClass: "top-4 -left-3 sm:-left-6 lg:-left-16",
+      popupContentVi: (
+        <div className="space-y-3">
+          <div><p className="font-semibold text-gray-900">🎯 Khách hàng</p><p className="text-gray-700 mt-1 text-[0.95rem]">Giám đốc IT, CTO, CISO của doanh nghiệp lớn (200+ nhân sự) cần bảo mật và hạ tầng mạng nghiêm túc.</p></div>
+          <div><p className="font-semibold text-gray-900">💼 Giải pháp</p><p className="text-gray-700 mt-1 text-[0.95rem]">Dịch vụ bảo mật (SOC, Pentest), hạ tầng (Fortinet/Cisco) và Managed IT. Quy mô deal từ 500tr đến 2 tỷ.</p></div>
+          <div><p className="font-semibold text-gray-900">⏳ Chiến lược</p><p className="text-gray-700 mt-1 text-[0.95rem]">Enterprise deal cần 3-9 tháng chốt. Hiện tại tập trung xây quan hệ, dùng nguồn lực từ Markee để nuôi sống hệ sinh thái trước.</p></div>
+        </div>
+      ),
+      popupContentEn: (
+        <div className="space-y-4 text-gray-700">Detailed English translation coming soon.</div>
+      )
     },
     {
       title: "SecurityZone",
       domain: "securityzone.vn",
       roleVi: "Máy tạo uy tín",
       roleEn: "Trust engine",
-      detailVi: "Xây cộng đồng công nghệ để tích lũy trust, authority và network effect cho toàn hệ.",
-      detailEn: "Builds tech community to compound trust, authority, and network effects.",
+      detailVi: "Cộng đồng & Platform.",
+      detailEn: "Community & Platform.",
       Icon: ShieldCheck,
       toneClass: "from-[#f5efff] to-[#ece2ff]",
       borderClass: "border-[#d7c2ff]",
       titleClass: "text-[#6d28d9]",
       domainClass: "text-[#7c3aed]/85",
       textClass: "text-[#4c1d95]",
+      positionClass: "top-4 -right-3 sm:-right-6 lg:-right-16",
+      popupContentVi: (
+        <div className="space-y-3">
+          <div><p className="font-semibold text-gray-900">🎯 Khách hàng</p><p className="text-gray-700 mt-1 text-[0.95rem]">Developer, IT Pro, Security Researcher đam mê công nghệ và muốn nâng cao trình độ.</p></div>
+          <div><p className="font-semibold text-gray-900">💼 Hệ sinh thái</p><p className="text-gray-700 mt-1 text-[0.95rem]">Cộng đồng Forum/Telegram, Events công nghệ, Nexus SOC platform và đào tạo bảo mật chuyên sâu.</p></div>
+          <div><p className="font-semibold text-gray-900">🔗 Phễu niềm tin (Trust layer)</p><p className="text-gray-700 mt-1 text-[0.95rem]">Tạo uy tín tuyệt đối. Người dùng sẽ biết Markee qua workshop, IT Director ấn tượng sẽ liên hệ Cloudgate sau sự kiện.</p></div>
+        </div>
+      ),
+      popupContentEn: (
+        <div className="space-y-4 text-gray-700">Detailed English translation coming soon.</div>
+      )
     },
   ];
 
   return (
-    <section className="relative overflow-hidden bg-white py-24 text-[#0f172a] sm:py-28 lg:py-32">
+    <section className={`relative overflow-hidden bg-white py-24 text-[#0f172a] sm:py-28 lg:py-32 ${selectedHouse ? "z-[999]" : "z-0"}`}>
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_18%,rgba(255,77,95,0.08)_0%,rgba(255,255,255,0)_34%),radial-gradient(circle_at_84%_78%,rgba(255,120,150,0.07)_0%,rgba(255,255,255,0)_36%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
       <div className="relative mx-auto max-w-[1420px] px-4 sm:px-6 lg:px-8">
         <motion.p {...fadeUp(0)} className="mk-eyebrow text-center text-[#7f1d35] uppercase">
@@ -104,7 +153,7 @@ export default function InsideMarkeeEcosystemSection() {
           <h2 className="mk-section-title uppercase">
             <span className="block text-[#3f1020]">{tx("4 NHÀ", "4 HOUSES")}</span>
             <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff4d5f] via-[#ff6c88] to-[#ff8cab] bg-clip-text text-transparent">
-              {tx("MỖI NHÀ MỘT VAI TRÒ", "ONE ROLE EACH")}
+              {tx("1 HỆ SINH THÁI", "1 ECOSYSTEM")}
             </span>
           </h2>
           <p className="mx-auto mt-5 max-w-[780px] text-[1.03rem] leading-8 text-[#3f1020]/76 sm:text-[1.12rem]">
@@ -115,85 +164,162 @@ export default function InsideMarkeeEcosystemSection() {
           </p>
         </motion.div>
 
-        <motion.div {...fadeUp(0.1)} className="mt-12 grid items-stretch gap-8 lg:grid-cols-[0.85fr_1.15fr]">
+        <motion.div {...fadeUp(0.1)} className="mt-12 grid items-center gap-10 lg:gap-24 lg:grid-cols-[0.85fr_1.15fr]">
           <div className="flex h-full flex-col gap-4">
-            <div className="rounded-[26px] border border-[#ffd1db] bg-white p-5 shadow-[0_22px_58px_-40px_rgba(255,77,95,0.32)] sm:p-6">
+            <div className="rounded-[26px] border border-[#ffd1db] bg-white p-5 shadow-[0_22px_58px_-40px_rgba(255,77,95,0.32)] sm:p-6 transition-all duration-300 hover:shadow-[0_22px_68px_-30px_rgba(255,77,95,0.4)]">
               <p className="text-xs font-semibold tracking-[0.12em] text-[#9f1239] uppercase">{tx("Cách các nhà phối hợp", "How the houses connect")}</p>
-              <p className="mt-3 text-sm leading-7 text-[#4c1d2f] sm:text-base">
+              <p className="mt-3 text-[0.95rem] leading-7 font-medium text-[#4c1d2f] sm:text-[1.05rem]">
                 {tx(
-                  "GoDanang tạo showcase sống trong hospitality. Markee dùng showcase này để phục vụ SME và tăng doanh thu. SecurityZone tạo trust và network cộng đồng. Cloudgate mở rộng vào enterprise IT/security.",
-                  "GoDanang provides a live hospitality showcase. Markee uses it to serve SMEs and drive revenue. SecurityZone builds trust and community network effects. Cloudgate expands into enterprise IT/security."
+                  "GoDanang tạo showcase thực tế. Markee chuyển showcase thành doanh thu. SecurityZone xây trust. Cloudgate scale lên enterprise.",
+                  "GoDanang builds real showcase. Markee turns showcase to revenue. SecurityZone builds trust. Cloudgate scales to enterprise."
                 )}
               </p>
             </div>
 
-            <div className="rounded-[26px] border border-[#ffd1db] bg-[#fff8fa] p-5 shadow-[0_20px_48px_-36px_rgba(255,77,95,0.34)] sm:p-6">
+            <div className="rounded-[26px] border border-[#ffd1db] bg-[#fff8fa] p-5 shadow-[0_20px_48px_-36px_rgba(255,77,95,0.34)] sm:p-6 transition-all duration-300 hover:shadow-[0_22px_58px_-26px_rgba(255,77,95,0.42)]">
               <p className="text-xs font-semibold tracking-[0.12em] text-[#9f1239] uppercase">{tx("Nguyên tắc", "Rule")}</p>
-              <p className="mt-2 text-sm leading-7 font-semibold text-[#4c1d2f] sm:text-base">
+              <p className="mt-2 text-[0.95rem] leading-7 font-bold text-[#4c1d2f] sm:text-[1.05rem]">
                 {tx(
-                  "Không nhà nào compete trực tiếp. Mỗi nhà tự nuôi sống mình và bổ trợ lẫn nhau.",
-                  "No house competes directly. Each house is financially independent and mutually reinforcing."
+                  "Không nhà nào cạnh tranh trực tiếp. Mỗi nhà tự lập tài chính và bổ trợ chéo.",
+                  "No direct competition. Financially independent and mutually reinforcing."
                 )}
               </p>
             </div>
 
-            <div className="rounded-[26px] border border-[#ffd1db] bg-white p-5 shadow-[0_20px_44px_-34px_rgba(255,77,95,0.3)] sm:p-6">
+            <div className="rounded-[26px] border border-[#ffd1db] bg-white p-5 shadow-[0_20px_44px_-34px_rgba(255,77,95,0.3)] sm:p-6 transition-all duration-300 hover:shadow-[0_22px_54px_-24px_rgba(255,77,95,0.38)]">
               <p className="text-xs font-semibold tracking-[0.12em] text-[#9f1239] uppercase">{tx("Mục tiêu chung", "Shared target")}</p>
-              <p className="mt-2 text-sm leading-7 text-[#4c1d2f] sm:text-base">
+              <p className="mt-2 text-[0.95rem] leading-7 font-medium text-[#4c1d2f] sm:text-[1.05rem]">
                 {tx(
-                  "Bốn nhà cùng đẩy về một hướng: tăng trưởng doanh thu thật, vận hành nhẹ hơn và tạo vòng lặp học hỏi liên tục từ thị trường.",
-                  "All four houses push toward one direction: real revenue growth, lighter operations, and a continuous market-learning loop."
+                  "Tăng trưởng doanh thu thật, vận hành tinh gọn, tạo vòng lặp học hỏi liên tục.",
+                  "Real revenue growth, lean operations, and a continuous learning loop."
                 )}
               </p>
             </div>
           </div>
 
-          <div className="mx-auto w-full max-w-[720px]">
+          <div className="mx-auto w-full max-w-[720px] relative">
+            
+            {/* Living System Background Effects */}
+            <div className="absolute inset-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[90%] rounded-full bg-[conic-gradient(from_0deg,rgba(255,77,95,0)_0%,rgba(255,77,95,0.08)_25%,rgba(255,77,95,0)_50%,rgba(255,77,95,0.08)_75%,rgba(255,77,95,0)_100%)] blur-[30px] animate-[spin_15s_linear_infinite] pointer-events-none" />
+            <div className="absolute inset-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] rounded-full border border-dashed border-[#ff4d5f]/15 animate-[spin_20s_linear_infinite_reverse] pointer-events-none" />
+            
+            {/* Connectors (SVG Pulse Lines) */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 opacity-40">
+              <defs>
+                <linearGradient id="pulse-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="transparent" />
+                  <stop offset="50%" stopColor="#ff4d5f">
+                    <animate attributeName="stop-color" values="#ff4d5f;#ffb5c5;#ff4d5f" dur="2s" repeatCount="indefinite" />
+                  </stop>
+                  <stop offset="100%" stopColor="transparent" />
+                </linearGradient>
+              </defs>
+              <line x1="10%" y1="20%" x2="45%" y2="45%" stroke="url(#pulse-gradient)" strokeWidth="1.5" strokeDasharray="3 3" />
+              <line x1="90%" y1="20%" x2="55%" y2="45%" stroke="url(#pulse-gradient)" strokeWidth="1.5" strokeDasharray="3 3" />
+              <line x1="10%" y1="80%" x2="45%" y2="55%" stroke="url(#pulse-gradient)" strokeWidth="1.5" strokeDasharray="3 3" />
+              <line x1="90%" y1="80%" x2="55%" y2="55%" stroke="url(#pulse-gradient)" strokeWidth="1.5" strokeDasharray="3 3" />
+            </svg>
+
             <motion.div
-              animate={{ y: [0, -5, 0] }}
+              animate={{ y: [0, -4, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="relative h-full overflow-hidden rounded-[28px] border border-[#ffd6df] bg-white p-3 shadow-[0_34px_80px_-48px_rgba(255,77,95,0.34)] sm:p-4"
+              className="relative h-full w-full rounded-[28px] border border-[#ffd6df]/60 bg-white p-2 shadow-[0_34px_80px_-48px_rgba(255,77,95,0.4)] sm:p-3"
             >
-              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,0)_20%,rgba(255,255,255,0.45)_50%,rgba(255,255,255,0)_78%)]" />
-              <Image
-                src="/banner4.png"
-                alt={tx("Sơ đồ 4 nhà trong hệ sinh thái Markee", "4-house ecosystem map")}
-                width={1300}
-                height={900}
-                className="h-auto w-full rounded-[20px] object-contain"
-              />
+              <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[28px]">
+                <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,0)_20%,rgba(255,255,255,0.5)_50%,rgba(255,255,255,0)_78%)]" />
+              </div>
+              
+              {/* House Node Hover Glows */}
+              <div className={`absolute top-[10%] left-[10%] w-[35%] h-[35%] bg-[radial-gradient(circle,rgba(29,78,216,0.35)_0%,rgba(29,78,216,0)_70%)] blur-2xl transition-opacity duration-500 pointer-events-none z-10 ${hoveredHouse === "Cloudgate" ? "opacity-100" : "opacity-0"}`} />
+              <div className={`absolute top-[10%] right-[10%] w-[35%] h-[35%] bg-[radial-gradient(circle,rgba(109,40,217,0.35)_0%,rgba(109,40,217,0)_70%)] blur-2xl transition-opacity duration-500 pointer-events-none z-10 ${hoveredHouse === "SecurityZone" ? "opacity-100" : "opacity-0"}`} />
+              <div className={`absolute bottom-[10%] left-[10%] w-[35%] h-[35%] bg-[radial-gradient(circle,rgba(159,18,57,0.35)_0%,rgba(159,18,57,0)_70%)] blur-2xl transition-opacity duration-500 pointer-events-none z-10 ${hoveredHouse === "Markee" ? "opacity-100" : "opacity-0"}`} />
+              <div className={`absolute bottom-[10%] right-[10%] w-[35%] h-[35%] bg-[radial-gradient(circle,rgba(180,83,9,0.35)_0%,rgba(180,83,9,0)_70%)] blur-2xl transition-opacity duration-500 pointer-events-none z-10 ${hoveredHouse === "GoDanang" ? "opacity-100" : "opacity-0"}`} />
+
+              <div className="relative z-0">
+                <Image
+                  src="/banner4.png"
+                  alt={tx("Sơ đồ 4 nhà trong hệ sinh thái Markee", "4-house ecosystem map")}
+                  width={1300}
+                  height={900}
+                  className="h-auto w-full rounded-[20px] object-contain drop-shadow-md"
+                />
+              </div>
+
+              {/* Overlaying Houses */}
+              {houses.map((house, index) => {
+                const Icon = house.Icon;
+                const isHovered = hoveredHouse === house.title;
+                return (
+                  <motion.article
+                    key={house.title}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    className={`absolute ${house.positionClass} flex flex-col justify-between overflow-hidden rounded-[16px] border-[1.5px] ${house.borderClass} bg-gradient-to-br ${house.toneClass} p-3 sm:p-3.5 transition-all duration-300 w-[46%] max-w-[210px] backdrop-blur-xl bg-opacity-100 z-20 cursor-pointer ${isHovered ? "shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] scale-[1.03]" : "shadow-[0_10px_20px_-10px_rgba(0,0,0,0.1)]"}`}
+                    onClick={() => setSelectedHouse(house)}
+                    onMouseEnter={() => setHoveredHouse(house.title)}
+                    onMouseLeave={() => setHoveredHouse(null)}
+                  >
+                    <div>
+                      <p className={`inline-flex items-center gap-1.5 text-[0.95rem] font-extrabold ${house.titleClass}`}>
+                        <Icon className="h-[18px] w-[18px]" />
+                        {house.title}
+                      </p>
+                      <p className={`mt-0.5 text-[0.6rem] font-bold tracking-widest uppercase truncate ${house.domainClass}`}>{house.domain}</p>
+                      <p className={`mt-2 text-[0.75rem] leading-tight font-medium ${house.textClass}`}>{tx("Vai trò:", "Role:")} {tx(house.roleVi, house.roleEn)}</p>
+                    </div>
+                    
+                    <div className={`mt-3 flex items-center gap-1 text-[0.7rem] font-extrabold opacity-90 transition-opacity ${isHovered ? "opacity-100" : ""} ${house.titleClass}`}>
+                      {tx("Xem chi tiết", "View details")} <ChevronRight className="h-3.5 w-3.5" />
+                    </div>
+                  </motion.article>
+                );
+              })}
             </motion.div>
           </div>
         </motion.div>
-
-        <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          {houses.map((house, index) => {
-            const Icon = house.Icon;
-            return (
-              <motion.article
-                key={house.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.08 + index * 0.08 }}
-                viewport={{ once: true, amount: 0.3 }}
-                animate={{ y: [0, -3, 0] }}
-                whileHover={{ y: -10, scale: 1.02 }}
-                className={`group relative overflow-hidden rounded-2xl border ${house.borderClass} bg-gradient-to-br ${house.toneClass} p-4 shadow-[0_20px_45px_-34px_rgba(255,77,95,0.38)] transition-shadow duration-300 hover:shadow-[0_30px_55px_-30px_rgba(255,77,95,0.48)]`}
-              >
-                <div className="pointer-events-none absolute -left-24 top-0 h-full w-20 -skew-x-12 bg-white/50 opacity-0 blur-md transition-all duration-500 group-hover:left-[120%] group-hover:opacity-100" />
-                <p className={`inline-flex items-center gap-2 text-sm font-semibold ${house.titleClass}`}>
-                  <Icon className="h-4 w-4" />
-                  {house.title}
-                </p>
-                <p className={`mt-1 text-xs font-semibold tracking-[0.1em] uppercase ${house.domainClass}`}>{house.domain}</p>
-                <p className={`mt-2 text-sm font-semibold ${house.textClass}`}>{tx(house.roleVi, house.roleEn)}</p>
-                <p className={`mt-2 text-sm leading-6 ${house.textClass}`}>{tx(house.detailVi, house.detailEn)}</p>
-              </motion.article>
-            );
-          })}
-        </div>
       </div>
+
+      <AnimatePresence>
+        {selectedHouse && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 px-4 sm:px-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedHouse(null)}
+              className="absolute inset-0 bg-[#0f172a]/40 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="relative w-full max-w-2xl overflow-hidden rounded-3xl bg-white p-6 sm:p-8 shadow-2xl z-10 max-h-[90vh] overflow-y-auto"
+            >
+              <button
+                onClick={() => setSelectedHouse(null)}
+                className="absolute right-5 top-5 rounded-full p-2 hover:bg-gray-100 transition-colors"
+              >
+                <X className="h-5 w-5 text-gray-500" />
+              </button>
+              
+              <div className="pr-8">
+                <div className={`inline-flex items-center gap-3 text-xl font-bold ${selectedHouse.titleClass}`}>
+                  <selectedHouse.Icon className="h-6 w-6" />
+                  {selectedHouse.title}
+                </div>
+                <p className={`mt-2 text-xs font-semibold tracking-[0.1em] uppercase ${selectedHouse.domainClass}`}>{selectedHouse.domain}</p>
+                <div className="mt-1 pb-4 mb-4 border-b border-gray-100">
+                  <span className={`text-sm font-semibold ${selectedHouse.textClass}`}>{tx("Vai trò:", "Role:")} {tx(selectedHouse.roleVi, selectedHouse.roleEn)}</span>
+                </div>
+                
+                {tx(selectedHouse.popupContentVi, selectedHouse.popupContentEn)}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
-

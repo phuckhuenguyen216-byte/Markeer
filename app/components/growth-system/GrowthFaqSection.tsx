@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -10,23 +10,23 @@ export default function GrowthFaqSection() {
 
   const faqItems = [
     {
-      q: tx("INTERN CÓ ĐƯỢC NHẬN HOA HỒNG KHÔNG?", "CAN INTERNS RECEIVE COMMISSION?"),
+      q: tx("Intern có được nhận hoa hồng không?", "Can interns receive commission?"),
       a: tx("Có. Hệ thống reward theo đóng góp thật, không theo level.", "Yes. The system rewards real contribution, not seniority level."),
     },
     {
-      q: tx("HAI NGƯỜI CÙNG BIẾT MỘT LEAD THÌ SAO?", "WHAT IF TWO PEOPLE KNOW THE SAME LEAD?"),
+      q: tx("Hai người cùng biết một lead thì sao?", "What if two people know the same lead?"),
       a: tx("Ưu tiên prior relationship và discovery quality. Timestamp chỉ là tiebreaker.", "Prior relationship and discovery quality come first. Timestamp is only a tiebreaker."),
     },
     {
-      q: tx("BỊ OVERLOAD CORE JOB THÌ GROWTH KPI THẾ NÀO?", "WHAT IF CORE JOB BECOMES OVERLOADED?"),
+      q: tx("Bị overload core job thì growth KPI thế nào?", "What if core job becomes overloaded?"),
       a: tx("Core luôn ưu tiên. Khi quá tải, Growth KPI sẽ pause để bảo vệ delivery.", "Core always comes first. Under overload, Growth KPI pauses to protect delivery."),
     },
     {
-      q: tx("KHÔNG THÍCH VIẾT CONTENT CÓ ĐÓNG GÓP ĐƯỢC KHÔNG?", "CAN I CONTRIBUTE WITHOUT WRITING CONTENT?"),
+      q: tx("Không thích viết content có đóng góp được không?", "Can I contribute without writing content?"),
       a: tx("Có. Bạn vẫn đóng góp qua lead discovery, referral, workflow insight hoặc delivery support.", "Yes. You can contribute through lead discovery, referrals, workflow insight, or delivery support."),
     },
     {
-      q: tx("HỎI AI VỀ OWNERSHIP VÀ PAYOUT?", "WHO HANDLES OWNERSHIP AND PAYOUT QUESTIONS?"),
+      q: tx("Hỏi ai về ownership và payout?", "Who handles ownership and payout questions?"),
       a: tx("Ownership/KPI: Sales Lead. Timeline và payout: Finance.", "Ownership/KPI: Sales Lead. Timeline and payout: Finance."),
     },
   ];

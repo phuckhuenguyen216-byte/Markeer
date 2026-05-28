@@ -16,25 +16,25 @@ export default function GrowthWhySection() {
 
   const layers = [
     {
-      layer: "Layer 1",
+      layer: "Layer 1 · BẮT BUỘC",
       nameVi: "Core Job",
       nameEn: "Core Job",
-      textVi: "Bắt buộc và ưu tiên số 1. Core yếu thì growth chỉ là ảo giác.",
-      textEn: "Mandatory and priority #1. Weak core makes growth an illusion.",
+      textVi: "Lý do bạn được trả lương (Code, Marketing, Sales, Ops). Không làm tốt việc chính = không có chuyện làm Layer 2.",
+      textEn: "Reason you get paid (Code, Mkt, Sales, Ops). Failing core job = no Layer 2.",
     },
     {
-      layer: "Layer 2",
+      layer: "Layer 2 · KHÔNG BẮT BUỘC",
       nameVi: "Growth Expansion",
       nameEn: "Growth Expansion",
-      textVi: "Optional nhưng có thưởng rõ. Đóng góp thật thì thu nhập tăng thật.",
-      textEn: "Optional but reward-based. Real contribution creates real upside.",
+      textVi: "Cơ hội kiếm thêm không giới hạn từ việc đóng góp growth (seeding, tìm lead). Cấm bỏ bê việc chính để chase hoa hồng.",
+      textEn: "Unlimited extra income from growth (seeding, leads). Do not sacrifice core job for commission.",
     },
     {
-      layer: "Layer 3",
-      nameVi: "Leader & Culture",
-      nameEn: "Leader & Culture",
-      textVi: "Mentor, chia sẻ và nâng cấp hệ thống để team scale không vỡ nhịp.",
-      textEn: "Mentor, share, and upgrade systems so scaling does not break rhythm.",
+      layer: "Layer 3 · LEADER & CULTURE",
+      nameVi: "Đóng góp cho tổ chức",
+      nameEn: "Organization Contribution",
+      textVi: "Mentor, chia sẻ kiến thức, cải thiện quy trình. Đánh giá định tính, ảnh hưởng trực tiếp đến cơ hội phát triển.",
+      textEn: "Mentor, share knowledge, improve SOPs. Qualitative review, impacts career growth.",
     },
   ];
 
@@ -54,34 +54,32 @@ export default function GrowthWhySection() {
             </p>
 
             <h2 className="mk-section-title mt-4 uppercase">
-              <span className="block text-[#0b1020]">{tx("GROWTH KHÔNG PHẢI", "GROWTH IS NOT")}</span>
-              <span className="block text-[#0b1020]">{tx("VIỆC CỦA RIÊNG SALES.", "A SALES-ONLY JOB.")}</span>
+              <span className="block text-[#0b1020]">{tx("TẠI SAO TÀI LIỆU", "WHY DOES THIS")}</span>
               <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff7c95] bg-clip-text text-transparent">
-                {tx("GROWTH LÀ HỆ THỐNG", "GROWTH IS AN")}
-              </span>
-              <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff7c95] bg-clip-text text-transparent">
-                {tx("CỦA CẢ TEAM.", "ALL-TEAM SYSTEM.")}
+                {tx("NÀY TỒN TẠI?", "DOCUMENT EXIST?")}
               </span>
             </h2>
 
             <p className="mt-6 max-w-[760px] text-[1.04rem] leading-8 text-[#0b1020]/78 sm:text-[1.12rem]">
               {tx(
-                "Đây là Growth System v1.0 cho Phase 1: làm tốt việc chính trước, mở rộng growth khi đủ lực, và giữ văn hóa để hệ thống đi đường dài.",
-                "This is Growth System v1.0 for Phase 1: execute core work first, expand growth with real capacity, and protect culture for the long run."
+                "Vì Markee đang ở giai đoạn chiếm thị phần — và chúng ta cần toàn bộ team cùng tham gia vào growth, không chỉ team Sales.",
+                "Because Markee is in the market share grab phase — and we need the entire team involved in growth, not just Sales."
               )}
             </p>
 
-            <div className="mt-7 space-y-3 max-w-[720px]">
-              {[
-                tx("Core trước. Không core thì không growth bền.", "Core first. No core means no durable growth."),
-                tx("Muốn kiếm thêm? Đóng góp growth có chất lượng.", "Want more upside? Contribute quality growth."),
-                tx("Muốn team scale? Bắt đầu từ hệ thống và văn hóa.", "Want team scale? Start with systems and culture."),
-              ].map((item) => (
-                <p key={item} className="rounded-xl bg-white/78 px-4 py-3 text-sm leading-7 text-[#2b0f1d] shadow-[0_10px_28px_-24px_rgba(15,23,42,0.58)] sm:text-base">
-                  {item}
-                </p>
-              ))}
+            <div className="mt-7 max-w-[720px] rounded-[24px] bg-white/78 p-5 shadow-[0_10px_28px_-24px_rgba(15,23,42,0.58)] sm:p-7 border border-[#ffe0e8]">
+              <p className="text-sm font-extrabold text-[#ff4d5f] uppercase tracking-wide">🔥 Mindset Phase 1</p>
+              <p className="mt-2.5 text-[0.98rem] leading-7 text-[#2b0f1d] sm:text-[1.05rem] font-medium">
+                {tx(
+                  "Markee không đang xây \"công ty ổn định\". Mình đang xây growth war machine. Speed quan trọng hơn perfection. Market share quan trọng hơn margin. Và mọi người trong team đều có thể đóng góp vào growth — và được trả tiền xứng đáng cho điều đó.",
+                  "Markee is not building a \"stable company\". We are building a growth war machine. Speed > perfection. Market share > margin. Everyone can contribute to growth — and get paid fairly for it."
+                )}
+              </p>
             </div>
+
+            <p className="mt-6 max-w-[720px] text-[0.95rem] font-medium leading-7 text-[#0b1020]/70 italic bg-[#fff7fa] p-4 rounded-xl border-l-2 border-[#ff4d5f]">
+              {tx("🎯 Tóm lại: Làm tốt công việc chính trước. Kiếm thêm từ growth nếu muốn. Đóng góp cho team nếu có thể. Ba thứ này KHÔNG cạnh tranh nhau — chúng bổ sung nhau.", "🎯 TL;DR: Do core work well first. Earn extra from growth if you want. Contribute to the team if you can. These 3 do NOT compete — they complement.")}
+            </p>
           </motion.article>
 
           <motion.article
@@ -94,9 +92,9 @@ export default function GrowthWhySection() {
               transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.15em] text-[#ff4d5f] uppercase">
-              <Sparkles className="h-3.5 w-3.5" />
-              {tx("3-layer operating model", "3-layer operating model")}
+            <p className="inline-flex items-center gap-2 text-[0.65rem] font-extrabold tracking-[0.15em] text-[#ff4d5f] uppercase bg-white/90 px-3 py-1.5 rounded-full border border-[#ffe0e8]">
+              <Sparkles className="h-3 w-3" />
+              {tx("3 layer — Hiểu đúng để không bị nhầm", "3 layer — Understand to avoid confusion")}
             </p>
 
             <div className="mt-5 space-y-4">

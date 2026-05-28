@@ -47,19 +47,15 @@ export default function GrowthHeroSection() {
           {tx("Growth System · Operating Story · V1", "Growth System · Operating Story · V1")}
         </p>
 
-        <div className="mt-8 grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="mt-8 grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
           <div>
             <motion.h1
               {...lineReveal(0.02)}
               className="mk-title-hero max-w-[21rem] uppercase sm:max-w-[780px]"
             >
-              <span className="block text-[#0b1020]">{tx("KHÔNG PHẢI MỘT", "NOT A SINGLE")}</span>
-              <span className="block text-[#0b1020]">{tx("CHIẾN DỊCH -", "CAMPAIGN -")}</span>
+              <span className="block text-[#0b1020]">{tx("ĐÂY LÀ CƠ HỘI CỦA", "THIS IS AN OPPORTUNITY FOR")}</span>
               <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff7b94] bg-clip-text text-transparent">
-                {tx("LÀ MỘT HỆ VẬN", "IT IS A GROWTH")}
-              </span>
-              <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff7b94] bg-clip-text text-transparent">
-                {tx("HÀNH TĂNG TRƯỞNG.", "OPERATING SYSTEM.")}
+                {tx("TẤT CẢ MỌI NGƯỜI.", "EVERYONE.")}
               </span>
             </motion.h1>
 
@@ -68,8 +64,8 @@ export default function GrowthHeroSection() {
               className="mt-6 max-w-[700px] text-[1.05rem] leading-8 text-[#0b1020]/80 sm:text-[1.18rem] sm:leading-9"
             >
               {tx(
-                "Khi content, automation, CRM và delivery cùng chạy theo một nhịp, growth không còn là campaign. Growth trở thành lớp vận hành của cả team.",
-                "When content, automation, CRM, and delivery run in one rhythm, growth is no longer a campaign. It becomes an operating layer for the whole team."
+                "Không cần là Sales. Không cần kinh nghiệm. Chỉ cần đọc xong tài liệu này — bạn biết chính xác cần làm gì, làm như thế nào, và sẽ kiếm được bao nhiêu.",
+                "No need to be in Sales. No experience required. Just finish reading this document — you'll know exactly what to do, how to do it, and how much you will earn."
               )}
             </motion.p>
 
@@ -88,6 +84,27 @@ export default function GrowthHeroSection() {
                 {tx("Xem flow chapter", "View chapter flow")}
                 <CirclePlay className="h-4 w-4" />
               </button>
+            </motion.div>
+
+            <motion.div {...lineReveal(0.24)} className="mt-12 grid grid-cols-3 gap-4 border-t border-[#ffe0e8] pt-8 max-w-[500px]">
+              <div>
+                <p className="text-[2.2rem] leading-none font-extrabold text-[#ff4d5f] tracking-tight">2</p>
+                <p className="mt-2 text-[0.75rem] font-extrabold text-[#0b1020]/60 uppercase tracking-widest leading-snug">
+                  {tx("Nguồn thu", "Extra income")}<br className="hidden sm:block" />{tx("nhập thêm", "sources")}
+                </p>
+              </div>
+              <div>
+                <p className="text-[2.2rem] leading-none font-extrabold text-[#ff4d5f] tracking-tight">∞</p>
+                <p className="mt-2 text-[0.75rem] font-extrabold text-[#0b1020]/60 uppercase tracking-widest leading-snug">
+                  {tx("Không giới", "Unlimited")}<br className="hidden sm:block" />{tx("hạn kiếm", "earnings")}
+                </p>
+              </div>
+              <div>
+                <p className="text-[2.2rem] leading-none font-extrabold text-[#ff4d5f] tracking-tight">7</p>
+                <p className="mt-2 text-[0.75rem] font-extrabold text-[#0b1020]/60 uppercase tracking-widest leading-snug">
+                  {tx("Tab để", "Tabs to")}<br className="hidden sm:block" />{tx("đọc hết", "read it all")}
+                </p>
+              </div>
             </motion.div>
           </div>
 

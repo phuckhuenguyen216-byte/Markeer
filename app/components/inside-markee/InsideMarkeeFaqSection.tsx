@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
@@ -26,63 +26,63 @@ export default function InsideMarkeeFaqSection() {
   const faqItems: FaqItem[] = [
     {
       id: "01",
-      question: tx("ĐÂY LÀ MỘT CÔNG TY HAY NHIỀU CÔNG TY?", "IS THIS ONE COMPANY OR MULTIPLE COMPANIES?"),
+      question: tx("Đây là một công ty hay nhiều công ty?", "Is this one company or multiple companies?"),
       intro: tx("Về mặt cấu trúc, mỗi hệ sinh thái có:", "Structurally, each ecosystem has:"),
       points: [
-        tx("vai trò riêng", "its own role"),
-        tx("thị trường riêng", "its own market"),
-        tx("định hướng riêng", "its own direction"),
+        tx("Vai trò riêng.", "Its own role."),
+        tx("Thị trường riêng.", "Its own market."),
+        tx("Định hướng riêng.", "Its own direction."),
       ],
       outro: tx("Tuy vậy, tư duy chiến lược vẫn kết nối để tạo lợi thế dài hạn.", "Strategic thinking remains connected to build long-term advantage."),
     },
     {
       id: "02",
-      question: tx("TẠI SAO KHÔNG XÂY SAAS TỪ ĐẦU?", "WHY NOT BUILD SAAS FROM DAY ONE?"),
+      question: tx("Tại sao không xây SaaS từ đầu?", "Why not build SaaS from day one?"),
       intro: tx("Hệ sinh thái cần:", "The ecosystem wants to:"),
       points: [
-        tx("hiểu quy trình thật", "understand real workflows"),
-        tx("xác thực nỗi đau thật", "validate real pain"),
-        tx("xây hệ thống từ thực tế", "build systems from reality"),
+        tx("Hiểu quy trình thật.", "Understand real workflows."),
+        tx("Xác thực nỗi đau thật.", "Validate real pain."),
+        tx("Xây hệ thống từ thực tế.", "Build systems from reality."),
       ],
       outro: tx("Service không phải giải pháp tạm. Đó là nơi team học vận hành thật.", "Service is not a temporary workaround. It is where the team learns real operations."),
     },
     {
       id: "03",
-      question: tx("MARKEE LÀ AI COMPANY HAY MARKETING AGENCY?", "IS MARKEE AN AI COMPANY OR A MARKETING AGENCY?"),
+      question: tx("Markee là AI company hay marketing agency?", "Is Markee an AI company or a marketing agency?"),
       intro: tx("AI chỉ là công cụ. Marketing chỉ là một lớp.", "AI is a tool. Marketing is one layer."),
       points: [tx("Thứ hệ sinh thái đang xây là hệ thống tăng trưởng và vận hành.", "What we build is growth and operational systems.")],
     },
     {
       id: "06",
-      question: tx("SECURITYZONE CÓ PHẢI CHỈ LÀ KÊNH BÁN HÀNG?", "IS SECURITYZONE ONLY A SALES CHANNEL?"),
+      question: tx("SecurityZone có phải chỉ là kênh bán hàng?", "Is SecurityZone only a sales channel?"),
       intro: tx("Không chỉ là kênh bán hàng. SecurityZone tồn tại để:", "Not only a sales channel. SecurityZone exists to:"),
       points: [
-        tx("xây niềm tin", "build trust"),
-        tx("xây cộng đồng", "community"),
-        tx("xây quan hệ", "relationships"),
-        tx("xây ảnh hưởng dài hạn", "long-term influence"),
+        tx("Xây niềm tin.", "Build trust."),
+        tx("Xây cộng đồng.", "Community."),
+        tx("Xây quan hệ.", "Relationships."),
+        tx("Xây ảnh hưởng dài hạn.", "Long-term influence."),
       ],
     },
     {
       id: "07",
-      question: tx("THỰC TẬP SINH HOẶC NGƯỜI MỚI CÓ THỂ ĐÓNG GÓP GÌ?", "HOW CAN INTERNS OR NEW MEMBERS CONTRIBUTE?"),
+      question: tx("Thực tập sinh hoặc người mới có thể đóng góp gì?", "How can interns or new members contribute?"),
       intro: tx("Hệ sinh thái không chỉ cần chuyên gia lâu năm. Hệ sinh thái cần:", "The ecosystem needs more than senior experts. It needs:"),
       points: [
-        tx("người chịu học", "people willing to learn"),
-        tx("người biết quan sát hệ thống", "observe systems"),
-        tx("người cải tiến quy trình", "improve workflows"),
-        tx("người đóng góp vào tăng trưởng", "contribute to growth"),
+        tx("Người chịu học.", "People willing to learn."),
+        tx("Người biết quan sát hệ thống.", "Observe systems."),
+        tx("Người cải tiến quy trình.", "Improve workflows."),
+        tx("Người đóng góp vào tăng trưởng.", "Contribute to growth."),
       ],
     },
     {
       id: "08",
-      question: tx("KHI NÀO CHUYỂN SANG GIAI ĐOẠN 2?", "WHEN DOES THE ECOSYSTEM MOVE TO PHASE 2?"),
+      question: tx("Khi nào chuyển sang giai đoạn 2?", "When does the ecosystem move to phase 2?"),
       intro: tx("Khi:", "When:"),
       points: [
-        tx("quy trình đủ ổn định", "workflows are stable"),
-        tx("chất lượng bàn giao đủ rõ", "delivery quality is clear"),
-        tx("cơ hội tự động hóa đủ nhiều", "automation opportunities are rich enough"),
-        tx("hệ thống đủ trưởng thành", "systems are mature enough"),
+        tx("Quy trình đủ ổn định.", "Workflows are stable."),
+        tx("Chất lượng bàn giao đủ rõ.", "Delivery quality is clear."),
+        tx("Cơ hội tự động hóa đủ nhiều.", "Automation opportunities are rich enough."),
+        tx("Hệ thống đủ trưởng thành.", "Systems are mature enough."),
       ],
       outro: tx("Phase 1 giữ kỷ luật chốt chặn vận hành và MRR ổn định trước khi tăng tốc.", "Phase 1 enforces operational and MRR gates before acceleration."),
     },
