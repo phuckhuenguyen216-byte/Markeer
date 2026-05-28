@@ -253,16 +253,40 @@ export default function GrowthLeadFlowSection() {
 
                       <div className="mt-4 space-y-3">
                         <div className="bg-white rounded-xl p-3.5 border border-amber-100 shadow-sm">
-                          <p className="font-bold text-amber-900"><span className="text-[#ff4d5f] font-extrabold mr-1">L1</span> Prior Relationship — Ưu tiên cao nhất</p>
-                          <p className="text-[0.85rem] text-amber-800 mt-1">Bạn đã có trao đổi thực tế với prospect từ trước, hoặc có quan hệ cá nhân. Phải ghi rõ khi submit: "Tôi đã quen biết/đã nói chuyện với họ trước rồi."</p>
+                          <p className="font-bold text-amber-900">
+                            <span className="text-[#ff4d5f] font-extrabold mr-1">L1</span>
+                            {tx("Prior Relationship — Ưu tiên cao nhất", "Prior Relationship — Highest Priority")}
+                          </p>
+                          <p className="text-[0.85rem] text-amber-800 mt-1">
+                            {tx(
+                              "Bạn đã có trao đổi thực tế với prospect từ trước, hoặc có quan hệ cá nhân. Phải ghi rõ khi submit: \"Tôi đã quen biết/đã nói chuyện với họ trước rồi.\"",
+                              "You already had real conversations with this prospect, or have a personal relationship. Clearly state this when submitting."
+                            )}
+                          </p>
                         </div>
                         <div className="bg-white rounded-xl p-3.5 border border-amber-100 shadow-sm">
-                          <p className="font-bold text-amber-900"><span className="text-[#ff4d5f] font-extrabold mr-1">L2</span> Discovery Quality — Ai biết nhiều hơn</p>
-                          <p className="text-[0.85rem] text-amber-800 mt-1">Ai submit được thông tin đầy đủ và sâu hơn: pain cụ thể, budget signal, tên người quyết định — người đó được ưu tiên. Submit càng chi tiết càng có lợi cho bạn.</p>
+                          <p className="font-bold text-amber-900">
+                            <span className="text-[#ff4d5f] font-extrabold mr-1">L2</span>
+                            {tx("Discovery Quality — Ai biết nhiều hơn", "Discovery Quality — Who Knows More")}
+                          </p>
+                          <p className="text-[0.85rem] text-amber-800 mt-1">
+                            {tx(
+                              "Ai submit được thông tin đầy đủ và sâu hơn: pain cụ thể, budget signal, tên người quyết định — người đó được ưu tiên. Submit càng chi tiết càng có lợi cho bạn.",
+                              "Whoever submits deeper, more complete information (specific pain, budget signals, decision maker) gets priority. More detail gives you an advantage."
+                            )}
+                          </p>
                         </div>
                         <div className="bg-white rounded-xl p-3.5 border border-amber-100 shadow-sm opacity-90">
-                          <p className="font-bold text-amber-900"><span className="text-gray-500 font-extrabold mr-1">L3</span> CRM Timestamp — Chỉ dùng khi L1 & L2 ngang nhau</p>
-                          <p className="text-[0.85rem] text-amber-800 mt-1">Timestamp là tiebreaker cuối cùng, không phải rule chính. Nếu cả hai submit thông tin như nhau cùng lúc, người nhắn vào nhóm trước được tính.</p>
+                          <p className="font-bold text-amber-900">
+                            <span className="text-gray-500 font-extrabold mr-1">L3</span>
+                            {tx("CRM Timestamp — Chỉ dùng khi L1 & L2 ngang nhau", "CRM Timestamp — Only when L1 & L2 are tied")}
+                          </p>
+                          <p className="text-[0.85rem] text-amber-800 mt-1">
+                            {tx(
+                              "Timestamp là tiebreaker cuối cùng, không phải rule chính. Nếu cả hai submit thông tin như nhau cùng lúc, người nhắn vào nhóm trước được tính.",
+                              "Timestamp is only the final tiebreaker, not the main rule. If both submissions are equally strong, earlier message time wins."
+                            )}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -283,34 +307,34 @@ export default function GrowthLeadFlowSection() {
                         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#ff4d5f] text-white flex items-center justify-center font-bold text-sm">1</div>
                         <div>
                           <p className="text-sm font-bold text-gray-900 mb-2">{tx("Quy trình 4 Bước:", "4-Step Process:")}</p>
-                          <p className="font-bold text-gray-900">Tìm được prospect — Ghi chép ngay</p>
-                          <p className="text-[0.9rem] text-gray-600 mt-1">Cần có: Tên + SĐT + Ngành + Pain cụ thể (họ đang gặp vấn đề gì). Càng chi tiết càng tốt — đây là L2 advantage.</p>
+                          <p className="font-bold text-gray-900">{tx("Tìm được prospect — Ghi chép ngay", "Find prospect — Note it down immediately")}</p>
+                          <p className="text-[0.9rem] text-gray-600 mt-1">{tx("Cần có: Tên + SĐT + Ngành + Pain cụ thể (họ đang gặp vấn đề gì). Càng chi tiết càng tốt — đây là L2 advantage.", "Required: Name + Phone + Industry + Specific Pain. The more detailed, the better — this is an L2 advantage.")}</p>
                         </div>
                       </div>
                       <div className="flex gap-4">
                         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#ff4d5f] text-white flex items-center justify-center font-bold text-sm">2</div>
                         <div>
-                          <p className="font-bold text-gray-900">Nhắn vào nhóm Zalo Sales ngay — Đúng format</p>
+                          <p className="font-bold text-gray-900">{tx("Nhắn vào nhóm Zalo Sales ngay — Đúng format", "Message Sales Zalo group immediately — Correct format")}</p>
                           <div className="mt-2 bg-gray-50 rounded-lg p-3 border border-gray-200 text-[0.85rem] font-mono text-gray-800">
-                            🎯 Lead mới: [Tên] - [SĐT] - [Ngành]<br/>
-                            Pain: [Mô tả vấn đề cụ thể]<br/>
-                            Relationship: [Người quen / Tìm qua FB / Group / Khác]
+                            {tx("🎯 Lead mới:", "🎯 New lead:")} {tx("[Tên] - [SĐT] - [Ngành]", "[Name] - [Phone] - [Industry]")}<br/>
+                            {tx("Pain: [Mô tả vấn đề cụ thể]", "Pain: [Specific problem description]")}<br/>
+                            {tx("Relationship: [Người quen / Tìm qua FB / Group / Khác]", "Relationship: [Prior contact / Found via FB / Group / Other]")}
                           </div>
-                          <p className="text-[0.85rem] text-gray-500 mt-2 italic">Nếu có quen biết trước → thêm dòng: "Đã nói chuyện với họ [X] lần về [Y]"</p>
+                          <p className="text-[0.85rem] text-gray-500 mt-2 italic">{tx("Nếu có quen biết trước → thêm dòng: \"Đã nói chuyện với họ [X] lần về [Y]\"", "If prior relationship → add line: \"Talked to them [X] times about [Y]\"")}</p>
                         </div>
                       </div>
                       <div className="flex gap-4">
                         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#ff4d5f] text-white flex items-center justify-center font-bold text-sm">3</div>
                         <div>
-                          <p className="font-bold text-gray-900">Sales Lead log vào CRM trong 24h</p>
-                          <p className="text-[0.9rem] text-gray-600 mt-1">Sales Lead check xem lead này đã có trong CRM chưa. Chưa có → log ngay, bạn được ghi nhận. Đã có → thông báo bạn và giải thích.</p>
+                          <p className="font-bold text-gray-900">{tx("Sales Lead log vào CRM trong 24h", "Sales Lead logs into CRM within 24h")}</p>
+                          <p className="text-[0.9rem] text-gray-600 mt-1">{tx("Sales Lead check xem lead này đã có trong CRM chưa. Chưa có → log ngay, bạn được ghi nhận. Đã có → thông báo bạn và giải thích.", "Sales Lead checks if lead exists in CRM. If not → logs immediately, you are credited. If yes → notifies you and explains.")}</p>
                         </div>
                       </div>
                       <div className="flex gap-4">
                         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#ff4d5f] text-white flex items-center justify-center font-bold text-sm">4</div>
                         <div>
-                          <p className="font-bold text-gray-900">Chờ Sales close → Nhận thông báo khi client trả tiền</p>
-                          <p className="text-[0.9rem] text-gray-600 mt-1">Bạn không cần làm thêm gì sau bước 2. Finance sẽ thông báo khi commission được unlock. Thường tháng 2 nhận 70%, tháng 3 nhận 30% còn lại.</p>
+                          <p className="font-bold text-gray-900">{tx("Chờ Sales close → Nhận thông báo khi client trả tiền", "Wait for Sales to close → Get notified when client pays")}</p>
+                          <p className="text-[0.9rem] text-gray-600 mt-1">{tx("Bạn không cần làm thêm gì sau bước 2. Finance sẽ thông báo khi commission được unlock. Thường tháng 2 nhận 70%, tháng 3 nhận 30% còn lại.", "You don't need to do anything after step 2. Finance notifies when commission is unlocked. Usually 70% in month 2, remaining 30% in month 3.")}</p>
                         </div>
                       </div>
                     </div>
@@ -325,22 +349,22 @@ export default function GrowthLeadFlowSection() {
                     className="grid sm:grid-cols-2 gap-6"
                   >
                     <div className="bg-[#f8faff] rounded-2xl p-5 border border-[#e0eaff]">
-                      <h4 className="text-lg font-extrabold text-[#23427a] mb-4">📤 Outbound — Chủ động tìm</h4>
+                      <h4 className="text-lg font-extrabold text-[#23427a] mb-4">{tx("📤 Outbound — Chủ động tìm", "📤 Outbound — Active hunting")}</h4>
                       <ul className="space-y-4 text-[0.85rem] text-gray-700">
-                        <li><strong className="text-gray-900">🔴 FB Ads Library (nhanh nhất):</strong> vào facebook.com/ads/library, tìm shop đang chạy ads, vào fanpage xem comment có ngập không — nhắn tin ngay.</li>
-                        <li><strong className="text-gray-900">🎵 TikTok comments:</strong> Tìm TikTok của homestay/mỹ phẩm/spa có nhiều "còn phòng không?" chưa rep → nhắn chủ account.</li>
-                        <li><strong className="text-gray-900">👥 Zalo/FB Groups:</strong> Join group chủ shop → lắng nghe 3 ngày → answer câu hỏi thật → DM sau khi đã engage.</li>
-                        <li><strong className="text-gray-900">🤝 Người quen:</strong> Ai quen đang chạy shop, homestay, spa? Kể họ nghe về Markee và intro với Sales.</li>
+                        <li><strong className="text-gray-900">{tx("🔴 FB Ads Library (nhanh nhất):", "🔴 FB Ads Library (fastest):")}</strong> {tx("vào facebook.com/ads/library, tìm shop đang chạy ads, vào fanpage xem comment có ngập không — nhắn tin ngay.", "go to facebook.com/ads/library, find shops running ads, check if fanpage comments are flooded — message immediately.")}</li>
+                        <li><strong className="text-gray-900">{tx("🎵 TikTok comments:", "🎵 TikTok comments:")}</strong> {tx("Tìm TikTok của homestay/mỹ phẩm/spa có nhiều \"còn phòng không?\" chưa rep → nhắn chủ account.", "Find TikToks of homestays/cosmetics/spas with many unreplied \"any rooms?\" → message the account owner.")}</li>
+                        <li><strong className="text-gray-900">{tx("👥 Zalo/FB Groups:", "👥 Zalo/FB Groups:")}</strong> {tx("Join group chủ shop → lắng nghe 3 ngày → answer câu hỏi thật → DM sau khi đã engage.", "Join shop owner groups → listen for 3 days → answer real questions → DM after engaging.")}</li>
+                        <li><strong className="text-gray-900">{tx("🤝 Người quen:", "🤝 Network:")}</strong> {tx("Ai quen đang chạy shop, homestay, spa? Kể họ nghe về Markee và intro với Sales.", "Know anyone running a shop, homestay, or spa? Tell them about Markee and intro to Sales.")}</li>
                       </ul>
                     </div>
                     
                     <div className="bg-[#fffcf8] rounded-2xl p-5 border border-[#ffeed4]">
-                      <h4 className="text-lg font-extrabold text-[#a16207] mb-4">📥 Inbound — Content kéo khách</h4>
+                      <h4 className="text-lg font-extrabold text-[#a16207] mb-4">{tx("📥 Inbound — Content kéo khách", "📥 Inbound — Content attraction")}</h4>
                       <ul className="space-y-4 text-[0.85rem] text-gray-700">
-                        <li><strong className="text-gray-900">✍️ Post cá nhân 1-2 lần/tuần:</strong> Pain của chủ shop, kết quả thực tế, tips marketing nhỏ. Thật là đủ.</li>
-                        <li><strong className="text-gray-900">🎬 Video ngắn:</strong> "Shop mất bao nhiêu đơn vì rep chậm?", case study thực tế. Không cần production fancy.</li>
-                        <li><strong className="text-gray-900">💬 Comment có giá trị:</strong> Vào post của khách hàng tiềm năng, comment insight thực sự hữu ích — không phải "dùng Markee đi".</li>
-                        <li><strong className="text-gray-900">👤 Founder/Leader branding:</strong> CEO và leader post về kinh nghiệm thực chiến → khách tự tìm đến.</li>
+                        <li><strong className="text-gray-900">{tx("✍️ Post cá nhân 1-2 lần/tuần:", "✍️ Personal posts 1-2 times/week:")}</strong> {tx("Pain của chủ shop, kết quả thực tế, tips marketing nhỏ. Thật là đủ.", "Shop owners' pain, real results, small marketing tips. Being authentic is enough.")}</li>
+                        <li><strong className="text-gray-900">{tx("🎬 Video ngắn:", "🎬 Short videos:")}</strong> {tx("\"Shop mất bao nhiêu đơn vì rep chậm?\", case study thực tế. Không cần production fancy.", "\"How many orders do shops lose due to slow replies?\", real case studies. No fancy production needed.")}</li>
+                        <li><strong className="text-gray-900">{tx("💬 Comment có giá trị:", "💬 Valuable comments:")}</strong> {tx("Vào post của khách hàng tiềm năng, comment insight thực sự hữu ích — không phải \"dùng Markee đi\".", "Go to potential clients' posts, drop genuinely useful insights — not just \"use Markee\".")}</li>
+                        <li><strong className="text-gray-900">{tx("👤 Founder/Leader branding:", "👤 Founder/Leader branding:")}</strong> {tx("CEO và leader post về kinh nghiệm thực chiến → khách tự tìm đến.", "CEO and leaders post about practical experience → clients will come naturally.")}</li>
                       </ul>
                     </div>
                   </motion.div>

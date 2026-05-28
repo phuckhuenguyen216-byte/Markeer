@@ -285,7 +285,9 @@ export default function InsideMarkeeTeamRolesSection() {
                 </p>
                 
                 <div className="mt-5 rounded-xl border border-[#ffd6df] bg-[#fff0f4] px-5 py-4 shadow-sm">
-                  <p className="text-[0.7rem] font-bold tracking-[0.15em] text-[#ff4d5f] uppercase mb-1.5">Mục tiêu (KPI)</p>
+                  <p className="text-[0.7rem] font-bold tracking-[0.15em] text-[#ff4d5f] uppercase mb-1.5">
+                    {tx("Mục tiêu (KPI)", "Goal (KPI)")}
+                  </p>
                   <p className="text-[0.95rem] leading-6 font-bold text-[#321017]">
                     {tx(selectedRole.kpiVi, selectedRole.kpiEn)}
                   </p>
