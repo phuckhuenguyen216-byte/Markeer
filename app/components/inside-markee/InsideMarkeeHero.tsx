@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -24,7 +24,9 @@ const ecosystemLinks: Record<EcosystemCard["key"], { href?: string; label: strin
     external: true,
   },
   cloudgate: {
-    label: "Cloudgate (coming soon)",
+    href: "https://getcloudgate.com/",
+    label: "Cloudgate",
+    external: true,
   },
   securityZone: {
     href: "https://securityzone.vn/",
@@ -134,7 +136,7 @@ export default function InsideMarkeeHero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.16 + index * 0.08, duration: 0.5 }}
                 whileHover={{ y: -6 }}
-                className={`group rounded-[22px] border border-red-100/80 bg-white/90 p-4 text-left shadow-[0_16px_35px_-28px_rgba(15,23,42,0.55)] backdrop-blur-sm sm:rounded-[24px] sm:p-6 ${isLinked ? "cursor-pointer" : ""}`}
+                className={`group rounded-[20px] border border-red-100/80 bg-white/90 p-4 text-left shadow-[0_16px_35px_-28px_rgba(15,23,42,0.55)] backdrop-blur-sm sm:rounded-[22px] sm:p-5 ${isLinked ? "cursor-pointer" : ""}`}
               >
                 <Link
                   href={linkItem.href ?? "#"}
@@ -142,22 +144,20 @@ export default function InsideMarkeeHero() {
                   rel={linkItem.external ? "noopener noreferrer" : undefined}
                   className={`${isLinked ? "pointer-events-auto" : "pointer-events-none"}`}
                 >
-                  <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-red-100 bg-red-50/70 sm:mb-5 sm:h-16 sm:w-16">
-                    <Icon className="h-5 w-5 text-red-500 sm:h-7 sm:w-7" />
+                  <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-red-100 bg-red-50/70 sm:mb-4 sm:h-12 sm:w-12">
+                    <Icon className="h-5 w-5 text-red-500 sm:h-6 sm:w-6" />
                   </div>
 
-                  <h3 className="text-[1.42rem] font-bold leading-[1.16] tracking-[-0.015em] text-slate-900 sm:text-[2rem]">{tx(card.titleVi, card.titleEn)}</h3>
-                  <p className="mt-1.5 text-[0.96rem] font-semibold text-[#FF3B3B] sm:text-[1.15rem]">{tx(card.subtitleVi, card.subtitleEn)}</p>
-                  <p className="mt-2.5 text-[0.92rem] leading-6 text-slate-600 sm:mt-4 sm:text-base sm:leading-8">{tx(card.descriptionVi, card.descriptionEn)}</p>
+                  <h3 className="text-[1.2rem] font-bold leading-[1.16] tracking-[-0.015em] text-slate-900 sm:text-[1.4rem]">{tx(card.titleVi, card.titleEn)}</h3>
+                  <p className="mt-1 text-[0.9rem] font-semibold text-[#FF3B3B] sm:text-[0.95rem]">{tx(card.subtitleVi, card.subtitleEn)}</p>
+                  <p className="mt-2 text-[0.85rem] leading-6 text-slate-600 sm:mt-2.5 sm:text-[0.9rem] sm:leading-6">{tx(card.descriptionVi, card.descriptionEn)}</p>
 
-                  <div className="mt-4 flex justify-end sm:mt-5">
-                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-red-200 text-red-500 transition-transform duration-300 group-hover:translate-x-1 sm:h-10 sm:w-10">
+                  <div className="mt-3 flex justify-end sm:mt-4">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-red-200 text-red-500 transition-transform duration-300 group-hover:translate-x-1 sm:h-9 sm:w-9">
                       <ArrowRight className="h-4 w-4" />
                     </span>
                   </div>
                 </Link>
-
-                {!isLinked && <p className="mt-1 text-xs font-semibold tracking-[0.08em] text-slate-400 uppercase">{tx("Cloudgate (sắp có link)", "Cloudgate (link coming soon)")}</p>}
               </motion.article>
             );
           })}

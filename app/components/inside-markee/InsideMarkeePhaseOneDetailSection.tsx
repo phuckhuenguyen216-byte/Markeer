@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { CheckCircle2, Hotel, Map, Sparkles, Stethoscope } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2, Hotel, Target, DollarSign, Settings, Sparkles, X, ChevronRight } from "lucide-react";
 import { useInsideMarkeeLocale } from "./useInsideMarkeeLocale";
+import { useState, ReactNode } from "react";
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -15,35 +16,116 @@ const fadeUp = (delay = 0) => ({
 export default function InsideMarkeePhaseOneDetailSection() {
   const { tx } = useInsideMarkeeLocale();
 
-  const coreDelivery = [
-    tx("Website/landing page chuyển đổi tốt", "High-conversion websites and landing pages"),
-    tx("Marketing execution đa kênh", "Multi-channel marketing execution"),
-    tx("Automation cho inbox, follow-up, booking", "Automation for inbox, follow-up, and booking"),
-    tx("Báo cáo rõ và tối ưu theo dữ liệu thật", "Clear reporting and optimization from real data"),
+  type PhaseTopic = {
+    title: string;
+    image: string;
+    Icon: any;
+    popupContent: ReactNode;
+  };
+
+  const [selectedTopic, setSelectedTopic] = useState<PhaseTopic | null>(null);
+
+  const principles = [
+    tx("✦ Bán kết quả trước khi bán tool", "✦ Sell outcomes before tools"),
+    tx("✦ Ưu tiên ngành có data thật", "✦ Prioritize real-data verticals"),
+    tx("✦ Vừa kiếm tiền vừa build system", "✦ Earn while building the system"),
+    tx("✦ Chỉ automation thứ đã proven", "✦ Only automate proven processes"),
   ];
 
-  const segmentCards = [
+  const topics: PhaseTopic[] = [
     {
-      title: tx("Homestay & khách sạn nhỏ", "Homestay & small hotels"),
+      title: tx("Khách hàng & Dịch vụ", "Clients & Services"),
       image: "/8.1.png",
-      Icon: Hotel,
+      Icon: Target,
+      popupContent: (
+        <div className="space-y-6">
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">🎯 Khách hàng chủ đạo — Du lịch</h4>
+            <ul className="space-y-2 text-gray-800 text-[0.95rem] ml-4 list-disc marker:text-[#ff4d5f]">
+              <li><strong className="text-gray-900">Chủ Homestay & Khách sạn nhỏ:</strong> Cần website đặt phòng, marketing, chatbot CSKH, automation booking.</li>
+              <li><strong className="text-gray-900">Chủ Tour & Hướng dẫn viên:</strong> Cần website bán tour, content marketing, AI support trả lời lịch trình.</li>
+              <li><strong className="text-gray-900">Spa & Dịch vụ du lịch:</strong> Cần marketing đến đúng khách du lịch, review management, CSKH 24/7.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">📦 Client nhận được gì? (Done-for-you)</h4>
+            <p className="text-gray-700 text-[0.95rem] mb-2">Team Markee lo toàn bộ từ A → Z. Client không cần biết công nghệ. Markee làm thay bạn, không bán tool để bạn tự dùng:</p>
+            <ul className="space-y-2 text-gray-800 text-[0.95rem] ml-4 list-disc marker:text-[#ff4d5f]">
+              <li><strong className="text-gray-900">Website / Landing page:</strong> Thiết kế và build website bán hàng, book tour — đẹp, convert được.</li>
+              <li><strong className="text-gray-900">Marketing Agency:</strong> Chạy Facebook/TikTok/Google Ads, tạo content, quản lý fanpage, tăng leads thật.</li>
+              <li><strong className="text-gray-900">AI Automation:</strong> Chatbot CSKH, tự động follow-up, tự động hóa quy trình booking, báo cáo.</li>
+            </ul>
+          </div>
+        </div>
+      )
     },
     {
-      title: tx("Tour & dịch vụ du lịch", "Tours & hospitality services"),
+      title: tx("Sales, Giá & Hoa hồng", "Sales, Pricing & Commision"),
       image: "/8.2.png",
-      Icon: Map,
+      Icon: DollarSign,
+      popupContent: (
+        <div className="space-y-6">
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">💰 Pricing — Chiến lược chiếm thị phần</h4>
+            <p className="text-gray-700 text-[0.95rem] mb-2">Ưu tiên chiếm thị phần và học nhanh nhất, không ưu tiên lợi nhuận. Giá phải cực cạnh tranh để khách thử.</p>
+            <ul className="space-y-2 text-gray-800 text-[0.95rem] ml-4 list-disc marker:text-[#ff4d5f]">
+              <li><strong className="text-gray-900">Định giá thông minh:</strong> Giá gốc + Discount có lý do (vd: client đầu tiên, tháng ra mắt).</li>
+              <li><strong className="text-gray-900">KPI Guarantee:</strong> Cam kết kết quả (inbox dưới 1 phút, X leads/tháng). Không đạt → hoàn tiền.</li>
+              <li><strong className="text-gray-900">Tăng giá tự nhiên:</strong> Sau 3–6 tháng có kết quả thật → bỏ discount, tăng về giá trị thực tế.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">🔍 Cách tìm khách hàng (Inbound & Outbound)</h4>
+            <ul className="space-y-2 text-gray-800 text-[0.95rem] ml-4 list-disc marker:text-[#ff4d5f]">
+              <li><strong className="text-gray-900">Outbound (Facebook Ads Library / TikTok):</strong> Nhắn tin các fanpage đang chạy ads nhưng không rep kịp comment.</li>
+              <li><strong className="text-gray-900">Agency Partnership:</strong> Hợp tác với Ads agency nhỏ → họ giới thiệu Markee cho client → chia % hoa hồng.</li>
+              <li><strong className="text-gray-900">Inbound (Toàn team seeding):</strong> Mỗi người đăng 1-2 post/tuần kể chuyện thật về kết quả làm cho khách. Case study là lead chất lượng nhất.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">🤝 Hoa hồng cho toàn team</h4>
+            <p className="text-gray-700 text-[0.95rem]">Bất kỳ ai (intern, dev, designer...) giới thiệu được client ký hợp đồng → đều nhận hoa hồng.</p>
+          </div>
+        </div>
+      )
     },
     {
-      title: tx("Spa / clinic / SMEs tương tự", "Spa / clinic / similar SMEs"),
+      title: tx("Cỗ máy tiến hóa nội bộ", "Internal Evolution Engine"),
       image: "/8.3.png",
-      Icon: Stethoscope,
+      Icon: Settings,
+      popupContent: (
+        <div className="space-y-6">
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">⚙️ Vũ khí bí mật của Markee</h4>
+            <p className="text-gray-800 text-[0.95rem] mb-2">Chúng ta là agency có team dev liên tục tự động hóa chính công việc của mình.</p>
+            <ul className="space-y-2 text-gray-700 text-[0.9rem] bg-gray-50 rounded-xl p-4 border border-gray-100">
+              <li><strong>Phase 1:</strong> 50–70% Con người / 30–50% AI</li>
+              <li><strong>Phase 2:</strong> 30–50% Con người / 50–70% AI</li>
+              <li><strong>Cuối cùng:</strong> &lt;10% Con người / 90%+ Tự động hoàn toàn</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">👥 Dev team 2 tầng</h4>
+            <ul className="space-y-2 text-gray-800 text-[0.95rem] ml-4 list-disc marker:text-[#ff4d5f]">
+              <li><strong className="text-gray-900">Senior dev:</strong> Làm cho client thật. Build automation, chatbot... Tích lũy module thật từ production.</li>
+              <li><strong className="text-gray-900">Junior dev:</strong> Nhận lại modules từ senior, tái sử dụng, tích hợp vào MarkeeAI platform nội bộ.</li>
+            </ul>
+            <p className="text-[#e11d48] font-medium text-[0.95rem] mt-3 italic">"Vòng lặp: Senior build module → Junior đóng gói template → Onboard client mới cực nhanh."</p>
+          </div>
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">💡 Tại sao không build SaaS ngay từ đầu?</h4>
+            <p className="text-gray-700 text-[0.95rem]">Build SaaS ngay mất 6-12 tháng mà chưa chắc đúng nhu cầu. Làm service trước → có doanh thu ngay tuần đầu → học được client thật sự cần gì. Client đang trả tiền để chúng ta R&D hệ thống.</p>
+          </div>
+        </div>
+      )
     },
   ];
 
   return (
-    <section className="relative overflow-hidden bg-white py-24 sm:py-28 lg:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(180,24,40,0.055)_1px,transparent_1px),linear-gradient(to_bottom,rgba(180,24,40,0.055)_1px,transparent_1px)] bg-[size:60px_60px]" />
-      <div className="pointer-events-none absolute left-[-10rem] top-[14%] h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(circle,rgba(255,77,77,0.16)_0%,rgba(255,255,255,0)_72%)] blur-3xl" />
+    <section style={{ zIndex: selectedTopic ? 999 : 0 }} className="relative overflow-hidden bg-white py-24 sm:py-28 lg:py-32">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,240,245,0.8)_0%,rgba(255,255,255,0)_60%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(180,24,40,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(180,24,40,0.03)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black_70%)]" />
+      <div className="pointer-events-none absolute left-[-10rem] top-[14%] h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(circle,rgba(255,77,77,0.12)_0%,rgba(255,255,255,0)_72%)] blur-3xl" />
 
       <div className="relative mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-8">
         <motion.p {...fadeUp(0)} className="mk-eyebrow text-[#5f1a22] uppercase">
@@ -58,27 +140,25 @@ export default function InsideMarkeePhaseOneDetailSection() {
             <div className="pointer-events-none absolute right-[-6rem] top-[-4rem] h-[15rem] w-[15rem] rounded-full bg-[radial-gradient(circle,rgba(255,77,95,0.14)_0%,rgba(255,255,255,0)_72%)] blur-2xl" />
 
             <h2 className="mk-section-title">
-              <span className="block text-[#321017]">{tx("PHASE 1 LÀ", "PHASE 1 IS")}</span>
+              <span className="block text-[#321017]">{tx("TRƯỚC KHI SCALE AI", "BEFORE SCALING AI")}</span>
               <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff748f] bg-clip-text text-transparent">
-                {tx("SERVICE-FIRST", "SERVICE-FIRST")}
+                {tx("PHẢI KIẾM ĐƯỢC TIỀN", "WE MUST EARN MONEY")}
               </span>
-              <span className="block text-[#321017]">{tx("VÀ KẾT QUẢ-TRƯỚC.", "AND OUTCOME-FIRST.")}</span>
             </h2>
 
-            <p className="mt-4 max-w-[680px] text-[1.02rem] leading-8 text-[#5f1a22]/80 sm:text-[1.1rem]">
+            <p className="mt-5 max-w-[680px] text-[1.05rem] leading-8 text-[#5f1a22]/85 sm:text-[1.15rem]">
               {tx(
-                "Markee bán một team growth + công nghệ cùng vận hành với doanh nghiệp, không bán một tool tự chạy.",
-                "Markee sells a growth + technology team operating with the business, not a self-running tool."
+                "Markee chưa bán AI tool tự chạy. Chúng tôi dùng AI để tạo kết quả thật trước, sau đó mới scale thành hệ thống.",
+                "Markee doesn't sell self-running AI tools yet. We use AI to generate real results first, then scale into a system."
               )}
             </p>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {coreDelivery.map((item) => (
+            <div className="mt-8 space-y-4">
+              {principles.map((item) => (
                 <p
                   key={item}
-                  className="flex items-start gap-3 rounded-2xl bg-white/85 px-4 py-3 text-sm leading-6 text-[#5f1a22]/82 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.42)] sm:text-base sm:leading-7"
+                  className="flex items-start text-[1.05rem] font-semibold text-[#5f1a22]/95 tracking-wide"
                 >
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#ff4d5f]" />
                   {item}
                 </p>
               ))}
@@ -95,18 +175,28 @@ export default function InsideMarkeePhaseOneDetailSection() {
 
           <motion.article
             {...fadeUp(0.1)}
-            className="relative rounded-[32px] bg-white p-4 shadow-[0_26px_62px_-44px_rgba(15,23,42,0.55)] sm:p-5"
+            className="relative rounded-[32px] bg-white p-4 shadow-[0_26px_62px_-44px_rgba(15,23,42,0.4)] sm:p-5"
           >
-            <div className="relative -mt-8 ml-auto h-[360px] w-[95%] overflow-hidden rounded-[26px] sm:h-[420px]">
+            <div className="relative w-full h-[360px] overflow-hidden rounded-[24px] sm:h-[420px] bg-gray-50 border border-gray-100/50">
               <Image src="/5.1.png" alt="Phase 1 service execution visual" fill className="object-cover" />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,13,18,0.04)_0%,rgba(14,13,18,0.46)_100%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_10%,rgba(255,255,255,0.25)_70%,rgba(255,255,255,0.7)_100%)] pointer-events-none" />
+              
+              {/* Invisible automation cues / Hologram system feel */}
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0)_60%)] mix-blend-overlay pointer-events-none" />
+              <div className="absolute top-[25%] left-[10%] w-[35%] h-[1px] bg-white/70 blur-[1px] shadow-[0_0_12px_3px_rgba(255,255,255,0.9)] animate-pulse pointer-events-none" />
+              <div className="absolute bottom-[35%] right-[15%] w-[45%] h-[1px] bg-white/70 blur-[1px] shadow-[0_0_12px_3px_rgba(255,255,255,0.9)] animate-pulse pointer-events-none" />
+              <div className="absolute top-[10%] bottom-[10%] left-[20%] w-[1px] bg-[linear-gradient(to_bottom,transparent_0%,rgba(255,255,255,0.6)_50%,transparent_100%)] pointer-events-none" />
             </div>
-            <div className="px-2 pb-2 pt-5 sm:px-3">
-              <p className="text-xs font-semibold tracking-[0.14em] text-[#ff4d4d] uppercase">{tx("Core message", "Core message")}</p>
-              <p className="mt-2 text-[1.05rem] leading-8 text-[#5f1a22]/84 sm:text-[1.12rem]">
+            
+            <div className="px-3 pb-3 pt-6 sm:px-4">
+              <div className="flex items-center gap-2">
+                <div className="h-[1px] w-6 bg-[#ff4d4d]" />
+                <p className="text-[0.65rem] font-bold tracking-[0.2em] text-[#ff4d4d] uppercase">{tx("Founder statement", "Founder statement")}</p>
+              </div>
+              <p className="mt-3 text-[1.15rem] leading-8 font-light text-[#5f1a22]/90 sm:text-[1.25rem] italic">
                 {tx(
-                  "Đội ngũ Markee + AI làm cho bạn, để kết quả đến nhanh hơn và ổn định hơn.",
-                  "Markee team + AI works for you, so outcomes arrive faster and stay stable."
+                  "\"Con người làm chiến lược. AI tăng tốc execution.\"",
+                  "\"Humans do strategy. AI accelerates execution.\""
                 )}
               </p>
             </div>
@@ -114,35 +204,84 @@ export default function InsideMarkeePhaseOneDetailSection() {
         </div>
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {segmentCards.map((segment, index) => {
-            const Icon = segment.Icon;
+          {topics.map((topic, index) => {
+            const Icon = topic.Icon;
             return (
               <motion.article
-                key={segment.title}
+                key={topic.title}
                 {...fadeUp(0.16 + index * 0.04)}
-                className="group relative overflow-hidden rounded-[26px]"
+                onClick={() => setSelectedTopic(topic)}
+                className="group cursor-pointer relative flex flex-col overflow-hidden rounded-[26px] bg-white border border-[#ffd6df] shadow-[0_12px_24px_-12px_rgba(15,23,42,0.06)] hover:shadow-[0_20px_40px_-16px_rgba(15,23,42,0.1)] transition-all duration-300"
               >
-                <div className="relative h-[230px] w-full">
+                <div className="relative h-[180px] w-full overflow-hidden bg-gray-100">
                   <Image
-                    src={segment.image}
-                    alt={segment.title}
+                    src={topic.image}
+                    alt={topic.title}
                     fill
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,13,18,0.08)_25%,rgba(14,13,18,0.58)_100%)]" />
                 </div>
-                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-                  <p className="inline-flex items-center gap-2 rounded-full bg-white/86 px-3 py-1.5 text-xs font-semibold tracking-[0.09em] text-[#ff4d4d] uppercase backdrop-blur">
-                    <Icon className="h-3.5 w-3.5" />
-                    {tx("Segment", "Segment")}
-                  </p>
-                  <p className="mt-2 text-[1.1rem] leading-7 font-semibold text-white sm:text-[1.2rem]">{segment.title}</p>
+                
+                <div className="flex flex-1 flex-col justify-between p-5 bg-white">
+                  <div>
+                    <p className="inline-flex items-center gap-1.5 rounded-full bg-[#fff0f4] px-3 py-1.5 text-[0.65rem] font-bold tracking-[0.12em] text-[#ff4d4d] uppercase shadow-sm">
+                      <Icon className="h-3.5 w-3.5" />
+                      {tx("Nội dung chính", "Main topic")}
+                    </p>
+                    <p className="mt-3 text-[1.15rem] leading-7 font-extrabold text-[#321017]">{topic.title}</p>
+                  </div>
+                  
+                  <button
+                    className="mt-6 inline-flex w-full pointer-events-none items-center justify-center gap-1.5 rounded-2xl bg-[#fff0f4] py-3 text-[0.85rem] font-bold text-[#ff4d5f] transition-colors group-hover:bg-[#ffe1e8]"
+                  >
+                    {tx("Bấm xem chi tiết", "View details")}
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
                 </div>
               </motion.article>
             );
           })}
         </div>
       </div>
+
+      {/* POPUP MODAL */}
+      <AnimatePresence>
+        {selectedTopic && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 px-4 sm:px-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedTopic(null)}
+              className="absolute inset-0 bg-[#0f172a]/30 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="relative w-full max-w-2xl overflow-hidden rounded-3xl bg-white border border-gray-100 p-6 sm:p-8 shadow-2xl z-10 max-h-[90vh] overflow-y-auto"
+            >
+              <button
+                onClick={() => setSelectedTopic(null)}
+                className="absolute right-5 top-5 rounded-full p-2 hover:bg-gray-100 transition-colors"
+              >
+                <X className="h-5 w-5 text-gray-400" />
+              </button>
+              
+              <div className="pr-6">
+                <p className="text-[0.7rem] font-bold tracking-[0.15em] text-[#ff4d5f] uppercase mb-1">
+                  {tx("Chi tiết Phase 1", "Phase 1 Detail")}
+                </p>
+                <h3 className="text-2xl font-extrabold text-[#321017] mb-6 pb-4 border-b border-gray-100">
+                  {selectedTopic.title}
+                </h3>
+                
+                {selectedTopic.popupContent}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

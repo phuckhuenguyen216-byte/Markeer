@@ -48,18 +48,7 @@ const brands: BrandItem[] = [
 export default function InsideMarkeeWhatBuilding() {
   const { tx } = useInsideMarkeeLocale();
 
-  const clientBuys = [
-    tx("Inbox không bỏ sót đơn hàng.", "Inbox operations with no missed orders."),
-    tx("Team không cần làm thủ công cả ngày.", "A team that is not stuck in manual work all day."),
-    tx("Content đều đặn mà không cần thuê thêm người viết.", "Consistent content without hiring extra writers."),
-    tx("Kết quả đo được bằng doanh thu và vận hành.", "Measurable outcomes in revenue and operations."),
-  ];
 
-  const quickRules = [
-    tx("Nói bằng kết quả đo được, không nói bằng tên công nghệ.", "Speak in measurable outcomes, not technology names."),
-    tx("Demo trên tình huống thật của khách, không demo giả lập chung chung.", "Demo on real client scenarios, not generic simulations."),
-    tx("Mỗi tuần phải có một cải tiến vận hành hoặc tự động hóa mới.", "Ship at least one operations or automation improvement every week."),
-  ];
 
   return (
     <section className="relative overflow-hidden bg-[#fff2f6] py-20 sm:py-24 lg:py-28">
@@ -70,10 +59,10 @@ export default function InsideMarkeeWhatBuilding() {
           {tx("02 · Câu chuyện của mình", "02 · Our story")}
         </motion.p>
 
-        <div className="mt-8 grid gap-7 xl:grid-cols-[1.05fr_0.95fr] xl:items-start">
+        <div className="mt-8 grid gap-7 xl:grid-cols-2 xl:items-stretch">
           <motion.article
             {...fadeUp(0.06)}
-            className="relative overflow-hidden rounded-[32px] border border-[#ffb8c8] bg-[linear-gradient(155deg,#3a0f1f_0%,#55172d_48%,#7a1c3e_100%)] p-6 text-white shadow-[0_34px_90px_-46px_rgba(127,29,53,0.75)] sm:p-8"
+            className="relative h-full overflow-hidden rounded-[32px] border border-[#ffb8c8] bg-[linear-gradient(155deg,#3a0f1f_0%,#55172d_48%,#7a1c3e_100%)] p-6 text-white shadow-[0_34px_90px_-46px_rgba(127,29,53,0.75)] sm:p-8"
           >
             <div className="pointer-events-none absolute -right-20 top-8 h-52 w-52 rounded-full bg-[#ff7b95]/40 blur-3xl" />
             <div className="pointer-events-none absolute -left-20 bottom-[-3.5rem] h-44 w-44 rounded-full bg-[#ff5170]/35 blur-3xl" />
@@ -120,17 +109,10 @@ export default function InsideMarkeeWhatBuilding() {
               ))}
             </div>
 
-            <div className="relative mt-6 space-y-2.5">
-              {clientBuys.map((item) => (
-                <div key={item} className="flex items-center gap-3 rounded-xl border border-white/18 bg-white/12 px-4 py-3 backdrop-blur-sm">
-                  <Sparkles className="h-4 w-4 shrink-0 text-[#ffd4de]" />
-                  <p className="text-sm leading-7 text-white/92 sm:text-base">{item}</p>
-                </div>
-              ))}
-            </div>
+
           </motion.article>
 
-          <div className="grid gap-4">
+          <div className="flex flex-col gap-4 h-full">
             <motion.article
               {...fadeUp(0.1)}
               className="relative overflow-hidden rounded-[30px] border border-[#ffd0da] bg-white/95 p-3 shadow-[0_30px_80px_-44px_rgba(255,77,95,0.52)] sm:p-4"
@@ -153,7 +135,7 @@ export default function InsideMarkeeWhatBuilding() {
 
             <motion.article
               {...fadeUp(0.14)}
-              className="rounded-[26px] border border-[#ffc7d3] bg-white p-5 shadow-[0_22px_46px_-28px_rgba(255,77,95,0.42)]"
+              className="flex-1 rounded-[26px] border border-[#ffc7d3] bg-white p-5 shadow-[0_22px_46px_-28px_rgba(255,77,95,0.42)]"
             >
               <p className="text-xs font-semibold tracking-[0.11em] text-[#9f1239] uppercase">{tx("Sứ mệnh", "Mission")}</p>
               <p className="mt-2 flex items-start gap-2.5 text-[1rem] leading-7 font-semibold text-[#4c1d2f] sm:text-[1.08rem]">
@@ -168,17 +150,6 @@ export default function InsideMarkeeWhatBuilding() {
                 <OutcomeChip>{tx("Thực chiến", "Practical execution")}</OutcomeChip>
                 <OutcomeChip>{tx("Đo được kết quả", "Measurable outcomes")}</OutcomeChip>
                 <OutcomeChip>{tx("Client thấy lợi sớm", "Early visible value")}</OutcomeChip>
-              </div>
-
-              <div className="mt-4 rounded-xl border border-[#ffd7e0] bg-[#fff8fb] p-4">
-                <p className="text-xs font-semibold tracking-[0.11em] text-[#9f1239] uppercase">{tx("Cách nhớ nhanh", "Quick rule")}</p>
-                <div className="mt-2 space-y-2">
-                  {quickRules.map((rule) => (
-                    <p key={rule} className="text-sm leading-6 text-[#5a2137]">
-                      {rule}
-                    </p>
-                  ))}
-                </div>
               </div>
             </motion.article>
           </div>

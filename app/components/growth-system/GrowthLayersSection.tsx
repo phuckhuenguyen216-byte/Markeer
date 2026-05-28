@@ -1,54 +1,48 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CalendarClock } from "lucide-react";
+import { CalendarClock, Calculator, Zap, Target, History } from "lucide-react";
 import { useGrowthLocale } from "./useGrowthLocale";
 
 const rise = (delay = 0) => ({
   initial: { opacity: 0, y: 18 },
   whileInView: { opacity: 1, y: 0 },
   transition: { duration: 0.58, delay, ease: [0.22, 1, 0.36, 1] as const },
-  viewport: { once: true, amount: 0.25 },
+  viewport: { once: true, amount: 0.15 },
 });
 
 export default function GrowthLayersSection() {
   const { tx } = useGrowthLocale();
 
-  const model = [
+  const phases = [
     {
-      phaseVi: "Tháng 1",
-      phaseEn: "Month 1",
-      titleVi: "Build Habit",
-      titleEn: "Build Habit",
-      descVi: "Tạo nhịp submit và tracking ổn định trước.",
-      descEn: "Establish stable submission and tracking rhythm first.",
+      badge: tx("Tháng 1", "Month 1"),
+      title: "Habit Building",
+      icon: History,
+      desc: tx("Làm quen, build thói quen. Đừng nghĩ nhiều. Cứ đăng. Cứ tìm.", "Get used to it, build habits. Don't overthink. Just post. Just find."),
+      kpi: tx("80% số lượng + 20% chất lượng", "80% quantity + 20% quality"),
+      goal: tx("Vượt ngại, tạo consistency", "Overcome hesitation, build consistency"),
+      color: "blue"
     },
     {
-      phaseVi: "Tháng 2+",
-      phaseEn: "Month 2+",
-      titleVi: "Quality Mode",
-      titleEn: "Quality Mode",
-      descVi: "Ưu tiên chất lượng lead/content thay vì spam volume.",
-      descEn: "Prioritize lead/content quality over volume spam.",
-    },
-    {
-      phaseVi: "Cuối tháng",
-      phaseEn: "Month End",
-      titleVi: "Verify & Reward",
-      titleEn: "Verify & Reward",
-      descVi: "Sales Lead verify, Finance payout theo điều kiện.",
-      descEn: "Sales Lead verifies, Finance pays by eligibility.",
-    },
+      badge: tx("Tháng 2+", "Month 2+"),
+      title: "Performance Mode",
+      icon: Target,
+      desc: tx("Chất lượng là vua. Ít bài nhưng hit, nhiều lead nhưng chất.", "Quality is king. Fewer posts but hits, fewer leads but qualified."),
+      kpi: "Content approved · DM generated · Lead attributed",
+      color: "rose"
+    }
   ];
 
-  const weekly = [
-    tx("Đầu tuần: chốt focus lane rõ ràng.", "Week start: set clear focus lane."),
-    tx("Giữa tuần: log tín hiệu vào hệ thống.", "Mid-week: log signals into the system."),
-    tx("Cuối tuần: review quality, chốt bài học.", "Week end: review quality and lock learnings."),
+  const schedule = [
+    { day: tx("Thứ 2", "Monday"), time: tx("10 phút", "10 mins"), action: tx("Plan tuần: sẽ post bài gì, tìm lead ở đâu, cần join group nào", "Weekly plan: what to post, where to find leads, what groups to join") },
+    { day: tx("T3–T6", "Tue–Fri"), time: tx("30-60p/ngày", "30-60m/day"), action: tx("Post bài, tìm prospect, submit lead qua Zalo ngay khi có", "Post content, find prospects, submit leads via Zalo immediately") },
+    { day: tx("Thứ 7", "Saturday"), time: tx("5 phút", "5 mins"), action: tx("Update GGSheet KPI Tracker: số bài đã post, số lead submit", "Update GGSheet KPI Tracker: posted count, submitted leads") },
+    { day: tx("Đầu tháng", "Early month"), time: "—", action: tx("Sales Lead verify xong → Finance trả thưởng KPI", "Sales Lead verifies → Finance pays KPI bonus") },
   ];
 
   return (
-    <section className="relative overflow-hidden py-18 sm:py-22 lg:py-26">
+    <section className="relative overflow-hidden py-16 sm:py-20 lg:py-20">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,92,118,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,92,118,0.045)_1px,transparent_1px)] bg-[size:64px_64px]" />
       <motion.div
         aria-hidden
@@ -58,80 +52,113 @@ export default function GrowthLayersSection() {
       />
 
       <div className="relative mx-auto max-w-[1320px] px-4 sm:px-6 lg:px-8">
-        <motion.div {...rise(0)} className="max-w-[980px]">
+        <motion.div {...rise(0)} className="max-w-[980px] mx-auto text-center">
           <p className="mk-eyebrow text-[#ff4d5f] uppercase">
             {tx("05 · Theo dõi & Tính thưởng", "05 · Tracking & Rewards")}
           </p>
-          <h2 className="mk-section-title mt-4 uppercase">
-            <span className="block text-[#0b1020]">{tx("ĐO CHẤT LƯỢNG TRƯỚC.", "MEASURE QUALITY FIRST.")}</span>
-            <span className="mk-section-title-accent block bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff7b94] bg-clip-text text-transparent">
-              {tx("ĐO TỐC ĐỘ SAU.", "THEN MEASURE SPEED.")}
+          <h2 className="mk-section-title mt-4 uppercase mx-auto flex flex-wrap justify-center gap-x-2 lg:gap-x-3">
+            <span className="text-[#0b1020]">{tx("KPI TUẦN,", "WEEKLY KPI,")}</span>
+            <span className="mk-section-title-accent bg-gradient-to-r from-[#ff3f57] via-[#ff4d5f] to-[#ff7b94] bg-clip-text text-transparent">
+              {tx("BONUS THÁNG", "MONTHLY BONUS")}
             </span>
           </h2>
+          <p className="mx-auto mt-4 max-w-[980px] text-[1.02rem] leading-8 text-[#0b1020]/76 sm:text-[1.1rem]">
+            {tx(
+              "Đơn giản. Làm đúng. Cuối tháng Sales Lead verify và Finance trả thưởng.",
+              "Simple. Do it right. Sales Lead verifies and Finance pays out at month end."
+            )}
+          </p>
         </motion.div>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[1.04fr_0.96fr] lg:items-start">
-          <motion.article
-            {...rise(0.08)}
-            className="relative overflow-hidden rounded-[32px] bg-[linear-gradient(170deg,#ffffff_0%,#fff8fb_100%)] p-6 shadow-[0_30px_68px_-50px_rgba(15,23,42,0.56)] sm:p-8"
-          >
-            <motion.div
-              aria-hidden
-              className="pointer-events-none absolute -left-[38%] top-0 h-full w-1/3 -skew-x-12 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(255,116,141,0.2)_50%,rgba(255,255,255,0)_100%)]"
-              animate={{ x: ["0%", "420%"] }}
-              transition={{ duration: 5.6, repeat: Infinity, ease: "linear" }}
-            />
-            <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.14em] text-[#ff4d5f] uppercase">
-              <CalendarClock className="h-3.5 w-3.5" />
-              {tx("Monthly progression", "Monthly progression")}
-            </p>
+        <div className="mt-10 grid gap-5 lg:grid-cols-2">
+          {/* Cột 1: Phases */}
+          <motion.div {...rise(0.1)} className="space-y-4">
+            {phases.map((phase) => {
+               const Icon = phase.icon;
+               const isRose = phase.color === "rose";
+               return (
+                <div key={phase.badge} className={`rounded-[28px] border p-5 sm:p-6 shadow-sm ${isRose ? 'bg-[#fff5f7] border-[#ffe0e8]' : 'bg-[#f5f9ff] border-[#e0edff]'}`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className={`text-lg font-extrabold flex items-center gap-2 ${isRose ? 'text-[#ff4d5f]' : 'text-[#2f73ff]'}`}>
+                      <Icon className="h-5 w-5" /> {phase.badge} — {phase.title}
+                    </h3>
+                  </div>
+                  <p className="text-[0.9rem] text-[#0b1020]/80 leading-relaxed mb-4">
+                    {phase.desc}
+                  </p>
+                  <div className={`rounded-xl p-3.5 text-[0.85rem] ${isRose ? 'bg-white/60 text-[#b51428]' : 'bg-white/60 text-[#144cb5]'}`}>
+                    <p><strong>{tx("KPI đo:", "KPI:")}</strong> {phase.kpi}</p>
+                    {phase.goal && <p className="mt-1.5"><strong>{tx("Mục tiêu:", "Goal:")}</strong> {phase.goal}</p>}
+                  </div>
+                </div>
+               );
+            })}
+          </motion.div>
 
-            <div className="mt-5 space-y-4">
-              {model.map((item, index) => (
-                <motion.article
-                  key={item.phaseVi}
-                  initial={{ opacity: 0, x: -14 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.45, delay: 0.1 + index * 0.08 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  className="relative rounded-2xl bg-white px-4 py-4 shadow-[0_12px_30px_-22px_rgba(15,23,42,0.48)]"
-                >
-                  <p className="text-[11px] font-semibold tracking-[0.12em] text-[#ff4d5f] uppercase">{tx(item.phaseVi, item.phaseEn)}</p>
-                  <p className="mt-1 text-[1.08rem] font-bold text-[#2b0f1d]">{tx(item.titleVi, item.titleEn)}</p>
-                  <p className="mt-1.5 text-sm leading-6 text-[#0b1020]/74 sm:text-base sm:leading-7">{tx(item.descVi, item.descEn)}</p>
-                </motion.article>
+          {/* Cột 2: Lịch trình tuần */}
+          <motion.div {...rise(0.15)} className="rounded-[28px] bg-[#160f22] p-5 sm:p-6 shadow-[0_30px_72px_-48px_rgba(22,15,34,0.78)] text-[#dfe8ff]">
+            <div className="flex items-center gap-2 text-[#8fb6ff] mb-6">
+               <CalendarClock className="h-5 w-5" />
+               <h3 className="text-sm font-bold uppercase tracking-wider">{tx("📅 Nhịp tuần — Làm gì và khi nào", "📅 Weekly Rhythm — What and When")}</h3>
+            </div>
+            
+            <div className="space-y-3">
+              {schedule.map((item, i) => (
+                <div key={item.day} className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-4 p-3.5 rounded-xl bg-white/5 border border-white/5">
+                  <div className="shrink-0 sm:w-[120px] flex justify-between items-center sm:block">
+                     <p className="font-bold text-[#ff4d5f]">{item.day}</p>
+                     <p className="text-xs text-[#8fb6ff] mt-0.5">{item.time}</p>
+                  </div>
+                  <p className="text-[0.85rem] leading-6 text-white/85 sm:mt-0 mt-1">{item.action}</p>
+                </div>
               ))}
             </div>
-          </motion.article>
-
-          <motion.article
-            {...rise(0.14)}
-            className="relative overflow-hidden rounded-[32px] bg-[#190f2a] p-6 text-[#dfe8ff] shadow-[0_30px_72px_-48px_rgba(25,15,42,0.8)] sm:p-8"
-          >
-            <motion.div
-              className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(255,255,255,0.06)_50%,transparent_100%)]"
-              animate={{ y: ["-100%", "100%"] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-            />
-
-            <p className="text-xs font-semibold tracking-[0.14em] text-[#8fb6ff] uppercase">{tx("Weekly rhythm", "Weekly rhythm")}</p>
-
-            <div className="relative mt-5 space-y-3">
-              {weekly.map((item) => (
-                <p key={item} className="rounded-xl bg-white/8 px-4 py-3 text-sm leading-6 sm:text-base sm:leading-7">
-                  {item}
-                </p>
-              ))}
-            </div>
-
-            <p className="mt-6 text-sm leading-7 text-[#dfe8ff]/82 sm:text-base">
-              {tx(
-                "Mục tiêu không phải số đẹp ngắn hạn. Mục tiêu là nhịp tăng trưởng có thể lặp lại mà không làm team mệt rã.",
-                "The goal is not short-term vanity metrics. The goal is repeatable growth rhythm without breaking the team."
-              )}
-            </p>
-          </motion.article>
+          </motion.div>
         </div>
+
+        {/* Khối 3: Ví dụ Bonus */}
+        <motion.div {...rise(0.2)} className="mt-5 rounded-[28px] border border-amber-200 bg-[linear-gradient(170deg,#fffdf5_0%,#ffffff_100%)] p-5 sm:p-6 shadow-sm relative overflow-hidden">
+           <div className="absolute top-0 right-0 p-4 opacity-[0.08] pointer-events-none">
+              <Calculator className="w-40 h-40 text-amber-500" />
+           </div>
+           
+           <h3 className="text-lg font-extrabold text-amber-900 flex items-center gap-2 mb-5 relative z-10">
+              💡 {tx("Ví dụ tính bonus — Intern tháng đầu", "Bonus example — First-month Intern")}
+           </h3>
+           
+           <div className="grid lg:grid-cols-[1.2fr_1fr] gap-6 relative z-10">
+             <div className="space-y-3">
+               <div className="bg-white rounded-xl border border-amber-100 p-3.5 shadow-sm text-[0.85rem]">
+                 <span className="inline-block px-2.5 py-1 bg-gray-100 rounded-md text-gray-700 font-bold mb-2">Target</span>
+                 <p className="text-gray-800 leading-relaxed">{tx("3 bài chất lượng + 1 qualified lead", "3 quality posts + 1 qualified lead")}</p>
+               </div>
+               <div className="bg-white rounded-xl border border-amber-100 p-3.5 shadow-sm text-[0.85rem]">
+                 <span className="inline-block px-2.5 py-1 bg-amber-100 rounded-md text-amber-800 font-bold mb-2">{tx("Thực tế", "Actual")}</span>
+                 <p className="text-gray-800 leading-relaxed">{tx("Đăng 4 bài chất lượng (133% seeding) + submit 1 qualified lead (100% lead)", "Posted 4 quality articles (133% seeding) + submitted 1 qualified lead (100% lead)")}</p>
+               </div>
+             </div>
+             
+             <div className="space-y-2 text-[0.85rem] bg-white rounded-xl border border-amber-100 p-4 shadow-sm flex flex-col justify-center">
+                <div className="flex justify-between items-center border-b border-gray-100 pb-2.5">
+                   <span className="text-gray-600">{tx("Seeding (133% = Mức 4)", "Seeding (133% = Level 4)")}</span>
+                   <span className="font-mono font-bold text-gray-900 bg-gray-50 px-2 py-0.5 rounded">100K × 1.5 = 150K</span>
+                </div>
+                <div className="flex justify-between items-center border-b border-gray-100 py-2.5">
+                   <span className="text-gray-600">{tx("Lead (100% = Mức 2)", "Lead (100% = Level 2)")}</span>
+                   <span className="font-mono font-bold text-gray-900 bg-gray-50 px-2 py-0.5 rounded">100K × 1 = 100K</span>
+                </div>
+                <div className="flex justify-between items-center pt-2.5 text-amber-700">
+                   <span className="font-bold">→ {tx("Tổng bonus tháng", "Total monthly bonus")}</span>
+                   <span className="font-mono font-black text-[1.1rem]">250.000đ</span>
+                </div>
+             </div>
+           </div>
+
+           <div className="mt-5 bg-[linear-gradient(90deg,#ff4d5f,#ff2139)] text-white rounded-xl p-4 text-[0.9rem] font-medium relative z-10 flex items-start sm:items-center gap-3 shadow-md shadow-red-500/20">
+              <Zap className="h-5 w-5 shrink-0 text-yellow-300 sm:mt-0 mt-0.5" />
+              <p>{tx("Nếu lead đó close thành deal 20M → Thêm hoa hồng Tier C", "If that lead closes a 20M deal → Additional Tier C commission")} <strong className="text-yellow-300 font-black text-base mx-1">500K</strong> {tx("từ Nhóm 1.", "from Group 1.")}</p>
+           </div>
+        </motion.div>
       </div>
     </section>
   );
