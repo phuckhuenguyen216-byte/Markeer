@@ -14,13 +14,14 @@ const fadeUp = (delay = 0) => ({
 });
 
 export default function InsideMarkeePhaseOneDetailSection() {
-  const { tx } = useInsideMarkeeLocale();
+  const { tx, isEn } = useInsideMarkeeLocale();
 
   type PhaseTopic = {
     title: string;
     image: string;
     Icon: any;
-    popupContent: ReactNode;
+    popupContentVi: ReactNode;
+    popupContentEn: ReactNode;
   };
 
   const [selectedTopic, setSelectedTopic] = useState<PhaseTopic | null>(null);
@@ -37,7 +38,7 @@ export default function InsideMarkeePhaseOneDetailSection() {
       title: tx("Khách hàng & Dịch vụ", "Clients & Services"),
       image: "/8.1.png",
       Icon: Target,
-      popupContent: (
+      popupContentVi: (
         <div className="space-y-6">
           <div>
             <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">🎯 Khách hàng chủ đạo — Du lịch</h4>
@@ -57,13 +58,34 @@ export default function InsideMarkeePhaseOneDetailSection() {
             </ul>
           </div>
         </div>
+      ),
+      popupContentEn: (
+        <div className="space-y-6">
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">🎯 Core Clients — Tourism</h4>
+            <ul className="space-y-2 text-gray-800 text-[0.95rem] ml-4 list-disc marker:text-[#ff4d5f]">
+              <li><strong className="text-gray-900">Homestay & Small Hotel Owners:</strong> Need booking websites, marketing, customer service chatbots, automation booking.</li>
+              <li><strong className="text-gray-900">Tour Owners & Guides:</strong> Need tour sales websites, content marketing, AI support for itinerary replies.</li>
+              <li><strong className="text-gray-900">Spa & Travel Services:</strong> Need marketing to the right tourists, review management, 24/7 customer service.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">📦 What do clients get? (Done-for-you)</h4>
+            <p className="text-gray-700 text-[0.95rem] mb-2">The Markee team handles everything from A → Z. Clients don't need to know technology. Markee does it for you, not selling tools for you to use yourself:</p>
+            <ul className="space-y-2 text-gray-800 text-[0.95rem] ml-4 list-disc marker:text-[#ff4d5f]">
+              <li><strong className="text-gray-900">Website / Landing page:</strong> Design and build sales websites, tour booking — beautiful, high-converting.</li>
+              <li><strong className="text-gray-900">Marketing Agency:</strong> Run Facebook/TikTok/Google Ads, create content, manage fanpages, increase real leads.</li>
+              <li><strong className="text-gray-900">AI Automation:</strong> Customer service chatbots, auto follow-ups, booking process automation, reporting.</li>
+            </ul>
+          </div>
+        </div>
       )
     },
     {
       title: tx("Sales, Giá & Hoa hồng", "Sales, Pricing & Commision"),
       image: "/8.2.png",
       Icon: DollarSign,
-      popupContent: (
+      popupContentVi: (
         <div className="space-y-6">
           <div>
             <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">💰 Pricing — Chiến lược chiếm thị phần</h4>
@@ -87,13 +109,38 @@ export default function InsideMarkeePhaseOneDetailSection() {
             <p className="text-gray-700 text-[0.95rem]">Bất kỳ ai (intern, dev, designer...) giới thiệu được client ký hợp đồng → đều nhận hoa hồng.</p>
           </div>
         </div>
+      ),
+      popupContentEn: (
+        <div className="space-y-6">
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">💰 Pricing — Market Share Strategy</h4>
+            <p className="text-gray-700 text-[0.95rem] mb-2">Prioritize gaining market share and learning fastest, not profit. Prices must be extremely competitive for clients to try.</p>
+            <ul className="space-y-2 text-gray-800 text-[0.95rem] ml-4 list-disc marker:text-[#ff4d5f]">
+              <li><strong className="text-gray-900">Smart Pricing:</strong> Base price + Reasoned discount (e.g., first client, launch month).</li>
+              <li><strong className="text-gray-900">KPI Guarantee:</strong> Guaranteed results (inbox under 1 min, X leads/month). Fail to achieve → refund.</li>
+              <li><strong className="text-gray-900">Natural Price Increase:</strong> After 3–6 months with real results → remove discounts, increase to actual value.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">🔍 How to find clients (Inbound & Outbound)</h4>
+            <ul className="space-y-2 text-gray-800 text-[0.95rem] ml-4 list-disc marker:text-[#ff4d5f]">
+              <li><strong className="text-gray-900">Outbound (Facebook Ads Library / TikTok):</strong> Message fanpages running ads but failing to reply to comments in time.</li>
+              <li><strong className="text-gray-900">Agency Partnership:</strong> Partner with small Ads agencies → they refer Markee to clients → share commission %.</li>
+              <li><strong className="text-gray-900">Inbound (Whole team seeding):</strong> Everyone posts 1-2 times/week sharing real stories about client results. Case studies are the highest quality leads.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">🤝 Commission for the whole team</h4>
+            <p className="text-gray-700 text-[0.95rem]">Anyone (intern, dev, designer...) who introduces a client that signs a contract → receives a commission.</p>
+          </div>
+        </div>
       )
     },
     {
       title: tx("Cỗ máy tiến hóa nội bộ", "Internal Evolution Engine"),
       image: "/8.3.png",
       Icon: Settings,
-      popupContent: (
+      popupContentVi: (
         <div className="space-y-6">
           <div>
             <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">⚙️ Vũ khí bí mật của Markee</h4>
@@ -115,6 +162,31 @@ export default function InsideMarkeePhaseOneDetailSection() {
           <div>
             <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">💡 Tại sao không build SaaS ngay từ đầu?</h4>
             <p className="text-gray-700 text-[0.95rem]">Build SaaS ngay mất 6-12 tháng mà chưa chắc đúng nhu cầu. Làm service trước → có doanh thu ngay tuần đầu → học được client thật sự cần gì. Client đang trả tiền để chúng ta R&D hệ thống.</p>
+          </div>
+        </div>
+      ),
+      popupContentEn: (
+        <div className="space-y-6">
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">⚙️ Markee's Secret Weapon</h4>
+            <p className="text-gray-800 text-[0.95rem] mb-2">We are an agency with a dev team continuously automating our own work.</p>
+            <ul className="space-y-2 text-gray-700 text-[0.9rem] bg-gray-50 rounded-xl p-4 border border-gray-100">
+              <li><strong>Phase 1:</strong> 50–70% Human / 30–50% AI</li>
+              <li><strong>Phase 2:</strong> 30–50% Human / 50–70% AI</li>
+              <li><strong>Final:</strong> &lt;10% Human / 90%+ Fully Automated</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">👥 Two-tier Dev Team</h4>
+            <ul className="space-y-2 text-gray-800 text-[0.95rem] ml-4 list-disc marker:text-[#ff4d5f]">
+              <li><strong className="text-gray-900">Senior dev:</strong> Works for real clients. Builds automation, chatbots... Accumulates real modules from production.</li>
+              <li><strong className="text-gray-900">Junior dev:</strong> Takes modules back from seniors, reuses, integrates into internal MarkeeAI platform.</li>
+            </ul>
+            <p className="text-[#e11d48] font-medium text-[0.95rem] mt-3 italic">"Loop: Senior builds module → Junior packages template → Onboard new clients blazingly fast."</p>
+          </div>
+          <div>
+            <h4 className="font-bold text-[#ff4d5f] text-lg mb-2">💡 Why not build SaaS from day one?</h4>
+            <p className="text-gray-700 text-[0.95rem]">Building SaaS immediately takes 6-12 months without certainty of demand. Doing service first → revenue in week one → learn what clients truly need. Clients are paying us to R&D the system.</p>
           </div>
         </div>
       )
@@ -276,7 +348,7 @@ export default function InsideMarkeePhaseOneDetailSection() {
                   {selectedTopic.title}
                 </h3>
                 
-                {selectedTopic.popupContent}
+                {isEn ? selectedTopic.popupContentEn : selectedTopic.popupContentVi}
               </div>
             </motion.div>
           </div>
