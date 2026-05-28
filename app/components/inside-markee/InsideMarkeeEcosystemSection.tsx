@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -50,7 +50,7 @@ export default function InsideMarkeeEcosystemSection() {
       titleClass: "text-[#9f1239]",
       domainClass: "text-[#be123c]/85",
       textClass: "text-[#4c1d2f]",
-      positionClass: "bottom-4 -left-3 sm:-left-6 lg:-left-16",
+      positionClass: "bottom-2 left-2 sm:bottom-4 sm:-left-6 lg:-left-16",
       popupContentVi: (
         <div className="space-y-3">
           <div><p className="font-semibold text-gray-900">🎯 Khách hàng</p><p className="text-gray-700 mt-1 text-[0.95rem]">Chủ homestay, khách sạn, tour du lịch, shop online. Ưu tiên mảng hospitality nhờ showcase GoDanang.</p></div>
@@ -79,7 +79,7 @@ export default function InsideMarkeeEcosystemSection() {
       titleClass: "text-[#b45309]",
       domainClass: "text-[#c26610]/85",
       textClass: "text-[#5f3a0b]",
-      positionClass: "bottom-4 -right-3 sm:-right-6 lg:-right-16",
+      positionClass: "bottom-2 right-2 sm:bottom-4 sm:-right-6 lg:-right-16",
       popupContentVi: (
         <div className="space-y-3">
           <div><p className="font-semibold text-gray-900">🏖️ GoDanang là gì?</p><p className="text-gray-700 mt-1 text-[0.95rem]">Nền tảng đặt phòng và tour Đà Nẵng (B2C). Đây là dự án nội bộ dùng để test công nghệ và học hỏi thị trường thực tế.</p></div>
@@ -108,7 +108,7 @@ export default function InsideMarkeeEcosystemSection() {
       titleClass: "text-[#1d4ed8]",
       domainClass: "text-[#2563eb]/85",
       textClass: "text-[#1e3a8a]",
-      positionClass: "top-4 -left-3 sm:-left-6 lg:-left-16",
+      positionClass: "top-2 left-2 sm:top-4 sm:-left-6 lg:-left-16",
       popupContentVi: (
         <div className="space-y-3">
           <div><p className="font-semibold text-gray-900">🎯 Khách hàng</p><p className="text-gray-700 mt-1 text-[0.95rem]">Giám đốc IT, CTO, CISO của doanh nghiệp lớn (200+ nhân sự) cần bảo mật và hạ tầng mạng nghiêm túc.</p></div>
@@ -137,7 +137,7 @@ export default function InsideMarkeeEcosystemSection() {
       titleClass: "text-[#6d28d9]",
       domainClass: "text-[#7c3aed]/85",
       textClass: "text-[#4c1d95]",
-      positionClass: "top-4 -right-3 sm:-right-6 lg:-right-16",
+      positionClass: "top-2 right-2 sm:top-4 sm:-right-6 lg:-right-16",
       popupContentVi: (
         <div className="space-y-3">
           <div><p className="font-semibold text-gray-900">🎯 Khách hàng</p><p className="text-gray-700 mt-1 text-[0.95rem]">Developer, IT Pro, Security Researcher đam mê công nghệ và muốn nâng cao trình độ.</p></div>
@@ -261,6 +261,29 @@ export default function InsideMarkeeEcosystemSection() {
                 />
               </div>
 
+              <div className="mt-3 grid grid-cols-2 gap-2.5 sm:hidden">
+                {houses.map((house) => {
+                  const Icon = house.Icon;
+                  return (
+                    <article
+                      key={`mobile-${house.title}`}
+                      onClick={() => setSelectedHouse(house)}
+                      className={`cursor-pointer rounded-[14px] border ${house.borderClass} bg-gradient-to-br ${house.toneClass} p-2.5 shadow-[0_10px_20px_-10px_rgba(0,0,0,0.1)]`}
+                    >
+                      <p className={`inline-flex items-center gap-1 text-[0.88rem] font-extrabold ${house.titleClass}`}>
+                        <Icon className="h-4 w-4" />
+                        {house.title}
+                      </p>
+                      <p className={`mt-0.5 text-[0.58rem] font-bold tracking-widest uppercase ${house.domainClass}`}>{house.domain}</p>
+                      <p className={`mt-1.5 text-[0.76rem] leading-snug font-medium ${house.textClass}`}>{tx("Vai trò:", "Role:")} {tx(house.roleVi, house.roleEn)}</p>
+                      <p className={`mt-2 inline-flex items-center gap-1 text-[0.72rem] font-bold ${house.titleClass}`}>
+                        {tx("Xem chi tiết", "View details")} <ChevronRight className="h-3.5 w-3.5" />
+                      </p>
+                    </article>
+                  );
+                })}
+              </div>
+
               {/* Overlaying Houses */}
               {houses.map((house, index) => {
                 const Icon = house.Icon;
@@ -272,7 +295,7 @@ export default function InsideMarkeeEcosystemSection() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
                     viewport={{ once: true, amount: 0.3 }}
-                    className={`absolute ${house.positionClass} flex flex-col justify-between overflow-hidden rounded-[16px] border-[1.5px] ${house.borderClass} bg-gradient-to-br ${house.toneClass} p-3 sm:p-3.5 transition-all duration-300 w-[46%] max-w-[210px] backdrop-blur-xl bg-opacity-100 z-20 cursor-pointer ${isHovered ? "shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] scale-[1.03]" : "shadow-[0_10px_20px_-10px_rgba(0,0,0,0.1)]"}`}
+                    className={`absolute hidden sm:flex ${house.positionClass} flex-col justify-between overflow-hidden rounded-[16px] border-[1.5px] ${house.borderClass} bg-gradient-to-br ${house.toneClass} p-3 sm:p-3.5 transition-all duration-300 w-[46%] max-w-[210px] backdrop-blur-xl bg-opacity-100 z-20 cursor-pointer ${isHovered ? "shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] scale-[1.03]" : "shadow-[0_10px_20px_-10px_rgba(0,0,0,0.1)]"}`}
                     onClick={() => setSelectedHouse(house)}
                     onMouseEnter={() => setHoveredHouse(house.title)}
                     onMouseLeave={() => setHoveredHouse(null)}
@@ -299,7 +322,7 @@ export default function InsideMarkeeEcosystemSection() {
 
       <AnimatePresence>
         {selectedHouse && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 px-4 sm:px-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -311,7 +334,7 @@ export default function InsideMarkeeEcosystemSection() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="relative w-full max-w-2xl overflow-hidden rounded-3xl bg-white p-6 sm:p-8 shadow-2xl z-10 max-h-[90vh] overflow-y-auto"
+              className="relative z-10 w-full max-w-[94vw] sm:max-w-2xl max-h-[86vh] overflow-y-auto overflow-hidden rounded-2xl sm:rounded-3xl bg-white p-4 sm:p-8 shadow-2xl"
             >
               <button
                 onClick={() => setSelectedHouse(null)}
@@ -339,3 +362,5 @@ export default function InsideMarkeeEcosystemSection() {
     </section>
   );
 }
+
+

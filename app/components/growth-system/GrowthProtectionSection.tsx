@@ -138,7 +138,7 @@ export default function GrowthProtectionSection() {
 
       <AnimatePresence>
         {activePopup && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -150,7 +150,7 @@ export default function GrowthProtectionSection() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="relative w-full max-w-[600px] rounded-[24px] bg-[#1a1423] border border-white/10 shadow-2xl z-10 overflow-hidden text-white h-auto"
+              className="relative z-10 w-full max-w-[94vw] sm:max-w-[600px] max-h-[86vh] sm:max-h-[90vh] overflow-y-auto rounded-[20px] sm:rounded-[24px] bg-[#1a1423] border border-white/10 shadow-2xl text-white h-auto"
             >
               <button
                 onClick={() => setActivePopup(null)}
@@ -159,7 +159,7 @@ export default function GrowthProtectionSection() {
                 <X className="h-5 w-5 text-white/60" />
               </button>
 
-              <div className="p-6 sm:p-8">
+              <div className="p-4 sm:p-8">
                  {activePopup === "delivery" && (
                     <div>
                        <h3 className="text-xl font-bold flex items-center gap-2 text-blue-400 mb-2">

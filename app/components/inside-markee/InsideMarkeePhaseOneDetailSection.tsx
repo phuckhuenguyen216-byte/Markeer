@@ -319,7 +319,7 @@ export default function InsideMarkeePhaseOneDetailSection() {
       {/* POPUP MODAL */}
       <AnimatePresence>
         {selectedTopic && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 px-4 sm:px-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -331,7 +331,7 @@ export default function InsideMarkeePhaseOneDetailSection() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="relative w-full max-w-2xl overflow-hidden rounded-3xl bg-white border border-gray-100 p-6 sm:p-8 shadow-2xl z-10 max-h-[90vh] overflow-y-auto"
+              className="relative z-10 w-full max-w-[94vw] sm:max-w-2xl max-h-[86vh] overflow-y-auto overflow-hidden rounded-2xl sm:rounded-3xl bg-white border border-gray-100 p-4 sm:p-8 shadow-2xl"
             >
               <button
                 onClick={() => setSelectedTopic(null)}

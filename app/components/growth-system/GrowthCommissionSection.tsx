@@ -175,7 +175,7 @@ export default function GrowthCommissionSection() {
 
       <AnimatePresence>
         {isPopupOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 px-4 sm:px-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -187,7 +187,7 @@ export default function GrowthCommissionSection() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="relative w-full max-w-[800px] rounded-[28px] bg-white border border-[#ffe0e8] shadow-2xl z-10 max-h-[90vh] sm:h-[700px] flex flex-col overflow-hidden"
+              className="relative z-10 w-full max-w-[94vw] sm:max-w-[800px] rounded-[22px] sm:rounded-[28px] bg-white border border-[#ffe0e8] shadow-2xl max-h-[86vh] sm:max-h-[90vh] flex flex-col overflow-hidden"
             >
               <button
                 onClick={() => setIsPopupOpen(false)}
@@ -196,10 +196,10 @@ export default function GrowthCommissionSection() {
                 <X className="h-5 w-5 text-gray-500" />
               </button>
 
-              <div className="px-6 pt-6 pb-0 sm:px-10 sm:pt-10 border-b border-gray-100 shrink-0">
-                <div className="flex gap-4">
+              <div className="px-6 pt-6 pb-0 pr-14 sm:px-10 sm:pt-10 sm:pr-16 border-b border-gray-100 shrink-0">
+                <div className="flex gap-2 sm:gap-4">
                   <button
-                    className={`pb-3 px-2 font-bold text-[1.05rem] transition-colors relative ${activeTab === "nhom1" ? "text-[#ff4d5f]" : "text-gray-500 hover:text-gray-800"}`}
+                    className={`pb-3 px-2 font-bold text-[0.95rem] sm:text-[1.05rem] whitespace-nowrap transition-colors relative ${activeTab === "nhom1" ? "text-[#ff4d5f]" : "text-gray-500 hover:text-gray-800"}`}
                     onClick={() => setActiveTab("nhom1")}
                   >
                     {tx("Nhóm 1 — Hoa hồng", "Group 1 — Commission")}
@@ -208,7 +208,7 @@ export default function GrowthCommissionSection() {
                     )}
                   </button>
                   <button
-                    className={`pb-3 px-2 font-bold text-[1.05rem] transition-colors relative ${activeTab === "nhom2" ? "text-[#427eff]" : "text-gray-500 hover:text-gray-800"}`}
+                    className={`pb-3 px-2 font-bold text-[0.95rem] sm:text-[1.05rem] whitespace-nowrap transition-colors relative ${activeTab === "nhom2" ? "text-[#427eff]" : "text-gray-500 hover:text-gray-800"}`}
                     onClick={() => setActiveTab("nhom2")}
                   >
                     {tx("Nhóm 2 — Thưởng KPI", "Group 2 — KPI Bonus")}
@@ -219,7 +219,7 @@ export default function GrowthCommissionSection() {
                 </div>
               </div>
 
-              <div className="text-[#0b1020] p-6 sm:p-10 flex-1 overflow-y-auto">
+              <div className="text-[#0b1020] p-4 sm:p-8 lg:p-10 flex-1 overflow-y-auto">
                 {activeTab === "nhom1" && (
                   <motion.div
                     initial={{ opacity: 0, x: -10 }}
@@ -333,40 +333,40 @@ export default function GrowthCommissionSection() {
                       </div>
                     </div>
 
-                    <div className="mt-5 overflow-x-auto rounded-xl border border-gray-200">
-                      <table className="w-full text-sm text-left border-collapse min-w-[500px]">
+                    <div className="mt-5 overflow-hidden rounded-xl border border-gray-200">
+                      <table className="w-full table-fixed text-[0.78rem] sm:text-sm text-left border-collapse">
                         <thead>
                           <tr className="bg-gray-100 text-gray-800">
-                            <th className="p-3 font-semibold whitespace-nowrap">Role</th>
-                            <th className="p-3 font-semibold whitespace-nowrap">{tx("KPI Seeding/tháng", "KPI Seeding/month")}</th>
-                            <th className="p-3 font-semibold whitespace-nowrap">{tx("KPI Lead/tháng", "KPI Lead/month")}</th>
-                            <th className="p-3 font-semibold whitespace-nowrap text-right">{tx("Bonus target", "Target Bonus")}</th>
+                            <th className="w-[30%] p-2.5 sm:p-3 font-semibold">Role</th>
+                            <th className="w-[24%] p-2.5 sm:p-3 font-semibold">{tx("KPI Seeding/tháng", "KPI Seeding/month")}</th>
+                            <th className="w-[24%] p-2.5 sm:p-3 font-semibold">{tx("KPI Lead/tháng", "KPI Lead/month")}</th>
+                            <th className="w-[22%] p-2.5 sm:p-3 font-semibold text-right">{tx("Bonus target", "Target Bonus")}</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 bg-white">
                           <tr className="hover:bg-gray-50">
-                            <td className="p-3">📣 Marketing/SDR</td>
-                            <td className="p-3 text-gray-600">{tx("8 bài chất lượng", "8 quality posts")}</td>
-                            <td className="p-3 text-gray-600">{tx("3 qualified leads", "3 qualified leads")}</td>
-                            <td className="p-3 font-bold text-[#427eff] text-right">200K/KPI</td>
+                            <td className="p-2.5 sm:p-3 break-words">📣 Marketing/SDR</td>
+                            <td className="p-2.5 sm:p-3 break-words text-gray-600">{tx("8 bài chất lượng", "8 quality posts")}</td>
+                            <td className="p-2.5 sm:p-3 break-words text-gray-600">{tx("3 qualified leads", "3 qualified leads")}</td>
+                            <td className="p-2.5 sm:p-3 font-bold text-[#427eff] text-right">200K/KPI</td>
                           </tr>
                           <tr className="hover:bg-gray-50">
-                            <td className="p-3">💻 Dev/Tech</td>
-                            <td className="p-3 text-gray-600">{tx("3 bài chất lượng", "3 quality posts")}</td>
-                            <td className="p-3 text-gray-600">{tx("2 qualified leads", "2 qualified leads")}</td>
-                            <td className="p-3 font-bold text-[#427eff] text-right">150K/KPI</td>
+                            <td className="p-2.5 sm:p-3 break-words">💻 Dev/Tech</td>
+                            <td className="p-2.5 sm:p-3 break-words text-gray-600">{tx("3 bài chất lượng", "3 quality posts")}</td>
+                            <td className="p-2.5 sm:p-3 break-words text-gray-600">{tx("2 qualified leads", "2 qualified leads")}</td>
+                            <td className="p-2.5 sm:p-3 font-bold text-[#427eff] text-right">150K/KPI</td>
                           </tr>
                           <tr className="hover:bg-gray-50">
-                            <td className="p-3">⚙️ Ops/Finance/HR</td>
-                            <td className="p-3 text-gray-600">{tx("2 bài chất lượng", "2 quality posts")}</td>
-                            <td className="p-3 text-gray-600">{tx("1 qualified lead", "1 qualified lead")}</td>
-                            <td className="p-3 font-bold text-[#427eff] text-right">100K/KPI</td>
+                            <td className="p-2.5 sm:p-3 break-words">⚙️ Ops/Finance/HR</td>
+                            <td className="p-2.5 sm:p-3 break-words text-gray-600">{tx("2 bài chất lượng", "2 quality posts")}</td>
+                            <td className="p-2.5 sm:p-3 break-words text-gray-600">{tx("1 qualified lead", "1 qualified lead")}</td>
+                            <td className="p-2.5 sm:p-3 font-bold text-[#427eff] text-right">100K/KPI</td>
                           </tr>
                           <tr className="hover:bg-gray-50">
-                            <td className="p-3">🎓 Intern</td>
-                            <td className="p-3 text-gray-600">{tx("3 bài chất lượng", "3 quality posts")}</td>
-                            <td className="p-3 text-gray-600">{tx("1 qualified lead", "1 qualified lead")}</td>
-                            <td className="p-3 font-bold text-[#427eff] text-right">100K/KPI</td>
+                            <td className="p-2.5 sm:p-3 break-words">🎓 Intern</td>
+                            <td className="p-2.5 sm:p-3 break-words text-gray-600">{tx("3 bài chất lượng", "3 quality posts")}</td>
+                            <td className="p-2.5 sm:p-3 break-words text-gray-600">{tx("1 qualified lead", "1 qualified lead")}</td>
+                            <td className="p-2.5 sm:p-3 font-bold text-[#427eff] text-right">100K/KPI</td>
                           </tr>
                         </tbody>
                       </table>

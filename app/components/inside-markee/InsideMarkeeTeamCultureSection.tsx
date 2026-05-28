@@ -150,7 +150,8 @@ export default function InsideMarkeeTeamCultureSection() {
                 key={item.id}
                 {...fadeUp(0.15 + index * 0.05)}
                 whileHover={{ y: -4 }}
-                className="rounded-[20px] border border-emerald-500/20 bg-white/[0.04] p-4 shadow-[0_18px_44px_-30px_rgba(0,0,0,0.6)] backdrop-blur-[2px] sm:p-5"
+                onClick={() => setSelectedItem(item)}
+                className="cursor-pointer rounded-[20px] border border-emerald-500/20 bg-white/[0.04] p-4 shadow-[0_18px_44px_-30px_rgba(0,0,0,0.6)] backdrop-blur-[2px] sm:p-5"
               >
                 <p className="text-[1rem] leading-[1.3] font-bold tracking-[-0.01em] text-white">{tx(item.titleVi, item.titleEn)}</p>
                 <p className="mt-1.5 text-[0.85rem] leading-5 text-emerald-100/80">{tx(item.keypointVi, item.keypointEn)}</p>
@@ -177,7 +178,8 @@ export default function InsideMarkeeTeamCultureSection() {
                 key={item.id}
                 {...fadeUp(0.15 + index * 0.05)}
                 whileHover={{ y: -4 }}
-                className="rounded-[20px] border border-red-500/20 bg-white/[0.04] p-4 shadow-[0_18px_44px_-30px_rgba(0,0,0,0.6)] backdrop-blur-[2px] sm:p-5"
+                onClick={() => setSelectedItem(item)}
+                className="cursor-pointer rounded-[20px] border border-red-500/20 bg-white/[0.04] p-4 shadow-[0_18px_44px_-30px_rgba(0,0,0,0.6)] backdrop-blur-[2px] sm:p-5"
               >
                 <p className="text-[1rem] leading-[1.3] font-bold tracking-[-0.01em] text-white">{tx(item.titleVi, item.titleEn)}</p>
                 <p className="mt-1.5 text-[0.85rem] leading-5 text-red-100/80">{tx(item.keypointVi, item.keypointEn)}</p>
@@ -216,7 +218,7 @@ export default function InsideMarkeeTeamCultureSection() {
 
       <AnimatePresence>
         {selectedItem && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-4 sm:px-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -228,7 +230,7 @@ export default function InsideMarkeeTeamCultureSection() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="relative z-10 w-full max-w-lg overflow-hidden rounded-3xl border border-[#ffb8c9]/30 bg-[#2a1722] p-6 shadow-2xl sm:p-8"
+              className="relative z-10 w-full max-w-[94vw] sm:max-w-lg max-h-[86vh] overflow-y-auto overflow-hidden rounded-2xl sm:rounded-3xl border border-[#ffb8c9]/30 bg-[#2a1722] p-4 shadow-2xl sm:p-8"
             >
               <button
                 type="button"
