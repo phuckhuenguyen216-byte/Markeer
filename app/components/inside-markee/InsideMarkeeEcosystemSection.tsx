@@ -32,7 +32,7 @@ const fadeUp = (delay = 0) => ({
 });
 
 export default function InsideMarkeeEcosystemSection() {
-  const { tx } = useInsideMarkeeLocale();
+  const { tx, isEn } = useInsideMarkeeLocale();
   const [selectedHouse, setSelectedHouse] = useState<HouseCard | null>(null);
   const [hoveredHouse, setHoveredHouse] = useState<string | null>(null);
 
@@ -314,7 +314,7 @@ export default function InsideMarkeeEcosystemSection() {
                   <span className={`text-sm font-semibold ${selectedHouse.textClass}`}>{tx("Vai trò:", "Role:")} {tx(selectedHouse.roleVi, selectedHouse.roleEn)}</span>
                 </div>
                 
-                {tx(selectedHouse.popupContentVi, selectedHouse.popupContentEn)}
+                {isEn ? selectedHouse.popupContentEn : selectedHouse.popupContentVi}
               </div>
             </motion.div>
           </div>

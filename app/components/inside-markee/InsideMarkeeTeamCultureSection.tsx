@@ -23,7 +23,7 @@ type CultureItem = {
 };
 
 export default function InsideMarkeeTeamCultureSection() {
-  const { tx } = useInsideMarkeeLocale();
+  const { tx, isEn } = useInsideMarkeeLocale();
   const [selectedItem, setSelectedItem] = useState<CultureItem | null>(null);
 
   const dos: CultureItem[] = [
@@ -123,7 +123,19 @@ export default function InsideMarkeeTeamCultureSection() {
 
       <div className="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
         <motion.p {...fadeUp(0)} className="mk-eyebrow text-center text-white/70 uppercase">
-          {tx("07 · Văn hóa team", "07 · Team culture")}
+          {isEn ? (
+              <>
+                Every client is not just revenue - every client is a lesson to build a better product.
+                <br />
+                <span className="text-[#ffb8c9]">Do it well, learn fast, build right.</span>
+              </>
+            ) : (
+              <>
+                M?i client kh?ng ch? l? doanh thu - m?i client l? m?t b?i h?c ?? m?nh build s?n ph?m t?t h?n.
+                <br />
+                <span className="text-[#ffb8c9]">L?m t?t, h?c nhanh, build ??ng.</span>
+              </>
+            )}
         </motion.p>
 
         <motion.div {...fadeUp(0.05)} className="mx-auto mt-6 max-w-[880px] text-center">
@@ -210,14 +222,17 @@ export default function InsideMarkeeTeamCultureSection() {
         <motion.div {...fadeUp(0.4)} className="mt-14 rounded-3xl border border-[#ffb8c9]/20 bg-[#3a1b2a]/40 px-6 py-8 text-center backdrop-blur-sm sm:px-10">
           <p className="text-xs font-semibold tracking-[0.15em] text-[#ffb8c9] uppercase mb-4">{tx("Câu chốt quan trọng nhất", "The most important takeaway")}</p>
           <p className="mx-auto max-w-[1020px] text-[1.1rem] font-bold leading-8 text-white sm:text-[1.25rem] sm:leading-9">
-            {tx(
+            {isEn ? (
               <>
-                "Mỗi client không chỉ là doanh thu — mỗi client là một bài học để mình build sản phẩm tốt hơn.<br />
-                <span className="text-[#ffb8c9]">Làm tốt, học nhanh, build đúng.</span>"
-              </>,
+                Every client is not just revenue - every client is a lesson to build a better product.
+                <br />
+                <span className="text-[#ffb8c9]">Do it well, learn fast, build right.</span>
+              </>
+            ) : (
               <>
-                "Every client is not just revenue — every client is a lesson to build a better product.<br />
-                <span className="text-[#ffb8c9]">Do it well, learn fast, build right.</span>"
+                Mỗi client không chỉ là doanh thu - mỗi client là một bài học để mình build sản phẩm tốt hơn.
+                <br />
+                <span className="text-[#ffb8c9]">Làm tốt, học nhanh, build đúng.</span>
               </>
             )}
           </p>
