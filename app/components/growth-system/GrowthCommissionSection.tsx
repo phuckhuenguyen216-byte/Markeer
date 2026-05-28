@@ -237,22 +237,22 @@ export default function GrowthCommissionSection() {
                       <div className="bg-[#fff0f4] p-3 rounded-xl border border-[#ffccd5]">
                         <p className="text-lg font-bold text-[#ff4d5f]">35%</p>
                         <p className="text-xs font-bold text-gray-900 mt-1">Lead Owner</p>
-                        <p className="text-[0.65rem] text-gray-600 mt-0.5 leading-tight">Người tìm ra / giới thiệu KH</p>
+                        <p className="text-[0.65rem] text-gray-600 mt-0.5 leading-tight">{tx("Người tìm ra / giới thiệu KH", "Finder / Client introducer")}</p>
                       </div>
                       <div className="bg-[#fff0f4] p-3 rounded-xl border border-[#ffccd5]">
                         <p className="text-lg font-bold text-[#ff4d5f]">35%</p>
                         <p className="text-xs font-bold text-gray-900 mt-1">Closer</p>
-                        <p className="text-[0.65rem] text-gray-600 mt-0.5 leading-tight">Sales team demo và chốt deal</p>
+                        <p className="text-[0.65rem] text-gray-600 mt-0.5 leading-tight">{tx("Sales team demo và chốt deal", "Sales team demo and close")}</p>
                       </div>
                       <div className="bg-[#fff0f4] p-3 rounded-xl border border-[#ffccd5]">
                         <p className="text-lg font-bold text-[#ff4d5f]">20%</p>
                         <p className="text-xs font-bold text-gray-900 mt-1">Delivery</p>
-                        <p className="text-[0.65rem] text-gray-600 mt-0.5 leading-tight">PM + team triển khai dự án</p>
+                        <p className="text-[0.65rem] text-gray-600 mt-0.5 leading-tight">{tx("PM + team triển khai dự án", "PM + project delivery team")}</p>
                       </div>
                       <div className="bg-[#fff0f4] p-3 rounded-xl border border-[#ffccd5]">
                         <p className="text-lg font-bold text-[#ff4d5f]">10%</p>
                         <p className="text-xs font-bold text-gray-900 mt-1">Growth Sup</p>
-                        <p className="text-[0.65rem] text-gray-600 mt-0.5 leading-tight">Content/support đóng góp</p>
+                        <p className="text-[0.65rem] text-gray-600 mt-0.5 leading-tight">{tx("Content/support đóng góp", "Content/support contribution")}</p>
                       </div>
                     </div>
 
@@ -261,7 +261,7 @@ export default function GrowthCommissionSection() {
                         {tx("Ví dụ thực tế — Deal 20 triệu/tháng, pool 20%:", "Example — Deal 20M/month, pool 20%:")}
                       </p>
                       <p className="text-sm text-gray-700 mt-1">
-                        Pool = 4 triệu → <span className="font-semibold text-[#ff4d5f]">Lead Owner: 1.4M</span> · <span className="font-semibold text-[#ff4d5f]">Closer: 1.4M</span> · Delivery: 800K · Growth Sup: 400K
+                        {tx("Pool = 4 triệu →", "Pool = 4 million →")} <span className="font-semibold text-[#ff4d5f]">Lead Owner: 1.4M</span> · <span className="font-semibold text-[#ff4d5f]">Closer: 1.4M</span> · Delivery: 800K · Growth Sup: 400K
                       </p>
                     </div>
 
@@ -272,31 +272,31 @@ export default function GrowthCommissionSection() {
                       <li className="flex gap-2">
                         <span className="shrink-0 mt-0.5 text-base">🥇</span>
                         <div>
-                          <strong className="text-gray-900">Giới thiệu người quen:</strong> Bạn biết ai đang cần marketing, web, chatbot? → Giới thiệu với Sales → Sales demo và close → Bạn nhận 35% pool. Không cần gặp khách, không cần biết sales.
+                          <strong className="text-gray-900">{tx("Giới thiệu người quen:", "Refer acquaintances:")}</strong> {tx("Bạn biết ai đang cần marketing, web, chatbot? → Giới thiệu với Sales → Sales demo và close → Bạn nhận 35% pool. Không cần gặp khách, không cần biết sales.", "Know anyone who needs marketing, web, chatbots? → Intro to Sales → Sales demo and close → You get 35% of pool. No need to meet clients, no sales skills needed.")}
                         </div>
                       </li>
                       <li className="flex gap-2">
                         <span className="shrink-0 mt-0.5 text-base">🥈</span>
                         <div>
-                          <strong className="text-gray-900">Tìm ra lead chất lượng:</strong> Bạn tìm được prospect (Tên + SĐT + Pain cụ thể) → Submit vào CRM → Sales close → Bạn nhận 5% deal value.
+                          <strong className="text-gray-900">{tx("Tìm ra lead chất lượng:", "Find quality leads:")}</strong> {tx("Bạn tìm được prospect (Tên + SĐT + Pain cụ thể) → Submit vào CRM → Sales close → Bạn nhận 5% deal value.", "You find a prospect (Name + Phone + Specific pain) → Submit to CRM → Sales close → You receive 5% of deal value.")}
                         </div>
                       </li>
                       <li className="flex gap-2">
                         <span className="shrink-0 mt-0.5 text-base">🥉</span>
                         <div>
-                          <strong className="text-gray-900">Seeding dẫn về lead:</strong> Bạn post content → Người lạ inbox hỏi → Trở thành client → Bạn nhận Growth Support 10% + KPI Bonus Nhóm 2. <span className="text-[#ff4d5f] font-bold">Double reward!</span>
+                          <strong className="text-gray-900">{tx("Seeding dẫn về lead:", "Seeding leading to leads:")}</strong> {tx("Bạn post content → Người lạ inbox hỏi → Trở thành client → Bạn nhận Growth Support 10% + KPI Bonus Nhóm 2.", "You post content → Stranger messages → Becomes client → You get Growth Support 10% + Group 2 KPI Bonus.")} <span className="text-[#ff4d5f] font-bold">Double reward!</span>
                         </div>
                       </li>
                     </ul>
 
                     <div className="mt-5 bg-amber-50 rounded-xl p-4 border border-amber-200">
                       <p className="text-sm font-bold text-amber-900 flex items-center gap-1.5">
-                        ⚠️ Commission Unlock — 2 đợt:
+                        ⚠️ {tx("Commission Unlock — 2 đợt:", "Commission Unlock — 2 phases:")}
                       </p>
                       <ul className="mt-2 text-[0.85rem] text-amber-800 list-disc list-inside space-y-1.5 ml-1 marker:text-amber-400">
-                        <li>70% hoa hồng trả sau tháng 2 (client đã paid, không refund, active &gt;14 ngày)</li>
-                        <li>30% còn lại trả sau tháng 3 (client vẫn active)</li>
-                        <li>Client cancel trước 30 ngày → hold toàn bộ. Cancel ngày 30–60 → thu hồi 30% đã trả.</li>
+                        <li>{tx("70% hoa hồng trả sau tháng 2 (client đã paid, không refund, active >14 ngày)", "70% commission paid after month 2 (client paid, no refund, active >14 days)")}</li>
+                        <li>{tx("30% còn lại trả sau tháng 3 (client vẫn active)", "Remaining 30% paid after month 3 (client still active)")}</li>
+                        <li>{tx("Client cancel trước 30 ngày → hold toàn bộ. Cancel ngày 30–60 → thu hồi 30% đã trả.", "Client cancels before 30 days → full hold. Cancels day 30-60 → clawback 30% already paid.")}</li>
                       </ul>
                     </div>
                   </motion.div>
@@ -318,18 +318,18 @@ export default function GrowthCommissionSection() {
                     <div className="mt-4 flex flex-wrap gap-2 sm:gap-4">
                       <div className="flex-1 bg-gray-50 rounded-xl p-3 border border-gray-200 text-center">
                         <p className="text-lg">❌</p>
-                        <p className="font-bold text-gray-900 mt-1">Dưới 60%</p>
-                        <p className="text-[0.7rem] text-gray-500 mt-0.5">0x (Không thưởng)</p>
+                        <p className="font-bold text-gray-900 mt-1">{tx("Dưới 60%", "Below 60%")}</p>
+                        <p className="text-[0.7rem] text-gray-500 mt-0.5">{tx("0x (Không thưởng)", "0x (No bonus)")}</p>
                       </div>
                       <div className="flex-1 bg-green-50 rounded-xl p-3 border border-green-200 text-center">
                         <p className="text-lg">🟢</p>
                         <p className="font-bold text-green-700 mt-1">80–99%</p>
-                        <p className="text-[0.7rem] text-green-600 mt-0.5">1x (Đúng target)</p>
+                        <p className="text-[0.7rem] text-green-600 mt-0.5">{tx("1x (Đúng target)", "1x (On target)")}</p>
                       </div>
                       <div className="flex-1 bg-orange-50 rounded-xl p-3 border border-orange-200 text-center">
                         <p className="text-lg">🔥</p>
                         <p className="font-bold text-orange-600 mt-1">≥120%</p>
-                        <p className="text-[0.7rem] text-orange-500 mt-0.5">2x (Top LB)</p>
+                        <p className="text-[0.7rem] text-orange-500 mt-0.5">{tx("2x (Top LB)", "2x (Top LB)")}</p>
                       </div>
                     </div>
 
@@ -338,34 +338,34 @@ export default function GrowthCommissionSection() {
                         <thead>
                           <tr className="bg-gray-100 text-gray-800">
                             <th className="p-3 font-semibold whitespace-nowrap">Role</th>
-                            <th className="p-3 font-semibold whitespace-nowrap">KPI Seeding/tháng</th>
-                            <th className="p-3 font-semibold whitespace-nowrap">KPI Lead/tháng</th>
-                            <th className="p-3 font-semibold whitespace-nowrap text-right">Bonus target</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">{tx("KPI Seeding/tháng", "KPI Seeding/month")}</th>
+                            <th className="p-3 font-semibold whitespace-nowrap">{tx("KPI Lead/tháng", "KPI Lead/month")}</th>
+                            <th className="p-3 font-semibold whitespace-nowrap text-right">{tx("Bonus target", "Target Bonus")}</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 bg-white">
                           <tr className="hover:bg-gray-50">
                             <td className="p-3">📣 Marketing/SDR</td>
-                            <td className="p-3 text-gray-600">8 bài chất lượng</td>
-                            <td className="p-3 text-gray-600">3 qualified leads</td>
+                            <td className="p-3 text-gray-600">{tx("8 bài chất lượng", "8 quality posts")}</td>
+                            <td className="p-3 text-gray-600">{tx("3 qualified leads", "3 qualified leads")}</td>
                             <td className="p-3 font-bold text-[#427eff] text-right">200K/KPI</td>
                           </tr>
                           <tr className="hover:bg-gray-50">
                             <td className="p-3">💻 Dev/Tech</td>
-                            <td className="p-3 text-gray-600">3 bài chất lượng</td>
-                            <td className="p-3 text-gray-600">2 qualified leads</td>
+                            <td className="p-3 text-gray-600">{tx("3 bài chất lượng", "3 quality posts")}</td>
+                            <td className="p-3 text-gray-600">{tx("2 qualified leads", "2 qualified leads")}</td>
                             <td className="p-3 font-bold text-[#427eff] text-right">150K/KPI</td>
                           </tr>
                           <tr className="hover:bg-gray-50">
                             <td className="p-3">⚙️ Ops/Finance/HR</td>
-                            <td className="p-3 text-gray-600">2 bài chất lượng</td>
-                            <td className="p-3 text-gray-600">1 qualified lead</td>
+                            <td className="p-3 text-gray-600">{tx("2 bài chất lượng", "2 quality posts")}</td>
+                            <td className="p-3 text-gray-600">{tx("1 qualified lead", "1 qualified lead")}</td>
                             <td className="p-3 font-bold text-[#427eff] text-right">100K/KPI</td>
                           </tr>
                           <tr className="hover:bg-gray-50">
                             <td className="p-3">🎓 Intern</td>
-                            <td className="p-3 text-gray-600">3 bài chất lượng</td>
-                            <td className="p-3 text-gray-600">1 qualified lead</td>
+                            <td className="p-3 text-gray-600">{tx("3 bài chất lượng", "3 quality posts")}</td>
+                            <td className="p-3 text-gray-600">{tx("1 qualified lead", "1 qualified lead")}</td>
                             <td className="p-3 font-bold text-[#427eff] text-right">100K/KPI</td>
                           </tr>
                         </tbody>
@@ -375,8 +375,8 @@ export default function GrowthCommissionSection() {
                     <div className="mt-4 bg-blue-50/70 rounded-xl p-4 border border-blue-100">
                       <p className="text-sm font-semibold text-blue-900 flex items-start gap-2">
                         <span className="text-lg leading-none shrink-0">📏</span>
-                        <span>"Bài seeding chất lượng" = đạt ≥15 reactions HOẶC Sales Lead approve.<br/>
-                        <span className="font-normal text-blue-800 mt-1 block">Không phải post về Markee — post về pain của khách, tips thực tế, case study. Thật là đủ. Không cần fancy.</span></span>
+                        <span>{tx("\"Bài seeding chất lượng\" = đạt ≥15 reactions HOẶC Sales Lead approve.", "\"Quality seeding post\" = reaches ≥15 reactions OR Sales Lead approves.")}<br/>
+                        <span className="font-normal text-blue-800 mt-1 block">{tx("Không phải post về Markee — post về pain của khách, tips thực tế, case study. Thật là đủ. Không cần fancy.", "Do not post about Markee — post about client pain points, practical tips, case studies. Being authentic is enough. No fancy stuff needed.")}</span></span>
                       </p>
                     </div>
                   </motion.div>

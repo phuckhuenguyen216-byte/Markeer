@@ -5,17 +5,23 @@ import { useTranslation } from "react-i18next";
 export default function LanguageSwitcher() {
   const { i18n } = useTranslation();
 
-  const changeLanguage = (lng: "vi" | "en") => {
-    i18n.changeLanguage(lng);
+  const changeLanguage = async (lng: "vi" | "en") => {
+    await i18n.changeLanguage(lng);
+    try {
+      window.localStorage.setItem("i18nextLng", lng);
+    } catch {
+      // Ignore localStorage write errors in restricted environments.
+    }
   };
 
-  const current = i18n.language === "en" ? "en" : "vi";
+  const currentLanguage = (i18n.resolvedLanguage ?? i18n.language ?? "vi").toLowerCase();
+  const current = currentLanguage.startsWith("en") ? "en" : "vi";
 
   return (
     <div className="flex items-center gap-1">
       <button
         type="button"
-        onClick={() => changeLanguage("vi")}
+        onClick={() => void changeLanguage("vi")}
         className={`w-8 h-8 rounded-full border-2 transition flex items-center justify-center overflow-hidden ${
           current === "vi"
             ? "border-red-500 shadow-md"
@@ -30,7 +36,7 @@ export default function LanguageSwitcher() {
       </button>
       <button
         type="button"
-        onClick={() => changeLanguage("en")}
+        onClick={() => void changeLanguage("en")}
         className={`w-8 h-8 rounded-full border-2 transition flex items-center justify-center overflow-hidden ${
           current === "en"
             ? "border-blue-500 shadow-md"
