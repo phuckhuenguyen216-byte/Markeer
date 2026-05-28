@@ -90,7 +90,7 @@ export default function GrowthLeadFlowSection() {
 
             <div className="flex items-center justify-between">
               <p className="text-xs font-semibold tracking-[0.14em] text-[#7db2ff] uppercase">{tx("Priority stack", "Priority stack")}</p>
-              <span className="text-xs font-semibold text-[#ff4d5f] opacity-0 transition-opacity group-hover:opacity-100 flex items-center gap-1">
+              <span className="flex items-center gap-1 text-xs font-semibold text-[#ff4d5f]">
                 {tx("Xem chi tiết", "View details")} <ArrowRight className="h-3 w-3" />
               </span>
             </div>
@@ -124,7 +124,7 @@ export default function GrowthLeadFlowSection() {
           >
             <div className="flex items-center justify-between">
               <p className="text-xs font-semibold tracking-[0.14em] text-[#ff4d5f] uppercase">{tx("4-step submit flow", "4-step submit flow")}</p>
-              <span className="text-xs font-semibold text-[#ff4d5f] opacity-0 transition-opacity group-hover:opacity-100 flex items-center gap-1">
+              <span className="flex items-center gap-1 text-xs font-semibold text-[#ff4d5f]">
                 {tx("Xem chi tiết", "View details")} <ArrowRight className="h-3 w-3" />
               </span>
             </div>
@@ -159,7 +159,7 @@ export default function GrowthLeadFlowSection() {
             >
               <div className="w-full flex items-center justify-between mb-3">
                 <p className="text-xs font-semibold tracking-[0.14em] text-[#ff4d5f] uppercase">{tx("Bí kíp thực chiến", "Practical Tactics")}</p>
-                <span className="text-xs font-semibold text-[#ff4d5f] opacity-0 transition-opacity group-hover/tags:opacity-100 flex items-center gap-1">
+                <span className="flex items-center gap-1 text-xs font-semibold text-[#ff4d5f]">
                   {tx("Xem", "View")} <ArrowRight className="h-3 w-3" />
                 </span>
               </div>
@@ -177,7 +177,7 @@ export default function GrowthLeadFlowSection() {
 
       <AnimatePresence>
         {isPopupOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 px-4 sm:px-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -189,7 +189,7 @@ export default function GrowthLeadFlowSection() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className={`relative w-full max-w-[800px] rounded-[28px] bg-white border border-[#ffe0e8] shadow-2xl z-10 max-h-[90vh] flex flex-col overflow-hidden ${popupType === "flow" ? "sm:h-[650px]" : "h-auto"}`}
+              className={`relative z-10 w-full max-w-[94vw] sm:max-w-[800px] rounded-[22px] sm:rounded-[28px] bg-white border border-[#ffe0e8] shadow-2xl max-h-[86vh] sm:max-h-[90vh] lg:max-h-none flex flex-col overflow-hidden ${popupType === "flow" ? "h-auto" : "h-auto"}`}
             >
               <button
                 onClick={() => setIsPopupOpen(false)}
@@ -199,7 +199,7 @@ export default function GrowthLeadFlowSection() {
               </button>
 
               {popupType === "flow" && (
-                <div className="px-6 pt-6 pb-0 sm:px-10 sm:pt-10 border-b border-gray-100 shrink-0">
+                <div className="px-4 pt-5 pb-0 pr-12 sm:px-10 sm:pt-10 border-b border-gray-100 shrink-0">
                   <div className="flex gap-4">
                     <button
                       className={`pb-3 px-2 font-bold text-[1.05rem] transition-colors relative whitespace-nowrap ${activeTab === "flow" ? "text-[#ff4d5f]" : "text-gray-500 hover:text-gray-800"}`}
@@ -223,7 +223,7 @@ export default function GrowthLeadFlowSection() {
                 </div>
               )}
 
-              <div className={`text-[#0b1020] p-6 sm:p-10 ${popupType === "flow" ? "flex-1 overflow-y-auto" : "overflow-y-auto"}`}>
+              <div className={`text-[#0b1020] p-4 sm:p-8 lg:p-10 ${popupType === "flow" ? "flex-1 overflow-y-auto lg:overflow-visible" : "overflow-y-auto lg:overflow-visible"}`}>
                 {popupType === "luat" && (
                   <motion.div
                     initial={{ opacity: 0, x: -10 }}

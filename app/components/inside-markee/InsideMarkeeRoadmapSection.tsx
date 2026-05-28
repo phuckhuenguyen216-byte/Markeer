@@ -288,7 +288,7 @@ export default function InsideMarkeeRoadmapSection() {
 
       <AnimatePresence>
         {selectedPhase && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 px-4 sm:px-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -300,7 +300,7 @@ export default function InsideMarkeeRoadmapSection() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="relative w-full max-w-lg overflow-hidden rounded-3xl bg-[#2a1722] border border-[#ffb8c9]/40 p-6 sm:p-8 shadow-2xl z-10 max-h-[90vh] overflow-y-auto"
+              className="relative z-10 w-full max-w-[94vw] sm:max-w-lg max-h-[86vh] overflow-y-auto overflow-hidden rounded-2xl sm:rounded-3xl bg-[#2a1722] border border-[#ffb8c9]/40 p-4 sm:p-8 shadow-2xl"
             >
               <button
                 onClick={() => setSelectedPhase(null)}
@@ -316,7 +316,7 @@ export default function InsideMarkeeRoadmapSection() {
                 
                 <div className="mt-6 space-y-4">
                   {selectedPhase.paragraphsVi.map((paragraph, idx) => (
-                    <p key={`popup-${selectedPhase.phaseVi}-${idx}`} className="text-[0.98rem] leading-7 text-white/90">
+                    <p key={`popup-${selectedPhase.phaseVi}-${idx}`} className="text-[0.92rem] leading-7 sm:text-[0.98rem] text-white/90">
                       {tx(paragraph, selectedPhase.paragraphsEn[Math.min(idx, selectedPhase.paragraphsEn.length - 1)])}
                     </p>
                   ))}
