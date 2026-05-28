@@ -59,7 +59,11 @@ export default function InsideMarkeeEcosystemSection() {
         </div>
       ),
       popupContentEn: (
-        <div className="space-y-4 text-gray-700">Detailed English translation coming soon.</div>
+        <div className="space-y-3">
+          <div><p className="font-semibold text-gray-900">🎯 Target Clients</p><p className="text-gray-700 mt-1 text-[0.95rem]">Homestay owners, hotels, tours, online shops. Priority on hospitality thanks to GoDanang showcase.</p></div>
+          <div><p className="font-semibold text-gray-900">💼 Services (Phase 1)</p><p className="text-gray-700 mt-1 text-[0.95rem]">Outsourced marketing & tech team. Running ads, web, content, automation. Using AI as a weapon to be faster and more efficient.</p></div>
+          <div><p className="font-semibold text-gray-900">🔄 Evolution Model</p><p className="text-gray-700 mt-1 text-[0.95rem]">From 70% human (Phase 1) → 90% AI automated (Phase 3). Every month dev team digitizes 1-2 more processes.</p></div>
+        </div>
       )
     },
     {
@@ -84,7 +88,11 @@ export default function InsideMarkeeEcosystemSection() {
         </div>
       ),
       popupContentEn: (
-        <div className="space-y-4 text-gray-700">Detailed English translation coming soon.</div>
+        <div className="space-y-3">
+          <div><p className="font-semibold text-gray-900">🏖️ What is GoDanang?</p><p className="text-gray-700 mt-1 text-[0.95rem]">Da Nang booking and tour platform (B2C). This is an internal project used to test technology and learn from the real market.</p></div>
+          <div><p className="font-semibold text-gray-900">🎯 Why is it important?</p><p className="text-gray-700 mt-1 text-[0.95rem]">It's a "live showroom". Pitching to B2B clients using real revenue results on GoDanang.net, absolutely no paper slides needed.</p></div>
+          <div><p className="font-semibold text-gray-900">🔄 Data Loop</p><p className="text-gray-700 mt-1 text-[0.95rem]">Serve B2B clients → Get insights to optimize GoDanang B2C → Stronger showcase → Attract more new B2B clients.</p></div>
+        </div>
       )
     },
     {
@@ -109,7 +117,11 @@ export default function InsideMarkeeEcosystemSection() {
         </div>
       ),
       popupContentEn: (
-        <div className="space-y-4 text-gray-700">Detailed English translation coming soon.</div>
+        <div className="space-y-3">
+          <div><p className="font-semibold text-gray-900">🎯 Target Clients</p><p className="text-gray-700 mt-1 text-[0.95rem]">IT Directors, CTOs, CISOs of large enterprises (200+ employees) needing serious security and network infrastructure.</p></div>
+          <div><p className="font-semibold text-gray-900">💼 Solutions</p><p className="text-gray-700 mt-1 text-[0.95rem]">Security services (SOC, Pentest), infrastructure (Fortinet/Cisco) and Managed IT. Deal sizes from 500M to 2 Billion.</p></div>
+          <div><p className="font-semibold text-gray-900">⏳ Strategy</p><p className="text-gray-700 mt-1 text-[0.95rem]">Enterprise deals take 3-9 months to close. Currently focusing on building relationships, using resources from Markee to sustain the ecosystem first.</p></div>
+        </div>
       )
     },
     {
@@ -134,7 +146,11 @@ export default function InsideMarkeeEcosystemSection() {
         </div>
       ),
       popupContentEn: (
-        <div className="space-y-4 text-gray-700">Detailed English translation coming soon.</div>
+        <div className="space-y-3">
+          <div><p className="font-semibold text-gray-900">🎯 Target Clients</p><p className="text-gray-700 mt-1 text-[0.95rem]">Developers, IT Pros, Security Researchers passionate about tech and wanting to level up their skills.</p></div>
+          <div><p className="font-semibold text-gray-900">💼 Ecosystem</p><p className="text-gray-700 mt-1 text-[0.95rem]">Forum/Telegram community, Tech events, Nexus SOC platform and advanced security training.</p></div>
+          <div><p className="font-semibold text-gray-900">🔗 Trust Funnel</p><p className="text-gray-700 mt-1 text-[0.95rem]">Create absolute credibility. Users will know Markee through workshops, impressed IT Directors will contact Cloudgate after events.</p></div>
+        </div>
       )
     },
   ];

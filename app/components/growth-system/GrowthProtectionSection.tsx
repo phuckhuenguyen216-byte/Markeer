@@ -20,7 +20,7 @@ export default function GrowthProtectionSection() {
     {
       id: "delivery" as const,
       icon: Shield,
-      title: "Delivery Health",
+      title: tx("Sức khỏe delivery", "Delivery Health"),
       subtitle: tx("Bảo vệ trước khi collapse", "Protect before collapse"),
       desc: tx("Agency chết không phải vì thiếu lead — chết vì delivery collapse khi nhận quá nhiều client.", "Agencies don't die from lack of leads — they die from delivery collapse when taking too many clients."),
       color: "from-blue-500 to-cyan-400",
@@ -31,7 +31,7 @@ export default function GrowthProtectionSection() {
     {
       id: "retention" as const,
       icon: Activity,
-      title: "Retention Monitoring",
+      title: tx("Theo dõi retention", "Retention Monitoring"),
       subtitle: tx("Theo dõi sớm, hành động nhanh", "Track early, act fast"),
       desc: tx("Mất 1 client ở Phase 1 = mất revenue + mất case study + negative word-of-mouth.", "Losing 1 client in Phase 1 = lost revenue + lost case study + negative word-of-mouth."),
       color: "from-amber-500 to-orange-400",
@@ -163,18 +163,18 @@ export default function GrowthProtectionSection() {
                  {activePopup === "delivery" && (
                     <div>
                        <h3 className="text-xl font-bold flex items-center gap-2 text-blue-400 mb-2">
-                          <Shield className="w-6 h-6" /> Delivery Health
+                          <Shield className="w-6 h-6" /> {tx("Sức khỏe delivery", "Delivery Health")}
                        </h3>
-                       <p className="text-white/60 text-sm mb-6">Bảo vệ trước khi collapse</p>
+                       <p className="text-white/60 text-sm mb-6">{tx("Bảo vệ trước khi collapse", "Protect before collapse")}</p>
                        
                        <div className="bg-white/5 border border-white/10 rounded-xl p-5">
-                          <p className="font-bold text-white mb-2">Rule auto-trigger đơn giản:</p>
+                          <p className="font-bold text-white mb-2">{tx("Rule auto-trigger đơn giản:", "Simple auto-trigger rule:")}</p>
                           <ul className="list-disc pl-5 space-y-2 text-[0.9rem] text-white/80">
-                             <li>Mỗi tuần, PM rate delivery capacity của team: 1 (quá tải) → 5 (còn nhiều bandwidth).</li>
-                             <li>Nếu bất kỳ PM nào rate dưới 3 hai tuần liên tiếp → Growth KPI của team đó tự động pause cho đến khi ổn định.</li>
+                             <li>{tx("Mỗi tuần, PM rate delivery capacity của team: 1 (quá tải) → 5 (còn nhiều bandwidth).", "Every week, PM rates team's delivery capacity: 1 (overloaded) → 5 (high bandwidth).")}</li>
+                             <li>{tx("Nếu bất kỳ PM nào rate dưới 3 hai tuần liên tiếp → Growth KPI của team đó tự động pause cho đến khi ổn định.", "If any PM rates below 3 for two consecutive weeks → The team's Growth KPI is automatically paused until stabilized.")}</li>
                           </ul>
                           <div className="mt-4 p-3 bg-blue-500/20 border border-blue-500/30 rounded-lg text-[0.85rem] text-blue-200">
-                             Không cần CEO quyết định. Không cần họp. Auto-trigger.
+                             {tx("Không cần CEO quyết định. Không cần họp. Auto-trigger.", "No CEO decision needed. No meetings. Auto-trigger.")}
                           </div>
                        </div>
                     </div>
@@ -183,36 +183,36 @@ export default function GrowthProtectionSection() {
                  {activePopup === "retention" && (
                     <div>
                        <h3 className="text-xl font-bold flex items-center gap-2 text-amber-400 mb-2">
-                          <Activity className="w-6 h-6" /> Retention Monitoring
+                          <Activity className="w-6 h-6" /> {tx("Theo dõi retention", "Retention Monitoring")}
                        </h3>
-                       <p className="text-white/60 text-sm mb-6">Theo dõi sớm, chưa cần optimize vội</p>
+                       <p className="text-white/60 text-sm mb-6">{tx("Theo dõi sớm, chưa cần optimize vội", "Track early, no need to optimize yet")}</p>
                        
-                       <p className="text-[0.9rem] text-white/80 mb-4">Phase 1 mình chưa cần tối ưu retention — nhưng phải biết sớm trước khi churn xảy ra. 3 metrics đơn giản:</p>
+                       <p className="text-[0.9rem] text-white/80 mb-4">{tx("Phase 1 mình chưa cần tối ưu retention — nhưng phải biết sớm trước khi churn xảy ra. 3 metrics đơn giản:", "In Phase 1 we don't need to optimize retention yet — but we must know early before churn happens. 3 simple metrics:")}</p>
                        
                        <div className="overflow-x-auto">
                          <table className="w-full text-left border-collapse text-[0.85rem]">
                             <thead>
                                <tr className="border-b border-white/10 text-white/60">
                                   <th className="py-2 px-2 font-medium">Metric</th>
-                                  <th className="py-2 px-2 font-medium">Ngưỡng</th>
-                                  <th className="py-2 px-2 font-medium">Action</th>
+                                  <th className="py-2 px-2 font-medium">{tx("Ngưỡng", "Threshold")}</th>
+                                  <th className="py-2 px-2 font-medium">{tx("Action", "Action")}</th>
                                </tr>
                             </thead>
                             <tbody className="text-white/80">
                                <tr className="border-b border-white/5">
                                   <td className="py-3 px-2 font-semibold text-white">Client satisfaction</td>
-                                  <td className="py-3 px-2 text-amber-300">&lt; 6/10 ở tuần 2</td>
-                                  <td className="py-3 px-2">Intervention call (PM)</td>
+                                  <td className="py-3 px-2 text-amber-300">{tx("< 6/10 ở tuần 2", "< 6/10 at week 2")}</td>
+                                  <td className="py-3 px-2">{tx("Intervention call (PM)", "Intervention call (PM)")}</td>
                                </tr>
                                <tr className="border-b border-white/5">
                                   <td className="py-3 px-2 font-semibold text-white">Churn reason</td>
-                                  <td className="py-3 px-2 text-amber-300">Bất kỳ cancel nào</td>
-                                  <td className="py-3 px-2">Exit interview 10p, log CRM</td>
+                                  <td className="py-3 px-2 text-amber-300">{tx("Bất kỳ cancel nào", "Any cancellation")}</td>
+                                  <td className="py-3 px-2">{tx("Exit interview 10p, log CRM", "10m exit interview, log CRM")}</td>
                                </tr>
                                <tr>
                                   <td className="py-3 px-2 font-semibold text-white">Delivery overload</td>
-                                  <td className="py-3 px-2 text-amber-300">PM rate &lt; 3</td>
-                                  <td className="py-3 px-2">Trigger pause Growth ngay</td>
+                                  <td className="py-3 px-2 text-amber-300">{tx("PM rate < 3", "PM rate < 3")}</td>
+                                  <td className="py-3 px-2">{tx("Trigger pause Growth ngay", "Trigger pause Growth immediately")}</td>
                                </tr>
                             </tbody>
                          </table>
@@ -223,30 +223,30 @@ export default function GrowthProtectionSection() {
                  {activePopup === "culture" && (
                     <div>
                        <h3 className="text-xl font-bold flex items-center gap-2 text-purple-400 mb-2">
-                          <Heart className="w-6 h-6" /> Bảo vệ văn hóa
+                          <Heart className="w-6 h-6" /> {tx("Bảo vệ văn hóa", "Protect culture")}
                        </h3>
-                       <p className="text-white/60 text-sm mb-6">Không để mọi thứ chỉ còn là tiền</p>
+                       <p className="text-white/60 text-sm mb-6">{tx("Không để mọi thứ chỉ còn là tiền", "Don't let everything be just about money")}</p>
                        
                        <p className="text-[0.9rem] text-white/80 mb-5 leading-relaxed">
-                          Những đóng góp văn hóa không có KPI, không có bonus — nhưng được đánh giá định tính trong quarterly review và ảnh hưởng đến cơ hội phát triển. Đừng bỏ qua chúng vì không thấy số tiền ngay.
+                          {tx("Những đóng góp văn hóa không có KPI, không có bonus — nhưng được đánh giá định tính trong quarterly review và ảnh hưởng đến cơ hội phát triển. Đừng bỏ qua chúng vì không thấy số tiền ngay.", "Cultural contributions have no KPI, no bonus — but are evaluated qualitatively in quarterly reviews and impact growth opportunities. Don't ignore them just because you don't see immediate money.")}
                        </p>
 
                        <div className="grid sm:grid-cols-2 gap-4">
                           <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4">
-                             <h4 className="text-green-400 font-bold mb-3 flex items-center gap-2"><Check className="w-4 h-4"/> Được ghi nhận</h4>
+                             <h4 className="text-green-400 font-bold mb-3 flex items-center gap-2"><Check className="w-4 h-4"/> {tx("Được ghi nhận", "Recognized")}</h4>
                              <ul className="space-y-2 text-[0.85rem] text-white/80">
-                                <li>→ Mentor người mới onboard</li>
-                                <li>→ Chia sẻ insight thật sự</li>
-                                <li>→ Cải thiện SOP, process</li>
-                                <li>→ Support deadline gấp</li>
+                                <li>{tx("→ Mentor người mới onboard", "→ Mentor new onboarded members")}</li>
+                                <li>{tx("→ Chia sẻ insight thật sự", "→ Share real insights")}</li>
+                                <li>{tx("→ Cải thiện SOP, process", "→ Improve SOPs, processes")}</li>
+                                <li>{tx("→ Support deadline gấp", "→ Support urgent deadlines")}</li>
                              </ul>
                           </div>
                           <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
-                             <h4 className="text-red-400 font-bold mb-3 flex items-center gap-2"><X className="w-4 h-4"/> Không được tính</h4>
+                             <h4 className="text-red-400 font-bold mb-3 flex items-center gap-2"><X className="w-4 h-4"/> {tx("Không được tính", "Not counted")}</h4>
                              <ul className="space-y-2 text-[0.85rem] text-white/80">
-                                <li>→ Giúp để lấy "điểm văn hóa"</li>
-                                <li>→ Fake support, làm màu</li>
-                                <li>→ Share session không ai cần</li>
+                                <li>{tx("→ Giúp để lấy \"điểm văn hóa\"", "→ Helping just to get \"culture points\"")}</li>
+                                <li>{tx("→ Fake support, làm màu", "→ Fake support, showing off")}</li>
+                                <li>{tx("→ Share session không ai cần", "→ Sharing sessions nobody needs")}</li>
                              </ul>
                           </div>
                        </div>
