@@ -55,19 +55,6 @@ const socials: SocialItem[] = [
     ),
   },
   {
-    name: "Chatwoot",
-    action: "chatwoot",
-    bg: "bg-yellow-400",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path
-          d="M12 3C7.029 3 3 6.805 3 11.5C3 14.221 4.353 16.642 6.46 18.209V21L9.331 19.424C10.172 19.673 11.067 19.806 12 19.806C16.971 19.806 21 16.001 21 11.306C21 6.611 16.971 3 12 3Z"
-          fill="white"
-        />
-      </svg>
-    ),
-  },
-  {
     name: "Telegram",
     href: "https://t.me/+zl4qiUlVDQ44ZDE9",
     bg: "bg-sky-500",
@@ -94,6 +81,19 @@ const socials: SocialItem[] = [
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
         <path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.301 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111S18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8.2l3.131 3.259L19.752 8.2l-6.561 6.763z" />
+      </svg>
+    ),
+  },
+  {
+    name: "Chatwoot",
+    action: "chatwoot",
+    bg: "bg-yellow-400",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M12 3C7.029 3 3 6.805 3 11.5C3 14.221 4.353 16.642 6.46 18.209V21L9.331 19.424C10.172 19.673 11.067 19.806 12 19.806C16.971 19.806 21 16.001 21 11.306C21 6.611 16.971 3 12 3Z"
+          fill="white"
+        />
       </svg>
     ),
   },
