@@ -17,68 +17,75 @@ type ChatwootController = {
   toggle: () => void;
 };
 
+type ChatwootSettings = {
+  position?: "left" | "right";
+  type?: "standard" | "expanded_bubble";
+  launcherTitle?: string;
+};
+
 declare global {
   interface Window {
     chatwootSDK?: ChatwootSDK;
     $chatwoot?: ChatwootController;
+    chatwootSettings?: ChatwootSettings;
+    __markeeChatwootInitialized?: boolean;
   }
 }
+
 export default function ChatwootWidget() {
   useEffect(() => {
-    console.log("ChatwootWidget: Initializing...");
-
-    // Ensure we're in browser environment
-    if (typeof window === "undefined") {
-      console.log("ChatwootWidget: Not in browser environment, skipping");
+    if (typeof window === "undefined" || window.__markeeChatwootInitialized) {
       return;
     }
-    (function (d, t) {
-      const BASE_URL = "https://crm.smb.securityzone.vn";
-      const g = d.createElement(t),
-        s = d.getElementsByTagName(t)[0];
-      if (
-        d.querySelector(`script[src='${BASE_URL}/packs/js/sdk.js']`) ||
-        typeof window.chatwootSDK !== "undefined"
-      ) {
-        console.log("ChatwootWidget: SDK already present");
-      } else {
-        (g as HTMLScriptElement).src = BASE_URL + "/packs/js/sdk.js";
-        (g as HTMLScriptElement).async = true;
-        (g as HTMLScriptElement).defer = true;
 
-        g.onerror = function () {
-          console.error("ChatwootWidget: Failed to load SDK script");
-        };
+    const BASE_URL = "https://crm.smb.markeeai.com";
+    const SDK_SRC = `${BASE_URL}/packs/js/sdk.js`;
 
-        s.parentNode?.insertBefore(g, s);
+    window.chatwootSettings = {
+      position: "right",
+      type: "standard",
+      launcherTitle: "",
+    };
 
-        g.onload = function () {
-          console.log("ChatwootWidget: SDK script loaded successfully");
-          // Wait a bit for SDK to be ready
-          setTimeout(() => {
-            try {
-              if (window.chatwootSDK) {
-                window.chatwootSDK.run({
-                  websiteToken: "u6cRPyuWKHjAiBFoe65QLNmT",
-                  baseUrl: BASE_URL,
-                  position: "right",
-                  type: "standard",
-                  launcherTitle: "Chat với chúng tôi",
-                  hideMessageBubble: true,
-                });
-                console.log("ChatwootWidget: SDK initialized successfully");
-              } else {
-                console.error(
-                  "ChatwootWidget: chatwootSDK not available after script load"
-                );
-              }
-            } catch (error) {
-              console.error("ChatwootWidget: Error initializing SDK:", error);
-            }
-          }, 100);
-        };
+    const initializeChatwoot = () => {
+      if (!window.chatwootSDK || window.__markeeChatwootInitialized) {
+        return;
       }
-    })(document, "script");
+
+      window.chatwootSDK.run({
+        websiteToken: "oBoaPY8grWDTu8KY68jn8m7z",
+        baseUrl: BASE_URL,
+      });
+      window.__markeeChatwootInitialized = true;
+    };
+
+    if (window.chatwootSDK) {
+      initializeChatwoot();
+      return;
+    }
+
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      `script[src="${SDK_SRC}"]`
+    );
+
+    if (existingScript) {
+      existingScript.addEventListener("load", initializeChatwoot, { once: true });
+      return () => {
+        existingScript.removeEventListener("load", initializeChatwoot);
+      };
+    }
+
+    const script = document.createElement("script");
+    script.src = SDK_SRC;
+    script.async = true;
+    script.onload = initializeChatwoot;
+
+    const firstScriptTag = document.getElementsByTagName("script")[0];
+    firstScriptTag.parentNode?.insertBefore(script, firstScriptTag);
+
+    return () => {
+      script.removeEventListener("load", initializeChatwoot);
+    };
   }, []);
 
   return null;

@@ -37,22 +37,43 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <Script id="chunk-error-reload" strategy="afterInteractive">{`
-        window.addEventListener('error', function(e) {
-          if (e && e.message && e.message.toLowerCase().includes('chunkloaderror')) {
-            window.location.reload();
+      <head>
+        <Script id="chatwoot-widget" strategy="afterInteractive">{`
+          if (!window.__markeeChatwootInitialized) {
+            window.__markeeChatwootInitialized = true;
+            window.chatwootSettings = {"position":"right","type":"standard","launcherTitle":""};
+            (function(d,t) {
+              var BASE_URL="https://crm.smb.markeeai.com";
+              var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+              g.src=BASE_URL+"/packs/js/sdk.js";
+              g.async = true;
+              s.parentNode.insertBefore(g,s);
+              g.onload=function(){
+                window.chatwootSDK.run({
+                  websiteToken: 'oBoaPY8grWDTu8KY68jn8m7z',
+                  baseUrl: BASE_URL
+                });
+              };
+            })(document,"script");
           }
-        });
-      `}</Script>
-      <Script id="google-tag-manager" strategy="afterInteractive">
-        {`
-          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','GTM-PTXW47KK');
-        `}
-      </Script>
+        `}</Script>
+        <Script id="chunk-error-reload" strategy="afterInteractive">{`
+          window.addEventListener('error', function(e) {
+            if (e && e.message && e.message.toLowerCase().includes('chunkloaderror')) {
+              window.location.reload();
+            }
+          });
+        `}</Script>
+        <Script id="google-tag-manager" strategy="afterInteractive">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-PTXW47KK');
+          `}
+        </Script>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${dmSans.variable} overflow-x-hidden antialiased bg-white text-gray-900`}
       >
