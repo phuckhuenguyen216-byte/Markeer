@@ -1,7 +1,23 @@
 "use client";
 import { useState, useEffect } from "react";
 
-const socials = [
+declare global {
+  interface Window {
+    $chatwoot?: {
+      toggle: () => void;
+    };
+  }
+}
+
+type SocialItem = {
+  name: string;
+  bg: string;
+  icon: React.ReactNode;
+  href?: string;
+  action?: "chatwoot";
+};
+
+const socials: SocialItem[] = [
   {
     name: "Facebook",
     href: "https://www.facebook.com/markeeaimarketing",
@@ -68,6 +84,19 @@ const socials = [
       </svg>
     ),
   },
+  {
+    name: "Chatwoot",
+    action: "chatwoot",
+    bg: "bg-yellow-400",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M12 3C7.029 3 3 6.805 3 11.5C3 14.221 4.353 16.642 6.46 18.209V21L9.331 19.424C10.172 19.673 11.067 19.806 12 19.806C16.971 19.806 21 16.001 21 11.306C21 6.611 16.971 3 12 3Z"
+          fill="white"
+        />
+      </svg>
+    ),
+  },
 ];
 
 export default function SocialFloat() {
@@ -82,6 +111,7 @@ export default function SocialFloat() {
   }, []);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const toggleChatwoot = () => window.$chatwoot?.toggle();
 
   return (
     <div className="fixed right-4 bottom-4 z-9999 flex flex-col items-end gap-2">
@@ -91,18 +121,30 @@ export default function SocialFloat() {
           open ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-75 pointer-events-none h-0 overflow-hidden"
         }`}
       >
-        {socials.map((s) => (
-          <a
-            key={s.name}
-            href={s.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            title={s.name}
-            className={`w-12 h-12 rounded-full ${s.bg} flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200`}
-          >
-            {s.icon}
-          </a>
-        ))}
+        {socials.map((s) =>
+          s.action === "chatwoot" ? (
+            <button
+              key={s.name}
+              type="button"
+              title={s.name}
+              onClick={toggleChatwoot}
+              className={`w-12 h-12 rounded-full ${s.bg} flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer`}
+            >
+              {s.icon}
+            </button>
+          ) : (
+            <a
+              key={s.name}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={s.name}
+              className={`w-12 h-12 rounded-full ${s.bg} flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200`}
+            >
+              {s.icon}
+            </a>
+          )
+        )}
       </div>
 
       {/* Mascot toggle button */}

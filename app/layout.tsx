@@ -41,7 +41,7 @@ export default function RootLayout({
         <Script id="chatwoot-widget" strategy="afterInteractive">{`
           if (!window.__markeeChatwootInitialized) {
             window.__markeeChatwootInitialized = true;
-            window.chatwootSettings = {"position":"right","type":"standard","launcherTitle":""};
+            window.chatwootSettings = {"position":"right","type":"standard","launcherTitle":"","hideMessageBubble":true};
             (function(d,t) {
               var BASE_URL="https://crm.smb.markeeai.com";
               var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
@@ -86,3 +86,4 @@ export default function RootLayout({
     </html>
   );
 }
+
