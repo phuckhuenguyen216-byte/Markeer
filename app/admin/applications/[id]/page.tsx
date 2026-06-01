@@ -3,70 +3,54 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
+  ArrowLeft,
+  Briefcase,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Edit3,
+  FileText,
+  GraduationCap,
+  Mail,
+  Phone,
+  Plus,
+  Save,
+  Star,
+  Trash2,
+  UserRound,
+} from "lucide-react";
+import {
   Application,
   STATUS_OPTIONS,
   getStatusInfo,
   ApplicationStatus,
 } from "@/lib/application";
+import {
+  getInitials,
+  getPrimaryTeam,
+  hasZalo,
+  isStarred,
+  toggleStarredNotes,
+  stripStarredTag,
+  daysAgo,
+  formatDate,
+  getRecruitmentMeta,
+  upsertRecruitmentMeta,
+  createEmptyManagement,
+  DEFAULT_LEADERS,
+  LEADER_TEAMS,
+  LEVEL_OPTIONS,
+  type EmployeeLevel,
+  type LeaderTeam,
+  type RecruitmentLeader,
+  type RecruitmentManagement,
+} from "@/lib/recruitment";
+import { StatusBadge } from "../../components/StatusControl";
+import PositionTags from "../../components/PositionTags";
+import Spinner from "../../components/Spinner";
+import { ToastStack, useToasts } from "../../components/Toast";
+import ConfirmModal, { type ConfirmAction } from "../../components/ConfirmModal";
 
-/* ── helpers ── */
-function initials(name: string) {
-  return name
-    .split(" ")
-    .map((w) => w[0])
-    .slice(-2)
-    .join("")
-    .toUpperCase();
-}
-
-/** Position → color mapping matching the recruitment form */
-const POSITION_COLORS: Record<
-  string,
-  { bg: string; color: string; abbr: string }
-> = {
-  "Network Team": { bg: "#dbeafe", color: "#2563eb", abbr: "NET" },
-  "System Team": { bg: "#dbeafe", color: "#2563eb", abbr: "SYS" },
-  "Security Team": { bg: "#dbeafe", color: "#2563eb", abbr: "SEC" },
-  "Hội nghị & Tổng đài": { bg: "#dbeafe", color: "#2563eb", abbr: "COM" },
-  "Cloud & Datacenter": { bg: "#dbeafe", color: "#2563eb", abbr: "CLD" },
-  BA: { bg: "#ede9fe", color: "#7c3aed", abbr: "BA" },
-  "Backend Developer": { bg: "#ede9fe", color: "#7c3aed", abbr: "BE" },
-  "Frontend Developer": { bg: "#ede9fe", color: "#7c3aed", abbr: "FE" },
-  "Full-stack Developer": { bg: "#ede9fe", color: "#7c3aed", abbr: "FS" },
-  "DevOps / Platform": { bg: "#ede9fe", color: "#7c3aed", abbr: "OPS" },
-  "AI / ML Engineer": { bg: "#fee2e2", color: "#dc2626", abbr: "ML" },
-  "Data Analyst / Engineer": { bg: "#fee2e2", color: "#dc2626", abbr: "DA" },
-  "AI Product / Research": { bg: "#fee2e2", color: "#dc2626", abbr: "RES" },
-  "Content & Social": { bg: "#fef3c7", color: "#d97706", abbr: "CNT" },
-  "Performance & Acquisition": { bg: "#fef3c7", color: "#d97706", abbr: "PRF" },
-  "Marketing Ops": { bg: "#fef3c7", color: "#d97706", abbr: "MKT" },
-  "B2B Sales": { bg: "#d1fae5", color: "#059669", abbr: "B2B" },
-  "Business Development": { bg: "#d1fae5", color: "#059669", abbr: "BD" },
-  "Customer Success": { bg: "#d1fae5", color: "#059669", abbr: "CS" },
-};
-const DEFAULT_POS_COLOR = { bg: "#f3f4f6", color: "#4b5563", abbr: "" };
-
-function isZalo(notes: string) {
-  return /zalo/i.test(notes || "");
-}
-
-function daysAgo(dateStr: string) {
-  const d = Math.floor((Date.now() - new Date(dateStr).getTime()) / 86400000);
-  if (d === 0) return "Hôm nay";
-  if (d === 1) return "Hôm qua";
-  return `${d} ngày trước`;
-}
-
-function formatDate(dateStr: string) {
-  if (!dateStr) return "---";
-  const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return dateStr;
-  const dd = String(d.getDate()).padStart(2, "0");
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  return `${dd}/${mm}/${d.getFullYear()}`;
-}
-
-/* ── page ── */
 export default function AdminApplicationDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -74,38 +58,102 @@ export default function AdminApplicationDetailPage() {
   const [loading, setLoading] = useState(true);
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [toasts, setToasts] = useState<
-    { id: number; msg: string; type: "success" | "error" }[]
-  >([]);
-  const [confirmAction, setConfirmAction] = useState<{
-    title: string;
-    desc: string;
-    onConfirm: () => void;
-    danger?: boolean;
-  } | null>(null);
-
-  const addToast = useCallback(
-    (msg: string, type: "success" | "error" = "success") => {
-      const tid = Date.now();
-      setToasts((p) => [...p, { id: tid, msg, type }]);
-      setTimeout(() => setToasts((p) => p.filter((t) => t.id !== tid)), 3500);
-    },
-    [],
+  const [starSaving, setStarSaving] = useState(false);
+  const { toasts, addToast } = useToasts();
+  const [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null);
+  const [navIds, setNavIds] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState<"management" | "application">(
+    "management",
   );
+  const [management, setManagement] = useState<RecruitmentManagement>(
+    createEmptyManagement,
+  );
+  const [managementSaving, setManagementSaving] = useState(false);
+  const [activeLevel, setActiveLevel] = useState<EmployeeLevel>("lv1");
+  const [leaders, setLeaders] = useState<RecruitmentLeader[]>(DEFAULT_LEADERS);
+  const [showLeaderModal, setShowLeaderModal] = useState(false);
+  const [editingLeaderId, setEditingLeaderId] = useState<string | null>(null);
+  const [leaderDraft, setLeaderDraft] = useState<{
+    name: string;
+    team: LeaderTeam;
+  }>({ name: "", team: "Marketing" });
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("recruitment:leaders");
+      if (raw) {
+        const parsed = JSON.parse(raw) as RecruitmentLeader[];
+        if (Array.isArray(parsed) && parsed.length > 0) setLeaders(parsed);
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  const persistLeaders = (next: RecruitmentLeader[]) => {
+    setLeaders(next);
+    try {
+      localStorage.setItem("recruitment:leaders", JSON.stringify(next));
+    } catch {
+      /* ignore */
+    }
+  };
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("recruitment:nav");
+      if (raw) setNavIds(JSON.parse(raw));
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   useEffect(() => {
     fetch(`/api/applications/${id}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.error) throw new Error(data.error);
+        const meta = getRecruitmentMeta(data.admin_notes || "");
         setApp(data);
-        // Strip [STARRED] tag from display
-        setNotes((data.admin_notes || "").replace("[STARRED]", "").trim());
+        setNotes(stripStarredTag(data.admin_notes || ""));
+        setManagement(meta);
+        setActiveLevel(meta.currentLevel);
+        // Auto-promote new -> reviewing on open (fire-and-forget).
+        if (data.status === "new") {
+          fetch(`/api/applications/${data.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "reviewing" as ApplicationStatus }),
+          }).catch(() => {});
+          setApp((p) => (p ? { ...p, status: "reviewing" } : p));
+        }
       })
       .catch(() => addToast("Không tìm thấy hồ sơ", "error"))
       .finally(() => setLoading(false));
   }, [id, addToast]);
+
+  const navIndex = navIds.indexOf(id);
+  const prevId = navIndex > 0 ? navIds[navIndex - 1] : null;
+  const nextId =
+    navIndex >= 0 && navIndex < navIds.length - 1 ? navIds[navIndex + 1] : null;
+
+  const goTo = useCallback(
+    (targetId: string | null) => {
+      if (targetId) router.push(`/admin/applications/${targetId}`);
+    },
+    [router],
+  );
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      if (e.key === "ArrowLeft") goTo(prevId);
+      if (e.key === "ArrowRight") goTo(nextId);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [goTo, prevId, nextId]);
 
   const updateStatus = async (status: ApplicationStatus) => {
     setConfirmAction(null);
@@ -113,9 +161,7 @@ export default function AdminApplicationDetailPage() {
     try {
       const res = await fetch(`/api/applications/${app.id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
       });
       if (!res.ok) throw new Error();
@@ -127,27 +173,46 @@ export default function AdminApplicationDetailPage() {
   };
 
   const confirmStatusChange = (status: ApplicationStatus) => {
+    if (!app || status === app.status) return;
     const info = getStatusInfo(status);
     setConfirmAction({
       title: `Đổi trạng thái sang "${info.label}"?`,
-      desc: `${app?.full_name} — ${app?.email}`,
+      desc: `${app.full_name} — ${app.email}`,
       danger: status === "rejected",
       onConfirm: () => updateStatus(status),
     });
+  };
+
+  const toggleStar = async () => {
+    if (!app) return;
+    setStarSaving(true);
+    const starred = isStarred(app);
+    const finalNotes = toggleStarredNotes(app.admin_notes || "", !starred);
+    try {
+      const res = await fetch(`/api/applications/${app.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ admin_notes: finalNotes }),
+      });
+      if (!res.ok) throw new Error();
+      setApp((p) => (p ? { ...p, admin_notes: finalNotes } : p));
+      addToast(starred ? "Đã bỏ đánh dấu" : "Đã đánh dấu nổi bật");
+    } catch {
+      addToast("Lỗi cập nhật đánh dấu", "error");
+    } finally {
+      setStarSaving(false);
+    }
   };
 
   const saveNotes = async () => {
     if (!app) return;
     setSaving(true);
     try {
-      // Preserve [STARRED] tag if present
-      const hasStarred = (app.admin_notes || "").includes("[STARRED]");
-      const finalNotes = hasStarred ? `[STARRED] ${notes}`.trim() : notes;
+      const visibleNotes = toggleStarredNotes(notes, isStarred(app));
+      const finalNotes = upsertRecruitmentMeta(visibleNotes, management);
       const res = await fetch(`/api/applications/${app.id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ admin_notes: finalNotes }),
       });
       if (!res.ok) throw new Error();
@@ -160,24 +225,130 @@ export default function AdminApplicationDetailPage() {
     }
   };
 
+  const updateLevelRecord = (
+    level: EmployeeLevel,
+    field: "target" | "comment",
+    value: string,
+  ) => {
+    setManagement((prev) => ({
+      ...prev,
+      levels: {
+        ...prev.levels,
+        [level]: {
+          ...prev.levels[level],
+          [field]: value,
+          updatedAt: new Date().toISOString(),
+        },
+      },
+    }));
+  };
+
+  const saveManagement = async () => {
+    if (!app) return;
+    await saveManagementState(management);
+  };
+
+  const saveManagementState = async (nextManagement: RecruitmentManagement) => {
+    if (!app) return;
+    setManagementSaving(true);
+    const visibleNotes = toggleStarredNotes(notes, isStarred(app));
+    const finalNotes = upsertRecruitmentMeta(visibleNotes, nextManagement);
+    try {
+      const res = await fetch(`/api/applications/${app.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ admin_notes: finalNotes }),
+      });
+      if (!res.ok) throw new Error();
+      setManagement(nextManagement);
+      setApp((p) => (p ? { ...p, admin_notes: finalNotes } : p));
+      addToast("Đã lưu thông tin quản lý");
+    } catch {
+      addToast("Lỗi lưu thông tin quản lý", "error");
+    } finally {
+      setManagementSaving(false);
+    }
+  };
+
+  const confirmPromoteLevel = (nextLevel: EmployeeLevel) => {
+    const current = LEVEL_OPTIONS.find(
+      (level) => level.value === management.currentLevel,
+    )?.label;
+    const next = LEVEL_OPTIONS.find((level) => level.value === nextLevel)?.label;
+
+    setConfirmAction({
+      title: `Nâng level nhân viên lên ${next}?`,
+      desc: `Level hiện tại là ${current}. Hành động này chỉ nên dùng khi nhân viên thật sự được nâng cấp.`,
+      detail: app ? `${app.full_name} - ${app.email}` : "",
+      onConfirm: () => {
+        setConfirmAction(null);
+        const nextManagement = { ...management, currentLevel: nextLevel };
+        setActiveLevel(nextLevel);
+        void saveManagementState(nextManagement);
+      },
+    });
+  };
+
+  const resetLeaderForm = () => {
+    setEditingLeaderId(null);
+    setLeaderDraft({ name: "", team: "Marketing" });
+  };
+
+  const saveLeader = () => {
+    const name = leaderDraft.name.trim();
+    if (!name) return;
+
+    if (editingLeaderId) {
+      const next = leaders.map((leader) =>
+        leader.id === editingLeaderId
+          ? { ...leader, name, team: leaderDraft.team }
+          : leader,
+      );
+      persistLeaders(next);
+      setManagement((prev) =>
+        prev.leader?.id === editingLeaderId
+          ? {
+              ...prev,
+              leader: { id: editingLeaderId, name, team: leaderDraft.team },
+            }
+          : prev,
+      );
+    } else {
+      const leader = {
+        id: `leader-${Date.now()}`,
+        name,
+        team: leaderDraft.team,
+      };
+      persistLeaders([...leaders, leader]);
+    }
+
+    resetLeaderForm();
+  };
+
+  const editLeader = (leader: RecruitmentLeader) => {
+    setEditingLeaderId(leader.id);
+    setLeaderDraft({ name: leader.name, team: leader.team });
+  };
+
+  const deleteLeader = (leaderId: string) => {
+    persistLeaders(leaders.filter((leader) => leader.id !== leaderId));
+    setManagement((prev) =>
+      prev.leader?.id === leaderId ? { ...prev, leader: null } : prev,
+    );
+    if (editingLeaderId === leaderId) resetLeaderForm();
+  };
+
   /* loading / not found */
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div
-          className="w-10 h-10 rounded-full border-2 border-t-transparent animate-spin"
-          style={{ borderColor: "#8b4513", borderTopColor: "transparent" }}
-        />
-      </div>
-    );
+    return <Spinner center />;
   }
   if (!app) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-        <p className="text-base font-medium mb-4">Không tìm thấy hồ sơ</p>
+        <p className="mb-4 text-base font-medium">Không tìm thấy hồ sơ</p>
         <button
           onClick={() => router.push("/admin/applications")}
-          className="px-5 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition"
+          className="rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50"
         >
           Quay lại danh sách
         </button>
@@ -186,100 +357,108 @@ export default function AdminApplicationDetailPage() {
   }
 
   const st = getStatusInfo(app.status);
-  const dateStr = new Date(app.created_at).toLocaleDateString("vi-VN", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  const dateStr = formatDate(app.created_at);
   const timeStr = new Date(app.created_at).toLocaleTimeString("vi-VN", {
     hour: "2-digit",
     minute: "2-digit",
   });
   const teams = app.career_journey || [];
-  const hasZalo = isZalo(app.admin_notes);
+  const team = getPrimaryTeam(app);
+  const zalo = hasZalo(app);
+  const starred = isStarred(app);
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif" }}>
-      {/* Toasts */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
-        {toasts.map((t) => (
-          <div
-            key={t.id}
-            className={`rounded-xl px-5 py-3.5 text-sm font-semibold shadow-lg text-white ${t.type === "error" ? "bg-red-500" : "bg-gray-900"}`}
-          >
-            {t.msg}
-          </div>
-        ))}
-      </div>
-
-      {/* Confirm modal */}
-      {confirmAction && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="mx-4 w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
-            <h3 className="text-base font-bold text-gray-800 mb-2">
-              {confirmAction.title}
-            </h3>
-            <p
-              className={`text-sm font-semibold mb-5 ${confirmAction.danger ? "text-red-600" : "text-gray-500"}`}
-            >
-              {confirmAction.desc}
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setConfirmAction(null)}
-                className="flex-1 rounded-xl border border-gray-200 py-2.5 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition"
-              >
-                Hủy
-              </button>
-              <button
-                onClick={confirmAction.onConfirm}
-                className={`flex-1 rounded-xl py-2.5 text-sm font-semibold text-white transition ${confirmAction.danger ? "bg-red-500 hover:bg-red-600" : "bg-gray-900 hover:bg-gray-800"}`}
-              >
-                Xác nhận
-              </button>
-            </div>
-          </div>
-        </div>
+      <ToastStack toasts={toasts} />
+      <ConfirmModal
+        action={confirmAction}
+        onCancel={() => setConfirmAction(null)}
+      />
+      {showLeaderModal && (
+        <LeaderModal
+          leaders={leaders}
+          draft={leaderDraft}
+          editingId={editingLeaderId}
+          onDraftChange={setLeaderDraft}
+          onSave={saveLeader}
+          onEdit={editLeader}
+          onDelete={deleteLeader}
+          onReset={resetLeaderForm}
+          onClose={() => setShowLeaderModal(false)}
+        />
       )}
 
-      {/* ─── HERO SUMMARY ─── */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 mb-4">
-        {/* top row: back + status */}
-        <div className="flex items-center justify-between mb-3">
-          <Link
-            href="/admin/applications"
-            className="flex items-center gap-1.5 text-sm font-semibold text-gray-400 hover:text-gray-600 transition"
-          >
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M10 3L5 8l5 5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+      {/* ─── HEADER SCORECARD ─── */}
+      <div className="mb-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+        {/* top row: back + prev/next + star + status buttons */}
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Link
+              href="/admin/applications"
+              className="flex items-center gap-1.5 text-sm font-semibold text-gray-400 transition hover:text-gray-600"
+            >
+              <ArrowLeft size={15} />
+              Danh sách
+            </Link>
+            {navIndex >= 0 && navIds.length > 1 && (
+              <div className="flex items-center gap-1 rounded-lg border border-gray-200 bg-gray-50 p-0.5">
+                <button
+                  type="button"
+                  onClick={() => goTo(prevId)}
+                  disabled={!prevId}
+                  className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 transition hover:bg-white hover:text-[#4a2318] disabled:opacity-30"
+                  title="Hồ sơ trước (←)"
+                >
+                  <ChevronLeft size={15} />
+                </button>
+                <span className="px-1 text-[11px] font-bold text-gray-500">
+                  {navIndex + 1}/{navIds.length}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => goTo(nextId)}
+                  disabled={!nextId}
+                  className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 transition hover:bg-white hover:text-[#4a2318] disabled:opacity-30"
+                  title="Hồ sơ sau (→)"
+                >
+                  <ChevronRight size={15} />
+                </button>
+              </div>
+            )}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleStar}
+              disabled={starSaving}
+              className={`flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-xs font-bold transition disabled:opacity-50 ${
+                starred
+                  ? "border-amber-300 bg-amber-50 text-amber-600"
+                  : "border-gray-200 bg-white text-gray-400 hover:bg-gray-50"
+              }`}
+              title={starred ? "Bỏ đánh dấu" : "Đánh dấu nổi bật"}
+            >
+              <Star
+                size={14}
+                className={starred ? "fill-amber-400 text-amber-500" : ""}
               />
-            </svg>
-            Danh sách
-          </Link>
-          <div className="flex items-center gap-2 flex-wrap">
+              {starred ? "Nổi bật" : "Đánh dấu"}
+            </button>
+            <span className="mx-1 hidden h-5 w-px bg-gray-200 sm:block" />
             {STATUS_OPTIONS.map((s) => {
               const active = app.status === s.value;
               return (
                 <button
                   key={s.value}
                   onClick={() => confirmStatusChange(s.value)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                  className={`rounded-lg border px-2.5 py-1 text-xs font-bold transition ${
                     active
                       ? ""
-                      : "hover:border-gray-400 hover:text-gray-600 hover:bg-gray-50"
+                      : "hover:border-gray-400 hover:bg-gray-50 hover:text-gray-600"
                   }`}
                   style={
                     active
-                      ? {
-                          background: s.bg,
-                          color: s.color,
-                          borderColor: s.color,
-                        }
+                      ? { background: s.bg, color: s.color, borderColor: s.color }
                       : {
                           background: "#fff",
                           color: "#9ca3af",
@@ -295,239 +474,186 @@ export default function AdminApplicationDetailPage() {
         </div>
 
         {/* hero content */}
-        <div className="flex flex-col lg:flex-row gap-4 items-start">
-          {/* avatar */}
+        <div className="flex flex-col items-start gap-4 lg:flex-row">
           <div
-            className="w-14 h-14 rounded-xl flex items-center justify-center text-white text-lg font-black shrink-0"
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-lg font-black text-white"
             style={{ background: st.color }}
           >
-            {initials(app.full_name)}
+            {getInitials(app.full_name)}
           </div>
-
-          {/* info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <h1 className="text-xl font-black text-gray-900 tracking-tight">
+          <div className="min-w-0 flex-1">
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+              <h1 className="text-xl font-black tracking-tight text-gray-900">
                 {app.full_name}
               </h1>
-              <span
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
-                style={{ background: st.bg, color: st.color }}
-              >
-                <span
-                  className="w-2 h-2 rounded-full"
-                  style={{ background: st.color }}
-                />
-                {st.label}
-              </span>
-            </div>
-
-            {/* position tags */}
-            <div className="flex flex-wrap gap-2 mb-2">
-              {teams.map((t) => {
-                const pc = POSITION_COLORS[t] || DEFAULT_POS_COLOR;
-                return (
-                  <span
-                    key={t}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold"
-                    style={{ background: pc.bg, color: pc.color }}
-                  >
-                    {pc.abbr && (
-                      <span
-                        className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-black text-white"
-                        style={{ background: pc.color }}
-                      >
-                        {pc.abbr}
-                      </span>
-                    )}
-                    {t}
-                  </span>
-                );
-              })}
-            </div>
-
-            {/* quick meta row */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-gray-500">
-              {app.school && (
-                <span className="flex items-center gap-1.5 font-medium">
-                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                    <path
-                      d="M2 6l6-3 6 3-6 3-6-3z"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                    />
-                    <path
-                      d="M12 7.5v4c0 1-2.7 2-4 2s-4-1-4-2v-4"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                    />
-                  </svg>
-                  {app.school}
-                </span>
-              )}
-              <span className="flex items-center gap-1.5 font-medium">
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                  <rect
-                    x="2"
-                    y="2"
-                    width="12"
-                    height="12"
-                    rx="3"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  />
-                  <path d="M2 6h12" stroke="currentColor" strokeWidth="1.2" />
-                </svg>
-                {daysAgo(app.created_at)} ({dateStr} {timeStr})
-              </span>
-            </div>
-
-            {/* contact chips */}
-            <div className="flex flex-wrap items-center gap-2 mt-2">
-              <a
-                href={`mailto:${app.email}`}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-50 text-xs font-semibold text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition cursor-pointer"
-                title="Gửi email"
-              >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <rect
-                    x="1"
-                    y="3"
-                    width="14"
-                    height="10"
-                    rx="2"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  />
-                  <path
-                    d="M1 5l7 4 7-4"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  />
-                </svg>
-                {app.email}
-              </a>
-
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(app.phone);
-                  addToast(`Đã copy: ${app.phone}`);
-                }}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-50 text-xs font-semibold text-gray-700 hover:bg-green-50 hover:text-green-600 transition cursor-pointer"
-                title="Nhấn để copy số điện thoại"
-              >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <rect
-                    x="4"
-                    y="1"
-                    width="8"
-                    height="14"
-                    rx="2"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  />
-                  <path
-                    d="M7 12h2"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                    strokeLinecap="round"
-                  />
-                </svg>
-                {app.phone}
-                {hasZalo && (
-                  <span className="ml-1 px-1.5 py-0.5 rounded text-[10px] font-black text-white bg-blue-500">
-                    Zalo
-                  </span>
-                )}
-              </button>
-
-              {app.dob && (
-                <span className="px-2.5 py-1.5 rounded-lg bg-gray-50 text-xs font-semibold text-gray-500">
-                  Sinh: {formatDate(app.dob)}
+              <StatusBadge status={app.status} />
+              {starred && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-black text-amber-600">
+                  <Star size={11} className="fill-amber-400 text-amber-500" />
+                  Nổi bật
                 </span>
               )}
             </div>
-          </div>
-
-          {/* CTA buttons */}
-          <div className="flex flex-row flex-wrap gap-2 shrink-0 lg:w-[120px] lg:flex-col">
-            {app.cv && (
-              <a
-                href={app.cv}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-white transition hover:opacity-90"
-                style={{ background: "#4a2318" }}
-              >
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                  <path
-                    d="M4 2h5l5 5v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  />
-                  <path
-                    d="M9 2v5h5"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                Xem CV
-              </a>
-            )}
+            <div className="flex flex-wrap gap-2">
+              <PositionTags positions={teams} showAbbr size="md" />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ─── TWO-COLUMN BODY ─── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      {/* ─── HIGHLIGHTS BAND ─── */}
+      <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-5">
+        <HighlightCard icon={<Briefcase size={15} />} label="Vị trí">
+          <span className="truncate text-sm font-black text-gray-900">
+            {teams[0] || "---"}
+          </span>
+          {teams.length > 1 && (
+            <span className="text-[11px] font-bold text-gray-400">
+              +{teams.length - 1} vị trí khác
+            </span>
+          )}
+          {team !== "all" && (
+            <span className="text-[11px] font-bold text-gray-400">
+              Team {team}
+            </span>
+          )}
+        </HighlightCard>
+
+        <HighlightCard icon={<FileText size={15} />} label="CV / Portfolio">
+          {app.cv ? (
+            <a
+              href={app.cv}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-fit items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-black text-white transition hover:opacity-90"
+              style={{ background: "#4a2318" }}
+            >
+              <FileText size={12} />
+              Xem CV
+            </a>
+          ) : (
+            <span className="text-sm font-bold text-gray-300">Chưa nộp</span>
+          )}
+        </HighlightCard>
+
+        <HighlightCard icon={<Mail size={15} />} label="Liên hệ">
+          <a
+            href={`mailto:${app.email}`}
+            className="truncate text-xs font-bold text-gray-700 hover:text-blue-600"
+            title={app.email}
+          >
+            {app.email}
+          </a>
+          <button
+            type="button"
+            onClick={() => {
+              navigator.clipboard.writeText(app.phone);
+              addToast(`Đã copy: ${app.phone}`);
+            }}
+            className="flex w-fit items-center gap-1 text-xs font-bold text-gray-500 hover:text-green-600"
+            title="Nhấn để copy"
+          >
+            <Phone size={11} />
+            {app.phone}
+            {zalo && (
+              <span className="rounded bg-blue-500 px-1 py-0.5 text-[9px] font-black text-white">
+                Zalo
+              </span>
+            )}
+          </button>
+        </HighlightCard>
+
+        <HighlightCard icon={<Calendar size={15} />} label="Ngày nộp">
+          <span className="text-sm font-black text-gray-900">
+            {daysAgo(app.created_at)}
+          </span>
+          <span className="text-[11px] font-bold text-gray-400">
+            {dateStr} {timeStr}
+          </span>
+        </HighlightCard>
+
+        <HighlightCard icon={<GraduationCap size={15} />} label="Trường">
+          <span
+            className="truncate text-sm font-black text-gray-900"
+            title={app.school}
+          >
+            {app.school || "---"}
+          </span>
+          {app.dob && (
+            <span className="text-[11px] font-bold text-gray-400">
+              Sinh {formatDate(app.dob)}
+            </span>
+          )}
+        </HighlightCard>
+      </div>
+
+      <div className="mb-4 inline-flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm">
+        <button
+          type="button"
+          onClick={() => setActiveTab("management")}
+          className={`h-9 rounded-lg px-4 text-sm font-black transition ${
+            activeTab === "management"
+              ? "bg-[#4a2318] text-white"
+              : "text-gray-500 hover:bg-gray-50"
+          }`}
+        >
+          Quản lý nhân viên
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("application")}
+          className={`h-9 rounded-lg px-4 text-sm font-black transition ${
+            activeTab === "application"
+              ? "bg-[#4a2318] text-white"
+              : "text-gray-500 hover:bg-gray-50"
+          }`}
+        >
+          Hồ sơ ứng tuyển
+        </button>
+      </div>
+
+      {activeTab === "management" ? (
+        <ManagementPanel
+          management={management}
+          leaders={leaders}
+          activeLevel={activeLevel}
+          saving={managementSaving}
+          onChange={setManagement}
+          onLevelChange={setActiveLevel}
+          onUpdateLevel={updateLevelRecord}
+          onPromoteLevel={confirmPromoteLevel}
+          onOpenLeaders={() => setShowLeaderModal(true)}
+          onSave={saveManagement}
+        />
+      ) : (
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* LEFT — 2 cols */}
-        <div className="lg:col-span-2 flex flex-col gap-4">
+        <div className="flex flex-col gap-4 lg:col-span-2">
           {/* SECTION 1: Career Fit */}
           <Section title="Định hướng & Động lực">
             <div className="mb-5">
               <SLabel>Vị trí ứng tuyển</SLabel>
-              <div className="flex flex-wrap gap-2 mt-1.5">
-                {teams.map((t) => {
-                  const pc = POSITION_COLORS[t] || DEFAULT_POS_COLOR;
-                  return (
-                    <span
-                      key={t}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold"
-                      style={{ background: pc.bg, color: pc.color }}
-                    >
-                      {pc.abbr && (
-                        <span
-                          className="w-4 h-4 rounded flex items-center justify-center text-[9px] font-black text-white"
-                          style={{ background: pc.color }}
-                        >
-                          {pc.abbr}
-                        </span>
-                      )}
-                      {t}
-                    </span>
-                  );
-                })}
-                {teams.length === 0 && (
-                  <span className="text-xs text-gray-400">---</span>
-                )}
+              <div className="mt-1.5 flex flex-wrap gap-2">
+                <PositionTags positions={teams} showAbbr size="md" />
               </div>
             </div>
 
-            <div className="mb-5">
-              <SLabel>Điều hứng thú</SLabel>
-              <div className="flex flex-wrap gap-2 mt-1.5">
-                {(app.interest_reason || []).map((r) => (
-                  <span
-                    key={r}
-                    className="px-2.5 py-1 rounded-lg text-xs font-semibold"
-                    style={{ background: "#eff6ff", color: "#1d4ed8" }}
-                  >
-                    {r}
-                  </span>
-                ))}
+            {(app.interest_reason || []).length > 0 && (
+              <div className="mb-5">
+                <SLabel>Điều hứng thú</SLabel>
+                <div className="mt-1.5 flex flex-wrap gap-2">
+                  {(app.interest_reason || []).map((r) => (
+                    <span
+                      key={r}
+                      className="rounded-lg px-2.5 py-1 text-xs font-semibold"
+                      style={{ background: "#eff6ff", color: "#1d4ed8" }}
+                    >
+                      {r}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             <ContentBlock label="Lý do ứng tuyển" value={app.why_apply} />
             <ContentBlock label="Mục tiêu thực tập" value={app.goal} />
@@ -541,16 +667,16 @@ export default function AdminApplicationDetailPage() {
 
           {/* SECTION 3: Mindset & Traits */}
           <Section title="Tư duy & Làm việc">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <SLabel color="#16a34a">Điểm mạnh</SLabel>
-                <p className="text-sm text-gray-700 leading-relaxed mt-1 whitespace-pre-wrap">
+                <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
                   {app.strengths || "---"}
                 </p>
               </div>
               <div>
                 <SLabel color="#f59e0b">Cần cải thiện</SLabel>
-                <p className="text-sm text-gray-700 leading-relaxed mt-1 whitespace-pre-wrap">
+                <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
                   {app.weaknesses || "---"}
                 </p>
               </div>
@@ -558,14 +684,14 @@ export default function AdminApplicationDetailPage() {
 
             <ContentBlock label="Kỳ vọng 3 tháng đầu" value={app.expectation} />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <SLabel>Cách xử lý vấn đề</SLabel>
-                <div className="flex flex-wrap gap-2 mt-1.5">
+                <div className="mt-1.5 flex flex-wrap gap-2">
                   {(app.problem_solving || []).map((p) => (
                     <span
                       key={p}
-                      className="px-2.5 py-1 rounded-lg text-xs font-semibold"
+                      className="rounded-lg px-2.5 py-1 text-xs font-semibold"
                       style={{ background: "#f0fdf4", color: "#15803d" }}
                     >
                       {p}
@@ -575,11 +701,11 @@ export default function AdminApplicationDetailPage() {
               </div>
               <div>
                 <SLabel>Phản ứng khi góp ý</SLabel>
-                <div className="flex flex-wrap gap-2 mt-1.5">
+                <div className="mt-1.5 flex flex-wrap gap-2">
                   {(app.feedback_response || []).map((f) => (
                     <span
                       key={f}
-                      className="px-2.5 py-1 rounded-lg text-xs font-semibold"
+                      className="rounded-lg px-2.5 py-1 text-xs font-semibold"
                       style={{ background: "#fef3c7", color: "#92400e" }}
                     >
                       {f}
@@ -590,13 +716,13 @@ export default function AdminApplicationDetailPage() {
             </div>
           </Section>
 
-          {/* SECTION 4: Work Preference + Note (compact) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* SECTION 4: Work Preference + Education */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {Object.keys(app.work_preference || {}).length > 0 && (
               <Section title="Hình thức làm việc" compact>
                 <table className="w-full text-xs">
                   <thead>
-                    <tr className="text-left text-gray-400 uppercase tracking-wider">
+                    <tr className="text-left uppercase tracking-wider text-gray-400">
                       <th className="pb-2 font-semibold">Hình thức</th>
                       <th className="pb-2 font-semibold">Chi tiết</th>
                     </tr>
@@ -605,7 +731,7 @@ export default function AdminApplicationDetailPage() {
                     {Object.entries(app.work_preference || {}).map(
                       ([key, vals]) => (
                         <tr key={key}>
-                          <td className="py-2 font-semibold text-gray-700 whitespace-nowrap pr-4">
+                          <td className="whitespace-nowrap py-2 pr-4 font-semibold text-gray-700">
                             {key}
                           </td>
                           <td className="py-2 text-gray-600">
@@ -621,7 +747,6 @@ export default function AdminApplicationDetailPage() {
               </Section>
             )}
 
-            {/* Education detail */}
             <Section title="Học vấn" compact>
               <div className="space-y-2 text-sm">
                 <InfoRow label="Trường" value={app.school} />
@@ -634,10 +759,9 @@ export default function AdminApplicationDetailPage() {
             </Section>
           </div>
 
-          {/* Note from candidate */}
           {app.note && (
             <Section title="Lời nhắn gửi team">
-              <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-600">
                 {app.note}
               </p>
             </Section>
@@ -645,50 +769,21 @@ export default function AdminApplicationDetailPage() {
         </div>
 
         {/* RIGHT PANEL */}
-        <div className="flex flex-col gap-4 lg:sticky lg:top-20 lg:self-start">
-          {/* Quick rating */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <h3 className="text-sm font-bold text-gray-800 mb-3">
-              Đánh giá nhanh
-            </h3>
-            <div className="flex items-center gap-1 mb-2">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  onClick={() => setRating(star === rating ? 0 : star)}
-                  className="text-xl transition hover:scale-110"
-                  style={{
-                    color: star <= rating ? "#f59e0b" : "#e5e7eb",
-                  }}
-                >
-                  &#9733;
-                </button>
-              ))}
-              {rating > 0 && (
-                <span className="ml-2 text-sm font-bold text-amber-600">
-                  {rating}/5
-                </span>
-              )}
-            </div>
-            <p className="text-xs text-gray-400">
-              Nhấn sao để đánh giá ứng viên
-            </p>
-          </div>
-
+        <div className="flex flex-col gap-4 lg:sticky lg:top-6 lg:self-start">
           {/* HR Notes */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <h3 className="text-sm font-bold text-gray-800 mb-3">Ghi chú HR</h3>
+          <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+            <h3 className="mb-3 text-sm font-bold text-gray-800">Ghi chú HR</h3>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              rows={4}
+              rows={5}
               placeholder="Ghi chú nội bộ về ứng viên..."
-              className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm leading-relaxed focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-50 resize-y"
+              className="w-full resize-y rounded-xl border border-gray-200 px-3 py-2.5 text-sm leading-relaxed focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-50"
             />
             <button
               onClick={saveNotes}
               disabled={saving}
-              className="mt-3 w-full py-2.5 rounded-xl text-sm font-bold text-white transition disabled:opacity-50 hover:opacity-90"
+              className="mt-3 w-full rounded-xl py-2.5 text-sm font-bold text-white transition hover:opacity-90 disabled:opacity-50"
               style={{ background: "#4a2318" }}
             >
               {saving ? "Đang lưu..." : "Lưu ghi chú"}
@@ -696,20 +791,20 @@ export default function AdminApplicationDetailPage() {
           </div>
 
           {/* Quick info recap */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <h3 className="text-sm font-bold text-gray-800 mb-3">
+          <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+            <h3 className="mb-3 text-sm font-bold text-gray-800">
               Thông tin nhanh
             </h3>
             <div className="space-y-3 text-sm">
               <InfoRow label="Email" value={app.email} />
               <div>
-                <span className="text-gray-400 text-xs font-semibold block mb-0.5">
+                <span className="mb-0.5 block text-xs font-semibold text-gray-400">
                   Số điện thoại
                 </span>
-                <span className="text-gray-800 font-semibold">
+                <span className="font-semibold text-gray-800">
                   {app.phone}
-                  {hasZalo && (
-                    <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-black text-white bg-blue-500 align-middle">
+                  {zalo && (
+                    <span className="ml-2 rounded bg-blue-500 px-1.5 py-0.5 align-middle text-[10px] font-black text-white">
                       Zalo
                     </span>
                   )}
@@ -719,14 +814,14 @@ export default function AdminApplicationDetailPage() {
               <InfoRow label="Ngày nộp" value={`${dateStr} ${timeStr}`} />
               {app.cv && (
                 <div>
-                  <span className="text-gray-400 text-xs font-semibold block mb-0.5">
+                  <span className="mb-0.5 block text-xs font-semibold text-gray-400">
                     CV / Portfolio
                   </span>
                   <a
                     href={app.cv}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline break-all text-sm font-semibold"
+                    className="break-all text-sm font-semibold text-blue-500 hover:underline"
                   >
                     Xem CV
                   </a>
@@ -736,11 +831,419 @@ export default function AdminApplicationDetailPage() {
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 }
 
 /* ── Sub-components ── */
+
+function ManagementPanel({
+  management,
+  leaders,
+  activeLevel,
+  saving,
+  onChange,
+  onLevelChange,
+  onUpdateLevel,
+  onPromoteLevel,
+  onOpenLeaders,
+  onSave,
+}: {
+  management: RecruitmentManagement;
+  leaders: RecruitmentLeader[];
+  activeLevel: EmployeeLevel;
+  saving: boolean;
+  onChange: React.Dispatch<React.SetStateAction<RecruitmentManagement>>;
+  onLevelChange: (level: EmployeeLevel) => void;
+  onUpdateLevel: (
+    level: EmployeeLevel,
+    field: "target" | "comment",
+    value: string,
+  ) => void;
+  onPromoteLevel: (level: EmployeeLevel) => void;
+  onOpenLeaders: () => void;
+  onSave: () => void;
+}) {
+  const currentLeader = management.leader;
+  const currentIndex = LEVEL_OPTIONS.findIndex(
+    (level) => level.value === management.currentLevel,
+  );
+  const nextLevel = LEVEL_OPTIONS[currentIndex + 1]?.value;
+
+  return (
+    <div className="grid grid-cols-1 gap-4 xl:grid-cols-[340px_minmax(0,1fr)]">
+      <div className="space-y-4">
+        <Section title="Phân công quản lý" compact>
+          <div className="space-y-4">
+            <div>
+              <SLabel>Leader phụ trách</SLabel>
+              <div className="mt-1 flex gap-2">
+                <select
+                  value={currentLeader?.id || ""}
+                  onChange={(event) => {
+                    const leader =
+                      leaders.find((item) => item.id === event.target.value) ||
+                      null;
+                    onChange((prev) => ({ ...prev, leader }));
+                  }}
+                  className="h-10 min-w-0 flex-1 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-700 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
+                >
+                  <option value="">Chưa chọn leader</option>
+                  {leaders.map((leader) => (
+                    <option key={leader.id} value={leader.id}>
+                      {leader.name} - {leader.team}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={onOpenLeaders}
+                  className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 text-xs font-bold text-gray-600 transition hover:bg-gray-50"
+                >
+                  <Edit3 size={13} />
+                  Leader
+                </button>
+              </div>
+              {currentLeader && (
+                <div className="mt-2 inline-flex max-w-full items-center gap-2 rounded-lg bg-gray-50 px-2.5 py-1.5">
+                  <span className="truncate text-xs font-bold text-gray-800">
+                    {currentLeader.name}
+                  </span>
+                  <LeaderTeamTag team={currentLeader.team} />
+                </div>
+              )}
+            </div>
+
+            <div>
+              <SLabel>Level hiện tại</SLabel>
+              <div className="mt-1 rounded-xl border border-gray-200 bg-gray-50 p-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-sm font-black text-gray-900">
+                      {
+                        LEVEL_OPTIONS.find(
+                          (level) => level.value === management.currentLevel,
+                        )?.label
+                      }
+                    </p>
+                    <p className="mt-0.5 text-xs font-medium leading-relaxed text-gray-500">
+                      Chọn LV bên dưới chỉ để xem lại target và nhận xét.
+                    </p>
+                  </div>
+                  {nextLevel ? (
+                    <button
+                      type="button"
+                      onClick={() => onPromoteLevel(nextLevel)}
+                      className="h-8 shrink-0 rounded-lg border border-[#8b4513] bg-white px-3 text-xs font-bold text-[#4a2318] transition hover:bg-[#fbf6f2]"
+                    >
+                      Nâng lên{" "}
+                      {LEVEL_OPTIONS.find((level) => level.value === nextLevel)
+                        ?.label || ""}
+                    </button>
+                  ) : (
+                    <span className="shrink-0 rounded-lg bg-emerald-50 px-2.5 py-1.5 text-xs font-bold text-emerald-600">
+                      Đã ở level cao nhất
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        <Section title="Xem lại theo level" compact>
+          <div className="space-y-2">
+            {LEVEL_OPTIONS.map((level) => {
+              const record = management.levels[level.value];
+              const active = activeLevel === level.value;
+              const isCurrent = management.currentLevel === level.value;
+              return (
+                <button
+                  key={level.value}
+                  type="button"
+                  onClick={() => onLevelChange(level.value)}
+                  className={`flex w-full items-center justify-between rounded-xl border px-3 py-2.5 text-left transition ${
+                    active
+                      ? "border-[#8b4513] bg-[#fbf6f2]"
+                      : "border-gray-100 bg-white hover:bg-gray-50"
+                  }`}
+                >
+                  <span className="min-w-0">
+                    <span className="flex min-w-0 items-center gap-2">
+                      <span className="text-sm font-bold text-gray-900">
+                      {level.label}
+                      </span>
+                      {isCurrent && (
+                        <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-600">
+                          hiện tại
+                        </span>
+                      )}
+                    </span>
+                    <span className="mt-0.5 block truncate text-xs font-medium text-gray-400">
+                      {record.target || record.comment
+                        ? "Đã có dữ liệu"
+                        : "Chưa nhập"}
+                    </span>
+                  </span>
+                  <ChevronRight size={15} className="shrink-0 text-gray-300" />
+                </button>
+              );
+            })}
+          </div>
+        </Section>
+      </div>
+
+      <Section title={`Target và nhận xét ${activeLevel.toUpperCase()}`}>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap gap-2">
+            {LEVEL_OPTIONS.map((level) => (
+              <button
+                key={level.value}
+                type="button"
+                onClick={() => onLevelChange(level.value)}
+                className={`h-8 rounded-lg border px-3 text-xs font-bold transition ${
+                  activeLevel === level.value
+                    ? "border-[#8b4513] bg-[#4a2318] text-white"
+                    : "border-gray-200 bg-white text-gray-500 hover:bg-gray-50"
+                }`}
+              >
+                {level.label}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={saving}
+            className="inline-flex h-9 items-center gap-2 rounded-xl bg-[#4a2318] px-4 text-sm font-bold text-white transition hover:opacity-90 disabled:opacity-50"
+          >
+            <Save size={15} />
+            {saving ? "Đang lưu..." : "Lưu quản lý"}
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <label>
+            <SLabel>Target {activeLevel.toUpperCase()}</SLabel>
+            <textarea
+              value={management.levels[activeLevel].target}
+              onChange={(event) =>
+                onUpdateLevel(activeLevel, "target", event.target.value)
+              }
+              rows={7}
+              placeholder="Nhập target, mục tiêu, KPI hoặc việc cần đạt..."
+              className="mt-1 w-full resize-y rounded-xl border border-gray-200 px-3 py-2.5 text-sm leading-relaxed text-gray-700 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
+            />
+          </label>
+          <label>
+            <SLabel>Nhận xét {activeLevel.toUpperCase()}</SLabel>
+            <textarea
+              value={management.levels[activeLevel].comment}
+              onChange={(event) =>
+                onUpdateLevel(activeLevel, "comment", event.target.value)
+              }
+              rows={7}
+              placeholder="Nhập nhận xét, điểm mạnh, điểm cần cải thiện..."
+              className="mt-1 w-full resize-y rounded-xl border border-gray-200 px-3 py-2.5 text-sm leading-relaxed text-gray-700 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
+            />
+          </label>
+        </div>
+
+        <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+          {LEVEL_OPTIONS.map((level) => {
+            const record = management.levels[level.value];
+            return (
+              <button
+                key={level.value}
+                type="button"
+                onClick={() => onLevelChange(level.value)}
+                className={`rounded-xl border p-3 text-left transition ${
+                  activeLevel === level.value
+                    ? "border-[#8b4513] bg-[#fbf6f2]"
+                    : "border-gray-100 bg-gray-50 hover:bg-white"
+                }`}
+              >
+                <p className="mb-2 text-xs font-bold text-gray-500">
+                  Lưu trữ {level.label}
+                </p>
+                <p className="line-clamp-2 text-xs leading-relaxed text-gray-600">
+                  <strong>Target:</strong> {record.target || "---"}
+                </p>
+                <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-gray-600">
+                  <strong>Nhận xét:</strong> {record.comment || "---"}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+      </Section>
+    </div>
+  );
+}
+
+function LeaderModal({
+  leaders,
+  draft,
+  editingId,
+  onDraftChange,
+  onSave,
+  onEdit,
+  onDelete,
+  onReset,
+  onClose,
+}: {
+  leaders: RecruitmentLeader[];
+  draft: { name: string; team: LeaderTeam };
+  editingId: string | null;
+  onDraftChange: (draft: { name: string; team: LeaderTeam }) => void;
+  onSave: () => void;
+  onEdit: (leader: RecruitmentLeader) => void;
+  onDelete: (leaderId: string) => void;
+  onReset: () => void;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+    >
+      <div
+        className="w-full max-w-2xl rounded-2xl bg-white p-5 shadow-2xl"
+      >
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f8f4f1] text-[#4a2318]">
+              <UserRound size={17} />
+            </span>
+            <div>
+              <h2 className="text-base font-black text-gray-950">
+                Quản lý leader
+              </h2>
+              <p className="text-xs font-semibold text-gray-400">
+                Team tag chỉ để nhìn và phân biệt, không ảnh hưởng vị trí.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Đóng"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-[0px] font-black leading-none text-gray-500 transition after:text-lg after:content-['×'] hover:bg-gray-50"
+          >
+            Đóng
+          </button>
+        </div>
+
+        <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-[1fr_160px_auto_auto]">
+          <input
+            value={draft.name}
+            onChange={(event) =>
+              onDraftChange({ ...draft, name: event.target.value })
+            }
+            placeholder="Tên leader"
+            className="h-10 rounded-lg border border-gray-200 px-3 text-sm font-semibold outline-none focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
+          />
+          <select
+            value={draft.team}
+            onChange={(event) =>
+              onDraftChange({ ...draft, team: event.target.value as LeaderTeam })
+            }
+            className="h-10 rounded-lg border border-gray-200 px-3 text-sm font-bold outline-none focus:border-[#8b4513]"
+          >
+            {LEADER_TEAMS.map((team) => (
+              <option key={team.value} value={team.value}>
+                {team.label}
+              </option>
+            ))}
+          </select>
+          <button
+            type="button"
+            onClick={onSave}
+            className="inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-[#4a2318] px-3 text-sm font-black text-white"
+          >
+            <Plus size={15} />
+            {editingId ? "Lưu" : "Thêm"}
+          </button>
+          {editingId && (
+            <button
+              type="button"
+              onClick={onReset}
+              className="h-10 rounded-lg border border-gray-200 px-3 text-sm font-black text-gray-500"
+            >
+              Hủy
+            </button>
+          )}
+        </div>
+
+        <div className="divide-y divide-gray-100 rounded-xl border border-gray-100">
+          {leaders.map((leader) => (
+            <div
+              key={leader.id}
+              className="flex items-center justify-between gap-3 px-3 py-2.5"
+            >
+              <div className="min-w-0">
+                <p className="truncate text-sm font-black text-gray-900">
+                  {leader.name}
+                </p>
+                <LeaderTeamTag team={leader.team} />
+              </div>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => onEdit(leader)}
+                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition hover:bg-gray-100"
+                  title="Sua"
+                >
+                  <Edit3 size={14} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onDelete(leader.id)}
+                  className="flex h-8 w-8 items-center justify-center rounded-lg text-red-400 transition hover:bg-red-50"
+                  title="Xoa"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LeaderTeamTag({ team }: { team: LeaderTeam }) {
+  const info = LEADER_TEAMS.find((item) => item.value === team) || LEADER_TEAMS[5];
+  return (
+    <span
+      className="inline-flex w-fit rounded-md px-2 py-0.5 text-[10px] font-black"
+      style={{ color: info.color, background: info.bg }}
+    >
+      {info.label}
+    </span>
+  );
+}
+
+function HighlightCard({
+  icon,
+  label,
+  children,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-1 rounded-2xl border border-gray-100 bg-white p-3.5 shadow-sm">
+      <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wide text-gray-400">
+        <span className="text-gray-400">{icon}</span>
+        {label}
+      </div>
+      <div className="flex min-w-0 flex-col gap-0.5">{children}</div>
+    </div>
+  );
+}
 
 function Section({
   title,
@@ -753,10 +1256,10 @@ function Section({
 }) {
   return (
     <div
-      className={`bg-white rounded-2xl border border-gray-100 shadow-sm ${compact ? "p-4" : "p-5"}`}
+      className={`rounded-2xl border border-gray-100 bg-white shadow-sm ${compact ? "p-4" : "p-5"}`}
     >
       <h2
-        className={`font-bold text-gray-900 mb-4 ${compact ? "text-sm" : "text-base"}`}
+        className={`mb-4 font-bold text-gray-900 ${compact ? "text-sm" : "text-base"}`}
       >
         {title}
       </h2>
@@ -774,7 +1277,7 @@ function SLabel({
 }) {
   return (
     <span
-      className="block text-xs font-bold uppercase tracking-wider mb-1"
+      className="mb-1 block text-xs font-bold uppercase tracking-wider"
       style={{ color: color || "#94a3b8" }}
     >
       {children}
@@ -787,7 +1290,7 @@ function ContentBlock({ label, value }: { label: string; value: string }) {
   return (
     <div className="mb-5">
       <SLabel>{label}</SLabel>
-      <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap mt-1">
+      <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
         {value}
       </p>
     </div>
@@ -797,10 +1300,10 @@ function ContentBlock({ label, value }: { label: string; value: string }) {
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <span className="text-gray-400 text-xs font-semibold block mb-0.5">
+      <span className="mb-0.5 block text-xs font-semibold text-gray-400">
         {label}
       </span>
-      <span className="text-gray-800 font-semibold">{value || "---"}</span>
+      <span className="font-semibold text-gray-800">{value || "---"}</span>
     </div>
   );
 }

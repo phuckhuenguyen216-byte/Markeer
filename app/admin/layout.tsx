@@ -131,6 +131,7 @@ export default function AdminLayout({
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     setMounted(true);
@@ -138,8 +139,15 @@ export default function AdminLayout({
     const supabase = createSupabaseBrowserClient();
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) router.push("/admin/login");
+      else setEmail(data.user.email || "");
     });
   }, [pathname, router]);
+
+  const handleLogout = async () => {
+    const supabase = createSupabaseBrowserClient();
+    await supabase.auth.signOut();
+    router.push("/admin/login");
+  };
 
   const { t } = useTranslation();
 
@@ -159,7 +167,7 @@ export default function AdminLayout({
   return (
     <>
       <style>{`
-        .admin-shell { display: flex; min-height: 100vh; background: #f0f2f5; font-family: system-ui, -apple-system, sans-serif; }
+        .admin-shell { display: flex; height: 100vh; overflow: hidden; background: #eef1f5; font-family: system-ui, -apple-system, sans-serif; }
 
         .sidebar {
           width: ${collapsed ? "64px" : "220px"};
@@ -179,7 +187,7 @@ export default function AdminLayout({
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(160deg, #2c1810 0%, #3b1c14 40%, #4a2318 100%);
+          background: linear-gradient(180deg, #2c1810 0%, #381c13 100%);
           z-index: 0;
         }
 
@@ -190,7 +198,7 @@ export default function AdminLayout({
           width: 100%;
           z-index: 1;
           opacity: 0.12;
-          animation: wave-move 8s ease-in-out infinite alternate;
+          display: none;
         }
         @keyframes wave-move {
           from { transform: translateY(0px) scaleX(1); }
@@ -201,7 +209,7 @@ export default function AdminLayout({
           position: absolute;
           border-radius: 50%;
           background: rgba(180,120,90,0.12);
-          animation: float-dot 6s ease-in-out infinite alternate;
+          display: none;
           z-index: 1;
         }
         @keyframes float-dot {
@@ -212,21 +220,25 @@ export default function AdminLayout({
         .sidebar-inner { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; }
 
         .sidebar-logo {
-          padding: 20px 16px 16px;
+          padding: 18px 14px 14px;
           border-bottom: 0.5px solid rgba(255,255,255,0.08);
           display: flex;
           align-items: center;
           gap: 10px;
-          min-height: 68px;
+          min-height: 66px;
         }
         .logo-mark {
-          width: 34px; height: 34px; flex-shrink: 0;
-          border-radius: 10px;
-          background: #8b4513;
+          width: 36px; height: 36px; flex-shrink: 0;
+          border-radius: 12px;
+          background: linear-gradient(135deg, #b45309, #7c2d12);
           display: flex; align-items: center; justify-content: center;
-          box-shadow: 0 4px 12px rgba(139,69,19,0.4);
+          color: #fff;
+          font-size: 15px;
+          font-weight: 900;
+          letter-spacing: 0;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 8px 18px rgba(0,0,0,0.22);
         }
-        .logo-mark:hover { transform: rotate(-6deg) scale(1.08); }
+        .logo-mark:hover { transform: translateY(-1px); }
         .logo-text { overflow: hidden; transition: opacity 0.2s, width 0.3s; white-space: nowrap; }
         .logo-text.hidden-text { opacity: 0; width: 0; }
 
@@ -274,20 +286,7 @@ export default function AdminLayout({
         .nav-link-name { overflow: hidden; transition: opacity 0.2s, max-width 0.3s; max-width: 120px; }
         .nav-link-name.hidden-text { opacity: 0; max-width: 0; }
 
-        .collapse-btn {
-          position: absolute; top: 22px; right: -11px;
-          width: 22px; height: 22px;
-          border-radius: 50%;
-          background: #2c1810;
-          border: 1.5px solid rgba(255,255,255,0.15);
-          display: flex; align-items: center; justify-content: center;
-          cursor: pointer; z-index: 10;
-          transition: all 0.2s;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        .collapse-btn:hover { background: #8b4513; border-color: #a0522d; }
-        .collapse-btn svg { transition: transform 0.3s; }
-        .collapse-btn.flipped svg { transform: rotate(180deg); }
+        .collapse-btn { display: none; }
 
         .sidebar-footer { padding: 10px 8px 14px; border-top: 0.5px solid rgba(255,255,255,0.06); }
         .logout-btn {
@@ -301,31 +300,46 @@ export default function AdminLayout({
         }
         .logout-btn:hover { color: rgba(255,140,80,1); background: rgba(255,100,50,0.1); }
 
-        .admin-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        .admin-main { flex: 1; display: flex; flex-direction: column; min-width: 0; height: 100vh; min-height: 0; background: #eef1f5; }
 
         .topbar {
-          height: 56px; flex-shrink: 0;
-          background: rgba(255,255,255,0.85);
-          backdrop-filter: blur(12px);
-          border-bottom: 0.5px solid rgba(0,0,0,0.06);
+          height: 52px; flex-shrink: 0;
+          background: #ffffff;
+          border-bottom: 1px solid #e5e7eb;
           display: flex; align-items: center; justify-content: space-between;
-          padding: 0 24px;
-          position: sticky; top: 0; z-index: 10;
+          padding: 0 clamp(12px, 1.8vw, 24px);
+          position: relative; z-index: 30;
         }
-        .topbar-left { display: flex; align-items: center; gap: 10px; }
+        .topbar-left { display: flex; min-width: 0; align-items: center; gap: 10px; }
+        .topbar-toggle {
+          width: 30px;
+          height: 30px;
+          border-radius: 9px;
+          border: 1px solid #e5e7eb;
+          background: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #6b7280;
+          cursor: pointer;
+          transition: all 0.18s;
+        }
+        .topbar-toggle:hover { background: #f9fafb; color: #4a2318; border-color: #d6c4ba; }
+        .topbar-toggle svg { transition: transform 0.2s; }
+        .topbar-toggle.collapsed svg { transform: rotate(180deg); }
         .breadcrumb-sep { color: #d1d5db; font-size: 14px; }
-        .topbar-page { font-size: 14px; font-weight: 600; color: #5c3320; }
-        .topbar-sub { font-size: 11px; color: #9ca3af; }
+        .topbar-page { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 700; color: #5c3320; }
+        .topbar-sub { font-size: 11px; color: #9ca3af; white-space: nowrap; }
 
-        .topbar-right { display: flex; align-items: center; gap: 12px; }
+        .topbar-right { display: flex; min-width: 0; align-items: center; gap: 10px; }
         .avatar-ring {
-          width: 32px; height: 32px; border-radius: 50%;
+          width: 30px; height: 30px; border-radius: 50%;
           background: linear-gradient(135deg,#8b4513,#a0522d);
           display: flex; align-items: center; justify-content: center;
           color: #fff; font-size: 11px; font-weight: 700;
           box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #8b4513;
         }
-        .topbar-name { font-size: 12px; color: #6b7280; font-weight: 500; }
+        .topbar-name { max-width: min(260px, 28vw); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: #6b7280; font-weight: 500; }
 
         .online-dot {
           width: 7px; height: 7px; border-radius: 50%;
@@ -338,17 +352,48 @@ export default function AdminLayout({
           50%      { box-shadow: 0 0 0 5px rgba(22,163,74,0.08); }
         }
 
-        .admin-content { flex: 1; padding: 24px; overflow-auto; }
+        .topbar-logout {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          height: 30px;
+          padding: 0 10px;
+          border-radius: 9px;
+          border: 1px solid rgba(192,57,43,0.25);
+          background: #fff;
+          color: #c0392b;
+          font-size: 12px;
+          font-weight: 700;
+          cursor: pointer;
+          white-space: nowrap;
+        }
+
+        .admin-content { flex: 1; min-height: 0; padding: clamp(12px, 1.6vw, 20px); overflow-y: auto; }
 
         .page-enter { animation: page-in 0.25s ease forwards; }
         @keyframes page-in {
           from { opacity: 0; }
           to   { opacity: 1; }
         }
+
+        @media (max-width: 900px) {
+          .sidebar { width: 68px !important; }
+          .logo-text, .nav-label, .nav-link-name { opacity: 0 !important; width: 0 !important; max-width: 0 !important; }
+          .sidebar-logo { padding-left: 17px; padding-right: 17px; }
+          .logout-btn span { opacity: 0 !important; max-width: 0 !important; }
+        }
+
+        @media (max-width: 720px) {
+          .topbar { height: 48px; gap: 8px; }
+          .topbar-sub, .breadcrumb-sep, .online-dot, .topbar-name, .topbar-logout span { display: none; }
+          .topbar-right { gap: 8px; }
+          .topbar-logout { width: 30px; padding: 0; justify-content: center; }
+          .admin-content { padding: 10px; }
+        }
       `}</style>
 
       <div className="admin-shell">
-        <aside className="sidebar">
+        <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
           <div
             className="sidebar-dot"
             style={{
@@ -415,16 +460,7 @@ export default function AdminLayout({
           <div className="sidebar-inner">
             <div className="sidebar-logo">
               <div className="logo-mark">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                  <circle cx="9" cy="9" r="6" fill="#ef4444" opacity="0.9" />
-                  <path
-                    d="M6 9l2 2 4-4"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                M
               </div>
               <div className={`logo-text ${collapsed ? "hidden-text" : ""}`}>
                 <p
@@ -481,11 +517,7 @@ export default function AdminLayout({
             <div className="sidebar-footer">
               <button
                 className="logout-btn"
-                onClick={async () => {
-                  const supabase = createSupabaseBrowserClient();
-                  await supabase.auth.signOut();
-                  router.push("/admin/login");
-                }}
+                onClick={handleLogout}
                 title={collapsed ? t("admin.sidebar.logout") : undefined}
               >
                 <svg
@@ -522,14 +554,53 @@ export default function AdminLayout({
         <div className="admin-main">
           <div className="topbar">
             <div className="topbar-left">
+              <button
+                type="button"
+                className={`topbar-toggle ${collapsed ? "collapsed" : ""}`}
+                onClick={() => setCollapsed(!collapsed)}
+                title={
+                  collapsed
+                    ? "Mở rộng thanh điều hướng"
+                    : "Thu gọn thanh điều hướng"
+                }
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M8.8 3.5 5.3 7l3.5 3.5"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
               <span className="topbar-sub">Admin</span>
               <span className="breadcrumb-sep">/</span>
               <span className="topbar-page">{currentPageLabel}</span>
             </div>
             <div className="topbar-right">
               <div className="online-dot" title="Online" />
-              <span className="topbar-name">admin</span>
-              <div className="avatar-ring">A</div>
+              <span className="topbar-name">{email || "admin"}</span>
+              <div className="avatar-ring">
+                {(email || "A").charAt(0).toUpperCase()}
+              </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                title={t("admin.sidebar.logout")}
+                className="topbar-logout"
+              >
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3M10 11l3-3-3-3M13 8H6"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span>{t("admin.sidebar.logout")}</span>
+              </button>
             </div>
           </div>
 

@@ -44,6 +44,10 @@ const VIDEO_POLICY_URL = (
   process.env.ONBOARDING_VIDEO_POLICY_URL ||
   "https://drive.google.com/file/d/15KEzLkC1KRE5GNf5Dad89sjJuO4UzPAW/view?usp=drive_link"
 ).trim();
+const ASSESSMENT_FORM_URL = (
+  process.env.APPLICATION_ASSESSMENT_FORM_URL ||
+  "https://forms.gle/myvGzo5QWmJihrEP7"
+).trim();
 const FACEBOOK_PAGE_URL = "https://www.facebook.com/markeeaimarketing/";
 const FACEBOOK_LOGO_URL =
   "https://graph.facebook.com/markeeaimarketing/picture?type=large&width=96&height=96";
@@ -199,6 +203,10 @@ function buildText({ fullName, position, videoUrl }: ConfirmationEmailInput) {
         ? `2. Th\u01b0 m\u1ee5c video h\u01b0\u1edbng d\u1eabn: ${fallbackVideoUrl}`
         : "",
     "",
+    ASSESSMENT_FORM_URL
+      ? `Xem video v\u00e0 nh\u1ea5n t\u1ea1i \u0111\u00e2y \u0111\u1ec3 ho\u00e0n th\u00e0nh ki\u1ec3m tra trong 24h b\u1ea1n nh\u00e9: ${ASSESSMENT_FORM_URL}`
+      : "",
+    "",
     "L\u01b0u \u00fd: quy\u1ec1n xem video ch\u1ec9 \u0111\u01b0\u1ee3c c\u1ea5p \u1edf m\u1ee9c ng\u01b0\u1eddi xem cho \u0111\u00fang email b\u1ea1n d\u00f9ng \u0111\u1ec3 \u1ee9ng tuy\u1ec3n. N\u1ebfu m\u1edf link b\u1eb1ng t\u00e0i kho\u1ea3n Google kh\u00e1c, h\u00e3y \u0111\u1ed5i l\u1ea1i \u0111\u00fang email n\u00e0y.",
     "",
     "H\u1eb9n g\u1eb7p b\u1ea1n,",
@@ -220,6 +228,7 @@ function buildHtml({ fullName, position, videoUrl }: ConfirmationEmailInput) {
   const safeZaloLabel = escapeHtml(zaloCommunity.label);
   const safePmKpiUrl = escapeHtml(VIDEO_PM_KPI_URL);
   const safePolicyUrl = escapeHtml(VIDEO_POLICY_URL);
+  const safeAssessmentFormUrl = escapeHtml(ASSESSMENT_FORM_URL);
   const safeFacebookPageUrl = escapeHtml(FACEBOOK_PAGE_URL);
   const safeFacebookLogoUrl = escapeHtml(FACEBOOK_LOGO_URL);
 
@@ -227,7 +236,7 @@ function buildHtml({ fullName, position, videoUrl }: ConfirmationEmailInput) {
     ? `<a href="${safeZaloUrl}" style="color:#0068ff;text-decoration:underline;font-weight:900;">t\u1ea1i \u0111\u00e2y</a> <span style="display:inline-block;margin-left:5px;padding:3px 7px;border-radius:999px;background:#0068ff;color:#ffffff;font-size:11px;line-height:1;font-weight:900;vertical-align:1px;">Zalo</span>`
     : `<span style="color:#0068ff;font-weight:900;">k\u00eanh Zalo ph\u00f9 h\u1ee3p</span>`;
   const pmKpiCard = safePmKpiUrl
-    ? `<a href="${safePmKpiUrl}" style="display:block;min-height:156px;background:#ffffff;border:1.5px solid #fecaca;border-radius:18px;padding:16px;text-decoration:none;box-shadow:0 10px 26px rgba(239,68,68,.08);">
+    ? `<a href="${safePmKpiUrl}" style="display:block;height:176px;background:#ffffff;border:1.5px solid #fecaca;border-radius:18px;padding:16px;text-decoration:none;box-shadow:0 10px 26px rgba(239,68,68,.08);box-sizing:border-box;">
         <span style="display:block;width:28px;height:28px;line-height:28px;text-align:center;border-radius:999px;background:#fff1f2;color:#ef4444;font-size:13px;font-weight:900;margin-bottom:10px;">1</span>
         <strong style="display:block;color:#0f172a;font-size:14px;line-height:1.4;margin-bottom:6px;">C\u00e1ch s\u1eed d\u1ee5ng PM v\u00e0 file KPI c\u00e1 nh\u00e2n</strong>
         <span style="font-size:13px;line-height:1.55;color:#64748b;">N\u1eafm c\u00e1ch team theo d\u00f5i c\u00f4ng vi\u1ec7c, c\u1eadp nh\u1eadt ti\u1ebfn \u0111\u1ed9 v\u00e0 ph\u1ed1i h\u1ee3p trong k\u1ef3 th\u1ef1c t\u1eadp.</span>
@@ -235,7 +244,7 @@ function buildHtml({ fullName, position, videoUrl }: ConfirmationEmailInput) {
       </a>`
     : "";
   const policyCard = safePolicyUrl
-    ? `<a href="${safePolicyUrl}" style="display:block;min-height:156px;background:#ffffff;border:1.5px solid #fecaca;border-radius:18px;padding:16px;text-decoration:none;box-shadow:0 10px 26px rgba(239,68,68,.08);">
+    ? `<a href="${safePolicyUrl}" style="display:block;height:176px;background:#ffffff;border:1.5px solid #fecaca;border-radius:18px;padding:16px;text-decoration:none;box-shadow:0 10px 26px rgba(239,68,68,.08);box-sizing:border-box;">
         <span style="display:block;width:28px;height:28px;line-height:28px;text-align:center;border-radius:999px;background:#fff1f2;color:#ef4444;font-size:13px;font-weight:900;margin-bottom:10px;">2</span>
         <strong style="display:block;color:#0f172a;font-size:14px;line-height:1.4;margin-bottom:6px;">Ch\u00ednh S\u00e1ch C\u00f4ng Ty, Quy \u0110\u1ecbnh & Roadmap Ph\u00e1t Tri\u1ec3n Intern</strong>
         <span style="font-size:13px;line-height:1.55;color:#64748b;">Hi\u1ec3u k\u1ef3 v\u1ecdng l\u00e0m vi\u1ec7c, ch\u00ednh s\u00e1ch n\u1ed9i b\u1ed9 v\u00e0 l\u1ed9 tr\u00ecnh ph\u00e1t tri\u1ec3n t\u1ea1i Markee.</span>
@@ -244,6 +253,11 @@ function buildHtml({ fullName, position, videoUrl }: ConfirmationEmailInput) {
     : safeFallbackVideoUrl
       ? `<a href="${safeFallbackVideoUrl}" style="display:block;background:#ef4444;color:#ffffff;text-decoration:none;border-radius:15px;padding:15px 20px;font-size:15px;font-weight:900;box-shadow:0 14px 28px rgba(239,68,68,.20);">Xem video h\u01b0\u1edbng d\u1eabn</a>`
       : "";
+  const assessmentCard = safeAssessmentFormUrl
+    ? `<a href="${safeAssessmentFormUrl}" style="display:block;background:#eff6ff;border:1px solid #bfdbfe;border-radius:16px;padding:14px 16px;margin:0 0 24px;text-decoration:none;">
+        <span style="display:block;margin:0;font-size:14px;line-height:1.65;color:#1e3a8a;font-weight:800;">Xem video v\u00e0 nh\u1ea5n <span style="color:#2563eb;text-decoration:underline;text-underline-offset:2px;font-weight:900;">t\u1ea1i \u0111\u00e2y</span> \u0111\u1ec3 ho\u00e0n th\u00e0nh ki\u1ec3m tra trong 24h b\u1ea1n nh\u00e9</span>
+      </a>`
+    : "";
 
   return `<!doctype html>
 <html lang="vi">
@@ -305,7 +319,7 @@ function buildHtml({ fullName, position, videoUrl }: ConfirmationEmailInput) {
 
                       <div style="font-size:16px;font-weight:900;color:#0f172a;text-align:center;margin:0 0 6px;">&#127916; Video H\u01b0\u1edbng D\u1eabn</div>
                       <p style="margin:0 0 14px;text-align:center;font-size:13px;line-height:1.6;color:#64748b;">Nh\u1ea5n v\u00e0o t\u1eebng th\u1ebb b\u00ean d\u01b0\u1edbi \u0111\u1ec3 m\u1edf video tr\u00ean Google Drive.</p>
-                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:separate;border-spacing:0 12px;margin:0 0 24px;">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="table-layout:fixed;border-collapse:separate;border-spacing:0 12px;margin:0 0 16px;">
                         <tr>
                           <td width="50%" style="vertical-align:top;padding-right:6px;">
                             ${pmKpiCard}
@@ -315,6 +329,8 @@ function buildHtml({ fullName, position, videoUrl }: ConfirmationEmailInput) {
                           </td>
                         </tr>
                       </table>
+
+                      ${assessmentCard}
 
                       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 24px;">
                         <tr>

@@ -3874,6 +3874,7 @@ function SuccessScreen({
                 <div className="wz-result-badges">
                   <span>Đã nhận hồ sơ</span>
                   <span>Email tự động · dưới 30 giây</span>
+                  <span>Check mail ngay và làm theo hướng dẫn</span>
                 </div>
                 <h2>
                   Hồ sơ đã được gửi <em>thành công!</em>
@@ -5145,11 +5146,13 @@ const wizardCSS = `
 .wz-result-badges span{display:inline-flex;align-items:center;min-height:24px;border-radius:999px;padding:3px 10px;font-size:10.5px;font-weight:900}
 .wz-result-badges span:first-child{background:#e8f5e9;color:#2e7d32}
 .wz-result-badges span:first-child::before{content:'';width:6px;height:6px;border-radius:999px;background:#4caf50;margin-right:5px}
-.wz-result-badges span:last-child{background:#fff8e1;border:1px solid #ffe082;color:#e65100}
+.wz-result-badges span:nth-child(2){background:#fff8e1;border:1px solid #ffe082;color:#e65100}
+.wz-result-badges span:nth-child(3){background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8}
 .wz-result-copy h2{font-size:25px;line-height:1.16;font-weight:900;color:#18182d;margin:0 0 6px;letter-spacing:-.03em}
 .wz-result-copy h2 em{font-style:normal;color:#e5323b}
 .wz-result-copy p{font-size:13px;line-height:1.62;color:#657083;font-weight:680;margin:0;max-width:820px}
 .wz-result-copy p strong{color:#1a1a2e}
+.wz-result-copy p a{color:#e5323b;font-weight:900;text-decoration:underline;text-underline-offset:2px}
 .wz-result-mascot{width:76px;filter:drop-shadow(0 12px 20px rgba(229,50,59,.12));opacity:.92}
 .wz-result-summary{grid-column:1 / -1;display:grid;grid-template-columns:1.2fr 1fr auto;gap:0;border:1px solid #e7edf5;border-radius:16px;background:#fbfdff;overflow:hidden}
 .wz-result-summary div{padding:11px 14px;border-right:1px solid #e7edf5;min-width:0}

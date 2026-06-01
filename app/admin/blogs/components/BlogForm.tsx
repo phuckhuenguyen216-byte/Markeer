@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -5,6 +6,9 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { BlogPost, TAG_OPTIONS } from "@/lib/blog";
 import dynamic from "next/dynamic";
+import Spinner from "../../components/Spinner";
+import BlogStatusBadge from "../../components/BlogStatusBadge";
+import { ToastStack, useToasts } from "../../components/Toast";
 
 const RichTextEditor = dynamic(() => import("./RichTextEditor"), {
   ssr: false,
@@ -122,6 +126,7 @@ export default function BlogForm({
 }) {
   const router = useRouter();
   const { t } = useTranslation();
+  const { toasts, addToast } = useToasts();
 
   const [post, setPost] = useState<Partial<BlogPost>>({
     title: "",
@@ -163,11 +168,11 @@ export default function BlogForm({
   const handleSubmit = async (e: React.FormEvent, overrideStatus?: string) => {
     e.preventDefault();
     if (!post.title?.trim()) {
-      alert(t("admin.form.errorTitle"));
+      addToast(t("admin.form.errorTitle"), "error");
       return;
     }
     if (!post.cover_image?.trim()) {
-      alert(t("admin.form.errorCover"));
+      addToast(t("admin.form.errorCover"), "error");
       return;
     }
 
@@ -188,34 +193,29 @@ export default function BlogForm({
         body: JSON.stringify(submitData),
       });
       if (res.ok) {
-        alert(
+        addToast(
           isNew ? t("admin.form.successCreate") : t("admin.form.successUpdate"),
         );
-        router.push("/admin/blogs");
-        router.refresh();
+        setTimeout(() => {
+          router.push("/admin/blogs");
+          router.refresh();
+        }, 800);
       } else {
         const err = await res.json();
-        alert(t("admin.form.errorServer") + ": " + (err.error || "Error"));
+        addToast(
+          t("admin.form.errorServer") + ": " + (err.error || "Error"),
+          "error",
+        );
+        setSaving(false);
       }
     } catch {
-      alert(t("admin.form.errorServer"));
-    } finally {
+      addToast(t("admin.form.errorServer"), "error");
       setSaving(false);
     }
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="flex flex-col items-center gap-3">
-          <div
-            className="w-10 h-10 rounded-full border-2 border-t-transparent animate-spin"
-            style={{ borderColor: "#8b4513", borderTopColor: "transparent" }}
-          />
-          <p className="text-sm text-gray-400">{t("admin.form.loading")}</p>
-        </div>
-      </div>
-    );
+    return <Spinner center label={t("admin.form.loading")} />;
   }
 
   return (
@@ -223,6 +223,8 @@ export default function BlogForm({
       className="max-w-4xl mx-auto"
       style={{ fontFamily: "system-ui, sans-serif" }}
     >
+      <ToastStack toasts={toasts} />
+
       {/* Top bar */}
       <div className="flex items-center justify-between mb-6">
         <button
@@ -232,24 +234,7 @@ export default function BlogForm({
         >
           <IconBack /> {t("admin.form.backToList")}
         </button>
-        <span
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
-          style={
-            post.status === "published"
-              ? { background: "#D1FAE5", color: "#065F46" }
-              : { background: "#F3F4F6", color: "#6B7280" }
-          }
-        >
-          <span
-            className="w-1.5 h-1.5 rounded-full"
-            style={{
-              background: post.status === "published" ? "#16a34a" : "#9CA3AF",
-            }}
-          />
-          {post.status === "published"
-            ? t("admin.dashboard.published")
-            : t("admin.dashboard.draft")}
-        </span>
+        <BlogStatusBadge status={post.status === "published" ? "published" : "draft"} />
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 declare global {
   interface Window {
@@ -100,15 +101,21 @@ const socials: SocialItem[] = [
 ];
 
 export default function SocialFloat() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [showScroll, setShowScroll] = useState(false);
 
   useEffect(() => {
+    if (pathname?.startsWith("/admin")) return;
     const onScroll = () => setShowScroll(window.scrollY > 300);
     window.addEventListener("scroll", onScroll);
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [pathname]);
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
   const toggleChatwoot = () => window.$chatwoot?.toggle();

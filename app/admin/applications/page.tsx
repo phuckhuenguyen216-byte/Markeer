@@ -1,14 +1,26 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   BarChart3,
+  ChevronDown,
+  ChevronUp,
+  ChevronsUpDown,
   Database,
   Eye,
   FileText,
   Filter,
+  LayoutGrid,
+  Rows3,
   RefreshCw,
   Search,
   Star,
@@ -22,190 +34,158 @@ import {
   STATUS_OPTIONS,
   getStatusInfo,
 } from "@/lib/application";
+import {
+  TEAM_FILTERS,
+  TEAM_POSITIONS,
+  POSITION_COLORS,
+  getInitials,
+  getPrimaryTeam,
+  hasZalo,
+  isStarred,
+  toggleStarredNotes,
+  formatSubmittedAt,
+  getRecruitmentMeta,
+} from "@/lib/recruitment";
+import { StatusSelect } from "../components/StatusControl";
+import PositionTags from "../components/PositionTags";
+import Spinner from "../components/Spinner";
+import { ToastStack, useToasts } from "../components/Toast";
+import ConfirmModal, { type ConfirmAction } from "../components/ConfirmModal";
 
-const TEAM_FILTERS = [
-  "all",
-  "Infrastructure",
-  "Dev/DevOps",
-  "AI",
-  "Marketing",
-  "Sales",
-];
+type SortKey = "name" | "team" | "status" | "date";
+type PeopleScope = "all" | "reviewing" | "employees";
 
-const TEAM_POSITIONS: Record<string, string[]> = {
-  Infrastructure: [
-    "Network Team",
-    "System Team",
-    "Security Team",
-    "Hội nghị & Tổng đài",
-    "Cloud & Datacenter",
-  ],
-  "Dev/DevOps": [
-    "BA",
-    "Backend Developer",
-    "Frontend Developer",
-    "Full-stack Developer",
-    "DevOps / Platform",
-  ],
-  AI: ["AI / ML Engineer", "Data Analyst / Engineer", "AI Product / Research"],
-  Marketing: ["Content & Social", "Performance & Acquisition", "Marketing Ops"],
-  Sales: ["B2B Sales", "Business Development", "Customer Success"],
-};
+const STATUS_ORDER: Record<string, number> = STATUS_OPTIONS.reduce(
+  (acc, status, index) => ({ ...acc, [status.value]: index }),
+  {} as Record<string, number>,
+);
 
-const TEAM_STYLES: Record<string, { bg: string; color: string; dot: string }> =
-  {
-    Infrastructure: { bg: "#eff6ff", color: "#2563eb", dot: "#3b82f6" },
-    "Dev/DevOps": { bg: "#f5f3ff", color: "#7c3aed", dot: "#8b5cf6" },
-    AI: { bg: "#fef2f2", color: "#dc2626", dot: "#ef4444" },
-    Marketing: { bg: "#fffbeb", color: "#d97706", dot: "#f59e0b" },
-    Sales: { bg: "#ecfdf5", color: "#059669", dot: "#10b981" },
-    all: { bg: "#f3f4f6", color: "#4b5563", dot: "#6b7280" },
-  };
-
-const POSITION_COLORS: Record<string, { bg: string; color: string }> = {
-  "Network Team": { bg: "#dbeafe", color: "#2563eb" },
-  "System Team": { bg: "#dbeafe", color: "#2563eb" },
-  "Security Team": { bg: "#dbeafe", color: "#2563eb" },
-  "Hội nghị & Tổng đài": { bg: "#dbeafe", color: "#2563eb" },
-  "Cloud & Datacenter": { bg: "#dbeafe", color: "#2563eb" },
-  BA: { bg: "#ede9fe", color: "#7c3aed" },
-  "Backend Developer": { bg: "#ede9fe", color: "#7c3aed" },
-  "Frontend Developer": { bg: "#ede9fe", color: "#7c3aed" },
-  "Full-stack Developer": { bg: "#ede9fe", color: "#7c3aed" },
-  "DevOps / Platform": { bg: "#ede9fe", color: "#7c3aed" },
-  "AI / ML Engineer": { bg: "#fee2e2", color: "#dc2626" },
-  "Data Analyst / Engineer": { bg: "#fee2e2", color: "#dc2626" },
-  "AI Product / Research": { bg: "#fee2e2", color: "#dc2626" },
-  "Content & Social": { bg: "#fef3c7", color: "#d97706" },
-  "Performance & Acquisition": { bg: "#fef3c7", color: "#d97706" },
-  "Marketing Ops": { bg: "#fef3c7", color: "#d97706" },
-  "B2B Sales": { bg: "#d1fae5", color: "#059669" },
-  "Business Development": { bg: "#d1fae5", color: "#059669" },
-  "Customer Success": { bg: "#d1fae5", color: "#059669" },
-};
-
-const DEFAULT_POS_COLOR = { bg: "#f3f4f6", color: "#4b5563" };
-
-function isStarred(app: Application) {
-  return (app.admin_notes || "").includes("[STARRED]");
+function starRank(app: Application) {
+  return isStarred(app) && (app.status === "new" || app.status === "reviewing")
+    ? 1
+    : 0;
 }
 
-function hasZalo(app: Application) {
-  return /zalo/i.test(app.admin_notes || "");
-}
-
-function getInitials(name: string) {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  return (parts.length ? parts.slice(-2) : ["?"])
-    .map((part) => part[0])
-    .join("")
-    .toUpperCase();
-}
-
-function getPrimaryTeam(app: Application) {
-  const positions = app.career_journey || [];
-  return (
-    Object.entries(TEAM_POSITIONS).find(([, teamPositions]) =>
-      positions.some((pos) => teamPositions.includes(pos)),
-    )?.[0] || "all"
-  );
-}
-
-function formatSubmittedAt(value: string) {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return { date: "---", time: "" };
-  }
-
-  return {
-    date: date.toLocaleDateString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    }),
-    time: date.toLocaleTimeString("vi-VN", {
-      hour: "2-digit",
-      minute: "2-digit",
-    }),
-  };
-}
-
-export default function AdminApplicationsPage() {
+function ApplicationsContent() {
   const router = useRouter();
-  const [apps, setApps] = useState<Application[]>([]);
+  const searchParams = useSearchParams();
   const [allApps, setAllApps] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [teamFilter, setTeamFilter] = useState("all");
-  const [toasts, setToasts] = useState<
-    { id: number; msg: string; type: "success" | "error" }[]
-  >([]);
-  const [confirmAction, setConfirmAction] = useState<{
-    title: string;
-    desc: string;
-    detail: string;
-    onConfirm: () => void;
-    danger?: boolean;
-  } | null>(null);
+  const [search, setSearch] = useState(() => searchParams.get("q") || "");
+  const [statusFilter, setStatusFilter] = useState(
+    () => searchParams.get("status") || "all",
+  );
+  const [teamFilter, setTeamFilter] = useState(
+    () => searchParams.get("team") || "all",
+  );
+  const [peopleScope, setPeopleScope] = useState<PeopleScope>(() => {
+    const scope = searchParams.get("scope");
+    return scope === "reviewing" || scope === "employees" ? scope : "all";
+  });
+  const [sortKey, setSortKey] = useState<SortKey | null>(
+    () => (searchParams.get("sort") as SortKey | null) || null,
+  );
+  const [sortDir, setSortDir] = useState<"asc" | "desc">(
+    () => (searchParams.get("dir") === "desc" ? "desc" : "asc"),
+  );
+  const [viewMode, setViewMode] = useState<"table" | "card">(
+    () => (searchParams.get("view") === "card" ? "card" : "table"),
+  );
+  const [pageSize, setPageSize] = useState<10 | 25 | 50>(() => {
+    const limit = Number(searchParams.get("limit"));
+    return limit === 10 || limit === 50 ? limit : 25;
+  });
+  const [page, setPage] = useState(() => {
+    const value = Number(searchParams.get("page"));
+    return Number.isFinite(value) && value > 0 ? value : 1;
+  });
+  const { toasts, addToast } = useToasts();
+  const [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [statusSavingId, setStatusSavingId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkSaving, setBulkSaving] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [showStats, setShowStats] = useState(false);
 
-  const addToast = useCallback(
-    (msg: string, type: "success" | "error" = "success") => {
-      const id = Date.now();
-      setToasts((prev) => [...prev, { id, msg, type }]);
-      setTimeout(
-        () => setToasts((prev) => prev.filter((toast) => toast.id !== id)),
-        3500,
-      );
-    },
-    [],
-  );
-
   const fetchApps = useCallback(async () => {
     try {
-      const params = new URLSearchParams();
-      if (search) params.set("search", search);
-      params.set("limit", "100");
-
-      const res = await fetch(`/api/applications?${params.toString()}`);
+      const res = await fetch(`/api/applications?limit=1000`);
       const data = await res.json();
       const all: Application[] = data.applications || [];
       setAllApps(all);
-
-      let filtered = all;
-      if (statusFilter !== "all") {
-        filtered = filtered.filter((app) => app.status === statusFilter);
-      }
-      if (teamFilter !== "all") {
-        const positions = TEAM_POSITIONS[teamFilter] || [];
-        filtered = filtered.filter((app) =>
-          (app.career_journey || []).some((pos) => positions.includes(pos)),
-        );
-      }
-
-      setApps(filtered);
     } catch {
       addToast("Lỗi tải danh sách ứng viên", "error");
     } finally {
       setLoading(false);
     }
-  }, [addToast, search, statusFilter, teamFilter]);
+  }, [addToast]);
 
   useEffect(() => {
     fetchApps();
   }, [fetchApps]);
 
+  // Sync filters + view to the URL (debounced) so reload/back/share keep state.
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      const params = new URLSearchParams();
+      if (search.trim()) params.set("q", search.trim());
+      if (statusFilter !== "all") params.set("status", statusFilter);
+      if (teamFilter !== "all") params.set("team", teamFilter);
+      if (peopleScope !== "all") params.set("scope", peopleScope);
+      if (pageSize !== 25) params.set("limit", String(pageSize));
+      if (page > 1) params.set("page", String(page));
+      if (sortKey) {
+        params.set("sort", sortKey);
+        params.set("dir", sortDir);
+      }
+      if (viewMode === "card") params.set("view", "card");
+      const qs = params.toString();
+      router.replace(qs ? `/admin/applications?${qs}` : "/admin/applications", {
+        scroll: false,
+      });
+    }, 300);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [
+    search,
+    statusFilter,
+    teamFilter,
+    peopleScope,
+    pageSize,
+    page,
+    sortKey,
+    sortDir,
+    viewMode,
+    router,
+  ]);
+
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir((dir) => (dir === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
+
+  useEffect(() => {
+    setPage(1);
+  }, [search, statusFilter, teamFilter, peopleScope, sortKey, sortDir, pageSize]);
+
   const handleView = (app: Application) => {
-    if (app.status === "new") {
-      fetch(`/api/applications/${app.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "reviewing" as ApplicationStatus }),
-      }).catch(() => {});
+    // Save the current filtered order so the detail page can offer prev/next.
+    try {
+      sessionStorage.setItem(
+        "recruitment:nav",
+        JSON.stringify(sortedApps.map((a) => a.id)),
+      );
+    } catch {
+      /* ignore storage errors */
     }
     router.push(`/admin/applications/${app.id}`);
   };
@@ -218,8 +198,8 @@ export default function AdminApplicationsPage() {
         method: "DELETE",
       });
       if (!res.ok) throw new Error();
+      setAllApps((prev) => prev.filter((item) => item.id !== app.id));
       addToast(`Đã xóa: ${app.full_name}`);
-      fetchApps();
     } catch {
       addToast("Lỗi xóa ứng viên", "error");
     } finally {
@@ -227,12 +207,26 @@ export default function AdminApplicationsPage() {
     }
   };
 
+  const confirmDelete = (app: Application) =>
+    setConfirmAction({
+      title: "Xóa ứng viên?",
+      desc: "Hành động này không thể hoàn tác.",
+      detail: `${app.full_name} - ${app.email}`,
+      danger: true,
+      onConfirm: () => handleDelete(app),
+    });
+
   const toggleStar = async (app: Application) => {
     setTogglingId(app.id);
     const starred = isStarred(app);
-    const newNotes = starred
-      ? (app.admin_notes || "").replace("[STARRED]", "").trim()
-      : `[STARRED] ${app.admin_notes || ""}`.trim();
+    const newNotes = toggleStarredNotes(app.admin_notes || "", !starred);
+
+    // optimistic update
+    setAllApps((prev) =>
+      prev.map((item) =>
+        item.id === app.id ? { ...item, admin_notes: newNotes } : item,
+      ),
+    );
 
     try {
       const res = await fetch(`/api/applications/${app.id}`, {
@@ -246,11 +240,53 @@ export default function AdminApplicationsPage() {
           ? `Bỏ đánh dấu: ${app.full_name}`
           : `Đánh dấu nổi bật: ${app.full_name}`,
       );
-      fetchApps();
     } catch {
+      // revert
+      setAllApps((prev) =>
+        prev.map((item) =>
+          item.id === app.id
+            ? { ...item, admin_notes: app.admin_notes }
+            : item,
+        ),
+      );
       addToast("Lỗi cập nhật đánh dấu", "error");
     } finally {
       setTogglingId(null);
+    }
+  };
+
+  const handleStatusChange = async (
+    app: Application,
+    next: ApplicationStatus,
+  ) => {
+    if (next === app.status) return;
+    setStatusSavingId(app.id);
+    const prevStatus = app.status;
+
+    // optimistic update
+    setAllApps((prev) =>
+      prev.map((item) =>
+        item.id === app.id ? { ...item, status: next } : item,
+      ),
+    );
+
+    try {
+      const res = await fetch(`/api/applications/${app.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: next }),
+      });
+      if (!res.ok) throw new Error();
+      addToast(`Cập nhật trạng thái: ${app.full_name}`);
+    } catch {
+      setAllApps((prev) =>
+        prev.map((item) =>
+          item.id === app.id ? { ...item, status: prevStatus } : item,
+        ),
+      );
+      addToast("Lỗi cập nhật trạng thái", "error");
+    } finally {
+      setStatusSavingId(null);
     }
   };
 
@@ -270,21 +306,168 @@ export default function AdminApplicationsPage() {
     }
   };
 
-  const sortedApps = useMemo(
-    () =>
-      [...apps].sort((a, b) => {
-        const aStarred =
-          isStarred(a) && (a.status === "new" || a.status === "reviewing")
-            ? 1
-            : 0;
-        const bStarred =
-          isStarred(b) && (b.status === "new" || b.status === "reviewing")
-            ? 1
-            : 0;
-        return bStarred - aStarred;
-      }),
-    [apps],
-  );
+  const toggleSelect = (id: string) =>
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  const clearSelection = () => setSelectedIds(new Set());
+
+  const bulkStatusChange = async (next: ApplicationStatus) => {
+    const ids = [...selectedIds];
+    if (ids.length === 0) return;
+    setBulkSaving(true);
+    const snapshot = allApps;
+    setAllApps((prev) =>
+      prev.map((item) =>
+        selectedIds.has(item.id) ? { ...item, status: next } : item,
+      ),
+    );
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/applications/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: next }),
+          }).then((r) => {
+            if (!r.ok) throw new Error();
+          }),
+        ),
+      );
+      addToast(`Đã cập nhật ${ids.length} hồ sơ`);
+      clearSelection();
+    } catch {
+      setAllApps(snapshot);
+      addToast("Lỗi cập nhật hàng loạt", "error");
+    } finally {
+      setBulkSaving(false);
+    }
+  };
+
+  const bulkDelete = async () => {
+    const ids = [...selectedIds];
+    if (ids.length === 0) return;
+    setConfirmAction(null);
+    setBulkSaving(true);
+    const snapshot = allApps;
+    setAllApps((prev) => prev.filter((item) => !selectedIds.has(item.id)));
+    try {
+      await Promise.all(
+        ids.map((id) =>
+          fetch(`/api/applications/${id}`, { method: "DELETE" }).then((r) => {
+            if (!r.ok) throw new Error();
+          }),
+        ),
+      );
+      addToast(`Đã xóa ${ids.length} hồ sơ`);
+      clearSelection();
+    } catch {
+      setAllApps(snapshot);
+      addToast("Lỗi xóa hàng loạt", "error");
+    } finally {
+      setBulkSaving(false);
+    }
+  };
+
+  const confirmBulkDelete = () =>
+    setConfirmAction({
+      title: "Xóa các hồ sơ đã chọn?",
+      desc: "Hành động này không thể hoàn tác.",
+      detail: `${selectedIds.size} hồ sơ`,
+      danger: true,
+      onConfirm: bulkDelete,
+    });
+
+  const sortedApps = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    let filtered = allApps;
+
+    if (query) {
+      filtered = filtered.filter((app) =>
+        [app.full_name, app.email, app.phone, app.school]
+          .filter(Boolean)
+          .some((field) => field!.toLowerCase().includes(query)),
+      );
+    }
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((app) => app.status === statusFilter);
+    }
+    if (peopleScope === "reviewing") {
+      filtered = filtered.filter(
+        (app) => app.status !== "accepted" && app.status !== "rejected",
+      );
+    }
+    if (peopleScope === "employees") {
+      filtered = filtered.filter((app) => app.status === "accepted");
+    }
+    if (teamFilter !== "all") {
+      const positions = TEAM_POSITIONS[teamFilter] || [];
+      filtered = filtered.filter((app) =>
+        (app.career_journey || []).some((pos) => positions.includes(pos)),
+      );
+    }
+
+    const dir = sortDir === "asc" ? 1 : -1;
+    const compare = (a: Application, b: Application) => {
+      switch (sortKey) {
+        case "name":
+          return dir * (a.full_name || "").localeCompare(b.full_name || "", "vi");
+        case "team":
+          return dir * getPrimaryTeam(a).localeCompare(getPrimaryTeam(b), "vi");
+        case "status":
+          return (
+            dir *
+            ((STATUS_ORDER[a.status] ?? 99) - (STATUS_ORDER[b.status] ?? 99))
+          );
+        case "date":
+          return (
+            dir *
+            (new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+          );
+        default:
+          return 0;
+      }
+    };
+
+    return [...filtered].sort((a, b) => {
+      // Tier 1: starred new/reviewing always float to top
+      const starDiff = starRank(b) - starRank(a);
+      if (starDiff !== 0) return starDiff;
+      // Tier 2: chosen column, or default newest-first
+      if (sortKey) return compare(a, b);
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    });
+  }, [allApps, search, statusFilter, teamFilter, peopleScope, sortKey, sortDir]);
+
+  const totalPages = Math.max(1, Math.ceil(sortedApps.length / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const pageStart = (safePage - 1) * pageSize;
+  const visibleApps = sortedApps.slice(pageStart, pageStart + pageSize);
+  const visibleFrom = sortedApps.length === 0 ? 0 : pageStart + 1;
+  const visibleTo = Math.min(pageStart + pageSize, sortedApps.length);
+
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
+
+  const allPageSelected =
+    visibleApps.length > 0 && visibleApps.every((a) => selectedIds.has(a.id));
+
+  const toggleSelectAll = () =>
+    setSelectedIds((prev) => {
+      if (visibleApps.length > 0 && visibleApps.every((a) => prev.has(a.id))) {
+        const next = new Set(prev);
+        visibleApps.forEach((a) => next.delete(a.id));
+        return next;
+      }
+      const next = new Set(prev);
+      visibleApps.forEach((a) => next.add(a.id));
+      return next;
+    });
 
   const statusCounts = useMemo(() => {
     const counts: Record<string, number> = { all: allApps.length };
@@ -439,27 +622,85 @@ export default function AdminApplicationsPage() {
     })),
   ];
 
+  const scopeTabs: {
+    value: PeopleScope;
+    label: string;
+    count: number;
+  }[] = [
+    { value: "all", label: "Tất cả", count: allApps.length },
+    {
+      value: "reviewing",
+      label: "Đang xét",
+      count: allApps.filter(
+        (app) => app.status !== "accepted" && app.status !== "rejected",
+      ).length,
+    },
+    {
+      value: "employees",
+      label: "Nhân viên",
+      count: allApps.filter((app) => app.status === "accepted").length,
+    },
+  ];
+
+  const paginationControls = (
+    <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 bg-white px-3 py-2">
+      <div className="flex items-center gap-2 text-xs font-bold text-gray-500">
+        <span>
+          Hiển thị {visibleFrom}-{visibleTo} / {sortedApps.length}
+        </span>
+        <span className="hidden text-gray-300 sm:inline">·</span>
+        <label className="flex items-center gap-2">
+          Số dòng
+          <select
+            value={pageSize}
+            onChange={(event) =>
+              setPageSize(Number(event.target.value) as 10 | 25 | 50)
+            }
+            className="h-8 rounded-lg border border-gray-200 bg-white px-2 text-xs font-black text-gray-700 outline-none focus:border-[#8b4513]"
+          >
+            <option value={10}>10</option>
+            <option value={25}>25</option>
+            <option value={50}>50</option>
+          </select>
+        </label>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setPage((value) => Math.max(1, value - 1))}
+          disabled={safePage <= 1}
+          className="h-8 rounded-lg border border-gray-200 bg-white px-3 text-xs font-black text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          Trước
+        </button>
+        <span className="text-xs font-black text-gray-500">
+          Trang {safePage} / {totalPages}
+        </span>
+        <button
+          type="button"
+          onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
+          disabled={safePage >= totalPages}
+          className="h-8 rounded-lg border border-gray-200 bg-white px-3 text-xs font-black text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          Sau
+        </button>
+      </div>
+    </div>
+  );
+
   if (loading) {
     return (
       <div className="flex min-h-[420px] items-center justify-center">
-        <div className="flex flex-col items-center gap-3 rounded-2xl border border-gray-100 bg-white px-10 py-8 shadow-sm">
-          <div
-            className="h-10 w-10 animate-spin rounded-full border-2 border-t-transparent"
-            style={{ borderColor: "#8b4513", borderTopColor: "transparent" }}
-          />
-          <p className="text-sm font-medium text-gray-500">
-            Đang tải danh sách...
-          </p>
+        <div className="rounded-2xl border border-gray-100 bg-white px-10 py-8 shadow-sm">
+          <Spinner label="Đang tải danh sách..." />
         </div>
       </div>
     );
   }
 
   return (
-    <div
-      className="mx-auto max-w-[1380px] space-y-6"
-      style={{ fontFamily: "system-ui, sans-serif" }}
-    >
+    <div className="w-full space-y-4" style={{ fontFamily: "system-ui, sans-serif" }}>
       <ToastStack toasts={toasts} />
 
       <ConfirmModal
@@ -467,7 +708,7 @@ export default function AdminApplicationsPage() {
         onCancel={() => setConfirmAction(null)}
       />
 
-      <section className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
+      <section className="rounded-xl border border-gray-200 bg-white p-3 shadow-sm">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex min-w-0 flex-1 items-center gap-3">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#f6eee9] text-[#4a2318]">
@@ -484,11 +725,37 @@ export default function AdminApplicationsPage() {
           </div>
 
           <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
+            <div className="inline-flex h-8 items-center rounded-lg border border-gray-200 bg-gray-50 p-0.5">
+              <button
+                type="button"
+                onClick={() => setViewMode("table")}
+                title="Dạng bảng"
+                  className={`flex h-7 w-7 items-center justify-center rounded-md transition ${
+                  viewMode === "table"
+                    ? "bg-white text-[#4a2318] shadow-sm"
+                    : "text-gray-400 hover:text-gray-600"
+                }`}
+              >
+                <Rows3 size={15} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("card")}
+                title="Dạng thẻ"
+                  className={`flex h-7 w-7 items-center justify-center rounded-md transition ${
+                  viewMode === "card"
+                    ? "bg-white text-[#4a2318] shadow-sm"
+                    : "text-gray-400 hover:text-gray-600"
+                }`}
+              >
+                <LayoutGrid size={15} />
+              </button>
+            </div>
             {stats && (
               <button
                 type="button"
                 onClick={() => setShowStats(true)}
-                className="inline-flex h-8 items-center gap-2 rounded-xl px-3 text-xs font-bold text-white shadow-sm transition hover:opacity-90"
+                className="inline-flex h-8 items-center gap-2 rounded-lg px-3 text-xs font-bold text-white shadow-sm transition hover:opacity-90"
                 style={{ background: "#4a2318" }}
               >
                 <BarChart3 size={14} />
@@ -501,7 +768,7 @@ export default function AdminApplicationsPage() {
                 setLoading(true);
                 fetchApps();
               }}
-              className="inline-flex h-8 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-xs font-bold text-gray-600 transition hover:bg-gray-50"
+              className="inline-flex h-8 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-xs font-bold text-gray-600 transition hover:bg-gray-50"
             >
               <RefreshCw size={14} />
               Tải lại
@@ -510,7 +777,7 @@ export default function AdminApplicationsPage() {
               type="button"
               onClick={handleSyncSheet}
               disabled={syncing}
-              className="inline-flex h-8 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-xs font-bold text-gray-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-50"
+              className="inline-flex h-8 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-xs font-bold text-gray-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-50"
             >
               <Database size={14} />
               {syncing ? "Đang đồng bộ..." : "Sync Sheet"}
@@ -520,7 +787,7 @@ export default function AdminApplicationsPage() {
 
         <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-3">
           {/* Search */}
-          <div className="relative min-w-[200px] flex-1">
+          <div className="relative min-w-[220px] flex-1">
             <Search
               size={15}
               className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -529,12 +796,12 @@ export default function AdminApplicationsPage() {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Tìm tên, email, SĐT..."
-              className="h-9 w-full rounded-xl border border-gray-200 bg-gray-50 pl-9 pr-4 text-sm text-gray-700 outline-none transition focus:border-[#a0522d] focus:bg-white focus:ring-2 focus:ring-[#f6eee9]"
+              className="h-9 w-full rounded-lg border border-gray-200 bg-gray-50 pl-9 pr-4 text-sm text-gray-700 outline-none transition focus:border-[#a0522d] focus:bg-white focus:ring-2 focus:ring-[#f6eee9]"
             />
           </div>
 
           {/* Team filter */}
-          <label className="relative block w-[200px] shrink-0">
+          <label className="relative block w-full shrink-0 sm:w-[220px]">
             <Filter
               size={15}
               className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -542,7 +809,7 @@ export default function AdminApplicationsPage() {
             <select
               value={teamFilter}
               onChange={(event) => setTeamFilter(event.target.value)}
-              className="h-9 w-full appearance-none rounded-xl border border-gray-200 bg-white pl-9 pr-8 text-sm font-bold text-gray-600 outline-none transition focus:border-[#a0522d] focus:ring-2 focus:ring-[#f6eee9]"
+              className="h-9 w-full appearance-none rounded-lg border border-gray-200 bg-white pl-9 pr-8 text-sm font-bold text-gray-600 outline-none transition focus:border-[#a0522d] focus:ring-2 focus:ring-[#f6eee9]"
             >
               {TEAM_FILTERS.map((team) => (
                 <option key={team} value={team}>
@@ -557,6 +824,32 @@ export default function AdminApplicationsPage() {
 
         </div>
 
+        <div className="mt-2 flex gap-2 overflow-x-auto border-t border-gray-100 pt-2">
+          {scopeTabs.map((scope) => {
+            const active = peopleScope === scope.value;
+            return (
+              <button
+                key={scope.value}
+                type="button"
+                onClick={() => {
+                  setPeopleScope(scope.value);
+                  if (scope.value === "employees") setStatusFilter("all");
+                }}
+                className={`inline-flex h-8 shrink-0 items-center gap-2 rounded-lg border px-3 text-xs font-black transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e7d9d0] ${
+                  active
+                    ? "border-[#4a2318] bg-[#f8f4f1] text-[#4a2318]"
+                    : "border-gray-200 bg-white text-gray-500 hover:bg-gray-50"
+                }`}
+              >
+                {scope.label}
+                <span className="rounded-full bg-white/70 px-1.5 text-[10px]">
+                  {scope.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
         <div className="mt-2 flex gap-2 overflow-x-auto">
           {statusTabs.map((status) => {
             const active = statusFilter === status.value;
@@ -565,7 +858,7 @@ export default function AdminApplicationsPage() {
                 key={status.value}
                 type="button"
                 onClick={() => setStatusFilter(status.value)}
-                className="inline-flex h-8 shrink-0 items-center gap-2 rounded-xl border px-3 text-xs font-bold transition"
+                className="inline-flex h-8 shrink-0 items-center gap-2 rounded-lg border px-3 text-xs font-bold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e7d9d0]"
                 style={
                   active
                     ? {
@@ -594,34 +887,165 @@ export default function AdminApplicationsPage() {
         </div>
       </section>
 
+      {selectedIds.size > 0 && (
+        <div className="sticky top-0 z-20 flex flex-wrap items-center gap-2 rounded-xl border border-[#e7d9d0] bg-[#fbf6f2] px-3 py-2 shadow-sm">
+          <span className="text-sm font-black text-[#4a2318]">
+            Đã chọn {selectedIds.size}
+          </span>
+          <span className="mx-1 hidden h-5 w-px bg-[#e7d9d0] sm:block" />
+          <label className="relative">
+            <select
+              defaultValue=""
+              disabled={bulkSaving}
+              onChange={(e) => {
+                if (e.target.value) {
+                  bulkStatusChange(e.target.value as ApplicationStatus);
+                  e.target.value = "";
+                }
+              }}
+              className="h-8 cursor-pointer appearance-none rounded-xl border border-gray-200 bg-white pl-3 pr-8 text-xs font-bold text-gray-700 outline-none transition focus:border-[#a0522d] disabled:opacity-50"
+            >
+              <option value="" disabled>
+                Đổi trạng thái…
+              </option>
+              {STATUS_OPTIONS.map((s) => (
+                <option key={s.value} value={s.value}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-gray-400">
+              ▾
+            </span>
+          </label>
+          <button
+            type="button"
+            onClick={confirmBulkDelete}
+            disabled={bulkSaving}
+            className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-red-200 bg-white px-3 text-xs font-bold text-red-500 transition hover:bg-red-50 disabled:opacity-50"
+          >
+            <Trash2 size={13} />
+            Xóa
+          </button>
+          <button
+            type="button"
+            onClick={clearSelection}
+            className="ml-auto inline-flex h-8 items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 text-xs font-bold text-gray-500 transition hover:bg-gray-50"
+          >
+            <X size={13} />
+            Bỏ chọn
+          </button>
+        </div>
+      )}
+
       {sortedApps.length === 0 ? (
         <EmptyState />
       ) : (
         <>
-          <div className="flex flex-col gap-2">
-            {sortedApps.map((app) => (
-              <CandidateRow
-                key={app.id}
-                app={app}
-                deleting={deletingId === app.id}
-                toggling={togglingId === app.id}
-                onView={() => handleView(app)}
-                onToggleStar={() => toggleStar(app)}
-                onDelete={() =>
-                  setConfirmAction({
-                    title: "Xóa ứng viên?",
-                    desc: "Hành động này không thể hoàn tác.",
-                    detail: `${app.full_name} - ${app.email}`,
-                    danger: true,
-                    onConfirm: () => handleDelete(app),
-                  })
-                }
-              />
-            ))}
-          </div>
-          <p className="text-center text-xs font-bold text-gray-400">
-            Hiển thị {sortedApps.length} / {allApps.length}
-          </p>
+          {viewMode === "table" ? (
+            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+              <div className="overflow-x-auto">
+              <table className="w-full min-w-[1080px] table-fixed border-collapse text-left">
+                <colgroup>
+                  <col className="w-9" />
+                  <col className="w-9" />
+                  <col className="w-[260px]" />
+                  <col className="w-[250px]" />
+                  <col className="w-[270px]" />
+                  <col className="w-[136px]" />
+                  <col className="w-[104px]" />
+                  <col className="w-[112px]" />
+                </colgroup>
+                <thead className="sticky top-0 z-10 border-b border-gray-200 bg-[#faf7f4]">
+                  <tr className="text-[10px] font-black uppercase tracking-wide text-gray-500">
+                    <th className="w-9 px-2 py-2.5">
+                      <input
+                        type="checkbox"
+                        checked={allPageSelected}
+                        onChange={toggleSelectAll}
+                        className="h-3.5 w-3.5 cursor-pointer accent-[#8b4513]"
+                        title="Chọn tất cả đang hiển thị"
+                      />
+                    </th>
+                    <th className="w-8 px-1 py-2.5" />
+                    <SortableTh
+                      label="Ứng viên"
+                      sortKey="name"
+                      activeKey={sortKey}
+                      dir={sortDir}
+                      onSort={toggleSort}
+                      className="px-3 py-2.5"
+                    />
+                    <th className="px-3 py-2.5">Liên hệ</th>
+                    <SortableTh
+                      label="Vị trí"
+                      sortKey="team"
+                      activeKey={sortKey}
+                      dir={sortDir}
+                      onSort={toggleSort}
+                      className="px-3 py-2.5"
+                    />
+                    <SortableTh
+                      label="Trạng thái"
+                      sortKey="status"
+                      activeKey={sortKey}
+                      dir={sortDir}
+                      onSort={toggleSort}
+                      className="px-3 py-2.5"
+                    />
+                    <SortableTh
+                      label="Ngày"
+                      sortKey="date"
+                      activeKey={sortKey}
+                      dir={sortDir}
+                      onSort={toggleSort}
+                      className="px-3 py-2.5"
+                    />
+                    <th className="px-3 py-2.5 text-right">Hành động</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {visibleApps.map((app) => (
+                    <CandidateRow
+                      key={app.id}
+                      app={app}
+                      selected={selectedIds.has(app.id)}
+                      onToggleSelect={() => toggleSelect(app.id)}
+                      deleting={deletingId === app.id}
+                      toggling={togglingId === app.id}
+                      statusSaving={statusSavingId === app.id}
+                      onView={() => handleView(app)}
+                      onToggleStar={() => toggleStar(app)}
+                      onStatusChange={(next) => handleStatusChange(app, next)}
+                      onDelete={() => confirmDelete(app)}
+                    />
+                  ))}
+                </tbody>
+              </table>
+              </div>
+              {paginationControls}
+            </div>
+          ) : (
+            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+              <div className="grid grid-cols-1 gap-3 p-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                {visibleApps.map((app) => (
+                  <CandidateCard
+                    key={app.id}
+                    app={app}
+                    selected={selectedIds.has(app.id)}
+                    onToggleSelect={() => toggleSelect(app.id)}
+                    toggling={togglingId === app.id}
+                    statusSaving={statusSavingId === app.id}
+                    onView={() => handleView(app)}
+                    onToggleStar={() => toggleStar(app)}
+                    onStatusChange={(next) => handleStatusChange(app, next)}
+                    onDelete={() => confirmDelete(app)}
+                  />
+                ))}
+              </div>
+              {paginationControls}
+            </div>
+          )}
         </>
       )}
 
@@ -639,214 +1063,376 @@ export default function AdminApplicationsPage() {
   );
 }
 
+export default function AdminApplicationsPage() {
+  return (
+    <Suspense fallback={<Spinner center label="Đang tải danh sách..." />}>
+      <ApplicationsContent />
+    </Suspense>
+  );
+}
+
+function SortableTh({
+  label,
+  sortKey,
+  activeKey,
+  dir,
+  onSort,
+  className = "",
+}: {
+  label: string;
+  sortKey: SortKey;
+  activeKey: SortKey | null;
+  dir: "asc" | "desc";
+  onSort: (key: SortKey) => void;
+  className?: string;
+}) {
+  const active = activeKey === sortKey;
+  return (
+    <th className={className}>
+      <button
+        type="button"
+        onClick={() => onSort(sortKey)}
+        className={`inline-flex items-center gap-1 whitespace-nowrap transition hover:text-[#4a2318] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e7d9d0] ${
+          active ? "text-[#4a2318]" : ""
+        }`}
+      >
+        {label}
+        {active ? (
+          dir === "asc" ? (
+            <ChevronUp size={13} />
+          ) : (
+            <ChevronDown size={13} />
+          )
+        ) : (
+          <ChevronsUpDown size={13} className="text-gray-300" />
+        )}
+      </button>
+    </th>
+  );
+}
+
 function CandidateRow({
   app,
+  selected,
+  onToggleSelect,
   deleting,
   toggling,
+  statusSaving,
   onView,
   onToggleStar,
+  onStatusChange,
   onDelete,
 }: {
   app: Application;
+  selected: boolean;
+  onToggleSelect: () => void;
   deleting: boolean;
   toggling: boolean;
+  statusSaving: boolean;
   onView: () => void;
   onToggleStar: () => void;
+  onStatusChange: (next: ApplicationStatus) => void;
   onDelete: () => void;
 }) {
   const status = getStatusInfo(app.status);
   const team = getPrimaryTeam(app);
-  const teamStyle = TEAM_STYLES[team] || TEAM_STYLES.all;
   const starred = isStarred(app);
   const submitted = formatSubmittedAt(app.created_at);
   const positions = app.career_journey || [];
+  const meta = getRecruitmentMeta(app.admin_notes || "");
+
+  const stop = (e: React.MouseEvent) => e.stopPropagation();
+
+  return (
+    <tr
+      onClick={onView}
+      className={`group cursor-pointer text-[13px] transition hover:bg-[#fafafa] ${
+        selected ? "bg-[#fbf6f2]" : starred ? "bg-amber-50/30" : "bg-white"
+      }`}
+    >
+      {/* Select */}
+      <td className="px-2 py-2" onClick={stop}>
+        <input
+          type="checkbox"
+          checked={selected}
+          onChange={onToggleSelect}
+          className="h-3.5 w-3.5 cursor-pointer rounded accent-[#8b4513]"
+        />
+      </td>
+
+      {/* Star */}
+      <td className="px-1 py-2" onClick={stop}>
+        <button
+          type="button"
+          onClick={onToggleStar}
+          disabled={toggling}
+          className="flex h-7 w-7 items-center justify-center rounded-md text-gray-300 transition hover:bg-amber-50 hover:text-amber-500 disabled:opacity-50"
+          title={starred ? "Bỏ đánh dấu" : "Đánh dấu nổi bật"}
+        >
+          <Star
+            size={14}
+            className={starred ? "fill-amber-400 text-amber-500" : ""}
+          />
+        </button>
+      </td>
+
+      {/* Candidate */}
+      <td className="px-3 py-2">
+        <div className="flex items-center gap-2.5">
+          <div
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[11px] font-black text-white"
+            style={{ background: status.color }}
+          >
+            {getInitials(app.full_name)}
+          </div>
+          <div className="min-w-0">
+            <div className="flex min-w-0 items-center gap-1.5">
+              <p className="truncate font-bold leading-tight text-gray-950">
+                {app.full_name || "---"}
+              </p>
+              {meta.leader && (
+                <span className="shrink-0 rounded-md bg-slate-100 px-1.5 py-px text-[9px] font-black text-slate-500">
+                  Leader: {meta.leader.name}
+                </span>
+              )}
+            </div>
+            <div className="flex min-w-0 items-center gap-1.5">
+              <p className="truncate text-[11px] font-semibold text-gray-400">
+                {positions[0] || (team !== "all" ? team : app.school || "---")}
+              </p>
+              {(meta.leader || meta.currentLevel !== "lv1") && (
+                <span className="shrink-0 rounded bg-gray-100 px-1.5 py-px text-[9px] font-black uppercase text-gray-500">
+                  {meta.currentLevel}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </td>
+
+      {/* Contact */}
+      <td className="px-3 py-2">
+        <p className="truncate text-xs font-medium text-gray-600">{app.email || "---"}</p>
+        <div className="mt-0.5 flex items-center gap-1.5">
+          <span className="text-[11px] text-gray-400">{app.phone || "---"}</span>
+          {hasZalo(app) && (
+            <span className="rounded bg-blue-50 px-1.5 py-px text-[9px] font-black text-blue-600">
+              Zalo
+            </span>
+          )}
+        </div>
+      </td>
+
+      {/* Positions */}
+      <td className="px-3 py-2">
+        <div className="flex max-w-[250px] flex-wrap items-center gap-1">
+          <PositionTags positions={positions} max={1} />
+        </div>
+      </td>
+
+      {/* Status (inline select) */}
+      <td className="px-3 py-2" onClick={stop}>
+        <StatusSelect
+          status={app.status}
+          disabled={statusSaving}
+          onChange={onStatusChange}
+          className="w-[108px]"
+        />
+      </td>
+
+      {/* Date */}
+      <td className="px-3 py-2 text-xs font-semibold text-gray-400">
+        {submitted.date}
+      </td>
+
+      {/* Actions */}
+      <td className="px-3 py-2" onClick={stop}>
+        <div className="flex items-center justify-end gap-1">
+          {app.cv && (
+            <a
+              href={app.cv}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-gray-50 text-gray-600 transition hover:bg-gray-100"
+              title="Xem CV"
+            >
+              <FileText size={13} />
+            </a>
+          )}
+          <button
+            type="button"
+            onClick={onView}
+            className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-100 text-gray-900 transition hover:bg-gray-200"
+            title="Chi tiết"
+          >
+            <Eye size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={onDelete}
+            disabled={deleting}
+            className="flex h-7 w-7 items-center justify-center rounded-md text-red-400 transition hover:bg-red-50 disabled:opacity-50"
+            title="Xóa"
+          >
+            <Trash2 size={13} />
+          </button>
+        </div>
+      </td>
+    </tr>
+  );
+}
+
+function CandidateCard({
+  app,
+  selected,
+  onToggleSelect,
+  toggling,
+  statusSaving,
+  onView,
+  onToggleStar,
+  onStatusChange,
+  onDelete,
+}: {
+  app: Application;
+  selected: boolean;
+  onToggleSelect: () => void;
+  toggling: boolean;
+  statusSaving: boolean;
+  onView: () => void;
+  onToggleStar: () => void;
+  onStatusChange: (next: ApplicationStatus) => void;
+  onDelete: () => void;
+}) {
+  const status = getStatusInfo(app.status);
+  const team = getPrimaryTeam(app);
+  const starred = isStarred(app);
+  const submitted = formatSubmittedAt(app.created_at);
+  const positions = app.career_journey || [];
+  const meta = getRecruitmentMeta(app.admin_notes || "");
+
+  const stop = (e: React.MouseEvent) => e.stopPropagation();
 
   return (
     <div
-      className={`flex items-center gap-4 rounded-2xl border bg-white px-4 py-3 shadow-sm transition hover:shadow-md ${
-        starred ? "border-amber-200 bg-amber-50/30" : "border-gray-200"
+      onClick={onView}
+      className={`group cursor-pointer rounded-2xl border bg-white p-3.5 shadow-sm transition hover:shadow-md ${
+        selected
+          ? "border-[#a0522d] ring-1 ring-[#a0522d]"
+          : starred
+            ? "border-amber-200 bg-amber-50/30"
+            : "border-gray-200"
       }`}
     >
-      {/* Avatar */}
-      <div
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-black text-white"
-        style={{ background: status.color }}
-      >
-        {getInitials(app.full_name)}
+      {/* Header: checkbox + avatar + name + star */}
+      <div className="flex items-start gap-2.5">
+        <input
+          type="checkbox"
+          checked={selected}
+          onClick={stop}
+          onChange={onToggleSelect}
+          className="mt-1 h-3.5 w-3.5 shrink-0 cursor-pointer accent-[#8b4513]"
+        />
+        <div
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-xs font-black text-white"
+          style={{ background: status.color }}
+        >
+          {getInitials(app.full_name)}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex min-w-0 items-center gap-1.5">
+            <p className="truncate text-sm font-black leading-tight text-gray-950">
+              {app.full_name || "---"}
+            </p>
+            {meta.leader && (
+              <span className="shrink-0 rounded-md bg-slate-100 px-1.5 py-px text-[9px] font-black text-slate-500">
+                Leader: {meta.leader.name}
+              </span>
+            )}
+          </div>
+          <p className="truncate text-[11px] font-medium text-gray-400">
+            {submitted.date}
+          </p>
+          {(meta.leader || meta.currentLevel !== "lv1") && (
+            <p className="mt-1 truncate text-[10px] font-black uppercase text-gray-400">
+              {meta.currentLevel}
+            </p>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={(e) => {
+            stop(e);
+            onToggleStar();
+          }}
+          disabled={toggling}
+          className="-mr-1 -mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-gray-300 transition hover:bg-amber-50 hover:text-amber-500 disabled:opacity-50"
+          title={starred ? "Bỏ đánh dấu" : "Đánh dấu nổi bật"}
+        >
+          <Star
+            size={15}
+            className={starred ? "fill-amber-400 text-amber-500" : ""}
+          />
+        </button>
       </div>
 
-      {/* Name + school */}
-      <div className="w-44 shrink-0">
-        <p className="truncate text-sm font-black text-gray-950">{app.full_name || "---"}</p>
-        {app.school && (
-          <p className="truncate text-xs font-medium text-gray-400">{app.school}</p>
+      {/* Positions */}
+      <div className="mt-2.5 flex flex-wrap items-center gap-1">
+        {positions.length > 0 ? (
+          <PositionTags positions={positions} max={2} />
+        ) : (
+          team !== "all" && (
+            <span className="text-[11px] font-bold text-gray-400">{team}</span>
+          )
         )}
       </div>
 
       {/* Contact */}
-      <div className="hidden min-w-0 flex-1 md:block">
-        <p className="truncate text-xs font-semibold text-gray-700">{app.email || "---"}</p>
-        <div className="mt-0.5 flex items-center gap-1.5">
-          <p className="text-xs text-gray-400">{app.phone || "---"}</p>
+      <div className="mt-2.5 space-y-0.5 border-t border-gray-100 pt-2.5">
+        <p className="truncate text-xs text-gray-600">{app.email || "---"}</p>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[11px] text-gray-400">{app.phone || "---"}</span>
           {hasZalo(app) && (
-            <span className="rounded-md border border-blue-100 bg-blue-50 px-1.5 py-0.5 text-[10px] font-black text-blue-600">
+            <span className="rounded bg-blue-50 px-1 text-[9px] font-black text-blue-600">
               Zalo
             </span>
           )}
         </div>
       </div>
 
-      {/* Positions */}
-      <div className="hidden w-48 shrink-0 flex-wrap items-center gap-1.5 lg:flex">
-        {positions.slice(0, 2).map((pos) => {
-          const color = POSITION_COLORS[pos] || DEFAULT_POS_COLOR;
-          return (
-            <span
-              key={pos}
-              className="rounded-lg border border-black/5 px-2 py-0.5 text-[11px] font-bold"
-              style={{ background: color.bg, color: color.color }}
+      {/* Footer: status + actions */}
+      <div className="mt-2.5 flex items-center justify-between gap-2" onClick={stop}>
+        <StatusSelect
+          status={app.status}
+          disabled={statusSaving}
+          onChange={onStatusChange}
+        />
+        <div className="flex items-center gap-1">
+          {app.cv && (
+            <a
+              href={app.cv}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-600 transition hover:bg-gray-100"
+              title="Xem CV"
             >
-              {pos}
-            </span>
-          );
-        })}
-        {positions.length > 2 && (
-          <span className="text-xs font-bold text-gray-400">+{positions.length - 2}</span>
-        )}
-      </div>
-
-      {/* Status + team */}
-      <div className="hidden shrink-0 items-center gap-2 sm:flex">
-        <span
-          className="inline-flex h-6 items-center gap-1 rounded-lg px-2 text-[11px] font-bold"
-          style={{ background: status.bg, color: status.color }}
-        >
-          <span className="h-1.5 w-1.5 rounded-full" style={{ background: status.color }} />
-          {status.label}
-        </span>
-        {team !== "all" && (
-          <span
-            className="hidden h-6 items-center gap-1 rounded-lg px-2 text-[11px] font-bold xl:inline-flex"
-            style={{ background: teamStyle.bg, color: teamStyle.color }}
-          >
-            {team}
-          </span>
-        )}
-      </div>
-
-      {/* Date */}
-      <p className="hidden shrink-0 text-xs font-semibold text-gray-400 lg:block">
-        {submitted.date}
-      </p>
-
-      {/* Actions */}
-      <div className="ml-auto flex shrink-0 items-center gap-1.5">
-        <button
-          type="button"
-          onClick={onToggleStar}
-          disabled={toggling}
-          className="flex h-8 w-8 items-center justify-center rounded-xl text-gray-300 transition hover:bg-amber-50 hover:text-amber-500 disabled:opacity-50"
-        >
-          <Star size={15} className={starred ? "fill-amber-400 text-amber-500" : ""} />
-        </button>
-        {app.cv && (
-          <a
-            href={app.cv}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-8 items-center gap-1.5 rounded-xl border border-gray-200 bg-gray-50 px-2.5 text-xs font-bold text-gray-700 transition hover:bg-gray-100"
-          >
-            <FileText size={13} />
-            CV
-          </a>
-        )}
-        <button
-          type="button"
-          onClick={onView}
-          className="inline-flex h-8 items-center gap-1.5 rounded-xl bg-gray-100 px-2.5 text-xs font-bold text-gray-900 transition hover:bg-gray-200"
-        >
-          <Eye size={13} />
-          Chi tiết
-        </button>
-        <button
-          type="button"
-          onClick={onDelete}
-          disabled={deleting}
-          className="flex h-8 w-8 items-center justify-center rounded-xl text-red-400 transition hover:bg-red-50 disabled:opacity-50"
-        >
-          <Trash2 size={14} />
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function ToastStack({
-  toasts,
-}: {
-  toasts: { id: number; msg: string; type: "success" | "error" }[];
-}) {
-  return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
-      {toasts.map((toast) => (
-        <div
-          key={toast.id}
-          className={`rounded-2xl px-4 py-3 text-sm font-bold text-white shadow-lg ${
-            toast.type === "error" ? "bg-red-500" : "bg-gray-950"
-          }`}
-        >
-          {toast.msg}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function ConfirmModal({
-  action,
-  onCancel,
-}: {
-  action: {
-    title: string;
-    desc: string;
-    detail: string;
-    onConfirm: () => void;
-    danger?: boolean;
-  } | null;
-  onCancel: () => void;
-}) {
-  if (!action) return null;
-
-  return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
-        <h3 className="text-base font-black text-gray-900">{action.title}</h3>
-        <p className="mt-2 text-sm text-gray-500">{action.desc}</p>
-        <p
-          className={`mt-2 text-sm font-bold ${
-            action.danger ? "text-red-600" : "text-gray-700"
-          }`}
-        >
-          {action.detail}
-        </p>
-        <div className="mt-6 flex gap-3">
+              <FileText size={13} />
+            </a>
+          )}
           <button
             type="button"
-            onClick={onCancel}
-            className="flex-1 rounded-2xl border border-gray-200 py-2.5 text-sm font-bold text-gray-600 transition hover:bg-gray-50"
+            onClick={onView}
+            className="flex h-7 w-7 items-center justify-center rounded-lg bg-gray-100 text-gray-900 transition hover:bg-gray-200"
+            title="Chi tiết"
           >
-            Hủy
+            <Eye size={13} />
           </button>
           <button
             type="button"
-            onClick={action.onConfirm}
-            className={`flex-1 rounded-2xl py-2.5 text-sm font-bold text-white transition ${
-              action.danger
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-gray-950 hover:bg-gray-800"
-            }`}
+            onClick={onDelete}
+            className="flex h-7 w-7 items-center justify-center rounded-lg text-red-400 transition hover:bg-red-50"
+            title="Xóa"
           >
-            Xác nhận
+            <Trash2 size={13} />
           </button>
         </div>
       </div>
