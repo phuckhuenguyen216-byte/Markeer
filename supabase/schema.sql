@@ -122,3 +122,52 @@ CREATE POLICY "Service role full access applications"
   ON applications FOR ALL
   USING (true)
   WITH CHECK (true);
+
+-- ============================================================
+-- Recruitment Leaders
+-- Shared leader directory for admin recruitment management.
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS recruitment_leaders (
+  id          TEXT        PRIMARY KEY DEFAULT ('leader-' || replace(gen_random_uuid()::text, '-', '')),
+  name        TEXT        NOT NULL CHECK (length(trim(name)) > 0),
+  team        TEXT        NOT NULL CHECK (team IN ('Marketing', 'Dev/DevOps', 'AI', 'Infrastructure', 'Sales', 'Other')),
+  is_active   BOOLEAN     DEFAULT true,
+  created_at  TIMESTAMPTZ DEFAULT now(),
+  updated_at  TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_recruitment_leaders_active
+  ON recruitment_leaders(is_active, created_at);
+
+CREATE OR REPLACE FUNCTION update_recruitment_leaders_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS recruitment_leaders_updated_at ON recruitment_leaders;
+CREATE TRIGGER recruitment_leaders_updated_at
+  BEFORE UPDATE ON recruitment_leaders
+  FOR EACH ROW
+  EXECUTE FUNCTION update_recruitment_leaders_updated_at();
+
+ALTER TABLE recruitment_leaders ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Service role full access recruitment leaders"
+  ON recruitment_leaders FOR ALL
+  USING (true)
+  WITH CHECK (true);
+
+INSERT INTO recruitment_leaders (id, name, team)
+VALUES
+  ('leader-mkt', 'Thuong', 'Marketing'),
+  ('leader-dev', 'Dev Lead', 'Dev/DevOps'),
+  ('leader-ai', 'AI Lead', 'AI')
+ON CONFLICT (id) DO UPDATE
+SET
+  name = EXCLUDED.name,
+  team = EXCLUDED.team,
+  is_active = true;

@@ -37,7 +37,6 @@ import {
   getRecruitmentMeta,
   upsertRecruitmentMeta,
   createEmptyManagement,
-  DEFAULT_LEADERS,
   LEADER_TEAMS,
   LEVEL_OPTIONS,
   type EmployeeLevel,
@@ -70,7 +69,9 @@ export default function AdminApplicationDetailPage() {
   );
   const [managementSaving, setManagementSaving] = useState(false);
   const [activeLevel, setActiveLevel] = useState<EmployeeLevel>("lv1");
-  const [leaders, setLeaders] = useState<RecruitmentLeader[]>(DEFAULT_LEADERS);
+  const [leaders, setLeaders] = useState<RecruitmentLeader[]>([]);
+  const [leadersLoading, setLeadersLoading] = useState(true);
+  const [leaderSaving, setLeaderSaving] = useState(false);
   const [showLeaderModal, setShowLeaderModal] = useState(false);
   const [editingLeaderId, setEditingLeaderId] = useState<string | null>(null);
   const [leaderDraft, setLeaderDraft] = useState<{
@@ -78,26 +79,23 @@ export default function AdminApplicationDetailPage() {
     team: LeaderTeam;
   }>({ name: "", team: "Marketing" });
 
-  useEffect(() => {
+  const fetchLeaders = useCallback(async () => {
+    setLeadersLoading(true);
     try {
-      const raw = localStorage.getItem("recruitment:leaders");
-      if (raw) {
-        const parsed = JSON.parse(raw) as RecruitmentLeader[];
-        if (Array.isArray(parsed) && parsed.length > 0) setLeaders(parsed);
-      }
+      const res = await fetch("/api/recruitment/leaders");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Không tải được leader");
+      setLeaders(Array.isArray(data.leaders) ? data.leaders : []);
     } catch {
-      /* ignore */
+      addToast("Lỗi tải danh sách leader", "error");
+    } finally {
+      setLeadersLoading(false);
     }
-  }, []);
+  }, [addToast]);
 
-  const persistLeaders = (next: RecruitmentLeader[]) => {
-    setLeaders(next);
-    try {
-      localStorage.setItem("recruitment:leaders", JSON.stringify(next));
-    } catch {
-      /* ignore */
-    }
-  };
+  useEffect(() => {
+    fetchLeaders();
+  }, [fetchLeaders]);
 
   useEffect(() => {
     try {
@@ -294,35 +292,50 @@ export default function AdminApplicationDetailPage() {
     setLeaderDraft({ name: "", team: "Marketing" });
   };
 
-  const saveLeader = () => {
+  const saveLeader = async () => {
     const name = leaderDraft.name.trim();
-    if (!name) return;
+    if (!name || leaderSaving) return;
 
-    if (editingLeaderId) {
-      const next = leaders.map((leader) =>
-        leader.id === editingLeaderId
-          ? { ...leader, name, team: leaderDraft.team }
-          : leader,
-      );
-      persistLeaders(next);
-      setManagement((prev) =>
-        prev.leader?.id === editingLeaderId
-          ? {
-              ...prev,
-              leader: { id: editingLeaderId, name, team: leaderDraft.team },
-            }
-          : prev,
-      );
-    } else {
-      const leader = {
-        id: `leader-${Date.now()}`,
-        name,
-        team: leaderDraft.team,
-      };
-      persistLeaders([...leaders, leader]);
+    setLeaderSaving(true);
+    try {
+      if (editingLeaderId) {
+        const res = await fetch(`/api/recruitment/leaders/${editingLeaderId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, team: leaderDraft.team }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Lỗi sửa leader");
+        const updated = data.leader as RecruitmentLeader;
+
+        setLeaders((prev) =>
+          prev.map((leader) =>
+            leader.id === editingLeaderId ? updated : leader,
+          ),
+        );
+        if (management.leader?.id === editingLeaderId) {
+          const nextManagement = { ...management, leader: updated };
+          await saveManagementState(nextManagement);
+        }
+        addToast("Đã lưu leader");
+      } else {
+        const res = await fetch("/api/recruitment/leaders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, team: leaderDraft.team }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Lỗi thêm leader");
+        setLeaders((prev) => [...prev, data.leader as RecruitmentLeader]);
+        addToast("Đã thêm leader");
+      }
+
+      resetLeaderForm();
+    } catch {
+      addToast("Lỗi lưu leader", "error");
+    } finally {
+      setLeaderSaving(false);
     }
-
-    resetLeaderForm();
   };
 
   const editLeader = (leader: RecruitmentLeader) => {
@@ -330,12 +343,28 @@ export default function AdminApplicationDetailPage() {
     setLeaderDraft({ name: leader.name, team: leader.team });
   };
 
-  const deleteLeader = (leaderId: string) => {
-    persistLeaders(leaders.filter((leader) => leader.id !== leaderId));
-    setManagement((prev) =>
-      prev.leader?.id === leaderId ? { ...prev, leader: null } : prev,
-    );
-    if (editingLeaderId === leaderId) resetLeaderForm();
+  const deleteLeader = async (leaderId: string) => {
+    if (leaderSaving) return;
+    setLeaderSaving(true);
+    try {
+      const res = await fetch(`/api/recruitment/leaders/${leaderId}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Lỗi xóa leader");
+
+      setLeaders((prev) => prev.filter((leader) => leader.id !== leaderId));
+      if (management.leader?.id === leaderId) {
+        const nextManagement = { ...management, leader: null };
+        await saveManagementState(nextManagement);
+      }
+      if (editingLeaderId === leaderId) resetLeaderForm();
+      addToast("Đã xóa leader");
+    } catch {
+      addToast("Lỗi xóa leader", "error");
+    } finally {
+      setLeaderSaving(false);
+    }
   };
 
   /* loading / not found */
@@ -377,6 +406,8 @@ export default function AdminApplicationDetailPage() {
       {showLeaderModal && (
         <LeaderModal
           leaders={leaders}
+          loading={leadersLoading}
+          saving={leaderSaving}
           draft={leaderDraft}
           editingId={editingLeaderId}
           onDraftChange={setLeaderDraft}
@@ -616,6 +647,7 @@ export default function AdminApplicationDetailPage() {
         <ManagementPanel
           management={management}
           leaders={leaders}
+          leadersLoading={leadersLoading}
           activeLevel={activeLevel}
           saving={managementSaving}
           onChange={setManagement}
@@ -841,6 +873,7 @@ export default function AdminApplicationDetailPage() {
 function ManagementPanel({
   management,
   leaders,
+  leadersLoading,
   activeLevel,
   saving,
   onChange,
@@ -852,6 +885,7 @@ function ManagementPanel({
 }: {
   management: RecruitmentManagement;
   leaders: RecruitmentLeader[];
+  leadersLoading: boolean;
   activeLevel: EmployeeLevel;
   saving: boolean;
   onChange: React.Dispatch<React.SetStateAction<RecruitmentManagement>>;
@@ -881,6 +915,7 @@ function ManagementPanel({
               <div className="mt-1 flex gap-2">
                 <select
                   value={currentLeader?.id || ""}
+                  disabled={leadersLoading}
                   onChange={(event) => {
                     const leader =
                       leaders.find((item) => item.id === event.target.value) ||
@@ -889,7 +924,9 @@ function ManagementPanel({
                   }}
                   className="h-10 min-w-0 flex-1 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-700 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
                 >
-                  <option value="">Chưa chọn leader</option>
+                  <option value="">
+                    {leadersLoading ? "Đang tải leader..." : "Chưa chọn leader"}
+                  </option>
                   {leaders.map((leader) => (
                     <option key={leader.id} value={leader.id}>
                       {leader.name} - {leader.team}
@@ -1084,6 +1121,8 @@ function ManagementPanel({
 
 function LeaderModal({
   leaders,
+  loading,
+  saving,
   draft,
   editingId,
   onDraftChange,
@@ -1094,12 +1133,14 @@ function LeaderModal({
   onClose,
 }: {
   leaders: RecruitmentLeader[];
+  loading: boolean;
+  saving: boolean;
   draft: { name: string; team: LeaderTeam };
   editingId: string | null;
   onDraftChange: (draft: { name: string; team: LeaderTeam }) => void;
-  onSave: () => void;
+  onSave: () => void | Promise<void>;
   onEdit: (leader: RecruitmentLeader) => void;
-  onDelete: (leaderId: string) => void;
+  onDelete: (leaderId: string) => void | Promise<void>;
   onReset: () => void;
   onClose: () => void;
 }) {
@@ -1137,6 +1178,7 @@ function LeaderModal({
         <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-[1fr_160px_auto_auto]">
           <input
             value={draft.name}
+            disabled={saving}
             onChange={(event) =>
               onDraftChange({ ...draft, name: event.target.value })
             }
@@ -1145,6 +1187,7 @@ function LeaderModal({
           />
           <select
             value={draft.team}
+            disabled={saving}
             onChange={(event) =>
               onDraftChange({ ...draft, team: event.target.value as LeaderTeam })
             }
@@ -1159,7 +1202,8 @@ function LeaderModal({
           <button
             type="button"
             onClick={onSave}
-            className="inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-[#4a2318] px-3 text-sm font-black text-white"
+            disabled={saving || !draft.name.trim()}
+            className="inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-[#4a2318] px-3 text-sm font-black text-white transition disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Plus size={15} />
             {editingId ? "Lưu" : "Thêm"}
@@ -1168,7 +1212,8 @@ function LeaderModal({
             <button
               type="button"
               onClick={onReset}
-              className="h-10 rounded-lg border border-gray-200 px-3 text-sm font-black text-gray-500"
+              disabled={saving}
+              className="h-10 rounded-lg border border-gray-200 px-3 text-sm font-black text-gray-500 transition disabled:cursor-not-allowed disabled:opacity-50"
             >
               Hủy
             </button>
@@ -1176,7 +1221,17 @@ function LeaderModal({
         </div>
 
         <div className="divide-y divide-gray-100 rounded-xl border border-gray-100">
-          {leaders.map((leader) => (
+          {loading && (
+            <div className="px-3 py-4 text-sm font-semibold text-gray-400">
+              Đang tải leader...
+            </div>
+          )}
+          {!loading && leaders.length === 0 && (
+            <div className="px-3 py-4 text-sm font-semibold text-gray-400">
+              Chưa có leader nào.
+            </div>
+          )}
+          {!loading && leaders.map((leader) => (
             <div
               key={leader.id}
               className="flex items-center justify-between gap-3 px-3 py-2.5"
@@ -1191,7 +1246,8 @@ function LeaderModal({
                 <button
                   type="button"
                   onClick={() => onEdit(leader)}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition hover:bg-gray-100"
+                  disabled={saving}
+                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-500 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
                   title="Sua"
                 >
                   <Edit3 size={14} />
@@ -1199,7 +1255,8 @@ function LeaderModal({
                 <button
                   type="button"
                   onClick={() => onDelete(leader.id)}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg text-red-400 transition hover:bg-red-50"
+                  disabled={saving}
+                  className="flex h-8 w-8 items-center justify-center rounded-lg text-red-400 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
                   title="Xoa"
                 >
                   <Trash2 size={14} />
