@@ -44,3 +44,7 @@ next-env.d.ts
 # local mock UI / zip artifacts
 markee-ai-admin-ui/
 markee-ai-admin-ui.zip
+
+# local-only test/screenshot artifacts and editor settings
+.codex-artifacts/
+.vscode/
