@@ -1653,8 +1653,8 @@ function RecruitmentPositionsModal({
   const activeCount = positions.filter((position) => position.is_active).length;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-start justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm sm:p-6">
-      <div className="w-full max-w-5xl overflow-hidden rounded-2xl bg-gray-50 shadow-2xl">
+    <div className="fixed inset-x-0 bottom-0 top-12 z-[9999] flex items-start justify-center overflow-y-auto bg-black/50 px-4 pb-6 pt-5 backdrop-blur-sm sm:px-6 sm:pt-7">
+      <div className="flex max-h-[calc(100dvh-5rem)] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-gray-50 shadow-2xl">
         <div className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 bg-white px-5 py-4">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f6eee9] text-[#4a2318]">
@@ -1690,7 +1690,7 @@ function RecruitmentPositionsModal({
           </div>
         </div>
 
-        <div className="space-y-4 p-4 sm:p-5">
+        <div className="space-y-4 overflow-y-auto p-4 sm:p-5">
           {positions.length === 0 && (
             <div className="rounded-xl border border-gray-200 bg-white p-6 text-center text-sm font-semibold text-gray-400">
               Chưa có dữ liệu vị trí tuyển dụng.
