@@ -78,6 +78,7 @@ export default function AdminApplicationDetailPage() {
     name: string;
     team: LeaderTeam;
   }>({ name: "", team: "Marketing" });
+  const [showStatusActions, setShowStatusActions] = useState(false);
 
   const fetchLeaders = useCallback(async () => {
     setLeadersLoading(true);
@@ -116,15 +117,6 @@ export default function AdminApplicationDetailPage() {
         setNotes(stripStarredTag(data.admin_notes || ""));
         setManagement(meta);
         setActiveLevel(meta.currentLevel);
-        // Auto-promote new -> reviewing on open (fire-and-forget).
-        if (data.status === "new") {
-          fetch(`/api/applications/${data.id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status: "reviewing" as ApplicationStatus }),
-          }).catch(() => {});
-          setApp((p) => (p ? { ...p, status: "reviewing" } : p));
-        }
       })
       .catch(() => addToast("Không tìm thấy hồ sơ", "error"))
       .finally(() => setLoading(false));
@@ -173,10 +165,12 @@ export default function AdminApplicationDetailPage() {
   const confirmStatusChange = (status: ApplicationStatus) => {
     if (!app || status === app.status) return;
     const info = getStatusInfo(status);
+    setShowStatusActions(false);
     setConfirmAction({
       title: `Đổi trạng thái sang "${info.label}"?`,
-      desc: `${app.full_name} — ${app.email}`,
-      danger: status === "rejected",
+      desc: `Trạng thái hiện tại là "${getStatusInfo(app.status).label}". Hành động này chỉ nên dùng khi hồ sơ thật sự chuyển bước.`,
+      detail: `${app.full_name} - ${app.email}`,
+      danger: status === "rejected" || status === "resigned",
       onConfirm: () => updateStatus(status),
     });
   };
@@ -476,31 +470,76 @@ export default function AdminApplicationDetailPage() {
               {starred ? "Nổi bật" : "Đánh dấu"}
             </button>
             <span className="mx-1 hidden h-5 w-px bg-gray-200 sm:block" />
-            {STATUS_OPTIONS.map((s) => {
-              const active = app.status === s.value;
-              return (
-                <button
-                  key={s.value}
-                  onClick={() => confirmStatusChange(s.value)}
-                  className={`rounded-lg border px-2.5 py-1 text-xs font-bold transition ${
-                    active
-                      ? ""
-                      : "hover:border-gray-400 hover:bg-gray-50 hover:text-gray-600"
-                  }`}
-                  style={
-                    active
-                      ? { background: s.bg, color: s.color, borderColor: s.color }
-                      : {
-                          background: "#fff",
-                          color: "#9ca3af",
-                          borderColor: "#e5e7eb",
-                        }
-                  }
-                >
-                  {s.label}
-                </button>
-              );
-            })}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowStatusActions((value) => !value)}
+                className="flex h-8 items-center gap-2 rounded-lg border px-2.5 text-xs font-bold transition hover:bg-gray-50"
+                style={{
+                  borderColor: st.color,
+                  color: st.color,
+                  background: st.bg,
+                }}
+              >
+                <span className="hidden text-gray-500 sm:inline">
+                  Trạng thái:
+                </span>
+                {st.label}
+                <Edit3 size={13} />
+              </button>
+
+              {showStatusActions && (
+                <div className="absolute right-0 top-10 z-30 w-64 rounded-xl border border-gray-200 bg-white p-3 shadow-xl">
+                  <div className="mb-2">
+                    <p className="text-xs font-black text-gray-900">
+                      Đổi trạng thái hồ sơ
+                    </p>
+                    <p className="mt-0.5 text-[11px] font-medium leading-relaxed text-gray-400">
+                      Chỉ đổi khi hồ sơ thật sự chuyển bước. Mỗi lần đổi sẽ cần xác nhận.
+                    </p>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    {STATUS_OPTIONS.map((s) => {
+                      const active = app.status === s.value;
+                      return (
+                        <button
+                          key={s.value}
+                          type="button"
+                          disabled={active}
+                          onClick={() => confirmStatusChange(s.value)}
+                          className={`flex h-9 w-full items-center justify-between rounded-lg border px-3 text-left text-xs font-bold transition disabled:cursor-default ${
+                            active
+                              ? "border-gray-200 bg-gray-50 text-gray-400"
+                              : "border-gray-100 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                          }`}
+                        >
+                          <span>{s.label}</span>
+                          {active ? (
+                            <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-black text-gray-400">
+                              hiện tại
+                            </span>
+                          ) : (
+                            <span
+                              className="h-2 w-2 rounded-full"
+                              style={{ background: s.color }}
+                            />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowStatusActions(false)}
+                    className="mt-2 h-8 w-full rounded-lg border border-gray-200 text-xs font-bold text-gray-500 transition hover:bg-gray-50"
+                  >
+                    Hủy
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
