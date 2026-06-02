@@ -45,6 +45,7 @@ import {
   toggleStarredNotes,
   formatSubmittedAt,
   getRecruitmentMeta,
+  type RecruitmentLeader,
 } from "@/lib/recruitment";
 import { StatusSelect } from "../components/StatusControl";
 import PositionTags from "../components/PositionTags";
@@ -59,6 +60,13 @@ const STATUS_ORDER: Record<string, number> = STATUS_OPTIONS.reduce(
   (acc, status, index) => ({ ...acc, [status.value]: index }),
   {} as Record<string, number>,
 );
+
+const EMPLOYEE_STATUSES: ApplicationStatus[] = ["accepted", "resigned"];
+const CLOSED_STATUSES: ApplicationStatus[] = [
+  "accepted",
+  "rejected",
+  "resigned",
+];
 
 function starRank(app: Application) {
   return isStarred(app) && (app.status === "new" || app.status === "reviewing")
@@ -77,6 +85,9 @@ function ApplicationsContent() {
   );
   const [teamFilter, setTeamFilter] = useState(
     () => searchParams.get("team") || "all",
+  );
+  const [leaderFilter, setLeaderFilter] = useState(
+    () => searchParams.get("leader") || "all",
   );
   const [peopleScope, setPeopleScope] = useState<PeopleScope>(() => {
     const scope = searchParams.get("scope");
@@ -108,6 +119,7 @@ function ApplicationsContent() {
   const [bulkSaving, setBulkSaving] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [showStats, setShowStats] = useState(false);
+  const [leaders, setLeaders] = useState<RecruitmentLeader[]>([]);
 
   const fetchApps = useCallback(async () => {
     try {
@@ -122,9 +134,21 @@ function ApplicationsContent() {
     }
   }, [addToast]);
 
+  const fetchLeaders = useCallback(async () => {
+    try {
+      const res = await fetch("/api/recruitment/leaders");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Không tải được leader");
+      setLeaders(Array.isArray(data.leaders) ? data.leaders : []);
+    } catch {
+      addToast("Lỗi tải danh sách leader", "error");
+    }
+  }, [addToast]);
+
   useEffect(() => {
     fetchApps();
-  }, [fetchApps]);
+    fetchLeaders();
+  }, [fetchApps, fetchLeaders]);
 
   // Sync filters + view to the URL (debounced) so reload/back/share keep state.
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -135,6 +159,7 @@ function ApplicationsContent() {
       if (search.trim()) params.set("q", search.trim());
       if (statusFilter !== "all") params.set("status", statusFilter);
       if (teamFilter !== "all") params.set("team", teamFilter);
+      if (leaderFilter !== "all") params.set("leader", leaderFilter);
       if (peopleScope !== "all") params.set("scope", peopleScope);
       if (pageSize !== 25) params.set("limit", String(pageSize));
       if (page > 1) params.set("page", String(page));
@@ -155,6 +180,7 @@ function ApplicationsContent() {
     search,
     statusFilter,
     teamFilter,
+    leaderFilter,
     peopleScope,
     pageSize,
     page,
@@ -175,7 +201,16 @@ function ApplicationsContent() {
 
   useEffect(() => {
     setPage(1);
-  }, [search, statusFilter, teamFilter, peopleScope, sortKey, sortDir, pageSize]);
+  }, [
+    search,
+    statusFilter,
+    teamFilter,
+    leaderFilter,
+    peopleScope,
+    sortKey,
+    sortDir,
+    pageSize,
+  ]);
 
   const handleView = (app: Application) => {
     // Save the current filtered order so the detail page can offer prev/next.
@@ -398,17 +433,26 @@ function ApplicationsContent() {
     }
     if (peopleScope === "reviewing") {
       filtered = filtered.filter(
-        (app) => app.status !== "accepted" && app.status !== "rejected",
+        (app) => !CLOSED_STATUSES.includes(app.status),
       );
     }
     if (peopleScope === "employees") {
-      filtered = filtered.filter((app) => app.status === "accepted");
+      filtered = filtered.filter((app) =>
+        EMPLOYEE_STATUSES.includes(app.status),
+      );
     }
     if (teamFilter !== "all") {
       const positions = TEAM_POSITIONS[teamFilter] || [];
       filtered = filtered.filter((app) =>
         (app.career_journey || []).some((pos) => positions.includes(pos)),
       );
+    }
+    if (leaderFilter !== "all") {
+      filtered = filtered.filter((app) => {
+        const leader = getRecruitmentMeta(app.admin_notes || "").leader;
+        if (leaderFilter === "none") return !leader;
+        return leader?.id === leaderFilter;
+      });
     }
 
     const dir = sortDir === "asc" ? 1 : -1;
@@ -441,7 +485,16 @@ function ApplicationsContent() {
       if (sortKey) return compare(a, b);
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
-  }, [allApps, search, statusFilter, teamFilter, peopleScope, sortKey, sortDir]);
+  }, [
+    allApps,
+    search,
+    statusFilter,
+    teamFilter,
+    leaderFilter,
+    peopleScope,
+    sortKey,
+    sortDir,
+  ]);
 
   const totalPages = Math.max(1, Math.ceil(sortedApps.length / pageSize));
   const safePage = Math.min(page, totalPages);
@@ -489,6 +542,28 @@ function ApplicationsContent() {
     });
     return counts;
   }, [allApps]);
+
+  const leaderCounts = useMemo(() => {
+    const counts: Record<string, number> = {
+      all: allApps.length,
+      none: 0,
+    };
+
+    leaders.forEach((leader) => {
+      counts[leader.id] = 0;
+    });
+
+    allApps.forEach((app) => {
+      const leader = getRecruitmentMeta(app.admin_notes || "").leader;
+      if (!leader) {
+        counts.none += 1;
+        return;
+      }
+      counts[leader.id] = (counts[leader.id] || 0) + 1;
+    });
+
+    return counts;
+  }, [allApps, leaders]);
 
   const stats = useMemo(() => {
     const total = allApps.length;
@@ -632,13 +707,14 @@ function ApplicationsContent() {
       value: "reviewing",
       label: "Đang xét",
       count: allApps.filter(
-        (app) => app.status !== "accepted" && app.status !== "rejected",
+        (app) => !CLOSED_STATUSES.includes(app.status),
       ).length,
     },
     {
       value: "employees",
       label: "Nhân viên",
-      count: allApps.filter((app) => app.status === "accepted").length,
+      count: allApps.filter((app) => EMPLOYEE_STATUSES.includes(app.status))
+        .length,
     },
   ];
 
@@ -814,6 +890,34 @@ function ApplicationsContent() {
               {TEAM_FILTERS.map((team) => (
                 <option key={team} value={team}>
                   {`${team === "all" ? "Tất cả team" : team} (${teamCounts[team] ?? 0})`}
+                </option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
+              ▾
+            </span>
+          </label>
+
+          {/* Leader filter */}
+          <label className="relative block w-full shrink-0 sm:w-[220px]">
+            <Users
+              size={15}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            />
+            <select
+              value={leaderFilter}
+              onChange={(event) => setLeaderFilter(event.target.value)}
+              className="h-9 w-full appearance-none rounded-lg border border-gray-200 bg-white pl-9 pr-8 text-sm font-bold text-gray-600 outline-none transition focus:border-[#a0522d] focus:ring-2 focus:ring-[#f6eee9]"
+            >
+              <option value="all">
+                {`Tất cả leader (${leaderCounts.all ?? 0})`}
+              </option>
+              <option value="none">
+                {`Chưa gán leader (${leaderCounts.none ?? 0})`}
+              </option>
+              {leaders.map((leader) => (
+                <option key={leader.id} value={leader.id}>
+                  {`${leader.name} (${leaderCounts[leader.id] ?? 0})`}
                 </option>
               ))}
             </select>
@@ -1191,8 +1295,8 @@ function CandidateRow({
                 {app.full_name || "---"}
               </p>
               {meta.leader && (
-                <span className="shrink-0 rounded-md bg-slate-100 px-1.5 py-px text-[9px] font-black text-slate-500">
-                  Leader: {meta.leader.name}
+                <span className="max-w-[96px] shrink-0 truncate rounded-md bg-slate-100 px-1.5 py-px text-[9px] font-black text-slate-500">
+                  {meta.leader.name}
                 </span>
               )}
             </div>
@@ -1344,8 +1448,8 @@ function CandidateCard({
               {app.full_name || "---"}
             </p>
             {meta.leader && (
-              <span className="shrink-0 rounded-md bg-slate-100 px-1.5 py-px text-[9px] font-black text-slate-500">
-                Leader: {meta.leader.name}
+              <span className="max-w-[90px] shrink-0 truncate rounded-md bg-slate-100 px-1.5 py-px text-[9px] font-black text-slate-500">
+                {meta.leader.name}
               </span>
             )}
           </div>

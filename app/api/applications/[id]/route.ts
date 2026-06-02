@@ -10,6 +10,7 @@ const VALID_STATUSES = [
   "interviewed",
   "accepted",
   "rejected",
+  "resigned",
 ];
 
 // GET /api/applications/[id]

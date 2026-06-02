@@ -36,7 +36,8 @@ export type ApplicationStatus =
   | "reviewing"
   | "interviewed"
   | "accepted"
-  | "rejected";
+  | "rejected"
+  | "resigned";
 
 export const STATUS_OPTIONS: {
   value: ApplicationStatus;
@@ -54,6 +55,7 @@ export const STATUS_OPTIONS: {
   },
   { value: "accepted", label: "Đã nhận", color: "#22c55e", bg: "#f0fdf4" },
   { value: "rejected", label: "Từ chối", color: "#ef4444", bg: "#fef2f2" },
+  { value: "resigned", label: "Đã nghỉ", color: "#64748b", bg: "#f8fafc" },
 ];
 
 export const TEAM_LABELS: Record<string, string> = {

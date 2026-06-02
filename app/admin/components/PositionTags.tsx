@@ -40,11 +40,9 @@ export default function PositionTags({
           >
             {showAbbr && c.abbr && (
               <span
-                className="flex h-4 w-4 items-center justify-center rounded text-[9px] font-black text-white"
+                className="h-2 w-2 shrink-0 rounded-full ring-2 ring-white/70"
                 style={{ background: c.color }}
-              >
-                {c.abbr}
-              </span>
+              />
             )}
             {pos}
           </span>

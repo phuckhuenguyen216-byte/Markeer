@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS applications (
   enrollment      TEXT        DEFAULT '',
   graduation      TEXT        DEFAULT '',
   cv              TEXT        DEFAULT '',
-  status          TEXT        DEFAULT 'new' CHECK (status IN ('new', 'reviewing', 'interviewed', 'accepted', 'rejected')),
+  status          TEXT        DEFAULT 'new' CHECK (status IN ('new', 'reviewing', 'interviewed', 'accepted', 'rejected', 'resigned')),
   admin_notes     TEXT        DEFAULT '',
   created_at      TIMESTAMPTZ DEFAULT now(),
   updated_at      TIMESTAMPTZ DEFAULT now()
