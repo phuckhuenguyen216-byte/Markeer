@@ -12,6 +12,7 @@ import { createPortal } from "react-dom";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   BarChart3,
+  BriefcaseBusiness,
   ChevronDown,
   ChevronUp,
   ChevronsUpDown,
@@ -45,6 +46,8 @@ import {
   toggleStarredNotes,
   formatSubmittedAt,
   getRecruitmentMeta,
+  TEAM_STYLES,
+  type RecruitmentPosition,
   type RecruitmentLeader,
 } from "@/lib/recruitment";
 import { StatusSelect } from "../components/StatusControl";
@@ -120,6 +123,9 @@ function ApplicationsContent() {
   const [syncing, setSyncing] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [leaders, setLeaders] = useState<RecruitmentLeader[]>([]);
+  const [positions, setPositions] = useState<RecruitmentPosition[]>([]);
+  const [showPositions, setShowPositions] = useState(false);
+  const [positionSavingId, setPositionSavingId] = useState<string | null>(null);
 
   const fetchApps = useCallback(async () => {
     try {
@@ -145,10 +151,22 @@ function ApplicationsContent() {
     }
   }, [addToast]);
 
+  const fetchPositions = useCallback(async () => {
+    try {
+      const res = await fetch("/api/recruitment/positions?includeInactive=1");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Không tải được vị trí");
+      setPositions(Array.isArray(data.positions) ? data.positions : []);
+    } catch {
+      addToast("Lỗi tải danh sách vị trí tuyển", "error");
+    }
+  }, [addToast]);
+
   useEffect(() => {
     fetchApps();
     fetchLeaders();
-  }, [fetchApps, fetchLeaders]);
+    fetchPositions();
+  }, [fetchApps, fetchLeaders, fetchPositions]);
 
   // Sync filters + view to the URL (debounced) so reload/back/share keep state.
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -338,6 +356,41 @@ function ApplicationsContent() {
       addToast(err instanceof Error ? err.message : "Lỗi đồng bộ", "error");
     } finally {
       setSyncing(false);
+    }
+  };
+
+  const handleTogglePosition = async (position: RecruitmentPosition) => {
+    const nextActive = !position.is_active;
+    setPositionSavingId(position.id);
+    const snapshot = positions;
+    setPositions((prev) =>
+      prev.map((item) =>
+        item.id === position.id ? { ...item, is_active: nextActive } : item,
+      ),
+    );
+
+    try {
+      const res = await fetch(`/api/recruitment/positions/${position.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_active: nextActive }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Lỗi cập nhật vị trí");
+      const updated = data.position as RecruitmentPosition;
+      setPositions((prev) =>
+        prev.map((item) => (item.id === updated.id ? updated : item)),
+      );
+      addToast(
+        nextActive
+          ? `Đã mở tuyển: ${position.label}`
+          : `Đã ẩn khỏi form: ${position.label}`,
+      );
+    } catch {
+      setPositions(snapshot);
+      addToast("Lỗi cập nhật vị trí tuyển", "error");
+    } finally {
+      setPositionSavingId(null);
     }
   };
 
@@ -565,6 +618,11 @@ function ApplicationsContent() {
     return counts;
   }, [allApps, leaders]);
 
+  const activePositionCount = useMemo(
+    () => positions.filter((position) => position.is_active).length,
+    [positions],
+  );
+
   const stats = useMemo(() => {
     const total = allApps.length;
     if (total === 0) return null;
@@ -784,6 +842,16 @@ function ApplicationsContent() {
         onCancel={() => setConfirmAction(null)}
       />
 
+      {showPositions && (
+        <RecruitmentPositionsModal
+          positions={positions}
+          savingId={positionSavingId}
+          onToggle={handleTogglePosition}
+          onRefresh={fetchPositions}
+          onClose={() => setShowPositions(false)}
+        />
+      )}
+
       <section className="rounded-xl border border-gray-200 bg-white p-3 shadow-sm">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -838,6 +906,17 @@ function ApplicationsContent() {
                 Thống kê
               </button>
             )}
+            <button
+              type="button"
+              onClick={() => setShowPositions(true)}
+              className="inline-flex h-8 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-xs font-bold text-gray-600 transition hover:border-[#d8c4b8] hover:bg-[#fbf6f2] hover:text-[#4a2318]"
+            >
+              <BriefcaseBusiness size={14} />
+              Vị trí tuyển
+              <span className="rounded-full bg-gray-100 px-1.5 text-[10px] text-gray-500">
+                {activePositionCount}/{positions.length || 0}
+              </span>
+            </button>
             <button
               type="button"
               onClick={() => {
@@ -1554,6 +1633,145 @@ function EmptyState() {
       <p className="mt-1 text-xs text-gray-400">
         Dữ liệu sẽ xuất hiện sau khi có người gửi form.
       </p>
+    </div>
+  );
+}
+
+function RecruitmentPositionsModal({
+  positions,
+  savingId,
+  onToggle,
+  onRefresh,
+  onClose,
+}: {
+  positions: RecruitmentPosition[];
+  savingId: string | null;
+  onToggle: (position: RecruitmentPosition) => void;
+  onRefresh: () => void;
+  onClose: () => void;
+}) {
+  const activeCount = positions.filter((position) => position.is_active).length;
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-start justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm sm:p-6">
+      <div className="w-full max-w-5xl overflow-hidden rounded-2xl bg-gray-50 shadow-2xl">
+        <div className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 bg-white px-5 py-4">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f6eee9] text-[#4a2318]">
+              <BriefcaseBusiness size={18} />
+            </span>
+            <div>
+              <h2 className="text-base font-black text-gray-950">
+                Quản lý vị trí tuyển dụng
+              </h2>
+              <p className="text-xs font-semibold text-gray-400">
+                {activeCount}/{positions.length} vị trí đang hiện trên form ứng tuyển
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onRefresh}
+              className="inline-flex h-9 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-xs font-bold text-gray-600 transition hover:bg-gray-50"
+            >
+              <RefreshCw size={14} />
+              Tải lại
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-400 transition hover:bg-gray-50 hover:text-gray-700"
+              title="Đóng"
+            >
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+
+        <div className="space-y-4 p-4 sm:p-5">
+          {positions.length === 0 && (
+            <div className="rounded-xl border border-gray-200 bg-white p-6 text-center text-sm font-semibold text-gray-400">
+              Chưa có dữ liệu vị trí tuyển dụng.
+            </div>
+          )}
+
+          {TEAM_FILTERS.filter((team) => team !== "all").map((team) => {
+            const teamPositions = positions.filter(
+              (position) => position.team === team,
+            );
+            if (teamPositions.length === 0) return null;
+            const style = TEAM_STYLES[team] || TEAM_STYLES.all;
+            const teamActive = teamPositions.filter(
+              (position) => position.is_active,
+            ).length;
+
+            return (
+              <section
+                key={team}
+                className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="h-2.5 w-2.5 rounded-full"
+                      style={{ background: style.dot }}
+                    />
+                    <h3 className="text-sm font-black text-gray-900">{team}</h3>
+                  </div>
+                  <span
+                    className="rounded-full px-2.5 py-1 text-[11px] font-black"
+                    style={{ background: style.bg, color: style.color }}
+                  >
+                    {teamActive}/{teamPositions.length} đang tuyển
+                  </span>
+                </div>
+
+                <div className="divide-y divide-gray-100">
+                  {teamPositions.map((position) => {
+                    const saving = savingId === position.id;
+                    return (
+                      <div
+                        key={position.id}
+                        className="flex flex-wrap items-center justify-between gap-3 px-4 py-3"
+                      >
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-black text-gray-900">
+                            {position.label}
+                          </p>
+                          <p className="mt-0.5 text-xs font-semibold text-gray-400">
+                            {position.is_active
+                              ? "Đang hiển thị trên form ứng tuyển"
+                              : "Đang ẩn khỏi form ứng tuyển"}
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => onToggle(position)}
+                          disabled={saving}
+                          className={`inline-flex h-9 min-w-[120px] items-center justify-center rounded-lg border px-3 text-xs font-black transition disabled:cursor-not-allowed disabled:opacity-60 ${
+                            position.is_active
+                              ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                              : "border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100"
+                          }`}
+                        >
+                          {saving
+                            ? "Đang lưu..."
+                            : position.is_active
+                              ? "Đang hiện"
+                              : "Đang ẩn"}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

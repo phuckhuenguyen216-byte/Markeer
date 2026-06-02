@@ -328,6 +328,12 @@ type CareerCategory = {
   icon: LucideIcon;
 };
 
+type PublicRecruitmentPosition = {
+  label: string;
+  team: string;
+  is_active?: boolean;
+};
+
 const CAREER_OPTIONS: CareerOption[] = [
   {
     label: "Network Team",
@@ -1221,6 +1227,9 @@ export default function ApplicationWizard({
   const [direction, setDirection] = useState<"next" | "prev">("next");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [mascotCue, setMascotCue] = useState<MascotCue>(null);
+  const [activePositionLabels, setActivePositionLabels] = useState<Set<string>>(
+    () => new Set(CAREER_OPTIONS.map((option) => option.label)),
+  );
   const csrfTokenRef = useRef<string>("");
   const bodyRef = useRef<HTMLDivElement>(null);
   const guideRailRef = useRef<HTMLDivElement>(null);
@@ -1253,6 +1262,29 @@ export default function ApplicationWizard({
         csrfTokenRef.current = d.token;
       })
       .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/recruitment/positions")
+      .then((response) => {
+        if (!response.ok) throw new Error("positions-unavailable");
+        return response.json();
+      })
+      .then((data) => {
+        const positions = Array.isArray(data.positions)
+          ? (data.positions as PublicRecruitmentPosition[])
+          : [];
+        const activeLabels = new Set(
+          positions
+            .filter((position) => position.is_active !== false)
+            .map((position) => position.label),
+        );
+
+        setActivePositionLabels(activeLabels);
+      })
+      .catch(() => {
+        /* keep local defaults if the public config endpoint is unavailable */
+      });
   }, []);
 
   const getVisibleGuideSections = useCallback(() => {
@@ -1548,6 +1580,27 @@ export default function ApplicationWizard({
   }, [form.career_journey, selectedCategory]);
 
   useEffect(() => {
+    setForm((prev) => {
+      const nextCareer = prev.career_journey.filter((position) =>
+        activePositionLabels.has(position),
+      );
+      if (nextCareer.length === prev.career_journey.length) return prev;
+      return { ...prev, career_journey: nextCareer };
+    });
+
+    if (
+      selectedCategory &&
+      !CAREER_OPTIONS.some(
+        (option) =>
+          option.team === selectedCategory &&
+          activePositionLabels.has(option.label),
+      )
+    ) {
+      setSelectedCategory("");
+    }
+  }, [activePositionLabels, selectedCategory]);
+
+  useEffect(() => {
     const t = setTimeout(() => {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(form));
@@ -1785,6 +1838,12 @@ export default function ApplicationWizard({
   };
 
   const pct = Math.round(((step + 1) / STEPS.length) * 100);
+  const activeCareerOptions = CAREER_OPTIONS.filter((option) =>
+    activePositionLabels.has(option.label),
+  );
+  const activeCareerCategories = CAREER_CATEGORIES.filter((category) =>
+    activeCareerOptions.some((option) => option.team === category.label),
+  );
   const selectedCareerCategories = getSelectedCareerTeams(form.career_journey);
   const activeStepCategory =
     selectedCategory || selectedCareerCategories[0] || "";
@@ -2261,6 +2320,8 @@ export default function ApplicationWizard({
                       selectedCategory={activeStepCategory}
                       setSelectedCategory={setSelectedCategory}
                       setMascotCue={setMascotCue}
+                      careerOptions={activeCareerOptions}
+                      careerCategories={activeCareerCategories}
                       errors={errors}
                     />
                   )}
@@ -2707,6 +2768,8 @@ function Step1({
   selectedCategory,
   setSelectedCategory,
   setMascotCue,
+  careerOptions,
+  careerCategories,
   errors,
 }: {
   form: FormData;
@@ -2715,21 +2778,23 @@ function Step1({
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
   setMascotCue: (cue: MascotCue) => void;
+  careerOptions: CareerOption[];
+  careerCategories: CareerCategory[];
   errors: StepErrors;
 }) {
   const [isChoosingCategory, setIsChoosingCategory] = useState(false);
   const activeCategory =
     selectedCategory || getSelectedCareerTeams(form.career_journey)[0] || "";
-  const activeCategoryMeta = CAREER_CATEGORIES.find(
+  const activeCategoryMeta = careerCategories.find(
     (category) => category.label === activeCategory,
   );
   const ActiveCategoryIcon = activeCategoryMeta?.icon;
   const filtered = activeCategory
-    ? CAREER_OPTIONS.filter((o) => o.team === activeCategory)
+    ? careerOptions.filter((o) => o.team === activeCategory)
     : [];
   const selectedCount = form.career_journey.length;
   const filterCount = (filter: string) =>
-    CAREER_OPTIONS.filter((o) => o.team === filter).length;
+    careerOptions.filter((o) => o.team === filter).length;
   const shouldShowCategoryPicker = !activeCategory || isChoosingCategory;
   const handleCategorySelect = (category: string) => {
     const isSwitching = activeCategory && activeCategory !== category;
@@ -2780,37 +2845,48 @@ function Step1({
         <FieldError error={errors.career_journey} />
         {shouldShowCategoryPicker ? (
           <>
-            <div className="wz-category-grid">
-              {CAREER_CATEGORIES.map((category) => {
-                const checked = activeCategory === category.label;
-                const count = filterCount(category.label);
-                const CategoryIcon = category.icon;
-                return (
-                  <button
-                    key={category.label}
-                    type="button"
-                    className={`wz-category-card ${checked ? "selected" : ""}`}
-                    aria-pressed={checked}
-                    onClick={() => handleCategorySelect(category.label)}
-                  >
-                    <span
-                      className="wz-category-icon"
-                      style={{ background: category.color }}
+            {careerCategories.length === 0 ? (
+              <div className="wz-switch-note">
+                Hiện tại team chưa mở vị trí tuyển dụng mới. Bạn quay lại sau
+                hoặc theo dõi kênh Markee để nhận thông báo đợt tuyển tiếp theo.
+              </div>
+            ) : (
+              <div className="wz-category-grid">
+                {careerCategories.map((category) => {
+                  const checked = activeCategory === category.label;
+                  const count = filterCount(category.label);
+                  const CategoryIcon = category.icon;
+                  return (
+                    <button
+                      key={category.label}
+                      type="button"
+                      className={`wz-category-card ${checked ? "selected" : ""}`}
+                      aria-pressed={checked}
+                      onClick={() => handleCategorySelect(category.label)}
                     >
-                      <CategoryIcon aria-hidden="true" strokeWidth={2.35} />
-                    </span>
-                    <span className="wz-category-copy">
-                      <span className="wz-category-name">{category.label}</span>
-                      <span className="wz-category-desc">{category.desc}</span>
-                    </span>
-                    <span className="wz-category-meta">{count} team</span>
-                    <span className="wz-category-action">
-                      {checked ? "Đã chọn" : "Chọn"}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+                      <span
+                        className="wz-category-icon"
+                        style={{ background: category.color }}
+                      >
+                        <CategoryIcon aria-hidden="true" strokeWidth={2.35} />
+                      </span>
+                      <span className="wz-category-copy">
+                        <span className="wz-category-name">
+                          {category.label}
+                        </span>
+                        <span className="wz-category-desc">
+                          {category.desc}
+                        </span>
+                      </span>
+                      <span className="wz-category-meta">{count} team</span>
+                      <span className="wz-category-action">
+                        {checked ? "Đã chọn" : "Chọn"}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
             {activeCategory && selectedCount > 0 && (
               <div className="wz-switch-note">
                 Khi đổi lĩnh vực, {selectedCount} team đã chọn trước đó sẽ được
@@ -2872,38 +2948,49 @@ function Step1({
               </span>
               <span>Chọn ít nhất 1 team để qua phần tiếp theo.</span>
             </div>
-            <div className="wz-career-grid">
-              {filtered.map((opt) => {
-                const checked = form.career_journey.includes(opt.label);
-                const OptionIcon = opt.icon;
-                return (
-                  <button
-                    key={opt.label}
-                    type="button"
-                    className={`wz-career-card ${checked ? "checked" : ""}`}
-                    aria-pressed={checked}
-                    onClick={() => {
-                      toggleArr("career_journey", opt.label);
-                      setMascotCue(
-                        checked && selectedCount <= 1 ? "category" : "complete",
-                      );
-                    }}
-                  >
-                    <span
-                      className="wz-cc-icon"
-                      style={{ background: opt.color }}
+            {filtered.length === 0 ? (
+              <div className="wz-switch-note">
+                Lĩnh vực này hiện chưa mở vị trí tuyển dụng. Bạn chọn lĩnh vực
+                khác nhé.
+              </div>
+            ) : (
+              <div className="wz-career-grid">
+                {filtered.map((opt) => {
+                  const checked = form.career_journey.includes(opt.label);
+                  const OptionIcon = opt.icon;
+                  return (
+                    <button
+                      key={opt.label}
+                      type="button"
+                      className={`wz-career-card ${checked ? "checked" : ""}`}
+                      aria-pressed={checked}
+                      onClick={() => {
+                        toggleArr("career_journey", opt.label);
+                        setMascotCue(
+                          checked && selectedCount <= 1
+                            ? "category"
+                            : "complete",
+                        );
+                      }}
                     >
-                      <OptionIcon aria-hidden="true" strokeWidth={2.35} />
-                    </span>
-                    <div className="wz-cc-info">
-                      <span className="wz-cc-label">{opt.label}</span>
-                      <span className="wz-cc-sub">{opt.sub}</span>
-                    </div>
-                    <div className="wz-cc-check">{checked ? "\u2713" : ""}</div>
-                  </button>
-                );
-              })}
-            </div>
+                      <span
+                        className="wz-cc-icon"
+                        style={{ background: opt.color }}
+                      >
+                        <OptionIcon aria-hidden="true" strokeWidth={2.35} />
+                      </span>
+                      <div className="wz-cc-info">
+                        <span className="wz-cc-label">{opt.label}</span>
+                        <span className="wz-cc-sub">{opt.sub}</span>
+                      </div>
+                      <div className="wz-cc-check">
+                        {checked ? "\u2713" : ""}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
             {form.career_journey.length > 0 && (
               <>
                 <div className="wz-selected-tags">

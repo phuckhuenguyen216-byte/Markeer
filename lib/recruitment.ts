@@ -94,6 +94,30 @@ export type RecruitmentLeader = {
   team: LeaderTeam;
 };
 
+export type RecruitmentPosition = {
+  id: string;
+  label: string;
+  team: string;
+  sort_order: number;
+  is_active: boolean;
+};
+
+export const DEFAULT_RECRUITMENT_POSITIONS: RecruitmentPosition[] =
+  Object.entries(TEAM_POSITIONS).flatMap(([team, positions], teamIndex) =>
+    positions.map((label, index) => ({
+      id: label
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, ""),
+      label,
+      team,
+      sort_order: teamIndex * 100 + index,
+      is_active: true,
+    })),
+  );
+
 export type LevelRecord = {
   target: string;
   comment: string;

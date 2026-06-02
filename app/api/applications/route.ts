@@ -33,6 +33,16 @@ function normalizeInterestReasons(value: unknown, otherValue: unknown) {
     .filter(Boolean);
 }
 
+async function getActiveRecruitmentPositionLabels() {
+  const { data, error } = await getSupabaseAdmin()
+    .from("recruitment_positions")
+    .select("label")
+    .eq("is_active", true);
+
+  if (error) throw error;
+  return new Set((data || []).map((row) => String(row.label)));
+}
+
 // GET /api/applications - List applications for admin
 export async function GET(request: NextRequest) {
   const user = await validateAdminRequest(request);
@@ -137,6 +147,29 @@ export async function POST(request: NextRequest) {
 
     if (!body.career_journey?.length)
       errors.push("Vui lòng chọn ít nhất 1 vị trí");
+    else {
+      try {
+        const activePositions = await getActiveRecruitmentPositionLabels();
+        const requestedPositions = Array.isArray(body.career_journey)
+          ? body.career_journey.filter((item: unknown) => typeof item === "string")
+          : [];
+        const inactivePositions = requestedPositions.filter(
+          (position: string) => !activePositions.has(position),
+        );
+
+        if (inactivePositions.length > 0) {
+          errors.push(
+            `Vị trí hiện không còn tuyển: ${inactivePositions.join(", ")}`,
+          );
+        }
+      } catch (positionError) {
+        console.error(
+          "[POST /api/applications] Recruitment position validation failed:",
+          positionError,
+        );
+        errors.push("Không kiểm tra được vị trí đang tuyển. Vui lòng thử lại.");
+      }
+    }
     if (!interestReasons.length) errors.push("Vui lòng chọn điều hứng thú");
     if (selectedOtherInterest && !String(body.interest_other || "").trim())
       errors.push("Vui lòng nhập lý do khác");
