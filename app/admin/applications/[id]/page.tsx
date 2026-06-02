@@ -154,8 +154,12 @@ export default function AdminApplicationDetailPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
       });
+      const data = await res.json();
       if (!res.ok) throw new Error();
-      setApp((p) => (p ? { ...p, status } : p));
+      const meta = getRecruitmentMeta(data.admin_notes || "");
+      setApp(data);
+      setManagement(meta);
+      setActiveLevel(meta.currentLevel);
       addToast(`Trạng thái → ${getStatusInfo(status).label}`);
     } catch {
       addToast("Lỗi cập nhật trạng thái", "error");
@@ -238,6 +242,12 @@ export default function AdminApplicationDetailPage() {
   const saveManagement = async () => {
     if (!app) return;
     await saveManagementState(management);
+  };
+
+  const saveStartLevelDate = async (value: string) => {
+    const nextManagement = { ...management, startLevelDate: value };
+    setManagement(nextManagement);
+    await saveManagementState(nextManagement);
   };
 
   const saveManagementState = async (nextManagement: RecruitmentManagement) => {
@@ -470,26 +480,27 @@ export default function AdminApplicationDetailPage() {
               {starred ? "Nổi bật" : "Đánh dấu"}
             </button>
             <span className="mx-1 hidden h-5 w-px bg-gray-200 sm:block" />
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setShowStatusActions((value) => !value)}
-                className="flex h-8 items-center gap-2 rounded-lg border px-2.5 text-xs font-bold transition hover:bg-gray-50"
-                style={{
-                  borderColor: st.color,
-                  color: st.color,
-                  background: st.bg,
-                }}
-              >
-                <span className="hidden text-gray-500 sm:inline">
-                  Trạng thái:
-                </span>
-                {st.label}
-                <Edit3 size={13} />
-              </button>
+            <div className="flex flex-col items-end gap-1">
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowStatusActions((value) => !value)}
+                  className="flex h-8 items-center gap-2 rounded-lg border px-2.5 text-xs font-bold transition hover:bg-gray-50"
+                  style={{
+                    borderColor: st.color,
+                    color: st.color,
+                    background: st.bg,
+                  }}
+                >
+                  <span className="hidden text-gray-500 sm:inline">
+                    Trạng thái:
+                  </span>
+                  {st.label}
+                  <Edit3 size={13} />
+                </button>
 
-              {showStatusActions && (
-                <div className="absolute right-0 top-10 z-30 w-64 rounded-xl border border-gray-200 bg-white p-3 shadow-xl">
+                {showStatusActions && (
+                  <div className="absolute right-0 top-10 z-30 w-64 rounded-xl border border-gray-200 bg-white p-3 shadow-xl">
                   <div className="mb-2">
                     <p className="text-xs font-black text-gray-900">
                       Đổi trạng thái hồ sơ
@@ -537,8 +548,18 @@ export default function AdminApplicationDetailPage() {
                   >
                     Hủy
                   </button>
-                </div>
-              )}
+                  </div>
+                )}
+              </div>
+              <label className="flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
+                Start level
+                <input
+                  type="date"
+                  value={management.startLevelDate}
+                  onChange={(event) => void saveStartLevelDate(event.target.value)}
+                  className="h-7 rounded-lg border border-gray-200 bg-white px-2 text-[11px] font-bold text-gray-600 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
+                />
+              </label>
             </div>
           </div>
         </div>
@@ -693,6 +714,7 @@ export default function AdminApplicationDetailPage() {
           onLevelChange={setActiveLevel}
           onUpdateLevel={updateLevelRecord}
           onPromoteLevel={confirmPromoteLevel}
+          onStartLevelDateChange={saveStartLevelDate}
           onOpenLeaders={() => setShowLeaderModal(true)}
           onSave={saveManagement}
         />
@@ -919,6 +941,7 @@ function ManagementPanel({
   onLevelChange,
   onUpdateLevel,
   onPromoteLevel,
+  onStartLevelDateChange,
   onOpenLeaders,
   onSave,
 }: {
@@ -935,6 +958,7 @@ function ManagementPanel({
     value: string,
   ) => void;
   onPromoteLevel: (level: EmployeeLevel) => void;
+  onStartLevelDateChange: (value: string) => void | Promise<void>;
   onOpenLeaders: () => void;
   onSave: () => void;
 }) {
@@ -1025,6 +1049,22 @@ function ManagementPanel({
                 </div>
               </div>
             </div>
+
+            <label className="block">
+              <SLabel>Ngày start level</SLabel>
+              <input
+                type="date"
+                value={management.startLevelDate}
+                onChange={(event) =>
+                  void onStartLevelDateChange(event.target.value)
+                }
+                className="mt-1 h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-700 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
+              />
+              <p className="mt-1 text-xs font-medium leading-relaxed text-gray-400">
+                Mặc định là ngày chuyển trạng thái sang Đã nhận, có thể chỉnh
+                lại khi cần.
+              </p>
+            </label>
           </div>
         </Section>
 

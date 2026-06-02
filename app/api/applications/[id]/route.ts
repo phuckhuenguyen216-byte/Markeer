@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 import { deleteFromSheet, updateRowInSheet } from "@/lib/google-sheets";
 import { validateAdminRequest } from "@/lib/admin-auth";
+import { getRecruitmentMeta, upsertRecruitmentMeta } from "@/lib/recruitment";
 
 const VALID_STATUSES = [
   "new",
@@ -62,6 +63,16 @@ export async function PUT(
     const supabase = getSupabaseAdmin();
 
     const updates: Record<string, any> = {};
+    let currentAdminNotes: string | null = null;
+
+    if (body.status === "accepted" && body.admin_notes === undefined) {
+      const { data: current } = await supabase
+        .from("applications")
+        .select("admin_notes")
+        .eq("id", id)
+        .single();
+      currentAdminNotes = current?.admin_notes || "";
+    }
     if (body.status !== undefined) {
       if (!VALID_STATUSES.includes(body.status)) {
         return NextResponse.json(
@@ -72,6 +83,15 @@ export async function PUT(
       updates.status = body.status;
     }
     if (body.admin_notes !== undefined) updates.admin_notes = body.admin_notes;
+
+    if (body.status === "accepted") {
+      const sourceNotes = String(updates.admin_notes ?? currentAdminNotes ?? "");
+      const meta = getRecruitmentMeta(sourceNotes);
+      if (!meta.startLevelDate) {
+        meta.startLevelDate = new Date().toISOString().slice(0, 10);
+        updates.admin_notes = upsertRecruitmentMeta(sourceNotes, meta);
+      }
+    }
 
     if (Object.keys(updates).length === 0) {
       return NextResponse.json(

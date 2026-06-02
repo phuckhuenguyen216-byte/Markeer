@@ -127,6 +127,7 @@ export type LevelRecord = {
 export type RecruitmentManagement = {
   leader: RecruitmentLeader | null;
   currentLevel: EmployeeLevel;
+  startLevelDate: string;
   levels: Record<EmployeeLevel, LevelRecord>;
 };
 
@@ -155,6 +156,7 @@ export function createEmptyManagement(): RecruitmentManagement {
   return {
     leader: null,
     currentLevel: "lv1",
+    startLevelDate: "",
     levels: {
       lv1: { target: "", comment: "" },
       lv2: { target: "", comment: "" },
@@ -186,6 +188,8 @@ export function getRecruitmentMeta(notes: string): RecruitmentManagement {
         parsed.currentLevel === "lv2" || parsed.currentLevel === "lv3"
           ? parsed.currentLevel
           : "lv1",
+      startLevelDate:
+        typeof parsed.startLevelDate === "string" ? parsed.startLevelDate : "",
       levels: {
         lv1: { ...empty.levels.lv1, ...(parsed.levels?.lv1 || {}) },
         lv2: { ...empty.levels.lv2, ...(parsed.levels?.lv2 || {}) },
