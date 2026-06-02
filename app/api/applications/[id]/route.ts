@@ -8,7 +8,6 @@ import { getRecruitmentMeta, upsertRecruitmentMeta } from "@/lib/recruitment";
 const VALID_STATUSES = [
   "new",
   "reviewing",
-  "interviewed",
   "accepted",
   "rejected",
   "resigned",
@@ -89,8 +88,11 @@ export async function PUT(
       const meta = getRecruitmentMeta(sourceNotes);
       if (!meta.startLevelDate) {
         meta.startLevelDate = new Date().toISOString().slice(0, 10);
-        updates.admin_notes = upsertRecruitmentMeta(sourceNotes, meta);
       }
+      if (!meta.levels.lv1.startedAt) {
+        meta.levels.lv1.startedAt = meta.startLevelDate;
+      }
+      updates.admin_notes = upsertRecruitmentMeta(sourceNotes, meta);
     }
 
     if (Object.keys(updates).length === 0) {

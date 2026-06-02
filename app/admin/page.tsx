@@ -77,7 +77,7 @@ export default function AdminDashboard() {
     views: 0,
     apps: 0,
     newApps: 0,
-    interviewed: 0,
+    reviewing: 0,
     accepted: 0,
   });
   const [recentApps, setRecentApps] = useState<Application[]>([]);
@@ -103,7 +103,9 @@ export default function AdminDashboard() {
           views: posts.reduce((sum, p) => sum + (p.view_count || 0), 0),
           apps: apps.length,
           newApps: apps.filter((a) => a.status === "new").length,
-          interviewed: apps.filter((a) => a.status === "interviewed").length,
+          reviewing: apps.filter(
+            (a) => a.status === "reviewing" || a.status === "interviewed",
+          ).length,
           accepted: apps.filter((a) => a.status === "accepted").length,
         });
 
@@ -170,7 +172,7 @@ export default function AdminDashboard() {
           value={stats.accepted}
           accent="#16a34a"
           icon={<UserCheck size={16} />}
-          sub={`${stats.interviewed} đã phỏng vấn`}
+          sub={`${stats.reviewing} đang xét`}
         />
       </div>
 

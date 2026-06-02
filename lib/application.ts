@@ -47,12 +47,6 @@ export const STATUS_OPTIONS: {
 }[] = [
   { value: "new", label: "Mới", color: "#3b82f6", bg: "#eff6ff" },
   { value: "reviewing", label: "Đã xem", color: "#f59e0b", bg: "#fffbeb" },
-  {
-    value: "interviewed",
-    label: "Đã phỏng vấn",
-    color: "#8b5cf6",
-    bg: "#f5f3ff",
-  },
   { value: "accepted", label: "Đã nhận", color: "#22c55e", bg: "#f0fdf4" },
   { value: "rejected", label: "Từ chối", color: "#ef4444", bg: "#fef2f2" },
   { value: "resigned", label: "Đã nghỉ", color: "#64748b", bg: "#f8fafc" },
@@ -67,6 +61,9 @@ export const TEAM_LABELS: Record<string, string> = {
 };
 
 export function getStatusInfo(status: ApplicationStatus) {
+  if (status === "interviewed") {
+    return STATUS_OPTIONS.find((s) => s.value === "reviewing") ?? STATUS_OPTIONS[0];
+  }
   return STATUS_OPTIONS.find((s) => s.value === status) ?? STATUS_OPTIONS[0];
 }
 

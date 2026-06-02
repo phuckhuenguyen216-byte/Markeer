@@ -46,6 +46,7 @@ import {
   toggleStarredNotes,
   formatSubmittedAt,
   getRecruitmentMeta,
+  upsertRecruitmentMeta,
   TEAM_STYLES,
   type RecruitmentPosition,
   type RecruitmentLeader,
@@ -126,6 +127,11 @@ function ApplicationsContent() {
   const [positions, setPositions] = useState<RecruitmentPosition[]>([]);
   const [showPositions, setShowPositions] = useState(false);
   const [positionSavingId, setPositionSavingId] = useState<string | null>(null);
+  const [acceptDraft, setAcceptDraft] = useState<{
+    app: Application;
+    leaderId: string;
+    startLevelDate: string;
+  } | null>(null);
 
   const fetchApps = useCallback(async () => {
     try {
@@ -313,6 +319,15 @@ function ApplicationsContent() {
     next: ApplicationStatus,
   ) => {
     if (next === app.status) return;
+    if (next === "accepted") {
+      const meta = getRecruitmentMeta(app.admin_notes || "");
+      setAcceptDraft({
+        app,
+        leaderId: meta.leader?.id || "",
+        startLevelDate: meta.startLevelDate || todayInputValue(),
+      });
+      return;
+    }
     setStatusSavingId(app.id);
     const prevStatus = app.status;
 
@@ -329,7 +344,11 @@ function ApplicationsContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: next }),
       });
+      const data = await res.json();
       if (!res.ok) throw new Error();
+      setAllApps((prev) =>
+        prev.map((item) => (item.id === app.id ? data : item)),
+      );
       addToast(`Cập nhật trạng thái: ${app.full_name}`);
     } catch {
       setAllApps((prev) =>
@@ -394,6 +413,54 @@ function ApplicationsContent() {
     }
   };
 
+  const confirmAcceptEmployee = async () => {
+    if (!acceptDraft) return;
+    const { app, leaderId, startLevelDate } = acceptDraft;
+    const leader = leaders.find((item) => item.id === leaderId) || null;
+    const meta = getRecruitmentMeta(app.admin_notes || "");
+    const finalDate = startLevelDate || todayInputValue();
+    const nextManagement = {
+      ...meta,
+      leader,
+      currentLevel: "lv1" as const,
+      startLevelDate: finalDate,
+      levels: {
+        ...meta.levels,
+        lv1: {
+          ...meta.levels.lv1,
+          startedAt: finalDate,
+        },
+      },
+    };
+    const finalNotes = upsertRecruitmentMeta(
+      app.admin_notes || "",
+      nextManagement,
+    );
+
+    setStatusSavingId(app.id);
+    try {
+      const res = await fetch(`/api/applications/${app.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "accepted", admin_notes: finalNotes }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Lỗi cập nhật trạng thái");
+      setAllApps((prev) =>
+        prev.map((item) => (item.id === app.id ? data : item)),
+      );
+      setAcceptDraft(null);
+      addToast(`Đã nhận nhân viên: ${app.full_name}`);
+    } catch (error) {
+      addToast(
+        error instanceof Error ? error.message : "Lỗi cập nhật trạng thái",
+        "error",
+      );
+    } finally {
+      setStatusSavingId(null);
+    }
+  };
+
   const toggleSelect = (id: string) =>
     setSelectedIds((prev) => {
       const next = new Set(prev);
@@ -407,6 +474,22 @@ function ApplicationsContent() {
   const bulkStatusChange = async (next: ApplicationStatus) => {
     const ids = [...selectedIds];
     if (ids.length === 0) return;
+    if (next === "accepted") {
+      if (ids.length === 1) {
+        const app = allApps.find((item) => item.id === ids[0]);
+        if (app) {
+          const meta = getRecruitmentMeta(app.admin_notes || "");
+          setAcceptDraft({
+            app,
+            leaderId: meta.leader?.id || "",
+            startLevelDate: meta.startLevelDate || todayInputValue(),
+          });
+        }
+      } else {
+        addToast("Hãy nhận từng hồ sơ để chọn leader và ngày start level.", "error");
+      }
+      return;
+    }
     setBulkSaving(true);
     const snapshot = allApps;
     setAllApps((prev) =>
@@ -536,6 +619,9 @@ function ApplicationsContent() {
       if (starDiff !== 0) return starDiff;
       // Tier 2: chosen column, or default newest-first
       if (sortKey) return compare(a, b);
+      const statusDiff =
+        (STATUS_ORDER[a.status] ?? 99) - (STATUS_ORDER[b.status] ?? 99);
+      if (statusDiff !== 0) return statusDiff;
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
   }, [
@@ -622,6 +708,7 @@ function ApplicationsContent() {
     () => positions.filter((position) => position.is_active).length,
     [positions],
   );
+  const hasQuickFilter = teamFilter !== "all" || leaderFilter !== "all";
 
   const stats = useMemo(() => {
     const total = allApps.length;
@@ -852,6 +939,23 @@ function ApplicationsContent() {
         />
       )}
 
+      {acceptDraft &&
+        createPortal(
+          <AcceptEmployeeModal
+            app={acceptDraft.app}
+            leaders={leaders}
+            saving={statusSavingId === acceptDraft.app.id}
+            leaderId={acceptDraft.leaderId}
+            startLevelDate={acceptDraft.startLevelDate}
+            onChange={(patch) =>
+              setAcceptDraft((prev) => (prev ? { ...prev, ...patch } : prev))
+            }
+            onCancel={() => setAcceptDraft(null)}
+            onConfirm={confirmAcceptEmployee}
+          />,
+          document.body,
+        )}
+
       <section className="rounded-xl border border-gray-200 bg-white p-3 shadow-sm">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -1004,6 +1108,20 @@ function ApplicationsContent() {
               ▾
             </span>
           </label>
+
+          {hasQuickFilter && (
+            <button
+              type="button"
+              onClick={() => {
+                setTeamFilter("all");
+                setLeaderFilter("all");
+              }}
+              className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 text-xs font-black text-gray-500 transition hover:border-[#d8c4b8] hover:bg-[#fbf6f2] hover:text-[#4a2318]"
+            >
+              <X size={13} />
+              Xóa lọc nhanh
+            </button>
+          )}
 
         </div>
 
@@ -1251,6 +1369,107 @@ export default function AdminApplicationsPage() {
     <Suspense fallback={<Spinner center label="Đang tải danh sách..." />}>
       <ApplicationsContent />
     </Suspense>
+  );
+}
+
+function AcceptEmployeeModal({
+  app,
+  leaders,
+  saving,
+  leaderId,
+  startLevelDate,
+  onChange,
+  onCancel,
+  onConfirm,
+}: {
+  app: Application;
+  leaders: RecruitmentLeader[];
+  saving: boolean;
+  leaderId: string;
+  startLevelDate: string;
+  onChange: (patch: { leaderId?: string; startLevelDate?: string }) => void;
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-lg rounded-2xl bg-white p-5 shadow-2xl">
+        <div className="mb-4 flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-base font-black text-gray-950">
+              Chuyển sang Đã nhận
+            </h2>
+            <p className="mt-1 text-xs font-semibold leading-relaxed text-gray-500">
+              Chọn leader phụ trách và ngày start level cho {app.full_name}.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={saving}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 disabled:opacity-50"
+            aria-label="Đóng"
+          >
+            <X size={15} />
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          <label className="block">
+            <span className="mb-1 block text-xs font-black uppercase tracking-wide text-gray-400">
+              Leader phụ trách
+            </span>
+            <select
+              value={leaderId}
+              disabled={saving}
+              onChange={(event) => onChange({ leaderId: event.target.value })}
+              className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm font-bold text-gray-700 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
+            >
+              <option value="">Chọn sau</option>
+              {leaders.map((leader) => (
+                <option key={leader.id} value={leader.id}>
+                  {leader.name} - {leader.team}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block">
+            <span className="mb-1 block text-xs font-black uppercase tracking-wide text-gray-400">
+              Ngày start level
+            </span>
+            <input
+              type="date"
+              value={startLevelDate}
+              disabled={saving}
+              onChange={(event) =>
+                onChange({ startLevelDate: event.target.value })
+              }
+              className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm font-bold text-gray-700 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
+            />
+          </label>
+        </div>
+
+        <div className="mt-5 flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={saving}
+            className="h-9 rounded-xl border border-gray-200 bg-white px-4 text-sm font-bold text-gray-600 transition hover:bg-gray-50 disabled:opacity-50"
+          >
+            Hủy
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={saving}
+            className="h-9 rounded-xl bg-[#4a2318] px-4 text-sm font-black text-white transition hover:opacity-90 disabled:opacity-50"
+          >
+            {saving ? "Đang lưu..." : "Xác nhận Đã nhận"}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -1635,6 +1854,10 @@ function EmptyState() {
       </p>
     </div>
   );
+}
+
+function todayInputValue() {
+  return new Date().toISOString().slice(0, 10);
 }
 
 function RecruitmentPositionsModal({

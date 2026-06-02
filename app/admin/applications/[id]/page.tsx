@@ -18,6 +18,7 @@ import {
   Star,
   Trash2,
   UserRound,
+  X,
 } from "lucide-react";
 import {
   Application,
@@ -50,6 +51,12 @@ import Spinner from "../../components/Spinner";
 import { ToastStack, useToasts } from "../../components/Toast";
 import ConfirmModal, { type ConfirmAction } from "../../components/ConfirmModal";
 
+const EMPLOYEE_STATUSES: ApplicationStatus[] = ["accepted", "resigned"];
+
+function todayInputValue() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 export default function AdminApplicationDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -79,6 +86,14 @@ export default function AdminApplicationDetailPage() {
     team: LeaderTeam;
   }>({ name: "", team: "Marketing" });
   const [showStatusActions, setShowStatusActions] = useState(false);
+  const [acceptDraft, setAcceptDraft] = useState<{
+    leaderId: string;
+    startLevelDate: string;
+  } | null>(null);
+  const [promoteDraft, setPromoteDraft] = useState<{
+    nextLevel: EmployeeLevel;
+    startDate: string;
+  } | null>(null);
 
   const fetchLeaders = useCallback(async () => {
     setLeadersLoading(true);
@@ -117,6 +132,9 @@ export default function AdminApplicationDetailPage() {
         setNotes(stripStarredTag(data.admin_notes || ""));
         setManagement(meta);
         setActiveLevel(meta.currentLevel);
+        setActiveTab(
+          EMPLOYEE_STATUSES.includes(data.status) ? "management" : "application",
+        );
       })
       .catch(() => addToast("Không tìm thấy hồ sơ", "error"))
       .finally(() => setLoading(false));
@@ -145,14 +163,27 @@ export default function AdminApplicationDetailPage() {
     return () => window.removeEventListener("keydown", onKey);
   }, [goTo, prevId, nextId]);
 
-  const updateStatus = async (status: ApplicationStatus) => {
+  const updateStatus = async (
+    status: ApplicationStatus,
+    nextManagement?: RecruitmentManagement,
+  ) => {
     setConfirmAction(null);
     if (!app) return;
+    const body =
+      nextManagement && status === "accepted"
+        ? {
+            status,
+            admin_notes: upsertRecruitmentMeta(
+              toggleStarredNotes(notes, isStarred(app)),
+              nextManagement,
+            ),
+          }
+        : { status };
     try {
       const res = await fetch(`/api/applications/${app.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       if (!res.ok) throw new Error();
@@ -160,6 +191,9 @@ export default function AdminApplicationDetailPage() {
       setApp(data);
       setManagement(meta);
       setActiveLevel(meta.currentLevel);
+      setActiveTab(
+        EMPLOYEE_STATUSES.includes(data.status) ? "management" : "application",
+      );
       addToast(`Trạng thái → ${getStatusInfo(status).label}`);
     } catch {
       addToast("Lỗi cập nhật trạng thái", "error");
@@ -168,6 +202,14 @@ export default function AdminApplicationDetailPage() {
 
   const confirmStatusChange = (status: ApplicationStatus) => {
     if (!app || status === app.status) return;
+    if (status === "accepted") {
+      setShowStatusActions(false);
+      setAcceptDraft({
+        leaderId: management.leader?.id || "",
+        startLevelDate: management.startLevelDate || todayInputValue(),
+      });
+      return;
+    }
     const info = getStatusInfo(status);
     setShowStatusActions(false);
     setConfirmAction({
@@ -177,6 +219,28 @@ export default function AdminApplicationDetailPage() {
       danger: status === "rejected" || status === "resigned",
       onConfirm: () => updateStatus(status),
     });
+  };
+
+  const confirmAcceptEmployee = () => {
+    if (!acceptDraft) return;
+    const leader =
+      leaders.find((item) => item.id === acceptDraft.leaderId) || null;
+    const finalDate = acceptDraft.startLevelDate || todayInputValue();
+    const nextManagement: RecruitmentManagement = {
+      ...management,
+      leader,
+      currentLevel: "lv1",
+      startLevelDate: finalDate,
+      levels: {
+        ...management.levels,
+        lv1: {
+          ...management.levels.lv1,
+          startedAt: finalDate,
+        },
+      },
+    };
+    setAcceptDraft(null);
+    void updateStatus("accepted", nextManagement);
   };
 
   const toggleStar = async () => {
@@ -245,7 +309,33 @@ export default function AdminApplicationDetailPage() {
   };
 
   const saveStartLevelDate = async (value: string) => {
-    const nextManagement = { ...management, startLevelDate: value };
+    const nextManagement = {
+      ...management,
+      startLevelDate: value,
+      levels: {
+        ...management.levels,
+        lv1: {
+          ...management.levels.lv1,
+          startedAt: value,
+        },
+      },
+    };
+    setManagement(nextManagement);
+    await saveManagementState(nextManagement);
+  };
+
+  const saveLevelStartDate = async (level: EmployeeLevel, value: string) => {
+    const nextManagement = {
+      ...management,
+      startLevelDate: level === "lv1" ? value : management.startLevelDate,
+      levels: {
+        ...management.levels,
+        [level]: {
+          ...management.levels[level],
+          startedAt: value,
+        },
+      },
+    };
     setManagement(nextManagement);
     await saveManagementState(nextManagement);
   };
@@ -273,22 +363,28 @@ export default function AdminApplicationDetailPage() {
   };
 
   const confirmPromoteLevel = (nextLevel: EmployeeLevel) => {
-    const current = LEVEL_OPTIONS.find(
-      (level) => level.value === management.currentLevel,
-    )?.label;
-    const next = LEVEL_OPTIONS.find((level) => level.value === nextLevel)?.label;
-
-    setConfirmAction({
-      title: `Nâng level nhân viên lên ${next}?`,
-      desc: `Level hiện tại là ${current}. Hành động này chỉ nên dùng khi nhân viên thật sự được nâng cấp.`,
-      detail: app ? `${app.full_name} - ${app.email}` : "",
-      onConfirm: () => {
-        setConfirmAction(null);
-        const nextManagement = { ...management, currentLevel: nextLevel };
-        setActiveLevel(nextLevel);
-        void saveManagementState(nextManagement);
-      },
+    setPromoteDraft({
+      nextLevel,
+      startDate: management.levels[nextLevel].startedAt || todayInputValue(),
     });
+  };
+
+  const savePromoteLevel = () => {
+    if (!promoteDraft) return;
+    const nextManagement = {
+      ...management,
+      currentLevel: promoteDraft.nextLevel,
+      levels: {
+        ...management.levels,
+        [promoteDraft.nextLevel]: {
+          ...management.levels[promoteDraft.nextLevel],
+          startedAt: promoteDraft.startDate || todayInputValue(),
+        },
+      },
+    };
+    setActiveLevel(promoteDraft.nextLevel);
+    setPromoteDraft(null);
+    void saveManagementState(nextManagement);
   };
 
   const resetLeaderForm = () => {
@@ -399,6 +495,7 @@ export default function AdminApplicationDetailPage() {
   const team = getPrimaryTeam(app);
   const zalo = hasZalo(app);
   const starred = isStarred(app);
+  const isEmployee = EMPLOYEE_STATUSES.includes(app.status);
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif" }}>
@@ -420,6 +517,32 @@ export default function AdminApplicationDetailPage() {
           onDelete={deleteLeader}
           onReset={resetLeaderForm}
           onClose={() => setShowLeaderModal(false)}
+        />
+      )}
+      {acceptDraft && (
+        <AcceptEmployeeModal
+          leaders={leaders}
+          saving={managementSaving}
+          leaderId={acceptDraft.leaderId}
+          startLevelDate={acceptDraft.startLevelDate}
+          onChange={(patch) =>
+            setAcceptDraft((prev) => (prev ? { ...prev, ...patch } : prev))
+          }
+          onCancel={() => setAcceptDraft(null)}
+          onConfirm={confirmAcceptEmployee}
+        />
+      )}
+      {promoteDraft && (
+        <PromoteLevelModal
+          currentLevel={management.currentLevel}
+          nextLevel={promoteDraft.nextLevel}
+          startDate={promoteDraft.startDate}
+          saving={managementSaving}
+          onChange={(startDate) =>
+            setPromoteDraft((prev) => (prev ? { ...prev, startDate } : prev))
+          }
+          onCancel={() => setPromoteDraft(null)}
+          onConfirm={savePromoteLevel}
         />
       )}
 
@@ -551,15 +674,19 @@ export default function AdminApplicationDetailPage() {
                   </div>
                 )}
               </div>
-              <label className="flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
-                Start level
-                <input
-                  type="date"
-                  value={management.startLevelDate}
-                  onChange={(event) => void saveStartLevelDate(event.target.value)}
-                  className="h-7 rounded-lg border border-gray-200 bg-white px-2 text-[11px] font-bold text-gray-600 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
-                />
-              </label>
+              {isEmployee && (
+                <label className="flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
+                  Start level
+                  <input
+                    type="date"
+                    value={management.startLevelDate}
+                    onChange={(event) =>
+                      void saveStartLevelDate(event.target.value)
+                    }
+                    className="h-7 rounded-lg border border-gray-200 bg-white px-2 text-[11px] font-bold text-gray-600 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
+                  />
+                </label>
+              )}
             </div>
           </div>
         </div>
@@ -678,32 +805,34 @@ export default function AdminApplicationDetailPage() {
         </HighlightCard>
       </div>
 
-      <div className="mb-4 inline-flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm">
-        <button
-          type="button"
-          onClick={() => setActiveTab("management")}
-          className={`h-9 rounded-lg px-4 text-sm font-black transition ${
-            activeTab === "management"
-              ? "bg-[#4a2318] text-white"
-              : "text-gray-500 hover:bg-gray-50"
-          }`}
-        >
-          Quản lý nhân viên
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab("application")}
-          className={`h-9 rounded-lg px-4 text-sm font-black transition ${
-            activeTab === "application"
-              ? "bg-[#4a2318] text-white"
-              : "text-gray-500 hover:bg-gray-50"
-          }`}
-        >
-          Hồ sơ ứng tuyển
-        </button>
-      </div>
+      {isEmployee && (
+        <div className="mb-4 inline-flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm">
+          <button
+            type="button"
+            onClick={() => setActiveTab("management")}
+            className={`h-9 rounded-lg px-4 text-sm font-black transition ${
+              activeTab === "management"
+                ? "bg-[#4a2318] text-white"
+                : "text-gray-500 hover:bg-gray-50"
+            }`}
+          >
+            Quản lý nhân viên
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("application")}
+            className={`h-9 rounded-lg px-4 text-sm font-black transition ${
+              activeTab === "application"
+                ? "bg-[#4a2318] text-white"
+                : "text-gray-500 hover:bg-gray-50"
+            }`}
+          >
+            Hồ sơ ứng tuyển
+          </button>
+        </div>
+      )}
 
-      {activeTab === "management" ? (
+      {isEmployee && activeTab === "management" ? (
         <ManagementPanel
           management={management}
           leaders={leaders}
@@ -715,6 +844,7 @@ export default function AdminApplicationDetailPage() {
           onUpdateLevel={updateLevelRecord}
           onPromoteLevel={confirmPromoteLevel}
           onStartLevelDateChange={saveStartLevelDate}
+          onLevelStartDateChange={saveLevelStartDate}
           onOpenLeaders={() => setShowLeaderModal(true)}
           onSave={saveManagement}
         />
@@ -931,6 +1061,180 @@ export default function AdminApplicationDetailPage() {
 
 /* ── Sub-components ── */
 
+function AcceptEmployeeModal({
+  leaders,
+  saving,
+  leaderId,
+  startLevelDate,
+  onChange,
+  onCancel,
+  onConfirm,
+}: {
+  leaders: RecruitmentLeader[];
+  saving: boolean;
+  leaderId: string;
+  startLevelDate: string;
+  onChange: (patch: { leaderId?: string; startLevelDate?: string }) => void;
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-lg rounded-2xl bg-white p-5 shadow-2xl">
+        <div className="mb-4 flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-base font-black text-gray-950">
+              Chuyển sang Đã nhận
+            </h2>
+            <p className="mt-1 text-xs font-semibold leading-relaxed text-gray-500">
+              Chọn leader phụ trách và ngày start level. Có thể chọn sau nếu
+              chưa phân công ngay.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={saving}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 disabled:opacity-50"
+            aria-label="Đóng"
+          >
+            <X size={15} />
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          <label className="block">
+            <SLabel>Leader phụ trách</SLabel>
+            <select
+              value={leaderId}
+              disabled={saving}
+              onChange={(event) => onChange({ leaderId: event.target.value })}
+              className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm font-bold text-gray-700 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
+            >
+              <option value="">Chọn sau</option>
+              {leaders.map((leader) => (
+                <option key={leader.id} value={leader.id}>
+                  {leader.name} - {leader.team}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block">
+            <SLabel>Ngày start level</SLabel>
+            <input
+              type="date"
+              value={startLevelDate}
+              disabled={saving}
+              onChange={(event) =>
+                onChange({ startLevelDate: event.target.value })
+              }
+              className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm font-bold text-gray-700 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
+            />
+          </label>
+        </div>
+
+        <div className="mt-5 flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={saving}
+            className="h-9 rounded-xl border border-gray-200 bg-white px-4 text-sm font-bold text-gray-600 transition hover:bg-gray-50 disabled:opacity-50"
+          >
+            Hủy
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={saving}
+            className="h-9 rounded-xl bg-[#4a2318] px-4 text-sm font-black text-white transition hover:opacity-90 disabled:opacity-50"
+          >
+            {saving ? "Đang lưu..." : "Xác nhận Đã nhận"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PromoteLevelModal({
+  currentLevel,
+  nextLevel,
+  startDate,
+  saving,
+  onChange,
+  onCancel,
+  onConfirm,
+}: {
+  currentLevel: EmployeeLevel;
+  nextLevel: EmployeeLevel;
+  startDate: string;
+  saving: boolean;
+  onChange: (startDate: string) => void;
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
+  const current = LEVEL_OPTIONS.find((level) => level.value === currentLevel);
+  const next = LEVEL_OPTIONS.find((level) => level.value === nextLevel);
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/45 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl">
+        <div className="mb-4 flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-base font-black text-gray-950">
+              Nâng level lên {next?.label}
+            </h2>
+            <p className="mt-1 text-xs font-semibold leading-relaxed text-gray-500">
+              Level hiện tại là {current?.label}. Chọn ngày bắt đầu level mới
+              trước khi lưu.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={saving}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50 disabled:opacity-50"
+            aria-label="Đóng"
+          >
+            <X size={15} />
+          </button>
+        </div>
+
+        <label className="block">
+          <SLabel>Ngày lên {next?.label}</SLabel>
+          <input
+            type="date"
+            value={startDate}
+            disabled={saving}
+            onChange={(event) => onChange(event.target.value)}
+            className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm font-bold text-gray-700 outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9]"
+          />
+        </label>
+
+        <div className="mt-5 flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={saving}
+            className="h-9 rounded-xl border border-gray-200 bg-white px-4 text-sm font-bold text-gray-600 transition hover:bg-gray-50 disabled:opacity-50"
+          >
+            Hủy
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={saving}
+            className="h-9 rounded-xl bg-[#4a2318] px-4 text-sm font-black text-white transition hover:opacity-90 disabled:opacity-50"
+          >
+            {saving ? "Đang lưu..." : "Lưu nâng level"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ManagementPanel({
   management,
   leaders,
@@ -942,6 +1246,7 @@ function ManagementPanel({
   onUpdateLevel,
   onPromoteLevel,
   onStartLevelDateChange,
+  onLevelStartDateChange,
   onOpenLeaders,
   onSave,
 }: {
@@ -959,6 +1264,10 @@ function ManagementPanel({
   ) => void;
   onPromoteLevel: (level: EmployeeLevel) => void;
   onStartLevelDateChange: (value: string) => void | Promise<void>;
+  onLevelStartDateChange: (
+    level: EmployeeLevel,
+    value: string,
+  ) => void | Promise<void>;
   onOpenLeaders: () => void;
   onSave: () => void;
 }) {
@@ -1112,7 +1421,7 @@ function ManagementPanel({
 
       <Section title={`Target và nhận xét ${activeLevel.toUpperCase()}`}>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {LEVEL_OPTIONS.map((level) => (
               <button
                 key={level.value}
@@ -1127,6 +1436,17 @@ function ManagementPanel({
                 {level.label}
               </button>
             ))}
+            <label className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-2 text-[11px] font-bold text-gray-500">
+              Ngày level
+              <input
+                type="date"
+                value={management.levels[activeLevel].startedAt || ""}
+                onChange={(event) =>
+                  void onLevelStartDateChange(activeLevel, event.target.value)
+                }
+                className="h-6 rounded-md border border-gray-100 px-1 text-[11px] font-bold text-gray-700 outline-none focus:border-[#8b4513]"
+              />
+            </label>
           </div>
           <button
             type="button"
@@ -1182,6 +1502,9 @@ function ManagementPanel({
               >
                 <p className="mb-2 text-xs font-bold text-gray-500">
                   Lưu trữ {level.label}
+                </p>
+                <p className="mb-2 text-xs font-semibold text-gray-400">
+                  Ngày level: {record.startedAt || "---"}
                 </p>
                 <p className="line-clamp-2 text-xs leading-relaxed text-gray-600">
                   <strong>Target:</strong> {record.target || "---"}

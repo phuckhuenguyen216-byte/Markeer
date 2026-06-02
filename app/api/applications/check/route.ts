@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     let query = supabase
       .from("applications")
       .select("id, status")
-      .in("status", ["new", "reviewing", "interviewed", "accepted"])
+      .in("status", ["new", "reviewing", "accepted"])
       .limit(1);
 
     if (email) {

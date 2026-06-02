@@ -46,6 +46,11 @@ export function StatusSelect({
       className={`h-7 cursor-pointer appearance-none rounded-lg border px-2 text-[11px] font-bold outline-none transition disabled:opacity-50 ${className}`}
       style={{ background: info.bg, color: info.color, borderColor: info.color }}
     >
+      {!STATUS_OPTIONS.some((s) => s.value === status) && (
+        <option value={status} style={{ color: "#111827" }}>
+          {info.label}
+        </option>
+      )}
       {STATUS_OPTIONS.map((s) => (
         <option key={s.value} value={s.value} style={{ color: "#111827" }}>
           {s.label}

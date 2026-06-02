@@ -49,10 +49,13 @@ const HEADERS = [
   "Leader",
   "Level hiện tại",
   "Ngày start level",
+  "Ngày LV1",
   "Target LV1",
   "Nhận xét LV1",
+  "Ngày LV2",
   "Target LV2",
   "Nhận xét LV2",
+  "Ngày LV3",
   "Target LV3",
   "Nhận xét LV3",
 ];
@@ -87,6 +90,8 @@ function appToRow(app: Application): string[] {
   const workPref = Object.entries(app.work_preference || {})
     .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`)
     .join(" | ");
+  const isEmployee =
+    app.status === "accepted" || app.status === "resigned" || Boolean(meta.leader);
 
   return [
     app.id,
@@ -115,12 +120,15 @@ function appToRow(app: Application): string[] {
     getStatusInfo(app.status).label,
     app.created_at ? new Date(app.created_at).toLocaleString("vi-VN") : "",
     meta.leader?.name || "",
-    toLevelLabel(meta.currentLevel),
+    isEmployee ? toLevelLabel(meta.currentLevel) : "LV0",
     meta.startLevelDate || "",
+    meta.levels.lv1.startedAt || "",
     meta.levels.lv1.target || "",
     meta.levels.lv1.comment || "",
+    meta.levels.lv2.startedAt || "",
     meta.levels.lv2.target || "",
     meta.levels.lv2.comment || "",
+    meta.levels.lv3.startedAt || "",
     meta.levels.lv3.target || "",
     meta.levels.lv3.comment || "",
   ];
@@ -168,6 +176,7 @@ async function getSheetNumericId(
 async function styleRecruitmentSheet(
   sheets: sheets_v4.Sheets,
   spreadsheetId: string,
+  apps?: Application[],
 ) {
   const sheetId = await getSheetNumericId(sheets, spreadsheetId);
   if (sheetId === null) return;
@@ -207,9 +216,9 @@ async function styleRecruitmentSheet(
     ...[
       { start: 0, end: 25, color: "#4a2318" },
       { start: 25, end: 28, color: "#5b3f88" },
-      { start: 28, end: 30, color: "#f59e0b" },
-      { start: 30, end: 32, color: "#eab308" },
-      { start: 32, end: 34, color: "#16a34a" },
+      { start: 28, end: 31, color: "#f59e0b" },
+      { start: 31, end: 34, color: "#eab308" },
+      { start: 34, end: 37, color: "#16a34a" },
     ].map<sheets_v4.Schema$Request>((group) => ({
       repeatCell: {
         range: {
@@ -270,6 +279,48 @@ async function styleRecruitmentSheet(
     },
   ];
 
+  if (apps) {
+    requests.push({
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: 1,
+          endRowIndex: MAX_SHEET_ROWS,
+          startColumnIndex: 0,
+          endColumnIndex: HEADERS.length,
+        },
+        cell: {
+          userEnteredFormat: {
+            backgroundColor: rgb("#ffffff"),
+          },
+        },
+        fields: "userEnteredFormat.backgroundColor",
+      },
+    });
+
+    apps.forEach((app, index) => {
+      const meta = getRecruitmentMeta(app.admin_notes || "");
+      if (!meta.leader) return;
+      requests.push({
+        repeatCell: {
+          range: {
+            sheetId,
+            startRowIndex: index + 1,
+            endRowIndex: index + 2,
+            startColumnIndex: 0,
+            endColumnIndex: HEADERS.length,
+          },
+          cell: {
+            userEnteredFormat: {
+              backgroundColor: rgb("#f3f4f6"),
+            },
+          },
+          fields: "userEnteredFormat.backgroundColor",
+        },
+      });
+    });
+  }
+
   if (leaderNames.length > 0 && LEADER_COL_INDEX >= 0) {
     requests.push({
       setDataValidation: {
@@ -295,6 +346,44 @@ async function styleRecruitmentSheet(
   await sheets.spreadsheets.batchUpdate({
     spreadsheetId,
     requestBody: { requests },
+  });
+}
+
+async function formatDataRow(
+  sheets: sheets_v4.Sheets,
+  spreadsheetId: string,
+  rowIndex: number,
+  hasLeader: boolean,
+) {
+  const sheetId = await getSheetNumericId(sheets, spreadsheetId);
+  if (sheetId === null) return;
+
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: {
+      requests: [
+        {
+          repeatCell: {
+            range: {
+              sheetId,
+              startRowIndex: rowIndex,
+              endRowIndex: rowIndex + 1,
+              startColumnIndex: 0,
+              endColumnIndex: HEADERS.length,
+            },
+            cell: {
+              userEnteredFormat: {
+                backgroundColor: rgb(hasLeader ? "#f3f4f6" : "#ffffff"),
+                verticalAlignment: "TOP",
+                wrapStrategy: "WRAP",
+              },
+            },
+            fields:
+              "userEnteredFormat(backgroundColor,verticalAlignment,wrapStrategy)",
+          },
+        },
+      ],
+    },
   });
 }
 
@@ -414,6 +503,13 @@ export async function updateRowInSheet(app: Application): Promise<boolean> {
       requestBody: { values: [appToRow(app)] },
     });
 
+    formatDataRow(
+      sheets,
+      sheetId,
+      rowIndex,
+      Boolean(getRecruitmentMeta(app.admin_notes || "").leader),
+    ).catch(() => {});
+
     console.log(`[Google Sheets] Updated row ${rowNum}: ${app.full_name}`);
     return true;
   } catch (err) {
@@ -448,7 +544,7 @@ export async function syncAllToSheet(apps: Application[]): Promise<boolean> {
       range: `${SHEET_NAME}!A${clearFrom}:${lastCol}${MAX_SHEET_ROWS}`,
     });
 
-    await styleRecruitmentSheet(sheets, sheetId);
+    await styleRecruitmentSheet(sheets, sheetId, apps);
 
     console.log(`[Google Sheets] Full sync: ${apps.length} rows`);
     return true;

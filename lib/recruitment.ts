@@ -121,6 +121,7 @@ export const DEFAULT_RECRUITMENT_POSITIONS: RecruitmentPosition[] =
 export type LevelRecord = {
   target: string;
   comment: string;
+  startedAt?: string;
   updatedAt?: string;
 };
 
@@ -158,9 +159,9 @@ export function createEmptyManagement(): RecruitmentManagement {
     currentLevel: "lv1",
     startLevelDate: "",
     levels: {
-      lv1: { target: "", comment: "" },
-      lv2: { target: "", comment: "" },
-      lv3: { target: "", comment: "" },
+      lv1: { target: "", comment: "", startedAt: "" },
+      lv2: { target: "", comment: "", startedAt: "" },
+      lv3: { target: "", comment: "", startedAt: "" },
     },
   };
 }
