@@ -1,7 +1,44 @@
 import {
+  BarChart3,
+  BrainCircuit,
+  BriefcaseBusiness,
+  Code2,
+  Megaphone,
+  Network,
+  ServerCog,
+  ShieldCheck,
+  UsersRound,
+  type LucideIcon,
+} from "lucide-react";
+import {
   POSITION_COLORS,
   DEFAULT_POS_COLOR,
 } from "@/lib/recruitment";
+
+function getPositionIcon(position: string): LucideIcon {
+  const value = position.toLowerCase();
+
+  if (value.includes("network")) return Network;
+  if (value.includes("system") || value.includes("cloud")) return ServerCog;
+  if (value.includes("security")) return ShieldCheck;
+  if (
+    value.includes("frontend") ||
+    value.includes("backend") ||
+    value.includes("full-stack") ||
+    value.includes("devops") ||
+    value.includes("platform")
+  ) {
+    return Code2;
+  }
+  if (value.includes("ai") || value.includes("ml") || value.includes("research")) {
+    return BrainCircuit;
+  }
+  if (value.includes("data") || value.includes("performance")) return BarChart3;
+  if (value.includes("content") || value.includes("marketing")) return Megaphone;
+  if (value.includes("sales") || value.includes("customer")) return UsersRound;
+
+  return BriefcaseBusiness;
+}
 
 /**
  * Renders position chips from career_journey. Optionally caps the number
@@ -32,6 +69,7 @@ export default function PositionTags({
     <>
       {shown.map((pos) => {
         const c = POSITION_COLORS[pos] || DEFAULT_POS_COLOR;
+        const Icon = getPositionIcon(pos);
         return (
           <span
             key={pos}
@@ -40,9 +78,13 @@ export default function PositionTags({
           >
             {showAbbr && c.abbr && (
               <span
-                className="h-2 w-2 shrink-0 rounded-full ring-2 ring-white/70"
-                style={{ background: c.color }}
-              />
+                className={`inline-flex shrink-0 items-center justify-center rounded-md bg-white/80 shadow-sm ring-1 ring-black/5 ${
+                  size === "md" ? "h-5 w-5" : "h-4 w-4"
+                }`}
+                style={{ color: c.color }}
+              >
+                <Icon size={size === "md" ? 13 : 11} strokeWidth={2.6} />
+              </span>
             )}
             {pos}
           </span>
