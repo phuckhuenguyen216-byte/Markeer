@@ -88,7 +88,10 @@ function appToRow(app: Application): string[] {
     .filter(Boolean)
     .join("\n");
   const workPref = Object.entries(app.work_preference || {})
-    .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`)
+    .map(
+      ([key, value]) =>
+        `${key}: ${Array.isArray(value) ? value.join(", ") : value}`,
+    )
     .join(" | ");
   const isEmployee =
     app.status === "accepted" || app.status === "resigned" || Boolean(meta.leader);
@@ -214,11 +217,11 @@ async function styleRecruitmentSheet(
       },
     },
     ...[
-      { start: 0, end: 25, color: "#4a2318" },
-      { start: 25, end: 28, color: "#5b3f88" },
-      { start: 28, end: 31, color: "#f59e0b" },
-      { start: 31, end: 34, color: "#eab308" },
-      { start: 34, end: 37, color: "#16a34a" },
+      { start: 0, end: LEADER_COL_INDEX, color: "#4a2318" },
+      { start: LEADER_COL_INDEX, end: LEADER_COL_INDEX + 3, color: "#5b3f88" },
+      { start: LEADER_COL_INDEX + 3, end: LEADER_COL_INDEX + 6, color: "#f59e0b" },
+      { start: LEADER_COL_INDEX + 6, end: LEADER_COL_INDEX + 9, color: "#eab308" },
+      { start: LEADER_COL_INDEX + 9, end: LEADER_COL_INDEX + 12, color: "#16a34a" },
     ].map<sheets_v4.Schema$Request>((group) => ({
       repeatCell: {
         range: {

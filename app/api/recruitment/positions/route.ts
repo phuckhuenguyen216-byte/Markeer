@@ -6,6 +6,7 @@ import {
   TEAM_FILTERS,
   type RecruitmentPosition,
 } from "@/lib/recruitment";
+import { logRecruitmentActivity } from "@/lib/recruitment-activity-log";
 
 const VALID_TEAMS = new Set(TEAM_FILTERS.filter((team) => team !== "all"));
 
@@ -119,7 +120,17 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) throw error;
-    return NextResponse.json({ position: toPosition(data) }, { status: 201 });
+    const position = toPosition(data);
+    await logRecruitmentActivity({
+      actor: user,
+      action: "position.create",
+      entityType: "position",
+      entityId: position.id,
+      entityLabel: position.label,
+      details: { team: position.team, is_active: position.is_active },
+    });
+
+    return NextResponse.json({ position }, { status: 201 });
   } catch (error) {
     return NextResponse.json(
       {

@@ -20,6 +20,7 @@ import {
   Eye,
   FileText,
   Filter,
+  History,
   LayoutGrid,
   Rows3,
   RefreshCw,
@@ -35,6 +36,7 @@ import {
   STATUS_OPTIONS,
   getStatusInfo,
 } from "@/lib/application";
+import type { RecruitmentActivityLog } from "@/lib/recruitment-activity-log";
 import {
   TEAM_FILTERS,
   TEAM_POSITIONS,
@@ -47,6 +49,7 @@ import {
   formatSubmittedAt,
   getRecruitmentMeta,
   upsertRecruitmentMeta,
+  LEADER_TEAMS,
   TEAM_STYLES,
   type RecruitmentPosition,
   type RecruitmentLeader,
@@ -57,7 +60,7 @@ import Spinner from "../components/Spinner";
 import { ToastStack, useToasts } from "../components/Toast";
 import ConfirmModal, { type ConfirmAction } from "../components/ConfirmModal";
 
-type SortKey = "name" | "team" | "status" | "date";
+type SortKey = "name" | "team" | "leader" | "status" | "date";
 type PeopleScope = "all" | "reviewing" | "employees";
 
 const STATUS_ORDER: Record<string, number> = STATUS_OPTIONS.reduce(
@@ -123,6 +126,10 @@ function ApplicationsContent() {
   const [bulkSaving, setBulkSaving] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [showStats, setShowStats] = useState(false);
+  const [showActivityLogs, setShowActivityLogs] = useState(false);
+  const [activityLogs, setActivityLogs] = useState<RecruitmentActivityLog[]>([]);
+  const [activityLogsLoading, setActivityLogsLoading] = useState(false);
+  const [leaderSavingId, setLeaderSavingId] = useState<string | null>(null);
   const [leaders, setLeaders] = useState<RecruitmentLeader[]>([]);
   const [positions, setPositions] = useState<RecruitmentPosition[]>([]);
   const [showPositions, setShowPositions] = useState(false);
@@ -165,6 +172,23 @@ function ApplicationsContent() {
       setPositions(Array.isArray(data.positions) ? data.positions : []);
     } catch {
       addToast("Lỗi tải danh sách vị trí tuyển", "error");
+    }
+  }, [addToast]);
+
+  const fetchActivityLogs = useCallback(async () => {
+    setActivityLogsLoading(true);
+    try {
+      const res = await fetch("/api/recruitment/activity-logs?limit=120");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Không tải được nhật ký");
+      setActivityLogs(Array.isArray(data.logs) ? data.logs : []);
+    } catch (error) {
+      addToast(
+        error instanceof Error ? error.message : "Không tải được nhật ký",
+        "error",
+      );
+    } finally {
+      setActivityLogsLoading(false);
     }
   }, [addToast]);
 
@@ -360,6 +384,61 @@ function ApplicationsContent() {
     } finally {
       setStatusSavingId(null);
     }
+  };
+
+  const handleLeaderChange = async (app: Application, leaderId: string) => {
+    if (app.status === "resigned") {
+      addToast("Nhân viên đã nghỉ không thể sửa leader", "error");
+      return;
+    }
+
+    setConfirmAction(null);
+    setLeaderSavingId(app.id);
+    try {
+      const res = await fetch(`/api/applications/${app.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ leaderId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Lỗi cập nhật leader");
+      setAllApps((prev) =>
+        prev.map((item) => (item.id === app.id ? data : item)),
+      );
+      if (showActivityLogs) fetchActivityLogs();
+      addToast(`Đã cập nhật leader: ${app.full_name}`);
+    } catch (error) {
+      addToast(
+        error instanceof Error ? error.message : "Lỗi cập nhật leader",
+        "error",
+      );
+    } finally {
+      setLeaderSavingId(null);
+    }
+  };
+
+  const confirmLeaderChange = (app: Application, leaderId: string) => {
+    const meta = getRecruitmentMeta(app.admin_notes || "");
+    const currentLeaderName = meta.leader?.name || "Chưa gán";
+    const nextLeader =
+      leaders.find((leader) => leader.id === leaderId) || null;
+    const nextLeaderName = nextLeader?.name || "Chưa gán";
+
+    if ((meta.leader?.id || "") === leaderId) return;
+    if (app.status === "resigned") {
+      addToast("Nhân viên đã nghỉ không thể sửa leader", "error");
+      return;
+    }
+
+    setConfirmAction({
+      title: "Đổi leader?",
+      desc:
+        leaderId && !EMPLOYEE_STATUSES.includes(app.status)
+          ? "Hồ sơ đang xét sẽ tự chuyển sang trạng thái Đã nhận."
+          : "Leader mới sẽ được lưu vào hồ sơ ứng viên.",
+      detail: `${app.full_name}: ${currentLeaderName} -> ${nextLeaderName}`,
+      onConfirm: () => handleLeaderChange(app, leaderId),
+    });
   };
 
   const handleSyncSheet = async () => {
@@ -598,6 +677,11 @@ function ApplicationsContent() {
           return dir * (a.full_name || "").localeCompare(b.full_name || "", "vi");
         case "team":
           return dir * getPrimaryTeam(a).localeCompare(getPrimaryTeam(b), "vi");
+        case "leader": {
+          const leaderA = getRecruitmentMeta(a.admin_notes || "").leader?.name || "";
+          const leaderB = getRecruitmentMeta(b.admin_notes || "").leader?.name || "";
+          return dir * leaderA.localeCompare(leaderB, "vi");
+        }
         case "status":
           return (
             dir *
@@ -939,6 +1023,17 @@ function ApplicationsContent() {
         />
       )}
 
+      {showActivityLogs &&
+        createPortal(
+          <ActivityLogModal
+            logs={activityLogs}
+            loading={activityLogsLoading}
+            onRefresh={fetchActivityLogs}
+            onClose={() => setShowActivityLogs(false)}
+          />,
+          document.body,
+        )}
+
       {acceptDraft &&
         createPortal(
           <AcceptEmployeeModal
@@ -1010,6 +1105,17 @@ function ApplicationsContent() {
                 Thống kê
               </button>
             )}
+            <button
+              type="button"
+              onClick={() => {
+                setShowActivityLogs(true);
+                fetchActivityLogs();
+              }}
+              className="inline-flex h-8 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-xs font-bold text-gray-600 transition hover:border-[#d8c4b8] hover:bg-[#fbf6f2] hover:text-[#4a2318]"
+            >
+              <History size={14} />
+              Nhật ký
+            </button>
             <button
               type="button"
               onClick={() => setShowPositions(true)}
@@ -1246,13 +1352,14 @@ function ApplicationsContent() {
           {viewMode === "table" ? (
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
               <div className="overflow-x-auto">
-              <table className="w-full min-w-[1080px] table-fixed border-collapse text-left">
+              <table className="w-full min-w-[1180px] table-fixed border-collapse text-left">
                 <colgroup>
                   <col className="w-9" />
                   <col className="w-9" />
-                  <col className="w-[260px]" />
                   <col className="w-[250px]" />
-                  <col className="w-[270px]" />
+                  <col className="w-[140px]" />
+                  <col className="w-[230px]" />
+                  <col className="w-[230px]" />
                   <col className="w-[136px]" />
                   <col className="w-[104px]" />
                   <col className="w-[112px]" />
@@ -1272,6 +1379,14 @@ function ApplicationsContent() {
                     <SortableTh
                       label="Ứng viên"
                       sortKey="name"
+                      activeKey={sortKey}
+                      dir={sortDir}
+                      onSort={toggleSort}
+                      className="px-3 py-2.5"
+                    />
+                    <SortableTh
+                      label="Leader"
+                      sortKey="leader"
                       activeKey={sortKey}
                       dir={sortDir}
                       onSort={toggleSort}
@@ -1315,8 +1430,13 @@ function ApplicationsContent() {
                       deleting={deletingId === app.id}
                       toggling={togglingId === app.id}
                       statusSaving={statusSavingId === app.id}
+                      leaders={leaders}
+                      leaderSaving={leaderSavingId === app.id}
                       onView={() => handleView(app)}
                       onToggleStar={() => toggleStar(app)}
+                      onLeaderChange={(leaderId) =>
+                        confirmLeaderChange(app, leaderId)
+                      }
                       onStatusChange={(next) => handleStatusChange(app, next)}
                       onDelete={() => confirmDelete(app)}
                     />
@@ -1337,8 +1457,13 @@ function ApplicationsContent() {
                     onToggleSelect={() => toggleSelect(app.id)}
                     toggling={togglingId === app.id}
                     statusSaving={statusSavingId === app.id}
+                    leaders={leaders}
+                    leaderSaving={leaderSavingId === app.id}
                     onView={() => handleView(app)}
                     onToggleStar={() => toggleStar(app)}
+                    onLeaderChange={(leaderId) =>
+                      confirmLeaderChange(app, leaderId)
+                    }
                     onStatusChange={(next) => handleStatusChange(app, next)}
                     onDelete={() => confirmDelete(app)}
                   />
@@ -1513,6 +1638,70 @@ function SortableTh({
   );
 }
 
+const COMPACT_LEADER_TEAM_LABELS: Record<RecruitmentLeader["team"], string> = {
+  Marketing: "MKT",
+  "Dev/DevOps": "Dev",
+  AI: "AI",
+  Infrastructure: "Infra",
+  Sales: "Sales",
+  Other: "Other",
+};
+
+function getLeaderTeamShort(team: RecruitmentLeader["team"]) {
+  return (
+    COMPACT_LEADER_TEAM_LABELS[team] ||
+    LEADER_TEAMS.find((item) => item.value === team)?.label ||
+    team
+  );
+}
+
+function getLeaderOptionLabel(leader: RecruitmentLeader) {
+  return `${leader.name} - ${getLeaderTeamShort(leader.team)}`;
+}
+
+function LeaderQuickSelect({
+  app,
+  leaders,
+  saving,
+  className = "",
+  onChange,
+}: {
+  app: Application;
+  leaders: RecruitmentLeader[];
+  saving: boolean;
+  className?: string;
+  onChange: (leaderId: string) => void;
+}) {
+  const meta = getRecruitmentMeta(app.admin_notes || "");
+  const disabled = saving || app.status === "resigned";
+
+  return (
+    <label className={`relative block ${className}`} title={disabled ? "Đã nghỉ - không thể sửa leader" : "Sửa leader"}>
+      <select
+        value={meta.leader?.id || ""}
+        disabled={disabled}
+        onClick={(event) => event.stopPropagation()}
+        onChange={(event) => onChange(event.target.value)}
+        className={`h-7 w-full cursor-pointer appearance-none rounded-md border bg-white pl-2 pr-5 text-[10px] font-black outline-none transition focus:border-[#8b4513] focus:ring-2 focus:ring-[#f6eee9] disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400 ${
+          meta.leader
+            ? "border-[#d8c4b8] text-[#4a2318]"
+            : "border-gray-200 text-gray-500"
+        }`}
+      >
+        <option value="">Chưa gán</option>
+        {leaders.map((leader) => (
+          <option key={leader.id} value={leader.id}>
+            {getLeaderOptionLabel(leader)}
+          </option>
+        ))}
+      </select>
+      <span className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 text-[9px] text-gray-400">
+        {saving ? "..." : "▾"}
+      </span>
+    </label>
+  );
+}
+
 function CandidateRow({
   app,
   selected,
@@ -1520,8 +1709,11 @@ function CandidateRow({
   deleting,
   toggling,
   statusSaving,
+  leaders,
+  leaderSaving,
   onView,
   onToggleStar,
+  onLeaderChange,
   onStatusChange,
   onDelete,
 }: {
@@ -1531,8 +1723,11 @@ function CandidateRow({
   deleting: boolean;
   toggling: boolean;
   statusSaving: boolean;
+  leaders: RecruitmentLeader[];
+  leaderSaving: boolean;
   onView: () => void;
   onToggleStar: () => void;
+  onLeaderChange: (leaderId: string) => void;
   onStatusChange: (next: ApplicationStatus) => void;
   onDelete: () => void;
 }) {
@@ -1592,11 +1787,6 @@ function CandidateRow({
               <p className="truncate font-bold leading-tight text-gray-950">
                 {app.full_name || "---"}
               </p>
-              {meta.leader && (
-                <span className="max-w-[96px] shrink-0 truncate rounded-md bg-slate-100 px-1.5 py-px text-[9px] font-black text-slate-500">
-                  {meta.leader.name}
-                </span>
-              )}
             </div>
             <div className="flex min-w-0 items-center gap-1.5">
               <p className="truncate text-[11px] font-semibold text-gray-400">
@@ -1610,6 +1800,16 @@ function CandidateRow({
             </div>
           </div>
         </div>
+      </td>
+
+      {/* Leader quick edit */}
+      <td className="px-3 py-2" onClick={stop}>
+        <LeaderQuickSelect
+          app={app}
+          leaders={leaders}
+          saving={leaderSaving}
+          onChange={onLeaderChange}
+        />
       </td>
 
       {/* Contact */}
@@ -1690,8 +1890,11 @@ function CandidateCard({
   onToggleSelect,
   toggling,
   statusSaving,
+  leaders,
+  leaderSaving,
   onView,
   onToggleStar,
+  onLeaderChange,
   onStatusChange,
   onDelete,
 }: {
@@ -1700,8 +1903,11 @@ function CandidateCard({
   onToggleSelect: () => void;
   toggling: boolean;
   statusSaving: boolean;
+  leaders: RecruitmentLeader[];
+  leaderSaving: boolean;
   onView: () => void;
   onToggleStar: () => void;
+  onLeaderChange: (leaderId: string) => void;
   onStatusChange: (next: ApplicationStatus) => void;
   onDelete: () => void;
 }) {
@@ -1799,6 +2005,15 @@ function CandidateCard({
             </span>
           )}
         </div>
+      </div>
+
+      <div className="mt-2.5" onClick={stop}>
+        <LeaderQuickSelect
+          app={app}
+          leaders={leaders}
+          saving={leaderSaving}
+          onChange={onLeaderChange}
+        />
       </div>
 
       {/* Footer: status + actions */}
@@ -1993,6 +2208,217 @@ function RecruitmentPositionsModal({
               </section>
             );
           })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const ACTIVITY_LABELS: Record<string, string> = {
+  "application.update": "Cập nhật hồ sơ",
+  "application.delete": "Xóa hồ sơ",
+  "leader.create": "Thêm leader",
+  "leader.update": "Sửa leader",
+  "leader.delete": "Xóa leader",
+  "position.create": "Thêm vị trí",
+  "position.update": "Sửa vị trí",
+  "sheet.sync": "Sync Sheet",
+};
+
+function asLogRecord(value: unknown) {
+  return value && typeof value === "object"
+    ? (value as Record<string, unknown>)
+    : null;
+}
+
+function getLogName(value: unknown) {
+  const record = asLogRecord(value);
+  return typeof record?.name === "string" && record.name.trim()
+    ? record.name
+    : "Chưa gán";
+}
+
+function describeActivity(log: RecruitmentActivityLog) {
+  const details = log.details || {};
+  const changes = asLogRecord(details.changes);
+  const parts: string[] = [];
+
+  const statusChange = asLogRecord(changes?.status);
+  if (
+    typeof statusChange?.from === "string" &&
+    typeof statusChange?.to === "string"
+  ) {
+    parts.push(
+      `Trạng thái: ${getStatusInfo(statusChange.from as ApplicationStatus).label} -> ${
+        getStatusInfo(statusChange.to as ApplicationStatus).label
+      }`,
+    );
+  }
+
+  const leaderChange = asLogRecord(changes?.leader);
+  if (leaderChange) {
+    parts.push(
+      `Leader: ${getLogName(leaderChange.from)} -> ${getLogName(
+        leaderChange.to,
+      )}`,
+    );
+  }
+
+  if (changes?.admin_notes) {
+    parts.push("Cập nhật ghi chú");
+  }
+
+  if (typeof details.count === "number") {
+    parts.push(`${details.count} hồ sơ`);
+  }
+
+  const from = asLogRecord(details.from);
+  const to = asLogRecord(details.to);
+  if (from || to) {
+    const fromText = from
+      ? Object.entries(from)
+          .map(([key, value]) => `${key}: ${String(value)}`)
+          .join(", ")
+      : "";
+    const toText = to
+      ? Object.entries(to)
+          .map(([key, value]) => `${key}: ${String(value)}`)
+          .join(", ")
+      : "";
+    parts.push([fromText, toText].filter(Boolean).join(" -> "));
+  }
+
+  if (typeof details.team === "string") {
+    parts.push(`Team: ${details.team}`);
+  }
+
+  return parts.filter(Boolean).join(" | ") || "Không có chi tiết";
+}
+
+function formatActivityTime(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleString("vi-VN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+}
+
+function ActivityLogModal({
+  logs,
+  loading,
+  onRefresh,
+  onClose,
+}: {
+  logs: RecruitmentActivityLog[];
+  loading: boolean;
+  onRefresh: () => void;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-[9999] flex items-start justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm sm:p-6"
+      onClick={onClose}
+    >
+      <div
+        className="flex max-h-[calc(100dvh-3rem)] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex items-center justify-between gap-3 border-b border-gray-200 px-5 py-4">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#f6eee9] text-[#4a2318]">
+              <History size={18} />
+            </span>
+            <div className="min-w-0">
+              <h2 className="text-base font-black text-gray-950">Nhật ký</h2>
+              <p className="truncate text-xs font-semibold text-gray-400">
+                Ai thao tác gì, trên mục nào và lúc nào
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onRefresh}
+              disabled={loading}
+              className="inline-flex h-9 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-xs font-bold text-gray-600 transition hover:bg-gray-50 disabled:opacity-50"
+            >
+              <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+              Tải lại
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-400 transition hover:bg-gray-50 hover:text-gray-700"
+              title="Đóng"
+            >
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+
+        <div className="overflow-y-auto p-4">
+          {loading && logs.length === 0 ? (
+            <div className="flex min-h-[220px] items-center justify-center">
+              <Spinner label="Đang tải nhật ký..." />
+            </div>
+          ) : logs.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-gray-200 p-8 text-center text-sm font-semibold text-gray-400">
+              Chưa có log nào.
+            </div>
+          ) : (
+            <div className="overflow-hidden rounded-xl border border-gray-200">
+              <table className="w-full min-w-[860px] table-fixed text-left">
+                <colgroup>
+                  <col className="w-[150px]" />
+                  <col className="w-[190px]" />
+                  <col className="w-[170px]" />
+                  <col />
+                  <col className="w-[150px]" />
+                </colgroup>
+                <thead className="bg-[#faf7f4] text-[10px] font-black uppercase tracking-wide text-gray-500">
+                  <tr>
+                    <th className="px-3 py-2.5">Hành động</th>
+                    <th className="px-3 py-2.5">Người làm</th>
+                    <th className="px-3 py-2.5">Đối tượng</th>
+                    <th className="px-3 py-2.5">Chi tiết</th>
+                    <th className="px-3 py-2.5">Thời gian</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 text-xs">
+                  {logs.map((log) => (
+                    <tr key={log.id} className="bg-white">
+                      <td className="px-3 py-3 font-black text-[#4a2318]">
+                        {ACTIVITY_LABELS[log.action] || log.action}
+                      </td>
+                      <td className="px-3 py-3">
+                        <p className="truncate font-bold text-gray-700">
+                          {log.actor_email || "Unknown"}
+                        </p>
+                      </td>
+                      <td className="px-3 py-3">
+                        <p className="truncate font-semibold text-gray-600">
+                          {log.entity_label || log.entity_id || "---"}
+                        </p>
+                        <p className="mt-0.5 text-[10px] font-bold uppercase text-gray-300">
+                          {log.entity_type}
+                        </p>
+                      </td>
+                      <td className="px-3 py-3 font-medium leading-relaxed text-gray-500">
+                        {describeActivity(log)}
+                      </td>
+                      <td className="px-3 py-3 font-bold text-gray-400">
+                        {formatActivityTime(log.created_at)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>

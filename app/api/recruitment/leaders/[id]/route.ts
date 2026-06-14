@@ -6,6 +6,7 @@ import {
   type LeaderTeam,
   type RecruitmentLeader,
 } from "@/lib/recruitment";
+import { logRecruitmentActivity } from "@/lib/recruitment-activity-log";
 
 const VALID_TEAMS = new Set<LeaderTeam>(LEADER_TEAMS.map((team) => team.value));
 
@@ -49,6 +50,12 @@ export async function PUT(
       );
     }
 
+    const { data: current } = await getSupabaseAdmin()
+      .from("recruitment_leaders")
+      .select("id,name,team")
+      .eq("id", id)
+      .single();
+
     const { data, error } = await getSupabaseAdmin()
       .from("recruitment_leaders")
       .update({ name, team, is_active: true })
@@ -57,7 +64,22 @@ export async function PUT(
       .single();
 
     if (error) throw error;
-    return NextResponse.json({ leader: toLeader(data) });
+    const leader = toLeader(data);
+    await logRecruitmentActivity({
+      actor: user,
+      action: "leader.update",
+      entityType: "leader",
+      entityId: leader.id,
+      entityLabel: leader.name,
+      details: {
+        from: current
+          ? { name: current.name, team: current.team }
+          : null,
+        to: { name: leader.name, team: leader.team },
+      },
+    });
+
+    return NextResponse.json({ leader });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Lỗi sửa leader" },
@@ -87,6 +109,15 @@ export async function DELETE(
       .eq("id", id);
 
     if (error) throw error;
+    await logRecruitmentActivity({
+      actor: user,
+      action: "leader.delete",
+      entityType: "leader",
+      entityId: id,
+      entityLabel: id,
+      details: { is_active: false },
+    });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json(

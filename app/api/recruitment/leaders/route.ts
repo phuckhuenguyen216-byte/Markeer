@@ -7,6 +7,7 @@ import {
   type LeaderTeam,
   type RecruitmentLeader,
 } from "@/lib/recruitment";
+import { logRecruitmentActivity } from "@/lib/recruitment-activity-log";
 
 const VALID_TEAMS = new Set<LeaderTeam>(LEADER_TEAMS.map((team) => team.value));
 
@@ -100,7 +101,17 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) throw error;
-    return NextResponse.json({ leader: toLeader(data) }, { status: 201 });
+    const leader = toLeader(data);
+    await logRecruitmentActivity({
+      actor: user,
+      action: "leader.create",
+      entityType: "leader",
+      entityId: leader.id,
+      entityLabel: leader.name,
+      details: { team: leader.team },
+    });
+
+    return NextResponse.json({ leader }, { status: 201 });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Lỗi thêm leader" },

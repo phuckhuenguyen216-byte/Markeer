@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { validateAdminRequest } from "@/lib/admin-auth";
 import { syncAllToSheet } from "@/lib/google-sheets";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
+import { logRecruitmentActivity } from "@/lib/recruitment-activity-log";
 
 // POST /api/applications/sync-sheet - Sync all applications to Google Sheets.
 export async function POST(request: NextRequest) {
@@ -32,6 +33,15 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
+
+    await logRecruitmentActivity({
+      actor: user,
+      action: "sheet.sync",
+      entityType: "sheet",
+      entityId: null,
+      entityLabel: "Google Sheets",
+      details: { count: (data || []).length },
+    });
 
     return NextResponse.json({
       success: true,

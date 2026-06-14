@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { validateAdminRequest } from "@/lib/admin-auth";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 import { TEAM_FILTERS, type RecruitmentPosition } from "@/lib/recruitment";
+import { logRecruitmentActivity } from "@/lib/recruitment-activity-log";
 
 const VALID_TEAMS = new Set(TEAM_FILTERS.filter((team) => team !== "all"));
 
@@ -54,7 +55,14 @@ export async function PUT(
       );
     }
 
-    const { data, error } = await getSupabaseAdmin()
+    const supabase = getSupabaseAdmin();
+    const { data: current } = await supabase
+      .from("recruitment_positions")
+      .select("id,label,team,sort_order,is_active")
+      .eq("id", id)
+      .single();
+
+    const { data, error } = await supabase
       .from("recruitment_positions")
       .update(updates)
       .eq("id", id)
@@ -62,7 +70,30 @@ export async function PUT(
       .single();
 
     if (error) throw error;
-    return NextResponse.json({ position: toPosition(data) });
+    const position = toPosition(data);
+    await logRecruitmentActivity({
+      actor: user,
+      action: "position.update",
+      entityType: "position",
+      entityId: position.id,
+      entityLabel: position.label,
+      details: {
+        from: current
+          ? {
+              team: current.team,
+              sort_order: current.sort_order,
+              is_active: current.is_active,
+            }
+          : null,
+        to: {
+          team: position.team,
+          sort_order: position.sort_order,
+          is_active: position.is_active,
+        },
+      },
+    });
+
+    return NextResponse.json({ position });
   } catch (error) {
     return NextResponse.json(
       {

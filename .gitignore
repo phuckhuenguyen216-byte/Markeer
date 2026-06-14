@@ -48,3 +48,6 @@ markee-ai-admin-ui.zip
 # local-only test/screenshot artifacts and editor settings
 .codex-artifacts/
 .vscode/
+
+# host-only verification files
+public/zalo_verifier*.html
