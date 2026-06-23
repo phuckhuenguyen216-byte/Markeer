@@ -12,7 +12,8 @@
     "aboutMenu": "About us",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
-    "apply": "Apply"
+    "apply": "Apply",
+    "applyForm": "Submit Profile"
   },
   "hero": {
     "brand": "MARKEE AI",
@@ -1095,6 +1096,7 @@
       "dashboard": "Dashboard",
       "manageBlog": "Manage Blog",
       "manageApplications": "Applications",
+      "manageEmployeeProfiles": "Employee Profiles",
       "logout": "Logout"
     },
     "dashboard": {

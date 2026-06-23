@@ -122,6 +122,10 @@ export default function Header() {
           <Link href="/apply" className="hover:text-gray-900 transition-colors">
             {t("header.apply")}
           </Link>
+
+          <Link href="/apply/form" className="hover:text-gray-900 transition-colors">
+            {t("header.applyForm")}
+          </Link>
         </nav>
 
         {/* Right Side */}
@@ -243,6 +247,14 @@ export default function Header() {
               onClick={() => setIsOpen(false)}
             >
               {t("header.apply")}
+            </Link>
+
+            <Link
+              href="/apply/form"
+              className="font-medium text-gray-700 hover:text-gray-900"
+              onClick={() => setIsOpen(false)}
+            >
+              {t("header.applyForm")}
             </Link>
 
             {/* About Section in Mobile */}

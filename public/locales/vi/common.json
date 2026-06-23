@@ -12,7 +12,8 @@
     "aboutMenu": "Về chúng tôi",
     "privacy": "Chính sách bảo mật",
     "terms": "Điều khoản dịch vụ",
-    "apply": "Tuyển dụng"
+    "apply": "Tuyển dụng",
+    "applyForm": "Nhập hồ sơ"
   },
   "hero": {
     "brand": "MARKEE AI",
@@ -1099,6 +1100,7 @@
       "dashboard": "Dashboard",
       "manageBlog": "Quản lý Blog",
       "manageApplications": "Ứng viên",
+      "manageEmployeeProfiles": "Hồ sơ nhân sự",
       "logout": "Đăng xuất"
     },
     "dashboard": {

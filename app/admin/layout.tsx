@@ -120,6 +120,31 @@ const menu = [
       </svg>
     ),
   },
+  {
+    nameKey: "admin.sidebar.manageEmployeeProfiles",
+    href: "/admin/employee-profiles",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <rect
+          x="2"
+          y="2"
+          width="12"
+          height="12"
+          rx="2"
+          fill="currentColor"
+          opacity="0.2"
+        />
+        <path
+          d="M8 8a2 2 0 100-4 2 2 0 000 4zm-4 4c0-1.5 2.5-2.2 4-2.2s4 .7 4 2.2v.8H4V12z"
+          stroke="currentColor"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          opacity="0.85"
+        />
+        <circle cx="12" cy="4" r="2.5" fill="#10b981" />
+      </svg>
+    ),
+  },
 ];
 
 export default function AdminLayout({
