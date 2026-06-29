@@ -10,7 +10,10 @@ export interface EmployeeProfile {
   id_issue_place: string;
   permanent_address: string;
   temporary_address: string;
-  documents_folder: string;
+  cccd_front_path: string;
+  cccd_back_path: string;
+  other_docs_path: string;
+  team: string;
   tax_code: string;
   insurance_code: string;
   health_insurance_code: string;
@@ -55,17 +58,12 @@ export function validateEmployeeProfile(body: Partial<EmployeeProfile>): string[
   if (!body.permanent_address?.trim()) errors.push("Địa chỉ thường trú là bắt buộc");
   if (!body.temporary_address?.trim()) errors.push("Địa chỉ tạm trú là bắt buộc");
 
-  if (!body.documents_folder?.trim()) {
-    errors.push("Đường dẫn folder tài liệu là bắt buộc");
-  } else {
-    try {
-      const parsed = new URL(body.documents_folder.trim());
-      if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-        errors.push("Đường dẫn folder tài liệu phải là liên kết hợp lệ (http/https)");
-      }
-    } catch {
-      errors.push("Đường dẫn folder tài liệu không hợp lệ");
-    }
+  // CCCD files validation
+  if (!body.cccd_front_path?.trim()) {
+    errors.push("Ảnh mặt trước CCCD là bắt buộc");
+  }
+  if (!body.cccd_back_path?.trim()) {
+    errors.push("Ảnh mặt sau CCCD là bắt buộc");
   }
 
   // Insurance & Tax
@@ -79,3 +77,4 @@ export function validateEmployeeProfile(body: Partial<EmployeeProfile>): string[
 
   return errors;
 }
+

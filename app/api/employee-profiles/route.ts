@@ -9,7 +9,7 @@ function stripHtml(str: string): string {
   return str.replace(/<[^>]*>/g, "").trim();
 }
 
-// GET /api/employee-profiles - List employee profiles for admin
+// GET /api/employee-profiles - List employee profiles for admin (with team filtering & stats)
 export async function GET(request: NextRequest) {
   const user = await validateAdminRequest(request);
   if (!user) {
@@ -19,15 +19,55 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get("search");
+    const team = searchParams.get("team");
+    const getStats = searchParams.get("stats") === "true";
     const limit = parseInt(searchParams.get("limit") || "25");
     const page = parseInt(searchParams.get("page") || "1");
     const offset = (page - 1) * limit;
 
     const supabase = getSupabaseAdmin();
+
+    // If requesting team stats
+    if (getStats) {
+      const { data: allTeams, error: statsError } = await supabase
+        .from("employee_profiles")
+        .select("team");
+
+      if (statsError) {
+        console.error("[GET /api/employee-profiles] Stats error:", statsError);
+        return NextResponse.json({ error: statsError.message }, { status: 500 });
+      }
+
+      // Group and count
+      const counts: Record<string, number> = {};
+      
+      // Default teams to always show
+      const defaultTeams = ["Tổng hợp", "Dev/DevOps", "AI", "Marketing", "Sales", "Infrastructure"];
+      defaultTeams.forEach(t => {
+        counts[t] = 0;
+      });
+
+      allTeams?.forEach(row => {
+        const t = row.team || "Tổng hợp";
+        counts[t] = (counts[t] || 0) + 1;
+      });
+
+      const stats = Object.entries(counts).map(([name, count]) => ({
+        name,
+        count
+      }));
+
+      return NextResponse.json({ stats });
+    }
+
     let query = supabase
       .from("employee_profiles")
       .select("*", { count: "exact" })
       .order("created_at", { ascending: false });
+
+    if (team) {
+      query = query.eq("team", team);
+    }
 
     if (search) {
       const safeSearch = search.replace(/[(),."'\\]/g, "").trim();
@@ -126,7 +166,10 @@ export async function POST(request: NextRequest) {
       id_issue_place: stripHtml(body.id_issue_place || ""),
       permanent_address: stripHtml(body.permanent_address || ""),
       temporary_address: stripHtml(body.temporary_address || ""),
-      documents_folder: body.documents_folder.trim(),
+      cccd_front_path: body.cccd_front_path.trim(),
+      cccd_back_path: body.cccd_back_path.trim(),
+      other_docs_path: (body.other_docs_path || "").trim(),
+      team: (body.team || "Tổng hợp").trim(),
       tax_code: body.tax_code.trim(),
       insurance_code: body.insurance_code.trim(),
       health_insurance_code: body.health_insurance_code.trim(),

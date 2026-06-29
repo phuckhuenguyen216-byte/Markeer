@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   User,
-  Calendar,
   Phone,
   Mail,
   CreditCard,
@@ -18,7 +17,10 @@ import {
   AlertCircle,
   X,
   Lock,
-  Heart
+  Heart,
+  UploadCloud,
+  Check,
+  Loader2
 } from "lucide-react";
 import MascotGuide from "@/app/components/MascotGuide";
 import type { MascotState } from "@/app/components/Mascot";
@@ -34,7 +36,10 @@ interface FormData {
   id_issue_place: string;
   permanent_address: string;
   temporary_address: string;
-  documents_folder: string;
+  cccd_front_path: string;
+  cccd_back_path: string;
+  other_docs_path: string;
+  team: string;
   tax_code: string;
   insurance_code: string;
   health_insurance_code: string;
@@ -53,7 +58,10 @@ const EMPTY_FORM: FormData = {
   id_issue_place: "",
   permanent_address: "",
   temporary_address: "",
-  documents_folder: "",
+  cccd_front_path: "",
+  cccd_back_path: "",
+  other_docs_path: "",
+  team: "Tổng hợp",
   tax_code: "",
   insurance_code: "",
   health_insurance_code: "",
@@ -78,7 +86,19 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
   const [submitError, setSubmitError] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
+  // Upload previews and states
+  const [uploadingFront, setUploadingFront] = useState(false);
+  const [uploadingBack, setUploadingBack] = useState(false);
+  const [uploadingDocs, setUploadingDocs] = useState(false);
+  
+  const [frontPreview, setFrontPreview] = useState<string>("");
+  const [backPreview, setBackPreview] = useState<string>("");
+  const [docsFileName, setDocsFileName] = useState<string>("");
+
   const containerRef = useRef<HTMLDivElement>(null);
+  const frontInputRef = useRef<HTMLInputElement>(null);
+  const backInputRef = useRef<HTMLInputElement>(null);
+  const docsInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch CSRF Token on mount
   useEffect(() => {
@@ -89,6 +109,74 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
       })
       .catch((err) => console.error("Error fetching CSRF token:", err));
   }, []);
+
+  // Format Date Input auto slash insertion: DD/MM/YYYY
+  const formatDatePicker = (val: string) => {
+    const clean = val.replace(/[^0-9]/g, "");
+    if (clean.length <= 2) return clean;
+    if (clean.length <= 4) return `${clean.slice(0, 2)}/${clean.slice(2)}`;
+    return `${clean.slice(0, 2)}/${clean.slice(2, 4)}/${clean.slice(4, 8)}`;
+  };
+
+  // Upload handler
+  const handleFileUpload = async (file: File, type: "front" | "back" | "docs") => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // Create local object URL for instant preview
+    const localUrl = URL.createObjectURL(file);
+    if (type === "front") {
+      setFrontPreview(localUrl);
+      setUploadingFront(true);
+    } else if (type === "back") {
+      setBackPreview(localUrl);
+      setUploadingBack(true);
+    } else {
+      setDocsFileName(file.name);
+      setUploadingDocs(true);
+    }
+
+    try {
+      const res = await fetch("/api/employee-profiles/upload", {
+        method: "POST",
+        headers: {
+          "x-csrf-token": csrfToken,
+        },
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Tải tệp lên thất bại");
+      }
+
+      setForm((prev) => {
+        if (type === "front") return { ...prev, cccd_front_path: data.path };
+        if (type === "back") return { ...prev, cccd_back_path: data.path };
+        return { ...prev, other_docs_path: data.path };
+      });
+
+      // Clear the error for this field
+      const fieldName = type === "front" ? "cccd_front_path" : type === "back" ? "cccd_back_path" : "other_docs_path";
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[fieldName];
+        return next;
+      });
+
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "Lỗi khi tải tệp lên.");
+      // Reset preview on error
+      if (type === "front") setFrontPreview("");
+      else if (type === "back") setBackPreview("");
+      else setDocsFileName("");
+    } finally {
+      if (type === "front") setUploadingFront(false);
+      else if (type === "back") setUploadingBack(false);
+      else setUploadingDocs(false);
+    }
+  };
 
   // Set Mascot State based on current step
   const getMascotState = (): MascotState => {
@@ -116,7 +204,7 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
       case 1:
         return "Chào bạn! Hãy nhập thông tin cá nhân cơ bản của mình để công ty bắt đầu làm thủ tục nhân sự nhé.";
       case 2:
-        return "Hãy chắc chắn rằng thông tin địa chỉ ghi đúng theo hộ khẩu và liên kết Drive đã mở quyền xem cho lnlinhnhan@poptech.vn nhé.";
+        return "Hãy tải trực tiếp ảnh chụp 2 mặt CCCD và tài liệu đính kèm (nếu có). Mọi thông tin được mã hóa bảo mật tuyệt đối.";
       case 3:
         return "Thông tin thuế và bảo hiểm xã hội rất quan trọng để công ty thực hiện đầy đủ quyền lợi và nghĩa vụ pháp lý cho bạn.";
       case 4:
@@ -126,81 +214,98 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
     }
   };
 
-  const validateStep = (step: number): boolean => {
+  const validateAll = (): { hasErrors: boolean; firstStepWithError: number } => {
     const newErrors: Partial<Record<keyof FormData, string>> = {};
 
-    if (step === 1) {
-      if (!form.full_name.trim()) newErrors.full_name = "Họ và tên không được để trống";
-      if (!form.dob) newErrors.dob = "Ngày sinh không được để trống";
-      if (!form.gender) newErrors.gender = "Vui lòng chọn giới tính";
-      
-      if (!form.phone.trim()) {
-        newErrors.phone = "Số điện thoại không được để trống";
-      } else {
-        const cleanedPhone = form.phone.replace(/[\s\-().]/g, "");
-        if (!/^(0|\+84)\d{9,10}$/.test(cleanedPhone)) {
-          newErrors.phone = "Số điện thoại không đúng định dạng";
-        }
-      }
-
-      if (!form.personal_email.trim()) {
-        newErrors.personal_email = "Email cá nhân không được để trống";
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.personal_email.trim())) {
-        newErrors.personal_email = "Email không hợp lệ";
-      }
+    // STEP 1 Validation
+    if (!form.full_name.trim()) newErrors.full_name = "Họ và tên không được để trống";
+    
+    if (!form.dob.trim()) {
+      newErrors.dob = "Ngày sinh không được để trống";
+    } else if (!/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/.test(form.dob.trim())) {
+      newErrors.dob = "Định dạng ngày sinh phải là ngày/tháng/năm (DD/MM/YYYY)";
     }
 
-    if (step === 2) {
-      if (!form.national_id.trim()) newErrors.national_id = "Số CCCD/CMND không được để trống";
-      if (!form.id_issue_date) newErrors.id_issue_date = "Ngày cấp không được để trống";
-      if (!form.id_issue_place.trim()) newErrors.id_issue_place = "Nơi cấp không được để trống";
-      if (!form.permanent_address.trim()) newErrors.permanent_address = "Địa chỉ thường trú không được để trống";
-      if (!form.temporary_address.trim()) newErrors.temporary_address = "Địa chỉ tạm trú không được để trống";
-      
-      if (!form.documents_folder.trim()) {
-        newErrors.documents_folder = "Vui lòng dán liên kết folder Drive";
-      } else {
-        try {
-          const parsed = new URL(form.documents_folder.trim());
-          if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-            newErrors.documents_folder = "Liên kết không đúng định dạng (http/https)";
-          }
-        } catch {
-          newErrors.documents_folder = "Liên kết không hợp lệ";
-        }
+    if (!form.gender) newErrors.gender = "Vui lòng chọn giới tính";
+    
+    if (!form.phone.trim()) {
+      newErrors.phone = "Số điện thoại không được để trống";
+    } else {
+      const cleanedPhone = form.phone.replace(/[\s\-().]/g, "");
+      if (!/^(0|\+84)\d{9,10}$/.test(cleanedPhone)) {
+        newErrors.phone = "Số điện thoại không đúng định dạng";
       }
     }
 
-    if (step === 3) {
-      if (!form.tax_code.trim()) newErrors.tax_code = "Mã số thuế không được để trống";
-      if (!form.insurance_code.trim()) newErrors.insurance_code = "Mã số BHXH không được để trống";
-      if (!form.health_insurance_code.trim()) newErrors.health_insurance_code = "Mã thẻ BHYT không được để trống";
+    if (!form.personal_email.trim()) {
+      newErrors.personal_email = "Email cá nhân không được để trống";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.personal_email.trim())) {
+      newErrors.personal_email = "Email không hợp lệ";
     }
 
-    if (step === 4) {
-      if (!form.bank_account.trim()) newErrors.bank_account = "Số tài khoản không được để trống";
-      if (!form.bank_name_branch.trim()) newErrors.bank_name_branch = "Tên ngân hàng & chi nhánh không được để trống";
+    // STEP 2 Validation
+    if (!form.national_id.trim()) newErrors.national_id = "Số CCCD/CMND không được để trống";
+    
+    if (!form.id_issue_date.trim()) {
+      newErrors.id_issue_date = "Ngày cấp không được để trống";
+    } else if (!/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/.test(form.id_issue_date.trim())) {
+      newErrors.id_issue_date = "Định dạng ngày cấp phải là ngày/tháng/năm (DD/MM/YYYY)";
     }
+
+    if (!form.id_issue_place.trim()) newErrors.id_issue_place = "Nơi cấp không được để trống";
+    if (!form.permanent_address.trim()) newErrors.permanent_address = "Địa chỉ thường trú không được để trống";
+    if (!form.temporary_address.trim()) newErrors.temporary_address = "Địa chỉ tạm trú không được để trống";
+    
+    if (!form.cccd_front_path) newErrors.cccd_front_path = "Vui lòng tải ảnh mặt trước CCCD";
+    if (!form.cccd_back_path) newErrors.cccd_back_path = "Vui lòng tải ảnh mặt sau CCCD";
+
+    // STEP 3 Validation
+    if (!form.tax_code.trim()) newErrors.tax_code = "Mã số thuế không được để trống";
+    if (!form.insurance_code.trim()) newErrors.insurance_code = "Mã số BHXH không được để trống";
+    if (!form.health_insurance_code.trim()) newErrors.health_insurance_code = "Mã thẻ BHYT không được để trống";
+
+    // STEP 4 Validation
+    if (!form.bank_account.trim()) newErrors.bank_account = "Số tài khoản không được để trống";
+    if (!form.bank_name_branch.trim()) newErrors.bank_name_branch = "Tên ngân hàng & chi nhánh không được để trống";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+
+    if (Object.keys(newErrors).length > 0) {
+      // Find the first step ID that contains an error
+      let firstStep = 4;
+      if (newErrors.full_name || newErrors.dob || newErrors.gender || newErrors.phone || newErrors.personal_email) {
+        firstStep = 1;
+      } else if (
+        newErrors.national_id ||
+        newErrors.id_issue_date ||
+        newErrors.id_issue_place ||
+        newErrors.permanent_address ||
+        newErrors.temporary_address ||
+        newErrors.cccd_front_path ||
+        newErrors.cccd_back_path
+      ) {
+        firstStep = 2;
+      } else if (newErrors.tax_code || newErrors.insurance_code || newErrors.health_insurance_code) {
+        firstStep = 3;
+      }
+      return { hasErrors: true, firstStepWithError: firstStep };
+    }
+
+    return { hasErrors: false, firstStepWithError: 0 };
   };
 
   const handleNext = () => {
-    if (validateStep(currentStep)) {
-      setSubmitError("");
-      if (currentStep < 4) {
-        setCurrentStep((prev) => prev + 1);
-        containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-      } else {
-        handleSubmit();
-      }
+    setSubmitError("");
+    if (currentStep < 4) {
+      setCurrentStep((prev) => prev + 1);
+      containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      handleSubmit();
     }
   };
 
   const handleBack = () => {
     setSubmitError("");
-    setErrors({});
     if (currentStep > 1) {
       setCurrentStep((prev) => prev - 1);
       containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
@@ -208,6 +313,15 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
   };
 
   const handleSubmit = async () => {
+    const { hasErrors, firstStepWithError } = validateAll();
+    
+    if (hasErrors) {
+      setCurrentStep(firstStepWithError);
+      setSubmitError("Vui lòng hoàn thành đầy đủ thông tin bắt buộc trước khi gửi.");
+      containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     setSubmitting(true);
     setSubmitError("");
     try {
@@ -222,14 +336,14 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
 
       const data = await res.json();
       if (!res.ok) {
-        setSubmitError(data.errors?.join(". ") || data.error || "Gửi thông tin thất bại. Vui lòng kiểm tra lại.");
+        setSubmitError(data.errors?.join(". ") || data.error || "Gửi hồ sơ thất bại. Vui lòng thử lại.");
         return;
       }
 
       setSubmitted(true);
     } catch (err) {
       console.error(err);
-      setSubmitError("Lỗi kết nối mạng. Vui lòng kiểm thử lại sau.");
+      setSubmitError("Lỗi kết nối mạng. Vui lòng thử lại sau.");
     } finally {
       setSubmitting(false);
     }
@@ -269,13 +383,17 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
               <span>MARKEE PROFILE SETUP</span>
             </div>
             
-            {/* Steps Visual Indicator */}
+            {/* Steps Visual Indicator (Clickable to switch step) */}
             <div className="mt-8 flex flex-col gap-6">
               {STEPS.map((step) => {
                 const isActive = step.id === currentStep;
                 const isCompleted = step.id < currentStep || submitted;
                 return (
-                  <div key={step.id} className="flex items-center gap-3">
+                  <button
+                    key={step.id}
+                    onClick={() => !submitted && setCurrentStep(step.id)}
+                    className="flex items-center gap-3 w-full text-left bg-transparent border-none p-0 cursor-pointer focus:outline-none"
+                  >
                     <div
                       className={`flex h-8 w-8 items-center justify-center rounded-xl font-bold text-xs transition-all ${
                         isActive
@@ -294,7 +412,7 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
                     >
                       {step.name}
                     </span>
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -388,18 +506,18 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
                               <span>Ngày sinh</span>
                               <span className="text-red-500">*</span>
                             </label>
-                            <div className="relative">
-                              <input
-                                type="date"
-                                value={form.dob}
-                                onChange={(e) => handleInputChange("dob", e.target.value)}
-                                className={`w-full rounded-xl border bg-white px-4 py-3 text-sm font-semibold transition-all focus:outline-none focus:ring-2 ${
-                                  errors.dob
-                                    ? "border-red-300 focus:ring-red-100"
-                                    : "border-gray-200 focus:border-gray-400 focus:ring-gray-100"
-                                }`}
-                              />
-                            </div>
+                            <input
+                              type="text"
+                              value={form.dob}
+                              onChange={(e) => handleInputChange("dob", formatDatePicker(e.target.value))}
+                              placeholder="DD/MM/YYYY"
+                              maxLength={10}
+                              className={`w-full rounded-xl border bg-white px-4 py-3 text-sm font-semibold transition-all focus:outline-none focus:ring-2 ${
+                                errors.dob
+                                  ? "border-red-300 focus:ring-red-100"
+                                  : "border-gray-200 focus:border-gray-400 focus:ring-gray-100"
+                              }`}
+                            />
                             {errors.dob && <span className="text-[11px] font-bold text-red-500">{errors.dob}</span>}
                           </div>
 
@@ -485,7 +603,7 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
                       </>
                     )}
 
-                    {/* STEP 2: ID Documents & Residence */}
+                    {/* STEP 2: ID Documents & Residence (Direct Uploads) */}
                     {currentStep === 2 && (
                       <>
                         {/* Số CCCD & Ngày cấp */}
@@ -515,9 +633,11 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
                               <span className="text-red-500">*</span>
                             </label>
                             <input
-                              type="date"
+                              type="text"
                               value={form.id_issue_date}
-                              onChange={(e) => handleInputChange("id_issue_date", e.target.value)}
+                              onChange={(e) => handleInputChange("id_issue_date", formatDatePicker(e.target.value))}
+                              placeholder="DD/MM/YYYY"
+                              maxLength={10}
                               className={`w-full rounded-xl border bg-white px-4 py-3 text-sm font-semibold transition-all focus:outline-none focus:ring-2 ${
                                 errors.id_issue_date
                                   ? "border-red-300 focus:ring-red-100"
@@ -596,39 +716,158 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
                           {errors.temporary_address && <span className="text-[11px] font-bold text-red-500">{errors.temporary_address}</span>}
                         </div>
 
-                        {/* Hình ảnh giấy tờ */}
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-bold text-gray-700 flex items-center gap-1">
-                            <span>Đường dẫn folder tài liệu giấy tờ</span>
-                            <span className="text-red-500">*</span>
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="url"
-                              value={form.documents_folder}
-                              onChange={(e) => handleInputChange("documents_folder", e.target.value)}
-                              placeholder="https://drive.google.com/drive/folders/..."
-                              className={`w-full rounded-xl border bg-white px-4 py-3 text-sm font-semibold transition-all focus:outline-none focus:ring-2 ${
-                                errors.documents_folder
-                                  ? "border-red-300 focus:ring-red-100"
-                                  : "border-gray-200 focus:border-gray-400 focus:ring-gray-100"
-                              }`}
-                            />
-                            <FileText size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                          </div>
-                          <div className="rounded-xl bg-red-50/50 border border-red-100 p-3 text-[10.5px] leading-relaxed text-red-700">
-                            <strong>Chú ý:</strong> Vui lòng đính kèm link folder Drive chứa:
-                            <ul className="list-disc pl-4 mt-1 space-y-0.5">
-                              <li>Hình chụp 2 mặt CMND/CCCD</li>
-                              <li>Bản điện tử Sơ yếu lý lịch</li>
-                              <li>Hình chụp thẻ BHYT (nếu có)</li>
-                              <li>Thư giới thiệu/Giấy tờ khác (nếu có)</li>
-                            </ul>
-                            <div className="mt-1 font-bold">
-                              * Nhớ mở quyền chia sẻ folder cho mail: <span className="underline">lnlinhnhan@poptech.vn</span>
+                        {/* Direct File Uploads (2-sides CCCD and optional others) */}
+                        <div className="flex flex-col gap-4">
+                          <span className="text-xs font-bold text-gray-700">Tải tệp tin tài liệu cá nhân</span>
+                          
+                          {/* CCCD Front & Back side grid */}
+                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            {/* CCCD Front Upload Box */}
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[11px] font-bold text-gray-500">Mặt trước CCCD/CMND <span className="text-red-500">*</span></label>
+                              <div
+                                onClick={() => !uploadingFront && frontInputRef.current?.click()}
+                                className={`relative flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-white p-3 transition-all hover:bg-gray-50/50 ${
+                                  errors.cccd_front_path
+                                    ? "border-red-300 bg-red-50/10"
+                                    : form.cccd_front_path
+                                    ? "border-emerald-300"
+                                    : "border-gray-200 hover:border-red-400"
+                                }`}
+                              >
+                                <input
+                                  type="file"
+                                  ref={frontInputRef}
+                                  accept="image/png, image/jpeg, image/jpg"
+                                  className="hidden"
+                                  onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], "front")}
+                                />
+                                {uploadingFront ? (
+                                  <div className="flex flex-col items-center gap-2">
+                                    <Loader2 className="h-6 w-6 animate-spin text-red-500" />
+                                    <span className="text-[10px] font-bold text-gray-500">Đang tải lên...</span>
+                                  </div>
+                                ) : frontPreview ? (
+                                  <div className="absolute inset-2 overflow-hidden rounded-xl">
+                                    <img src={frontPreview} alt="CCCD Front Side" className="h-full w-full object-cover" />
+                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity rounded-xl">
+                                      <span className="text-[11px] font-bold text-white">Đổi hình ảnh</span>
+                                    </div>
+                                  </div>
+                                ) : form.cccd_front_path ? (
+                                  <div className="flex flex-col items-center gap-1.5 text-emerald-500">
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50">
+                                      <Check size={18} />
+                                    </div>
+                                    <span className="text-[10px] font-bold">Đã tải lên thành công</span>
+                                  </div>
+                                ) : (
+                                  <div className="flex flex-col items-center text-center">
+                                    <UploadCloud size={24} className="text-gray-400" />
+                                    <span className="mt-1 text-xs font-bold text-gray-600">Chọn hoặc thả ảnh vào</span>
+                                    <span className="text-[9px] text-gray-400 font-semibold mt-0.5">Hỗ trợ JPG, PNG (tối đa 5MB)</span>
+                                  </div>
+                                )}
+                              </div>
+                              {errors.cccd_front_path && <span className="text-[10px] font-bold text-red-500 mt-1">{errors.cccd_front_path}</span>}
+                            </div>
+
+                            {/* CCCD Back Upload Box */}
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[11px] font-bold text-gray-500">Mặt sau CCCD/CMND <span className="text-red-500">*</span></label>
+                              <div
+                                onClick={() => !uploadingBack && backInputRef.current?.click()}
+                                className={`relative flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-white p-3 transition-all hover:bg-gray-50/50 ${
+                                  errors.cccd_back_path
+                                    ? "border-red-300 bg-red-50/10"
+                                    : form.cccd_back_path
+                                    ? "border-emerald-300"
+                                    : "border-gray-200 hover:border-red-400"
+                                }`}
+                              >
+                                <input
+                                  type="file"
+                                  ref={backInputRef}
+                                  accept="image/png, image/jpeg, image/jpg"
+                                  className="hidden"
+                                  onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], "back")}
+                                />
+                                {uploadingBack ? (
+                                  <div className="flex flex-col items-center gap-2">
+                                    <Loader2 className="h-6 w-6 animate-spin text-red-500" />
+                                    <span className="text-[10px] font-bold text-gray-500">Đang tải lên...</span>
+                                  </div>
+                                ) : backPreview ? (
+                                  <div className="absolute inset-2 overflow-hidden rounded-xl">
+                                    <img src={backPreview} alt="CCCD Back Side" className="h-full w-full object-cover" />
+                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity rounded-xl">
+                                      <span className="text-[11px] font-bold text-white">Đổi hình ảnh</span>
+                                    </div>
+                                  </div>
+                                ) : form.cccd_back_path ? (
+                                  <div className="flex flex-col items-center gap-1.5 text-emerald-500">
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50">
+                                      <Check size={18} />
+                                    </div>
+                                    <span className="text-[10px] font-bold">Đã tải lên thành công</span>
+                                  </div>
+                                ) : (
+                                  <div className="flex flex-col items-center text-center">
+                                    <UploadCloud size={24} className="text-gray-400" />
+                                    <span className="mt-1 text-xs font-bold text-gray-600">Chọn hoặc thả ảnh vào</span>
+                                    <span className="text-[9px] text-gray-400 font-semibold mt-0.5">Hỗ trợ JPG, PNG (tối đa 5MB)</span>
+                                  </div>
+                                )}
+                              </div>
+                              {errors.cccd_back_path && <span className="text-[10px] font-bold text-red-500 mt-1">{errors.cccd_back_path}</span>}
                             </div>
                           </div>
-                          {errors.documents_folder && <span className="text-[11px] font-bold text-red-500">{errors.documents_folder}</span>}
+
+                          {/* Optional Other Documents Upload Box */}
+                          <div className="flex flex-col gap-1">
+                            <label className="text-[11px] font-bold text-gray-500">Các tài liệu khác (Sơ yếu lý lịch, thẻ BHYT...) <span className="text-gray-400">(Tùy chọn)</span></label>
+                            <div
+                              onClick={() => !uploadingDocs && docsInputRef.current?.click()}
+                              className={`relative flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-white p-3 transition-all hover:bg-gray-50/50 ${
+                                form.other_docs_path ? "border-emerald-300" : "border-gray-200 hover:border-red-400"
+                              }`}
+                            >
+                              <input
+                                type="file"
+                                ref={docsInputRef}
+                                accept="image/png, image/jpeg, image/jpg, application/pdf"
+                                className="hidden"
+                                onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], "docs")}
+                              />
+                              {uploadingDocs ? (
+                                <div className="flex flex-col items-center gap-2">
+                                  <Loader2 className="h-5 w-5 animate-spin text-red-500" />
+                                  <span className="text-[9px] font-bold text-gray-500">Đang tải tài liệu lên...</span>
+                                </div>
+                              ) : docsFileName ? (
+                                <div className="flex items-center gap-2 text-emerald-500">
+                                  <FileText size={20} />
+                                  <span className="text-xs font-bold truncate max-w-[200px]">{docsFileName}</span>
+                                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50">
+                                    <Check size={12} />
+                                  </div>
+                                </div>
+                              ) : form.other_docs_path ? (
+                                <div className="flex items-center gap-2 text-emerald-500">
+                                  <FileText size={20} />
+                                  <span className="text-xs font-bold">Tài liệu đã được đính kèm</span>
+                                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50">
+                                    <Check size={12} />
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-2 text-center text-gray-500">
+                                  <UploadCloud size={20} className="text-gray-400" />
+                                  <span className="text-xs font-bold">Bấm chọn tệp đính kèm (PDF, Ảnh...)</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </>
                     )}
@@ -837,7 +1076,7 @@ export default function EmployeeProfileWizard({ onClose }: { onClose?: () => voi
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-400">Ngày gửi:</span>
-                        <span>{new Date().toLocaleDateString("vi-VN")}</span>
+                        <span>{form.dob}</span>
                       </div>
                     </div>
                   </div>

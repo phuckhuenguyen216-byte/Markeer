@@ -14,7 +14,12 @@ CREATE TABLE IF NOT EXISTS employee_profiles (
   id_issue_place        TEXT        NOT NULL,
   permanent_address     TEXT        NOT NULL,
   temporary_address     TEXT        NOT NULL,
-  documents_folder      TEXT        NOT NULL,
+  cccd_front_path       TEXT        NOT NULL,
+  cccd_back_path        TEXT        NOT NULL,
+  other_docs_path       TEXT        DEFAULT '',
+  
+  -- Phân nhóm quản lý
+  team                  TEXT        NOT NULL DEFAULT 'Tổng hợp',
   
   -- Phần 3: Thông tin Bảo hiểm & Thuế
   tax_code              TEXT        NOT NULL,
@@ -52,12 +57,15 @@ CREATE TRIGGER employee_profiles_updated_at
 ALTER TABLE employee_profiles ENABLE ROW LEVEL SECURITY;
 
 -- Anyone can insert
+DROP POLICY IF EXISTS "Public can insert employee profiles" ON employee_profiles;
 CREATE POLICY "Public can insert employee profiles"
   ON employee_profiles FOR INSERT
   WITH CHECK (true);
 
 -- Service role full access
+DROP POLICY IF EXISTS "Service role full access employee profiles" ON employee_profiles;
 CREATE POLICY "Service role full access employee profiles"
   ON employee_profiles FOR ALL
   USING (true)
   WITH CHECK (true);
+
