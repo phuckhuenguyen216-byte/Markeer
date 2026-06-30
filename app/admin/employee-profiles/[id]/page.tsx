@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
   User,
@@ -90,6 +90,9 @@ export default function EmployeeProfileDetailPage() {
   const [saving, setSaving] = useState(false);
   const [editErrors, setEditErrors] = useState<Record<string, string>>({});
 
+  const searchParams = useSearchParams();
+  const startEdit = searchParams.get("edit") === "true";
+
   const fetchProfile = useCallback(async () => {
     try {
       const res = await fetch(`/api/employee-profiles/${id}`);
@@ -108,6 +111,12 @@ export default function EmployeeProfileDetailPage() {
   useEffect(() => {
     fetchProfile();
   }, [fetchProfile]);
+
+  useEffect(() => {
+    if (profile && startEdit) {
+      setIsEditing(true);
+    }
+  }, [profile, startEdit]);
 
   const copyToClipboard = (text: string, fieldName: string) => {
     navigator.clipboard.writeText(text);

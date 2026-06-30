@@ -15,7 +15,8 @@ import {
   TrendingUp,
   Server,
   ArrowLeft,
-  ChevronRight
+  ChevronRight,
+  Edit
 } from "lucide-react";
 import Spinner from "../components/Spinner";
 import ConfirmModal, { type ConfirmAction } from "../components/ConfirmModal";
@@ -353,9 +354,16 @@ export default function EmployeeProfilesPage() {
                             <button
                               onClick={() => router.push(`/admin/employee-profiles/${profile.id}`)}
                               className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
-                              title="Xem chi tiết & Chỉnh sửa"
+                              title="Xem chi tiết"
                             >
                               <Eye size={14} />
+                            </button>
+                            <button
+                              onClick={() => router.push(`/admin/employee-profiles/${profile.id}?edit=true`)}
+                              className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
+                              title="Chỉnh sửa trực tiếp"
+                            >
+                              <Edit size={14} />
                             </button>
                             <button
                               onClick={() => confirmDelete(profile)}
