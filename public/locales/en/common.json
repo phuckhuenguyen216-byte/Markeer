@@ -1097,6 +1097,9 @@
       "manageBlog": "Manage Blog",
       "manageApplications": "Applications",
       "manageEmployeeProfiles": "Employee Profiles",
+      "selfReviewLevel": "Self Review",
+      "leaderReviewLevel": "Leader Review",
+      "surveyReviewLevel": "Survey Review Level",
       "logout": "Logout"
     },
     "dashboard": {

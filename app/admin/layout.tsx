@@ -145,6 +145,40 @@ const menu = [
       </svg>
     ),
   },
+  {
+    nameKey: "admin.sidebar.surveyReviewLevel",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <rect
+          x="2"
+          y="2"
+          width="12"
+          height="12"
+          rx="2"
+          fill="currentColor"
+          opacity="0.2"
+        />
+        <path
+          d="M4 5h8M4 8h8M4 11h5"
+          stroke="currentColor"
+          strokeWidth="1.3"
+          strokeLinecap="round"
+          opacity="0.85"
+        />
+        <circle cx="12" cy="12" r="2" fill="#ef4444" />
+      </svg>
+    ),
+    children: [
+      {
+        nameKey: "admin.sidebar.selfReviewLevel",
+        href: "/admin/survey-review/self-review",
+      },
+      {
+        nameKey: "admin.sidebar.leaderReviewLevel",
+        href: "/admin/survey-review/leader-review",
+      },
+    ],
+  },
 ];
 
 export default function AdminLayout({
@@ -156,6 +190,7 @@ export default function AdminLayout({
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [surveyExpanded, setSurveyExpanded] = useState(pathname.startsWith("/admin/survey-review"));
   const [email, setEmail] = useState("");
 
   useEffect(() => {
@@ -179,12 +214,21 @@ export default function AdminLayout({
   if (!mounted) return null;
   if (pathname === "/admin/login") return <>{children}</>;
 
-  const currentPage =
-    menu.find(
-      (m) =>
-        m.href === pathname ||
-        (m.href !== "/admin" && pathname.startsWith(m.href)),
-    )?.nameKey ?? "Admin";
+  const currentPage = (() => {
+    for (const item of menu) {
+      if (item.href && (pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href)))) {
+        return item.nameKey;
+      }
+      if (item.children) {
+        for (const child of item.children) {
+          if (pathname === child.href || (child.href !== "/admin" && pathname.startsWith(child.href))) {
+            return child.nameKey;
+          }
+        }
+      }
+    }
+    return "Admin";
+  })();
 
   const currentPageLabel =
     currentPage === "Admin" ? currentPage : t(currentPage);
@@ -517,6 +561,55 @@ export default function AdminLayout({
                 Điều hướng
               </div>
               {menu.map((item) => {
+                if (item.children) {
+                  const isAnyChildActive = item.children.some((child) => pathname === child.href);
+                  return (
+                    <div key={item.nameKey} className="flex flex-col">
+                      <button
+                        onClick={() => setSurveyExpanded(!surveyExpanded)}
+                        className={`nav-link w-full text-left bg-transparent border-none cursor-pointer ${isAnyChildActive ? "active" : ""}`}
+                        title={collapsed ? t(item.nameKey) : undefined}
+                      >
+                        <div className="nav-link-bar" />
+                        <span className="nav-link-icon">{item.icon}</span>
+                        <span className={`nav-link-name ${collapsed ? "hidden-text" : ""} flex-1`}>
+                          {t(item.nameKey)}
+                        </span>
+                        {!collapsed && (
+                          <svg
+                            className={`w-3 h-3 transition-transform duration-200 ${surveyExpanded ? "rotate-90" : ""}`}
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                          </svg>
+                        )}
+                      </button>
+                      
+                      {surveyExpanded && !collapsed && (
+                        <div className="ml-6 mt-1 flex flex-col gap-1 border-l border-white/10 pl-2">
+                          {item.children.map((child) => {
+                            const isChildActive = pathname === child.href;
+                            return (
+                              <Link
+                                key={child.href}
+                                href={child.href}
+                                className={`nav-link py-1.5 text-[11px] ${isChildActive ? "active text-white font-bold" : "text-white/60"}`}
+                              >
+                                <span className="nav-link-name">
+                                  {t(child.nameKey)}
+                                </span>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
                 const isActive =
                   pathname === item.href ||
                   (item.href !== "/admin" && pathname.startsWith(item.href));
