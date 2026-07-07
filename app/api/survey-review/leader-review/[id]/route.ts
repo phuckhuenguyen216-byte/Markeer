@@ -60,11 +60,7 @@ export async function PUT(
       review_period: stripHtml(body.review_period || ""),
       assigned_mentors_leaders: body.assigned_mentors_leaders,
       management_time: stripHtml(body.management_time || ""),
-      kpi_answers: body.kpi_answers || {},
-      quality_answers: body.quality_answers || {},
-      behavior_answers: body.behavior_answers || {},
-      readiness_answers: body.readiness_answers || {},
-      self_eval_answers: body.self_eval_answers || {},
+      answers: body.answers || [],
       status: body.status || "Đang xem xét",
       updated_at: new Date().toISOString()
     };

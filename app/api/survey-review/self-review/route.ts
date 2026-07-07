@@ -102,10 +102,7 @@ export async function POST(request: NextRequest) {
       target_level: body.target_level,
       review_period: stripHtml(body.review_period),
       assigned_mentors_leaders: body.assigned_mentors_leaders,
-      kpi_answers: body.kpi_answers || {},
-      quality_answers: body.quality_answers || {},
-      behavior_answers: body.behavior_answers || {},
-      commitment_answers: body.commitment_answers || {},
+      answers: body.answers || [],
       status: "Đang xem xét"
     };
 

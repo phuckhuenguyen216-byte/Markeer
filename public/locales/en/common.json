@@ -1100,6 +1100,7 @@
       "selfReviewLevel": "Self Review",
       "leaderReviewLevel": "Leader Review",
       "surveyReviewLevel": "Survey Review Level",
+      "questionSettings": "Question Settings",
       "logout": "Logout"
     },
     "dashboard": {

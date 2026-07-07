@@ -36,28 +36,6 @@ interface SelfReviewForm {
   target_level: string;
   review_period: string;
   assigned_mentors_leaders: AssignedReviewers;
-  kpi_answers: {
-    q1: string;
-    q2: string;
-    q3: string;
-    q4: string;
-    self_score: string;
-  };
-  quality_answers: {
-    q5: string;
-    q6: string;
-    q7: string;
-  };
-  behavior_answers: {
-    q8: string;
-    q9: string;
-    q10: string;
-  };
-  commitment_answers: {
-    q11: string;
-    q12: string;
-    q13: string;
-  };
   confirmed: boolean;
 }
 
@@ -69,10 +47,6 @@ const EMPTY_FORM: SelfReviewForm = {
   target_level: "",
   review_period: "",
   assigned_mentors_leaders: {},
-  kpi_answers: { q1: "", q2: "", q3: "", q4: "", self_score: "" },
-  quality_answers: { q5: "", q6: "", q7: "" },
-  behavior_answers: { q8: "", q9: "", q10: "" },
-  commitment_answers: { q11: "", q12: "", q13: "" },
   confirmed: false,
 };
 
@@ -94,6 +68,9 @@ export default function SelfReviewPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [form, setForm] = useState<SelfReviewForm>(EMPTY_FORM);
+  const [questions, setQuestions] = useState<any[]>([]);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [loadingQuestions, setLoadingQuestions] = useState(true);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [csrfToken, setCsrfToken] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -102,7 +79,7 @@ export default function SelfReviewPage() {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Initialize reviewers checklist state on mount
+  // Initialize reviewers & fetch questions + CSRF
   useEffect(() => {
     const initialReviewers: AssignedReviewers = {};
     REVIEWERS_LIST.forEach((name) => {
@@ -117,6 +94,26 @@ export default function SelfReviewPage() {
         if (data.token) setCsrfToken(data.token);
       })
       .catch((err) => console.error("Error fetching CSRF token:", err));
+
+    // Fetch dynamic questions
+    fetch("/api/survey-review/questions?type=self-review")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.questions) {
+          setQuestions(data.questions);
+          // Initialize answers dictionary
+          const initialAnswers: Record<string, string> = {};
+          data.questions.forEach((q: any) => {
+            initialAnswers[q.id] = "";
+          });
+          setAnswers(initialAnswers);
+        }
+        setLoadingQuestions(false);
+      })
+      .catch((err) => {
+        console.error("Error loading survey questions:", err);
+        setLoadingQuestions(false);
+      });
   }, []);
 
   const handleInputChange = (field: keyof SelfReviewForm, value: any) => {
@@ -130,32 +127,15 @@ export default function SelfReviewPage() {
     }
   };
 
-  const handleKPIChange = (field: string, value: string) => {
-    setForm((prev) => ({
-      ...prev,
-      kpi_answers: { ...prev.kpi_answers, [field]: value },
-    }));
-  };
-
-  const handleQualityChange = (field: string, value: string) => {
-    setForm((prev) => ({
-      ...prev,
-      quality_answers: { ...prev.quality_answers, [field]: value },
-    }));
-  };
-
-  const handleBehaviorChange = (field: string, value: string) => {
-    setForm((prev) => ({
-      ...prev,
-      behavior_answers: { ...prev.behavior_answers, [field]: value },
-    }));
-  };
-
-  const handleCommitmentChange = (field: string, value: string) => {
-    setForm((prev) => ({
-      ...prev,
-      commitment_answers: { ...prev.commitment_answers, [field]: value },
-    }));
+  const handleAnswerChange = (questionId: string, value: string) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));
+    if (errors[questionId]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[questionId];
+        return next;
+      });
+    }
   };
 
   const handleReviewerCheck = (name: string, role: "leader" | "mentor", checked: boolean) => {
@@ -195,7 +175,7 @@ export default function SelfReviewPage() {
   const validateAll = (): { hasErrors: boolean; firstStepWithError: number } => {
     const newErrors: Record<string, string> = {};
 
-    // Step 1
+    // Step 1 validation
     if (!form.full_name.trim()) newErrors.full_name = "Họ và tên là bắt buộc";
     if (!form.team) newErrors.team = "Vui lòng chọn Track / Team";
     if (form.team === "Other" && !form.team_other?.trim()) newErrors.team_other = "Vui lòng nhập tên Team khác";
@@ -203,44 +183,39 @@ export default function SelfReviewPage() {
     if (!form.target_level) newErrors.target_level = "Vui lòng chọn Level muốn lên";
     if (!form.review_period.trim()) newErrors.review_period = "Vui lòng nhập Kỳ review";
 
-    // Step 2
-    if (!form.kpi_answers.q1.trim()) newErrors.q1 = "Câu hỏi [Q1] là bắt buộc";
-    if (!form.kpi_answers.q2.trim()) newErrors.q2 = "Câu hỏi [Q2] là bắt buộc";
-    if (!form.kpi_answers.q3.trim()) newErrors.q3 = "Câu hỏi [Q3] là bắt buộc";
-    if (!form.kpi_answers.q4.trim()) newErrors.q4 = "Câu hỏi [Q4] là bắt buộc";
-    if (!form.kpi_answers.self_score) newErrors.self_score = "Vui lòng tự đánh giá điểm số";
+    // Dynamic steps 2-5 questions validation
+    questions.forEach((q) => {
+      const answerVal = answers[q.id] || "";
+      if (q.is_required && !answerVal.trim()) {
+        newErrors[q.id] = "Câu trả lời là bắt buộc";
+      }
+    });
 
-    // Step 3
-    if (!form.quality_answers.q5.trim()) newErrors.q5 = "Câu hỏi [Q5] là bắt buộc";
-    if (!form.quality_answers.q6.trim()) newErrors.q6 = "Câu hỏi [Q6] là bắt buộc";
-    if (!form.quality_answers.q7.trim()) newErrors.q7 = "Câu hỏi [Q7] là bắt buộc";
-
-    // Step 4
-    if (!form.behavior_answers.q8.trim()) newErrors.q8 = "Câu hỏi [Q8] là bắt buộc";
-    if (!form.behavior_answers.q9.trim()) newErrors.q9 = "Câu hỏi [Q9] là bắt buộc";
-    if (!form.behavior_answers.q10.trim()) newErrors.q10 = "Câu hỏi [Q10] là bắt buộc";
-
-    // Step 5
-    if (!form.commitment_answers.q11.trim()) newErrors.q11 = "Câu hỏi [Q11] là bắt buộc";
-    if (!form.commitment_answers.q12.trim()) newErrors.q12 = "Câu hỏi [Q12] là bắt buộc";
-
-    // Step 6
+    // Step 6 validation
     if (!form.confirmed) newErrors.confirmed = "Vui lòng xác nhận tính trung thực trước khi nộp";
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
       let firstStep = 6;
-      if (newErrors.full_name || newErrors.team || newErrors.team_other || newErrors.current_level || newErrors.target_level || newErrors.review_period) {
+      if (
+        newErrors.full_name ||
+        newErrors.team ||
+        newErrors.team_other ||
+        newErrors.current_level ||
+        newErrors.target_level ||
+        newErrors.review_period
+      ) {
         firstStep = 1;
-      } else if (newErrors.q1 || newErrors.q2 || newErrors.q3 || newErrors.q4 || newErrors.self_score) {
-        firstStep = 2;
-      } else if (newErrors.q5 || newErrors.q6 || newErrors.q7) {
-        firstStep = 3;
-      } else if (newErrors.q8 || newErrors.q9 || newErrors.q10) {
-        firstStep = 4;
-      } else if (newErrors.q11 || newErrors.q12) {
-        firstStep = 5;
+      } else {
+        // Find first question step with error
+        let lowestSection = 6;
+        questions.forEach((q) => {
+          if (newErrors[q.id] && q.section_index < lowestSection) {
+            lowestSection = q.section_index;
+          }
+        });
+        firstStep = lowestSection;
       }
       return { hasErrors: true, firstStepWithError: firstStep };
     }
@@ -285,10 +260,13 @@ export default function SelfReviewPage() {
       target_level: form.target_level,
       review_period: form.review_period,
       assigned_mentors_leaders: form.assigned_mentors_leaders,
-      kpi_answers: form.kpi_answers,
-      quality_answers: form.quality_answers,
-      behavior_answers: form.behavior_answers,
-      commitment_answers: form.commitment_answers,
+      answers: questions.map((q) => ({
+        section_index: q.section_index,
+        section_title: q.section_title,
+        question_text: q.question_text,
+        question_type: q.question_type,
+        answer: answers[q.id] || "",
+      })),
     };
 
     try {
@@ -316,6 +294,59 @@ export default function SelfReviewPage() {
     }
   };
 
+  // Render question component based on its type
+  const renderQuestionInput = (q: any) => {
+    switch (q.question_type) {
+      case "text":
+        return (
+          <input
+            type="text"
+            value={answers[q.id] || ""}
+            onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+            placeholder="Nhập câu trả lời cụ thể..."
+            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold focus:outline-none focus:border-red-400"
+          />
+        );
+      case "radio": {
+        let opts: string[] = [];
+        try {
+          opts = typeof q.options === "string" ? JSON.parse(q.options) : q.options;
+        } catch {
+          opts = Array.isArray(q.options) ? q.options : [];
+        }
+        return (
+          <div className="flex flex-col gap-1 text-[11px] font-semibold text-gray-600">
+            {opts.map((opt: string) => (
+              <label key={opt} className="flex items-center gap-2 cursor-pointer py-1">
+                <input
+                  type="radio"
+                  name={`question-${q.id}`}
+                  checked={answers[q.id] === opt}
+                  onChange={() => handleAnswerChange(q.id, opt)}
+                  className="accent-red-500 h-3.5 w-3.5"
+                />
+                {opt}
+              </label>
+            ))}
+          </div>
+        );
+      }
+      case "textarea":
+      default:
+        return (
+          <textarea
+            rows={3}
+            value={answers[q.id] || ""}
+            onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+            placeholder="Nhập câu trả lời cụ thể..."
+            className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none focus:border-red-400"
+          />
+        );
+    }
+  };
+
+  const currentStepQuestions = questions.filter((q) => q.section_index === currentStep);
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 sm:p-6 md:p-10">
       <div className="relative flex h-[780px] w-full max-w-6xl flex-col overflow-hidden rounded-3xl bg-white shadow-xl md:flex-row border border-gray-100">
@@ -328,7 +359,7 @@ export default function SelfReviewPage() {
               <span>MARKEE SURVEY PORTAL</span>
             </div>
             
-            {/* Clickable Steps progress */}
+            {/* Steps progress */}
             <div className="mt-8 flex flex-col gap-4">
               {STEPS.map((step) => {
                 const isActive = step.id === currentStep;
@@ -342,10 +373,10 @@ export default function SelfReviewPage() {
                     <div
                       className={`flex h-7 w-7 items-center justify-center rounded-lg font-bold text-xs transition-all ${
                         isActive
-                          ? "bg-red-500 text-white shadow-md shadow-red-500/20"
-                          : isCompleted
-                          ? "bg-emerald-100 text-emerald-600"
-                          : "bg-gray-100 text-gray-400"
+                           ? "bg-red-500 text-white shadow-md shadow-red-500/20"
+                           : isCompleted
+                           ? "bg-emerald-100 text-emerald-600"
+                           : "bg-gray-100 text-gray-400"
                       }`}
                     >
                       {isCompleted ? "✓" : step.id}
@@ -388,414 +419,200 @@ export default function SelfReviewPage() {
                     <span className="text-xs font-black uppercase tracking-widest text-red-500">
                       Phần {currentStep} trên 6
                     </span>
-                    <h2 className="mt-1 text-xl font-black text-gray-900 tracking-tight">
+                    <h2 className="mt-1 text-xl font-black text-gray-900 tracking-tight animate-fade-in">
                       {STEPS[currentStep - 1].name}
                     </h2>
                   </div>
 
                   {submitError && (
-                    <div className="mb-5 flex gap-2 rounded-xl bg-red-50 border border-red-200 p-3.5 text-red-800 text-xs font-bold">
+                    <div className="mb-5 flex gap-2 rounded-xl bg-red-50 border border-red-200 p-3.5 text-red-800 text-xs font-bold animate-shake">
                       <AlertCircle size={16} className="shrink-0" />
                       <div>{submitError}</div>
                     </div>
                   )}
 
-                  {/* STEP 1: Basic Info */}
-                  {currentStep === 1 && (
-                    <div className="flex flex-col gap-4">
-                      {/* Name */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700">Họ và tên <span className="text-red-500">*</span></label>
-                        <input
-                          type="text"
-                          value={form.full_name}
-                          onChange={(e) => handleInputChange("full_name", e.target.value)}
-                          placeholder="Nguyễn Văn A"
-                          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold focus:outline-none focus:border-red-400"
-                        />
-                        {errors.full_name && <span className="text-[10px] font-bold text-red-500">{errors.full_name}</span>}
-                      </div>
+                  {loadingQuestions && currentStep > 1 && currentStep < 6 ? (
+                    <div className="flex flex-col items-center justify-center py-20 text-gray-400 font-bold text-xs gap-2">
+                      <Loader2 className="animate-spin text-red-500" size={24} />
+                      <span>Đang tải câu hỏi khảo sát...</span>
+                    </div>
+                  ) : (
+                    <>
+                      {/* STEP 1: Basic Info */}
+                      {currentStep === 1 && (
+                        <div className="flex flex-col gap-4">
+                          {/* Name */}
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-xs font-bold text-gray-700">Họ và tên <span className="text-red-500">*</span></label>
+                            <input
+                              type="text"
+                              value={form.full_name}
+                              onChange={(e) => handleInputChange("full_name", e.target.value)}
+                              placeholder="Nguyễn Văn A"
+                              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold focus:outline-none focus:border-red-400"
+                            />
+                            {errors.full_name && <span className="text-[10px] font-bold text-red-500">{errors.full_name}</span>}
+                          </div>
 
-                      {/* Team Radio list */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700">Track / Team <span className="text-red-500">*</span></label>
-                        <div className="grid grid-cols-2 gap-2">
-                          {TEAMS_LIST.map((t) => (
-                            <label key={t} className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-bold text-gray-600 cursor-pointer hover:bg-gray-50">
-                              <input
-                                type="radio"
-                                name="team"
-                                checked={form.team === t}
-                                onChange={() => handleInputChange("team", t)}
-                                className="accent-red-500"
-                              />
-                              {t}
-                            </label>
-                          ))}
-                        </div>
-                        {form.team === "Other" && (
-                          <input
-                            type="text"
-                            value={form.team_other || ""}
-                            onChange={(e) => handleInputChange("team_other", e.target.value)}
-                            placeholder="Nhập tên Team khác của bạn"
-                            className="mt-2 w-full rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold focus:outline-none focus:border-red-400"
-                          />
-                        )}
-                        {(errors.team || errors.team_other) && <span className="text-[10px] font-bold text-red-500">{errors.team || errors.team_other}</span>}
-                      </div>
-
-                      {/* Level Hiện tại & Muốn lên */}
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-bold text-gray-700">Level hiện tại <span className="text-red-500">*</span></label>
-                          <select
-                            value={form.current_level}
-                            onChange={(e) => handleInputChange("current_level", e.target.value)}
-                            className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-xs font-bold text-gray-700"
-                          >
-                            <option value="">-- Chọn level --</option>
-                            {LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
-                          </select>
-                          {errors.current_level && <span className="text-[10px] font-bold text-red-500">{errors.current_level}</span>}
-                        </div>
-
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-bold text-gray-700">Level muốn lên <span className="text-red-500">*</span></label>
-                          <select
-                            value={form.target_level}
-                            onChange={(e) => handleInputChange("target_level", e.target.value)}
-                            className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-xs font-bold text-gray-700"
-                          >
-                            <option value="">-- Chọn level --</option>
-                            {TARGET_LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
-                          </select>
-                          {errors.target_level && <span className="text-[10px] font-bold text-red-500">{errors.target_level}</span>}
-                        </div>
-                      </div>
-
-                      {/* Review period */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700">Kỳ review level <span className="text-red-500">*</span></label>
-                        <input
-                          type="text"
-                          value={form.review_period}
-                          onChange={(e) => handleInputChange("review_period", e.target.value)}
-                          placeholder="Tháng 04/2026"
-                          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold focus:outline-none"
-                        />
-                        {errors.review_period && <span className="text-[10px] font-bold text-red-500">{errors.review_period}</span>}
-                      </div>
-
-                      {/* Assigned mentors table */}
-                      <div className="flex flex-col gap-1.5 mt-2">
-                        <label className="text-xs font-bold text-gray-700">Mentor / Leader phụ trách</label>
-                        <div className="rounded-xl border border-gray-150 bg-white overflow-hidden text-xs">
-                          <table className="w-full text-left">
-                            <thead className="bg-gray-50 border-b border-gray-100 text-[10px] font-black uppercase text-gray-400">
-                              <tr>
-                                <th className="px-4 py-2">Họ tên</th>
-                                <th className="px-4 py-2 text-center">Leader</th>
-                                <th className="px-4 py-2 text-center">Mentor</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100">
-                              {REVIEWERS_LIST.map((name) => (
-                                <tr key={name}>
-                                  <td className="px-4 py-2 font-bold text-gray-700">{name}</td>
-                                  <td className="px-4 py-2 text-center">
-                                    <input
-                                      type="checkbox"
-                                      checked={form.assigned_mentors_leaders[name]?.leader || false}
-                                      onChange={(e) => handleReviewerCheck(name, "leader", e.target.checked)}
-                                      className="h-3.5 w-3.5 accent-red-500 cursor-pointer"
-                                    />
-                                  </td>
-                                  <td className="px-4 py-2 text-center">
-                                    <input
-                                      type="checkbox"
-                                      checked={form.assigned_mentors_leaders[name]?.mentor || false}
-                                      onChange={(e) => handleReviewerCheck(name, "mentor", e.target.checked)}
-                                      className="h-3.5 w-3.5 accent-red-500 cursor-pointer"
-                                    />
-                                  </td>
-                                </tr>
+                          {/* Team Radio list */}
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-xs font-bold text-gray-700">Track / Team <span className="text-red-500">*</span></label>
+                            <div className="grid grid-cols-2 gap-2">
+                              {TEAMS_LIST.map((t) => (
+                                <label key={t} className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-bold text-gray-600 cursor-pointer hover:bg-gray-50">
+                                  <input
+                                    type="radio"
+                                    name="team"
+                                    checked={form.team === t}
+                                    onChange={() => handleInputChange("team", t)}
+                                    className="accent-red-500"
+                                  />
+                                  {t}
+                                </label>
                               ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* STEP 2: KPI & OUTPUT */}
-                  {currentStep === 2 && (
-                    <div className="flex flex-col gap-4">
-                      <div className="rounded-xl bg-red-50/50 border border-red-100 p-3 text-[10.5px] leading-relaxed text-red-700 font-semibold mb-2">
-                        <strong>Mẫu 3 dòng trả lời:</strong><br />
-                        📌 Bối cảnh: (task gì, dự án gì, tình huống nào)<br />
-                        📌 Tôi đã làm: (hành động cụ thể của bạn)<br />
-                        📌 Kết quả / Bài học: (output, con số, hoặc rút ra được gì)
-                      </div>
-
-                      {/* Q1 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q1] Kỳ này bạn được giao bao nhiêu task/deliverable? Hoàn thành được bao nhiêu % và đúng hạn chưa? <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={form.kpi_answers.q1}
-                          onChange={(e) => handleKPIChange("q1", e.target.value)}
-                          placeholder="Nhập câu trả lời cụ thể..."
-                          className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none focus:border-red-400"
-                        />
-                        {errors.q1 && <span className="text-[10px] font-bold text-red-500">{errors.q1}</span>}
-                      </div>
-
-                      {/* Q2 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q2] Liệt kê 2–3 output quan trọng nhất kỳ này. (Kèm link evidence & số liệu cụ thể) <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={form.kpi_answers.q2}
-                          onChange={(e) => handleKPIChange("q2", e.target.value)}
-                          placeholder="Nhập câu trả lời cụ thể..."
-                          className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none focus:border-red-400"
-                        />
-                        {errors.q2 && <span className="text-[10px] font-bold text-red-500">{errors.q2}</span>}
-                      </div>
-
-                      {/* Q3 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q3] Tổng KPI Points bạn tự tính được kỳ này là bao nhiêu? (Kèm link/screenshot KPI log) <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          value={form.kpi_answers.q3}
-                          onChange={(e) => handleKPIChange("q3", e.target.value)}
-                          placeholder="Nhập số điểm + link..."
-                          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold focus:outline-none focus:border-red-400"
-                        />
-                        {errors.q3 && <span className="text-[10px] font-bold text-red-500">{errors.q3}</span>}
-                      </div>
-
-                      {/* Q4 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q4] Có task nào bị trễ hoặc chưa đạt không? Nếu có - lý do gì, bạn xử lý thế nào? <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={form.kpi_answers.q4}
-                          onChange={(e) => handleKPIChange("q4", e.target.value)}
-                          placeholder="Nếu không, ghi 'Không trễ' và giải thích ngắn gọn..."
-                          className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none focus:border-red-400"
-                        />
-                        {errors.q4 && <span className="text-[10px] font-bold text-red-500">{errors.q4}</span>}
-                      </div>
-
-                      {/* Self Score */}
-                      <div className="flex flex-col gap-1.5 mt-2">
-                        <label className="text-xs font-bold text-gray-700">Tự chấm điểm <span className="text-red-500">*</span></label>
-                        <div className="flex flex-col gap-1 text-[11px] font-semibold text-gray-600">
-                          {[
-                            { val: "1", text: "1 = Không đạt rõ" },
-                            { val: "2", text: "2 = Dưới kỳ vọng / thiếu ổn định" },
-                            { val: "3", text: "3 = Đạt kỳ vọng / target hiện tại" },
-                            { val: "4", text: "4 = Tốt, vượt mặt bằng KPI/target ở vài phần" },
-                            { val: "5", text: "5 = Vượt trội" }
-                          ].map((item) => (
-                            <label key={item.val} className="flex items-center gap-2 cursor-pointer py-1">
+                            </div>
+                            {form.team === "Other" && (
                               <input
-                                type="radio"
-                                name="self_score"
-                                checked={form.kpi_answers.self_score === item.val}
-                                onChange={() => handleKPIChange("self_score", item.val)}
-                                className="accent-red-500 h-3.5 w-3.5"
+                                type="text"
+                                value={form.team_other || ""}
+                                onChange={(e) => handleInputChange("team_other", e.target.value)}
+                                placeholder="Nhập tên Team khác của bạn"
+                                className="mt-2 w-full rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold focus:outline-none focus:border-red-400"
                               />
-                              {item.text}
-                            </label>
+                            )}
+                            {(errors.team || errors.team_other) && <span className="text-[10px] font-bold text-red-500">{errors.team || errors.team_other}</span>}
+                          </div>
+
+                          {/* Level Hiện tại & Muốn lên */}
+                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div className="flex flex-col gap-1.5">
+                              <label className="text-xs font-bold text-gray-700">Level hiện tại <span className="text-red-500">*</span></label>
+                              <select
+                                value={form.current_level}
+                                onChange={(e) => handleInputChange("current_level", e.target.value)}
+                                className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-xs font-bold text-gray-700"
+                              >
+                                <option value="">-- Chọn level --</option>
+                                {LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
+                              </select>
+                              {errors.current_level && <span className="text-[10px] font-bold text-red-500">{errors.current_level}</span>}
+                            </div>
+
+                            <div className="flex flex-col gap-1.5">
+                              <label className="text-xs font-bold text-gray-700">Level muốn lên <span className="text-red-500">*</span></label>
+                              <select
+                                value={form.target_level}
+                                onChange={(e) => handleInputChange("target_level", e.target.value)}
+                                className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-xs font-bold text-gray-700"
+                              >
+                                <option value="">-- Chọn level --</option>
+                                {TARGET_LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
+                              </select>
+                              {errors.target_level && <span className="text-[10px] font-bold text-red-500">{errors.target_level}</span>}
+                            </div>
+                          </div>
+
+                          {/* Review period */}
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-xs font-bold text-gray-700">Kỳ review level <span className="text-red-500">*</span></label>
+                            <input
+                              type="text"
+                              value={form.review_period}
+                              onChange={(e) => handleInputChange("review_period", e.target.value)}
+                              placeholder="Tháng 04/2026"
+                              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold focus:outline-none"
+                            />
+                            {errors.review_period && <span className="text-[10px] font-bold text-red-500">{errors.review_period}</span>}
+                          </div>
+
+                          {/* Assigned mentors table */}
+                          <div className="flex flex-col gap-1.5 mt-2">
+                            <label className="text-xs font-bold text-gray-700">Mentor / Leader phụ trách</label>
+                            <div className="rounded-xl border border-gray-150 bg-white overflow-hidden text-xs">
+                              <table className="w-full text-left">
+                                <thead className="bg-gray-50 border-b border-gray-100 text-[10px] font-black uppercase text-gray-400">
+                                  <tr>
+                                    <th className="px-4 py-2">Họ tên</th>
+                                    <th className="px-4 py-2 text-center">Leader</th>
+                                    <th className="px-4 py-2 text-center">Mentor</th>
+                                  </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-100">
+                                  {REVIEWERS_LIST.map((name) => (
+                                    <tr key={name}>
+                                      <td className="px-4 py-2 font-bold text-gray-700">{name}</td>
+                                      <td className="px-4 py-2 text-center">
+                                        <input
+                                          type="checkbox"
+                                          checked={form.assigned_mentors_leaders[name]?.leader || false}
+                                          onChange={(e) => handleReviewerCheck(name, "leader", e.target.checked)}
+                                          className="h-3.5 w-3.5 accent-red-500 cursor-pointer"
+                                        />
+                                      </td>
+                                      <td className="px-4 py-2 text-center">
+                                        <input
+                                          type="checkbox"
+                                          checked={form.assigned_mentors_leaders[name]?.mentor || false}
+                                          onChange={(e) => handleReviewerCheck(name, "mentor", e.target.checked)}
+                                          className="h-3.5 w-3.5 accent-red-500 cursor-pointer"
+                                        />
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* DYNAMIC STEPS: Render questions dynamically */}
+                      {currentStep > 1 && currentStep < 6 && (
+                        <div className="flex flex-col gap-4">
+                          {currentStep === 2 && (
+                            <div className="rounded-xl bg-red-50/50 border border-red-100 p-3 text-[10.5px] leading-relaxed text-red-700 font-semibold mb-2">
+                              <strong>Mẫu 3 dòng trả lời:</strong><br />
+                              📌 Bối cảnh: (task gì, dự án gì, tình huống nào)<br />
+                              📌 Tôi đã làm: (hành động cụ thể của bạn)<br />
+                              📌 Kết quả / Bài học: (output, con số, hoặc rút ra được gì)
+                            </div>
+                          )}
+
+                          {currentStepQuestions.map((q) => (
+                            <div key={q.id} className="flex flex-col gap-1.5">
+                              <label className="text-xs font-bold text-gray-700 leading-relaxed">
+                                {q.question_text} {q.is_required && <span className="text-red-500">*</span>}
+                              </label>
+                              {renderQuestionInput(q)}
+                              {errors[q.id] && <span className="text-[10px] font-bold text-red-500">{errors[q.id]}</span>}
+                            </div>
                           ))}
                         </div>
-                        {errors.self_score && <span className="text-[10px] font-bold text-red-500">{errors.self_score}</span>}
-                      </div>
-                    </div>
-                  )}
+                      )}
 
-                  {/* STEP 3: QUALITY & SKILLS */}
-                  {currentStep === 3 && (
-                    <div className="flex flex-col gap-4">
-                      {/* Q5 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q5] Output kỳ này có bị review trả lại nhiều không? Bao nhiêu lần phải sửa? So với kỳ trước thì sao? <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={form.quality_answers.q5}
-                          onChange={(e) => handleQualityChange("q5", e.target.value)}
-                          placeholder="Ví dụ: 10 task, bị sửa 2 lần. Kỳ trước 5 lần -> cải thiện 60%..."
-                          className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none focus:border-red-400"
-                        />
-                        {errors.q5 && <span className="text-[10px] font-bold text-red-500">{errors.q5}</span>}
-                      </div>
+                      {/* STEP 6: CONFIRM & SUBMIT */}
+                      {currentStep === 6 && (
+                        <div className="flex flex-col gap-6 py-4">
+                          <div className="rounded-2xl border border-gray-150 bg-white p-6 shadow-sm flex flex-col gap-3">
+                            <h3 className="text-base font-black text-gray-800">Xác nhận thông tin</h3>
+                            <p className="text-xs text-gray-500 leading-relaxed font-semibold">
+                              Cám ơn bạn đã trả lời đầy đủ và trung thực. Công ty sẽ dựa vào bản tự đánh giá này và bảng đánh giá chéo của Mentor để đưa ra kết quả xét duyệt cuối cùng.
+                            </p>
 
-                      {/* Q6 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q6] Phần nào trong công việc bạn tự xử lý độc lập được? Phần nào bạn vẫn cần mentor/leader hỗ trợ? <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={form.quality_answers.q6}
-                          onChange={(e) => handleQualityChange("q6", e.target.value)}
-                          placeholder="Trả lời trung thực để Leader hỗ trợ đúng điểm yếu..."
-                          className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none focus:border-red-400"
-                        />
-                        {errors.q6 && <span className="text-[10px] font-bold text-red-500">{errors.q6}</span>}
-                      </div>
-
-                      {/* Q7 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q7] Đã bàn giao đầy đủ chưa? (runbook / doc / checklist / handover). Dán link tài liệu bàn giao nếu có. <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={form.quality_answers.q7}
-                          onChange={(e) => handleQualityChange("q7", e.target.value)}
-                          placeholder="Dán link doc/handover sheet cụ thể..."
-                          className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none focus:border-red-400"
-                        />
-                        {errors.q7 && <span className="text-[10px] font-bold text-red-500">{errors.q7}</span>}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* STEP 4: BEHAVIOR & ATTITUDE */}
-                  {currentStep === 4 && (
-                    <div className="flex flex-col gap-4">
-                      {/* Q8 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q8] Kỳ này bạn tự làm gì NGOÀI task được giao? (Hỗ trợ đồng đội, cải tiến quy trình, tự học thêm ứng dụng...) <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={form.behavior_answers.q8}
-                          onChange={(e) => handleBehaviorChange("q8", e.target.value)}
-                          placeholder="Ví dụ: Soạn cẩm nang setup, tự học Python áp dụng automation..."
-                          className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none focus:border-red-400"
-                        />
-                        {errors.q8 && <span className="text-[10px] font-bold text-red-500">{errors.q8}</span>}
-                      </div>
-
-                      {/* Q9 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q9] Kể 1 lần bạn nhận feedback / góp ý từ Mentor hoặc Leader. Bạn phản ứng thế nào và đã thay đổi gì? <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={form.behavior_answers.q9}
-                          onChange={(e) => handleBehaviorChange("q9", e.target.value)}
-                          placeholder="Mô tả cụ thể sự việc và hành động thay đổi sau đó..."
-                          className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none focus:border-red-400"
-                        />
-                        {errors.q9 && <span className="text-[10px] font-bold text-red-500">{errors.q9}</span>}
-                      </div>
-
-                      {/* Q10 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q10] Kỳ này bạn gặp blocker / vướng mắc nào? Bạn tự xử lý hay đã leo thang đúng lúc? <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={form.behavior_answers.q10}
-                          onChange={(e) => handleBehaviorChange("q10", e.target.value)}
-                          placeholder="Cách xử lý khó khăn và giao tiếp với sếp..."
-                          className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none focus:border-red-400"
-                        />
-                        {errors.q10 && <span className="text-[10px] font-bold text-red-500">{errors.q10}</span>}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* STEP 5: COMMITMENT */}
-                  {currentStep === 5 && (
-                    <div className="flex flex-col gap-4">
-                      {/* Q11 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q11] Đối chiếu với tiêu chí level bạn muốn lên: Bạn đã đạt điểm nào? Còn thiếu điểm nào? (Nêu rõ 2-3 điểm đạt, 1-2 điểm chưa đạt) <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={form.commitment_answers.q11}
-                          onChange={(e) => handleCommitmentChange("q11", e.target.value)}
-                          placeholder="Ví dụ: Đạt tiêu chí làm runbook mini, còn thiếu case onsite..."
-                          className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none"
-                        />
-                        {errors.q11 && <span className="text-[10px] font-bold text-red-500">{errors.q11}</span>}
-                      </div>
-
-                      {/* Q12 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q12] Nếu được lên level, bạn cam kết gì cho kỳ tiếp theo? (Scope mới, deliverable mới, cụ thể) <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={form.commitment_answers.q12}
-                          onChange={(e) => handleCommitmentChange("q12", e.target.value)}
-                          placeholder="Cam kết đo lường được, không hứa suông..."
-                          className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none"
-                        />
-                        {errors.q12 && <span className="text-[10px] font-bold text-red-500">{errors.q12}</span>}
-                      </div>
-
-                      {/* Q13 */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold text-gray-700 leading-relaxed">
-                          [Q13] Có điều gì bạn muốn Leader/Sếp biết thêm khi xem xét lên level không? (Context, hoàn cảnh đặc biệt...) <span className="text-gray-400">(Tùy chọn)</span>
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={form.commitment_answers.q13}
-                          onChange={(e) => handleCommitmentChange("q13", e.target.value)}
-                          placeholder="Bổ sung thông tin nếu có..."
-                          className="w-full rounded-xl border border-gray-200 bg-white p-3 text-xs font-semibold focus:outline-none"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* STEP 6: CONFIRM & SUBMIT */}
-                  {currentStep === 6 && (
-                    <div className="flex flex-col gap-6 py-4">
-                      <div className="rounded-2xl border border-gray-150 bg-white p-6 shadow-sm flex flex-col gap-3">
-                        <h3 className="text-base font-black text-gray-800">Xác nhận thông tin</h3>
-                        <p className="text-xs text-gray-500 leading-relaxed font-semibold">
-                          Cám ơn bạn đã trả lời đầy đủ và trung thực. Công ty sẽ dựa vào bản tự đánh giá này và bảng đánh giá chéo của Mentor để đưa ra kết quả xét duyệt cuối cùng.
-                        </p>
-
-                        <label className="mt-2 flex items-start gap-2.5 text-xs font-bold text-gray-700 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={form.confirmed}
-                            onChange={(e) => handleInputChange("confirmed", e.target.checked)}
-                            className="mt-0.5 h-4 w-4 accent-red-500 rounded border-gray-300"
-                          />
-                          <span>Tôi xác nhận tất cả thông tin trên là trung thực và có evidence kèm theo.</span>
-                        </label>
-                        {errors.confirmed && <span className="text-[10px] font-bold text-red-500">{errors.confirmed}</span>}
-                      </div>
-                    </div>
+                            <label className="mt-2 flex items-start gap-2.5 text-xs font-bold text-gray-700 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={form.confirmed}
+                                onChange={(e) => handleInputChange("confirmed", e.target.checked)}
+                                className="mt-0.5 h-4 w-4 accent-red-500 rounded border-gray-300"
+                              />
+                              <span>Tôi xác nhận tất cả thông tin trên là trung thực và có evidence kèm theo.</span>
+                            </label>
+                            {errors.confirmed && <span className="text-[10px] font-bold text-red-500">{errors.confirmed}</span>}
+                          </div>
+                        </div>
+                      )}
+                    </>
                   )}
 
                   {/* Navigation Buttons */}
@@ -815,7 +632,7 @@ export default function SelfReviewPage() {
 
                     <button
                       onClick={handleNext}
-                      disabled={submitting}
+                      disabled={submitting || (loadingQuestions && currentStep > 1 && currentStep < 6)}
                       className="flex h-10 items-center gap-1.5 rounded-xl bg-red-500 px-5 text-xs font-bold text-white hover:bg-red-600 shadow-lg shadow-red-500/10 disabled:opacity-50"
                     >
                       {submitting ? (

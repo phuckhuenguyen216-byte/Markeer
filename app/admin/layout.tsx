@@ -177,6 +177,10 @@ const menu = [
         nameKey: "admin.sidebar.leaderReviewLevel",
         href: "/admin/survey-review/leader-review",
       },
+      {
+        nameKey: "admin.sidebar.questionSettings",
+        href: "/admin/survey-review/questions",
+      },
     ],
   },
 ];

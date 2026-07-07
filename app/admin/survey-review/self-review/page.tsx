@@ -13,12 +13,18 @@ import {
   Save,
   X,
   Loader2,
-  Trash2,
   Calendar,
   Layers,
   Briefcase
 } from "lucide-react";
-import { createSupabaseBrowserClient } from "@/lib/supabase";
+
+interface AnswerItem {
+  section_index: number;
+  section_title: string;
+  question_text: string;
+  question_type: string;
+  answer: string;
+}
 
 interface SelfReview {
   id: string;
@@ -33,28 +39,7 @@ interface SelfReview {
       mentor: boolean;
     };
   };
-  kpi_answers: {
-    q1: string;
-    q2: string;
-    q3: string;
-    q4: string;
-    self_score: string;
-  };
-  quality_answers: {
-    q5: string;
-    q6: string;
-    q7: string;
-  };
-  behavior_answers: {
-    q8: string;
-    q9: string;
-    q10: string;
-  };
-  commitment_answers: {
-    q11: string;
-    q12: string;
-    q13: string;
-  };
+  answers: AnswerItem[];
   status: string;
   created_at: string;
 }
@@ -143,16 +128,28 @@ export default function AdminSelfReviewsPage() {
     setEditForm((prev) => prev ? { ...prev, [field]: value } : null);
   };
 
-  const handleEditNestedChange = (category: "kpi_answers" | "quality_answers" | "behavior_answers" | "commitment_answers", key: string, value: string) => {
+  const handleEditAnswerChange = (index: number, val: string) => {
     if (!editForm) return;
-    setEditForm((prev) => {
-      if (!prev) return null;
-      const sub = { ...prev[category] as any, [key]: value };
-      return { ...prev, [category]: sub };
-    });
+    const updatedAnswers = [...editForm.answers];
+    updatedAnswers[index] = { ...updatedAnswers[index], answer: val };
+    setEditForm({ ...editForm, answers: updatedAnswers });
   };
 
   const totalPages = Math.ceil(total / limit);
+
+  // Group selected review answers by section_title for rendering
+  const getGroupedAnswers = (review: SelfReview) => {
+    const list = review.answers || [];
+    const grouped: Record<string, AnswerItem[]> = {};
+    list.forEach((ans) => {
+      const title = ans.section_title || "PHẦN CÂU HỎI";
+      if (!grouped[title]) {
+        grouped[title] = [];
+      }
+      grouped[title].push(ans);
+    });
+    return grouped;
+  };
 
   return (
     <div className="flex flex-col gap-6 p-1">
@@ -206,12 +203,16 @@ export default function AdminSelfReviewsPage() {
                 </tr>
               ) : (
                 reviews.map((row) => (
-                  <tr key={row.id} className="hover:bg-gray-50/50 transition-colors">
+                  <tr key={row.id} className="hover:bg-gray-50/30 transition-all">
                     <td className="px-5 py-3.5 font-bold text-gray-800">{row.full_name}</td>
-                    <td className="px-5 py-3.5 font-semibold text-gray-500">{row.team}</td>
-                    <td className="px-5 py-3.5"><span className="rounded bg-gray-100 px-2 py-0.5 font-bold text-gray-600 text-[10px]">{row.current_level}</span></td>
-                    <td className="px-5 py-3.5"><span className="rounded bg-red-50 px-2 py-0.5 font-bold text-red-600 text-[10px]">{row.target_level}</span></td>
-                    <td className="px-5 py-3.5 font-bold text-gray-700">{row.review_period}</td>
+                    <td className="px-5 py-3.5 font-semibold text-gray-600">{row.team}</td>
+                    <td className="px-5 py-3.5">
+                      <span className="rounded bg-gray-100 px-2 py-0.5 font-bold text-gray-600 text-[10px]">{row.current_level}</span>
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <span className="rounded bg-red-50 px-2 py-0.5 font-bold text-red-600 text-[10px]">{row.target_level}</span>
+                    </td>
+                    <td className="px-5 py-3.5 font-semibold text-gray-600">{row.review_period}</td>
                     <td className="px-5 py-3.5">
                       <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-black ${
                         row.status === "Đã duyệt lên Level"
@@ -224,15 +225,13 @@ export default function AdminSelfReviewsPage() {
                       </span>
                     </td>
                     <td className="px-5 py-3.5 text-center">
-                      <div className="flex items-center justify-center gap-1.5">
-                        <button
-                          onClick={() => { setSelectedReview(row); setIsEditing(false); }}
-                          className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:text-gray-900 transition-all hover:bg-gray-50"
-                          title="Xem chi tiết"
-                        >
-                          <Eye size={13} />
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => { setSelectedReview(row); setIsEditing(false); }}
+                        className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:text-gray-900 transition-all hover:bg-gray-50 mx-auto"
+                        title="Xem chi tiết"
+                      >
+                        <Eye size={13} />
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -241,7 +240,7 @@ export default function AdminSelfReviewsPage() {
           </table>
         </div>
 
-        {/* Pagination Footer */}
+        {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3">
             <span className="text-[11px] font-bold text-gray-400">
@@ -267,10 +266,10 @@ export default function AdminSelfReviewsPage() {
         )}
       </div>
 
-      {/* Details Slide-Over / Modal */}
+      {/* Details Slide-Over / Drawer */}
       {selectedReview && (
         <div className="fixed inset-0 z-[100] flex justify-end bg-gray-900/40 backdrop-blur-sm">
-          <div className="flex h-screen w-full max-w-3xl flex-col rounded-l-3xl bg-white shadow-2xl overflow-hidden border-l border-gray-150">
+          <div className="flex h-screen w-full max-w-3xl flex-col rounded-l-3xl bg-white shadow-2xl overflow-hidden border-l border-gray-150 animate-fade-in">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4 bg-gray-50/50">
               <div>
@@ -309,10 +308,9 @@ export default function AdminSelfReviewsPage() {
               </div>
             </div>
 
-            {/* Scrollable details content */}
+            {/* Content area */}
             <div className="flex-1 overflow-y-auto p-6 text-xs leading-relaxed space-y-6">
-              
-              {/* Approval status badge and controls */}
+              {/* Status Update bar */}
               <div className="rounded-2xl bg-gray-50 p-4 border border-gray-100 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <span className="text-[10px] font-bold text-gray-400 uppercase">Trạng thái hiện tại</span>
@@ -341,9 +339,9 @@ export default function AdminSelfReviewsPage() {
                 </div>
               </div>
 
-              {/* View/Edit Form */}
+              {/* Form rendering */}
               {isEditing && editForm ? (
-                // EDIT MODE FORM
+                // EDIT MODE
                 <div className="space-y-5">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1">
@@ -396,164 +394,39 @@ export default function AdminSelfReviewsPage() {
                     </div>
                   </div>
 
-                  <hr className="border-gray-100" />
+                  <hr className="border-gray-150" />
 
-                  {/* KPI edits */}
-                  <div className="space-y-3">
-                    <h4 className="font-bold text-red-500 uppercase text-[10px] tracking-wider">Phần 1: KPI & Output</h4>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q1] Giao bao nhiêu task, hoàn thành bao nhiêu % và đúng hạn chưa?</label>
-                      <textarea
-                        rows={2}
-                        value={editForm.kpi_answers.q1}
-                        onChange={(e) => handleEditNestedChange("kpi_answers", "q1", e.target.value)}
-                        className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q2] Liệt kê 2–3 output quan trọng nhất (link evidence)</label>
-                      <textarea
-                        rows={2}
-                        value={editForm.kpi_answers.q2}
-                        onChange={(e) => handleEditNestedChange("kpi_answers", "q2", e.target.value)}
-                        className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q3] Tổng KPI Points tự tính & screenshot log</label>
-                      <input
-                        type="text"
-                        value={editForm.kpi_answers.q3}
-                        onChange={(e) => handleEditNestedChange("kpi_answers", "q3", e.target.value)}
-                        className="rounded-lg border border-gray-200 px-3 py-1.5 font-semibold text-gray-750"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q4] Task trễ hoặc chưa đạt (lý do & xử lý thế nào)</label>
-                      <textarea
-                        rows={2}
-                        value={editForm.kpi_answers.q4}
-                        onChange={(e) => handleEditNestedChange("kpi_answers", "q4", e.target.value)}
-                        className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">Tự chấm điểm</label>
-                      <input
-                        type="text"
-                        value={editForm.kpi_answers.self_score}
-                        onChange={(e) => handleEditNestedChange("kpi_answers", "self_score", e.target.value)}
-                        className="w-20 rounded-lg border border-gray-200 px-3 py-1 font-semibold text-gray-800"
-                      />
-                    </div>
-                  </div>
-
-                  <hr className="border-gray-100" />
-
-                  {/* Quality edits */}
-                  <div className="space-y-3">
-                    <h4 className="font-bold text-red-500 uppercase text-[10px] tracking-wider">Phần 2: Chất lượng & Chuẩn nghề</h4>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q5] Output bị review trả lại nhiều không, bao nhiêu lần?</label>
-                      <textarea
-                        rows={2}
-                        value={editForm.quality_answers.q5}
-                        onChange={(e) => handleEditNestedChange("quality_answers", "q5", e.target.value)}
-                        className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q6] Phần tự xử lý độc lập vs phần cần hỗ trợ</label>
-                      <textarea
-                        rows={2}
-                        value={editForm.quality_answers.q6}
-                        onChange={(e) => handleEditNestedChange("quality_answers", "q6", e.target.value)}
-                        className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q7] Tài liệu bàn giao (handover/runbook/doc link)</label>
-                      <textarea
-                        rows={2}
-                        value={editForm.quality_answers.q7}
-                        onChange={(e) => handleEditNestedChange("quality_answers", "q7", e.target.value)}
-                        className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700"
-                      />
-                    </div>
-                  </div>
-
-                  <hr className="border-gray-100" />
-
-                  {/* Behavior edits */}
-                  <div className="space-y-3">
-                    <h4 className="font-bold text-red-500 uppercase text-[10px] tracking-wider">Phần 3: Behavior & Thái độ</h4>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q8] Việc tự làm ngoài task được giao</label>
-                      <textarea
-                        rows={2}
-                        value={editForm.behavior_answers.q8}
-                        onChange={(e) => handleEditNestedChange("behavior_answers", "q8", e.target.value)}
-                        className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q9] Lần nhận feedback và sự thay đổi</label>
-                      <textarea
-                        rows={2}
-                        value={editForm.behavior_answers.q9}
-                        onChange={(e) => handleEditNestedChange("behavior_answers", "q9", e.target.value)}
-                        className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q10] Khó khăn blocker (tự xử lý vs leo thang)</label>
-                      <textarea
-                        rows={2}
-                        value={editForm.behavior_answers.q10}
-                        onChange={(e) => handleEditNestedChange("behavior_answers", "q10", e.target.value)}
-                        className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700"
-                      />
-                    </div>
-                  </div>
-
-                  <hr className="border-gray-100" />
-
-                  {/* Commitment edits */}
-                  <div className="space-y-3">
-                    <h4 className="font-bold text-red-500 uppercase text-[10px] tracking-wider">Phần 4: Đối chiếu & Cam kết</h4>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q11] Điểm đạt vs điểm chưa đạt so với level muốn lên</label>
-                      <textarea
-                        rows={2}
-                        value={editForm.commitment_answers.q11}
-                        onChange={(e) => handleEditNestedChange("commitment_answers", "q11", e.target.value)}
-                        className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q12] Cam kết cụ thể nếu được thăng cấp</label>
-                      <textarea
-                        rows={2}
-                        value={editForm.commitment_answers.q12}
-                        onChange={(e) => handleEditNestedChange("commitment_answers", "q12", e.target.value)}
-                        className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="font-bold text-gray-600">[Q13] Đóng góp/Context muốn sếp biết thêm</label>
-                      <textarea
-                        rows={2}
-                        value={editForm.commitment_answers.q13}
-                        onChange={(e) => handleEditNestedChange("commitment_answers", "q13", e.target.value)}
-                        className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700"
-                      />
-                    </div>
+                  {/* Answers editing */}
+                  <div className="space-y-4">
+                    <h4 className="font-bold text-red-500 uppercase text-[10px] tracking-wider">Nội dung khảo sát tự luận</h4>
+                    {editForm.answers && editForm.answers.map((ans, idx) => (
+                      <div key={idx} className="flex flex-col gap-1">
+                        <label className="font-bold text-gray-600 leading-relaxed">
+                          {ans.question_text}
+                        </label>
+                        {ans.question_type === "textarea" ? (
+                          <textarea
+                            rows={3}
+                            value={ans.answer || ""}
+                            onChange={(e) => handleEditAnswerChange(idx, e.target.value)}
+                            className="rounded-lg border border-gray-200 p-2 font-semibold text-gray-700 focus:outline-none"
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            value={ans.answer || ""}
+                            onChange={(e) => handleEditAnswerChange(idx, e.target.value)}
+                            className="rounded-lg border border-gray-200 px-3 py-1.5 font-semibold text-gray-700 focus:outline-none"
+                          />
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               ) : (
-                // NORMAL VIEW DETAILS
+                // NORMAL DETAILS VIEW
                 <div className="space-y-6">
-                  {/* General Info Grid */}
+                  {/* General metadata card */}
                   <div className="grid grid-cols-2 gap-x-8 gap-y-4 rounded-2xl border border-gray-100 bg-white p-5">
                     <div>
                       <span className="text-gray-400 font-bold">Họ và tên:</span>
@@ -579,7 +452,7 @@ export default function AdminSelfReviewsPage() {
                     </div>
                   </div>
 
-                  {/* Mentor/Leader Checklist display */}
+                  {/* Reviewers List */}
                   <div className="space-y-2">
                     <h4 className="font-black text-gray-800 uppercase tracking-wider text-[10px]">Leader / Mentor phụ trách đánh giá chéo</h4>
                     <div className="flex flex-wrap gap-1.5">
@@ -598,94 +471,24 @@ export default function AdminSelfReviewsPage() {
                     </div>
                   </div>
 
-                  {/* KPI answers */}
-                  <div className="space-y-4 rounded-2xl border border-gray-100 bg-white p-5">
-                    <div className="flex items-center justify-between border-b border-gray-50 pb-2">
-                      <h4 className="font-black text-red-500 uppercase tracking-wider text-[10px]">Phần 1: KPI & Output</h4>
-                      <div className="flex items-center gap-1">
-                        <span className="text-gray-400 font-bold">Tự chấm điểm:</span>
-                        <span className="rounded bg-red-500 text-white font-black text-xs px-2 py-0.5">{selectedReview.kpi_answers.self_score || "N/A"} / 5</span>
+                  {/* Grouped answers rendering */}
+                  {Object.entries(getGroupedAnswers(selectedReview)).map(([sectionTitle, list]) => (
+                    <div key={sectionTitle} className="space-y-4 rounded-2xl border border-gray-100 bg-white p-5">
+                      <h4 className="font-black text-red-500 uppercase tracking-wider text-[10px] border-b border-gray-50 pb-2">
+                        {sectionTitle}
+                      </h4>
+                      <div className="space-y-4">
+                        {list.map((ans, idx) => (
+                          <div key={idx} className="flex flex-col gap-1">
+                            <div className="font-bold text-gray-800 leading-relaxed">{ans.question_text}</div>
+                            <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">
+                              {ans.answer || <span className="text-gray-400 italic">Không có câu trả lời</span>}
+                            </p>
+                          </div>
+                        ))}
                       </div>
                     </div>
-
-                    <div className="space-y-3">
-                      <div>
-                        <div className="font-bold text-gray-800 leading-relaxed">[Q1] Số lượng task & tỷ lệ hoàn thành đúng hạn:</div>
-                        <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">{selectedReview.kpi_answers.q1}</p>
-                      </div>
-                      <div>
-                        <div className="font-bold text-gray-800 leading-relaxed">[Q2] Các output quan trọng kèm link evidence:</div>
-                        <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">{selectedReview.kpi_answers.q2}</p>
-                      </div>
-                      <div>
-                        <div className="font-bold text-gray-800 leading-relaxed">[Q3] Tổng điểm KPI & link log:</div>
-                        <p className="mt-1 text-gray-700 font-bold bg-gray-50/50 p-2.5 rounded-xl border border-gray-100">{selectedReview.kpi_answers.q3}</p>
-                      </div>
-                      <div>
-                        <div className="font-bold text-gray-800 leading-relaxed">[Q4] Task bị trễ hoặc chưa đạt (lý do & xử lý):</div>
-                        <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">{selectedReview.kpi_answers.q4}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Quality answers */}
-                  <div className="space-y-4 rounded-2xl border border-gray-100 bg-white p-5">
-                    <h4 className="font-black text-red-500 uppercase tracking-wider text-[10px] border-b border-gray-50 pb-2">Phần 2: Chất lượng & Chuẩn nghề</h4>
-                    <div className="space-y-3">
-                      <div>
-                        <div className="font-bold text-gray-800 leading-relaxed">[Q5] Output bị review trả lại & số lần sửa:</div>
-                        <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">{selectedReview.quality_answers.q5}</p>
-                      </div>
-                      <div>
-                        <div className="font-bold text-gray-800 leading-relaxed">[Q6] Phạm vi độc lập xử lý vs sự hỗ trợ:</div>
-                        <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">{selectedReview.quality_answers.q6}</p>
-                      </div>
-                      <div>
-                        <div className="font-bold text-gray-800 leading-relaxed">[Q7] Tài liệu bàn giao & link runbook/checklist:</div>
-                        <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">{selectedReview.quality_answers.q7}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Behavior answers */}
-                  <div className="space-y-4 rounded-2xl border border-gray-100 bg-white p-5">
-                    <h4 className="font-black text-red-500 uppercase tracking-wider text-[10px] border-b border-gray-50 pb-2">Phần 3: Behavior & Thái độ</h4>
-                    <div className="space-y-3">
-                      <div>
-                        <div className="font-bold text-gray-800 leading-relaxed">[Q8] Những đóng góp chủ động ngoài task được giao:</div>
-                        <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">{selectedReview.behavior_answers.q8}</p>
-                      </div>
-                      <div>
-                        <div className="font-bold text-gray-800 leading-relaxed">[Q9] Lần nhận feedback từ sếp & sự cải thiện:</div>
-                        <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">{selectedReview.behavior_answers.q9}</p>
-                      </div>
-                      <div>
-                        <div className="font-bold text-gray-800 leading-relaxed">[Q10] Khó khăn blocker & kỹ năng leo thang đúng lúc:</div>
-                        <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">{selectedReview.behavior_answers.q10}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Commitment answers */}
-                  <div className="space-y-4 rounded-2xl border border-gray-100 bg-white p-5">
-                    <h4 className="font-black text-red-500 uppercase tracking-wider text-[10px] border-b border-gray-50 pb-2">Phần 4: Đối chiếu tiêu chí & Cam kết</h4>
-                    <div className="space-y-3">
-                      <div>
-                        <div className="font-bold text-gray-800 leading-relaxed">[Q11] Điểm mạnh/yếu so với level tiếp theo:</div>
-                        <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">{selectedReview.commitment_answers.q11}</p>
-                      </div>
-                      <div>
-                        <div className="font-bold text-gray-800 leading-relaxed">[Q12] Cam kết hành động cụ thể ở kỳ tiếp theo:</div>
-                        <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">{selectedReview.commitment_answers.q12}</p>
-                      </div>
-                      {selectedReview.commitment_answers.q13 && (
-                        <div>
-                          <div className="font-bold text-gray-800 leading-relaxed">[Q13] Đóng góp/Context muốn sếp biết thêm:</div>
-                          <p className="mt-1 text-gray-600 bg-gray-50/50 p-2.5 rounded-xl border border-gray-100 whitespace-pre-wrap">{selectedReview.commitment_answers.q13}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  ))}
                 </div>
               )}
             </div>

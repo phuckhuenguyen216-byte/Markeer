@@ -1104,6 +1104,7 @@
       "selfReviewLevel": "Self Review",
       "leaderReviewLevel": "Leader Review",
       "surveyReviewLevel": "Survey Review Level",
+      "questionSettings": "Cài đặt câu hỏi",
       "logout": "Đăng xuất"
     },
     "dashboard": {
