@@ -39,6 +39,42 @@ interface SelfReviewForm {
   confirmed: boolean;
 }
 
+const DEFAULT_REVIEWERS = ["Anh Nhớ", "Lê Phi", "Tấn Phát", "Hoàng Yên", "Vũ Phước", "Diệp Hân", "Tấn Huy", "Hà Tiên", "Dương Mai", "a.Minh", "Thương"];
+
+const DEFAULT_STEPS = [
+  { id: 1, name: "Thông tin chung" },
+  { id: 2, name: "PHẦN 1: KPI & OUTPUT" },
+  { id: 3, name: "PHẦN 2: CHẤT LƯỢNG & CHUẨN NGHỀ" },
+  { id: 4, name: "PHẦN 3: BEHAVIOR & THÁI ĐỘ" },
+  { id: 5, name: "PHẦN 4: ĐỐI CHIẾU TIÊU CHÍ & CAM KẾT" },
+  { id: 6, name: "Xác nhận & Gửi" }
+];
+
+const DEFAULT_QUESTIONS = [
+  { id: "default-q1", section_index: 2, section_title: "PHẦN 1: KPI & OUTPUT", question_text: "[Q1] Kỳ này bạn được giao bao nhiêu task/deliverable? Hoàn thành được bao nhiêu % và đúng hạn chưa?", question_type: "textarea", is_required: true, sort_order: 1 },
+  { id: "default-q2", section_index: 2, section_title: "PHẦN 1: KPI & OUTPUT", question_text: "[Q2] Liệt kê 2–3 output quan trọng nhất kỳ này. (Mỗi output kèm link evidence và số liệu cụ thể nếu có)", question_type: "textarea", is_required: true, sort_order: 2 },
+  { id: "default-q3", section_index: 2, section_title: "PHẦN 1: KPI & OUTPUT", question_text: "[Q3] Tổng KPI Points bạn tự tính được kỳ này là bao nhiêu? (Kèm link/screenshot KPI log – leader sẽ cross-check)", question_type: "text", is_required: true, sort_order: 3 },
+  { id: "default-q4", section_index: 2, section_title: "PHẦN 1: KPI & OUTPUT", question_text: "[Q4] Có task nào bị trễ hoặc chưa đạt không? Nếu có - lý do gì, bạn xử lý thế nào?", question_type: "textarea", is_required: true, sort_order: 4 },
+  { id: "default-q5", section_index: 2, section_title: "PHẦN 1: KPI & OUTPUT", question_text: "Tự chấm điểm", question_type: "radio", options: ["1=Không đạt rõ", "2=Dưới kỳ vọng / thiếu ổn định", "3=Đạt kỳ vọng/target hiện tại", "4=Tốt, vượt mặt bằng KPI/target ở vài phần", "5=Vượt trội"], is_required: true, sort_order: 5 },
+  
+  { id: "default-q6", section_index: 3, section_title: "PHẦN 2: CHẤT LƯỢNG & CHUẨN NGHỀ", question_text: "[Q5] Output kỳ này có bị review trả lại nhiều không? Bao nhiêu lần phải sửa? So với kỳ trước thì sao?", question_type: "textarea", is_required: true, sort_order: 1 },
+  { id: "default-q7", section_index: 3, section_title: "PHẦN 2: CHẤT LƯỢNG & CHUẨN NGHỀ", question_text: "[Q6] Phần nào trong công việc bạn tự xử lý độc lập được? Phần nào bạn vẫn cần mentor/leader hỗ trợ?", question_type: "textarea", is_required: true, sort_order: 2 },
+  { id: "default-q8", section_index: 3, section_title: "PHẦN 2: CHẤT LƯỢNG & CHUẨN NGHỀ", question_text: "[Q7] Đã bàn giao đầy đủ chưa? (runbook / doc / checklist / handover). Dán link doc bàn giao nếu có.", question_type: "textarea", is_required: true, sort_order: 3 },
+  
+  { id: "default-q9", section_index: 4, section_title: "PHẦN 3: BEHAVIOR & THÁI ĐỘ", question_text: "[Q8] Kỳ này bạn tự làm gì NGOÀI task được giao? (VD: hỗ trợ teammate, cải tiến quy trình, tự học thêm và áp dụng, đề xuất ý tưởng)", question_type: "textarea", is_required: true, sort_order: 1 },
+  { id: "default-q10", section_index: 4, section_title: "PHẦN 3: BEHAVIOR & THÁI ĐỘ", question_text: "[Q9] Kể 1 lần bạn nhận feedback / góp ý từ Mentor hoặc Leader. Bạn phản ứng thế nào và đã thay đổi gì?", question_type: "textarea", is_required: true, sort_order: 2 },
+  { id: "default-q11", section_index: 4, section_title: "PHẦN 3: BEHAVIOR & THÁI ĐỘ", question_text: "[Q10] Kỳ này bạn gặp blocker / vướng mắc nào? Bạn tự xử lý hay đã leo thang (hỏi mentor) đúng lúc?", question_type: "textarea", is_required: true, sort_order: 3 },
+  
+  { id: "default-q12", section_index: 5, section_title: "PHẦN 4: ĐỐI CHIẾU TIÊU CHÍ & CAM KẾT", question_text: "[Q11] Đối chiếu với tiêu chí level bạn muốn lên: Bạn đã đáp ứng những điểm nào? Bạn còn thiếu điểm nào? (Liệt kê cụ thể 2–3 điểm đã đáp ứng + 1–2 điểm chưa đủ)", question_type: "textarea", is_required: true, sort_order: 1 },
+  { id: "default-q13", section_index: 5, section_title: "PHẦN 4: ĐỐI CHIẾU TIÊU CHÍ & CAM KẾT", question_text: "[Q12] Nếu được lên level, bạn cam kết gì cho kỳ tiếp theo? (Scope mới, deliverable mới, ownership cụ thể gì?)", question_type: "textarea", is_required: true, sort_order: 2 },
+  { id: "default-q14", section_index: 5, section_title: "PHẦN 4: ĐỐI CHIẾU TIÊU CHÍ & CAM KẾT", question_text: "[Q13] Có điều gì bạn muốn Leader/ Sếp biết thêm khi xem xét lên level không? (Context quan trọng, hoàn cảnh đặc biệt, hay đóng góp chưa được ghi nhận?)", question_type: "textarea", is_required: false, sort_order: 3 }
+];
+
+const INITIAL_REVIEWERS: AssignedReviewers = {};
+DEFAULT_REVIEWERS.forEach((name) => {
+  INITIAL_REVIEWERS[name] = { leader: false, mentor: false };
+});
+
 const EMPTY_FORM: SelfReviewForm = {
   full_name: "",
   team: "",
@@ -46,30 +82,22 @@ const EMPTY_FORM: SelfReviewForm = {
   current_level: "",
   target_level: "",
   review_period: "",
-  assigned_mentors_leaders: {},
+  assigned_mentors_leaders: INITIAL_REVIEWERS,
   confirmed: false,
 };
 
 const TEAMS_LIST = ["Network", "System", "SOC", "Marketing", "Dev/DevOps", "Other"];
 const LEVELS = ["L1 - Seed Intern", "L2 - Growth Intern", "L3 - Strong Intern", "L4 - Fresher Talent", "L5 - Core team"];
 const TARGET_LEVELS = ["L1 - Seed Intern", "L2 - Growth Intern", "L3 - Strong Intern", "L4 - Fresher Talent", "L5 - Core team", "L6 - Presales"];
-const REVIEWERS_LIST = ["Anh Nhớ", "Lê Phi", "Tấn Phát", "Hoàng Yên", "Vũ Phước", "Diệp Hân", "Tấn Huy", "Hà Tiên", "Dương Mai", "a.Minh", "Thương"];
-
-const STEPS = [
-  { id: 1, name: "Thông tin chung" },
-  { id: 2, name: "KPI & Output" },
-  { id: 3, name: "Chất lượng & Chuẩn nghề" },
-  { id: 4, name: "Behavior & Thái độ" },
-  { id: 5, name: "Đối chiếu tiêu chí" },
-  { id: 6, name: "Xác nhận & Gửi" },
-];
 
 export default function SelfReviewPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [form, setForm] = useState<SelfReviewForm>(EMPTY_FORM);
-  const [questions, setQuestions] = useState<any[]>([]);
+  const [questions, setQuestions] = useState<any[]>(DEFAULT_QUESTIONS);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [steps, setSteps] = useState<any[]>(DEFAULT_STEPS);
+  const [reviewersList, setReviewersList] = useState<string[]>(DEFAULT_REVIEWERS);
   const [loadingQuestions, setLoadingQuestions] = useState(true);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [csrfToken, setCsrfToken] = useState("");
@@ -78,15 +106,19 @@ export default function SelfReviewPage() {
   const [submitted, setSubmitted] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const maxStep = steps.length || 6;
 
-  // Initialize reviewers & fetch questions + CSRF
+  // Initialize answers for default questions
   useEffect(() => {
-    const initialReviewers: AssignedReviewers = {};
-    REVIEWERS_LIST.forEach((name) => {
-      initialReviewers[name] = { leader: false, mentor: false };
+    const initialAnswers: Record<string, string> = {};
+    DEFAULT_QUESTIONS.forEach((q) => {
+      initialAnswers[q.id] = "";
     });
-    setForm((prev) => ({ ...prev, assigned_mentors_leaders: initialReviewers }));
+    setAnswers(initialAnswers);
+  }, []);
 
+  // Fetch sections, questions + CSRF to override static defaults dynamically if available
+  useEffect(() => {
     // Fetch CSRF
     fetch("/api/csrf-token")
       .then((res) => res.json())
@@ -95,25 +127,58 @@ export default function SelfReviewPage() {
       })
       .catch((err) => console.error("Error fetching CSRF token:", err));
 
-    // Fetch dynamic questions
-    fetch("/api/survey-review/questions?type=self-review")
+    // Fetch Reviewers from database
+    fetch("/api/survey-review/reviewers")
       .then((res) => res.json())
       .then((data) => {
-        if (data.questions) {
-          setQuestions(data.questions);
-          // Initialize answers dictionary
-          const initialAnswers: Record<string, string> = {};
-          data.questions.forEach((q: any) => {
-            initialAnswers[q.id] = "";
+        if (data.reviewers && data.reviewers.length > 0) {
+          const list = data.reviewers.map((r: any) => r.name);
+          setReviewersList(list);
+          const initialReviewers: AssignedReviewers = {};
+          list.forEach((name: string) => {
+            initialReviewers[name] = { leader: false, mentor: false };
           });
-          setAnswers(initialAnswers);
+          setForm((prev) => ({ ...prev, assigned_mentors_leaders: initialReviewers }));
         }
-        setLoadingQuestions(false);
       })
-      .catch((err) => {
-        console.error("Error loading survey questions:", err);
-        setLoadingQuestions(false);
-      });
+      .catch((err) => console.error("Error loading reviewers, fallback to static defaults:", err));
+
+    // Fetch dynamic sections & questions in parallel
+    Promise.all([
+      fetch("/api/survey-review/sections?type=self-review").then(res => res.json()),
+      fetch("/api/survey-review/questions?type=self-review").then(res => res.json())
+    ]).then(([sectionsData, questionsData]) => {
+      // 1. Build steps dynamically if loadedSections is not empty
+      const loadedSections = sectionsData.sections || [];
+      if (loadedSections.length > 0) {
+        const dynamicSteps = loadedSections.map((sec: any) => ({
+          id: sec.section_index,
+          name: sec.section_title
+        }));
+        const maxDynamicIndex = loadedSections.reduce((max: number, sec: any) => Math.max(max, sec.section_index), 1);
+        
+        const builtSteps = [
+          { id: 1, name: "Thông tin chung" },
+          ...dynamicSteps,
+          { id: maxDynamicIndex + 1, name: "Xác nhận & Gửi" }
+        ];
+        setSteps(builtSteps);
+      }
+
+      // 2. Set questions if questionsData is not empty
+      if (questionsData.questions && questionsData.questions.length > 0) {
+        setQuestions(questionsData.questions);
+        const initialAnswers: Record<string, string> = {};
+        questionsData.questions.forEach((q: any) => {
+          initialAnswers[q.id] = "";
+        });
+        setAnswers(initialAnswers);
+      }
+      setLoadingQuestions(false);
+    }).catch((err) => {
+      console.error("Error loading dynamic survey metadata, keeping static templates:", err);
+      setLoadingQuestions(false);
+    });
   }, []);
 
   const handleInputChange = (field: keyof SelfReviewForm, value: any) => {
@@ -156,20 +221,16 @@ export default function SelfReviewPage() {
     if (submitted) return "Cám ơn bạn đã gửi bản Self Review! Chúc bạn gặt hái kết quả tốt.";
     if (submitError) return submitError;
     if (Object.keys(errors).length > 0) return "Vui lòng hoàn thành các câu hỏi bắt buộc trước khi gửi.";
-    switch (currentStep) {
-      case 1:
-        return "Chào bạn! Hãy điền đúng thông tin cá nhân và kỳ xét nâng level nhé.";
-      case 2:
-        return "Phần 1: Hãy mô tả thật chi tiết về KPI, output cốt lõi cùng bằng chứng (evidence) đi kèm.";
-      case 3:
-        return "Phần 2: Nêu rõ mức độ làm việc độc lập của bạn và chất lượng bàn giao tài liệu kỹ thuật.";
-      case 4:
-        return "Phần 3: Kể về thái độ ứng xử, tinh thần học hỏi cũng như cách bạn xử lý khó khăn trong kỳ.";
-      case 5:
-        return "Phần 4: Đối chiếu năng lực bản thân với Career Ladder và các cam kết hành động cụ thể tiếp theo.";
-      default:
-        return "Xác nhận tính trung thực của các câu trả lời rồi nộp bài khảo sát nhé.";
+    
+    if (currentStep === 1) {
+      return "Chào bạn! Hãy điền đúng thông tin cá nhân và kỳ xét nâng level nhé.";
     }
+    if (currentStep === maxStep) {
+      return "Xác nhận tính trung thực của các câu trả lời rồi nộp bài khảo sát nhé.";
+    }
+    
+    const activeStepObj = steps.find(s => s.id === currentStep);
+    return `Bạn đang điền phần: ${activeStepObj?.name || ""}. Hãy điền thông tin chi tiết và rõ ràng nhé!`;
   };
 
   const validateAll = (): { hasErrors: boolean; firstStepWithError: number } => {
@@ -183,7 +244,7 @@ export default function SelfReviewPage() {
     if (!form.target_level) newErrors.target_level = "Vui lòng chọn Level muốn lên";
     if (!form.review_period.trim()) newErrors.review_period = "Vui lòng nhập Kỳ review";
 
-    // Dynamic steps 2-5 questions validation
+    // Dynamic steps questions validation
     questions.forEach((q) => {
       const answerVal = answers[q.id] || "";
       if (q.is_required && !answerVal.trim()) {
@@ -191,13 +252,13 @@ export default function SelfReviewPage() {
       }
     });
 
-    // Step 6 validation
+    // Last step validation
     if (!form.confirmed) newErrors.confirmed = "Vui lòng xác nhận tính trung thực trước khi nộp";
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      let firstStep = 6;
+      let firstStep = maxStep;
       if (
         newErrors.full_name ||
         newErrors.team ||
@@ -209,7 +270,7 @@ export default function SelfReviewPage() {
         firstStep = 1;
       } else {
         // Find first question step with error
-        let lowestSection = 6;
+        let lowestSection = maxStep;
         questions.forEach((q) => {
           if (newErrors[q.id] && q.section_index < lowestSection) {
             lowestSection = q.section_index;
@@ -225,7 +286,7 @@ export default function SelfReviewPage() {
 
   const handleNext = () => {
     setSubmitError("");
-    if (currentStep < 6) {
+    if (currentStep < maxStep) {
       setCurrentStep((prev) => prev + 1);
       containerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
     } else {
@@ -294,7 +355,6 @@ export default function SelfReviewPage() {
     }
   };
 
-  // Render question component based on its type
   const renderQuestionInput = (q: any) => {
     switch (q.question_type) {
       case "text":
@@ -304,7 +364,7 @@ export default function SelfReviewPage() {
             value={answers[q.id] || ""}
             onChange={(e) => handleAnswerChange(q.id, e.target.value)}
             placeholder="Nhập câu trả lời cụ thể..."
-            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold focus:outline-none focus:border-red-400"
+            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold focus:outline-none focus:border-red-400"
           />
         );
       case "radio": {
@@ -361,7 +421,7 @@ export default function SelfReviewPage() {
             
             {/* Steps progress */}
             <div className="mt-8 flex flex-col gap-4">
-              {STEPS.map((step) => {
+              {steps.map((step) => {
                 const isActive = step.id === currentStep;
                 const isCompleted = step.id < currentStep || submitted;
                 return (
@@ -417,10 +477,10 @@ export default function SelfReviewPage() {
                 >
                   <div className="mb-6">
                     <span className="text-xs font-black uppercase tracking-widest text-red-500">
-                      Phần {currentStep} trên 6
+                      Phần {currentStep} trên {maxStep}
                     </span>
                     <h2 className="mt-1 text-xl font-black text-gray-900 tracking-tight animate-fade-in">
-                      {STEPS[currentStep - 1].name}
+                      {steps[currentStep - 1]?.name || ""}
                     </h2>
                   </div>
 
@@ -431,7 +491,7 @@ export default function SelfReviewPage() {
                     </div>
                   )}
 
-                  {loadingQuestions && currentStep > 1 && currentStep < 6 ? (
+                  {loadingQuestions && currentStep > 1 && currentStep < maxStep && questions.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-20 text-gray-400 font-bold text-xs gap-2">
                       <Loader2 className="animate-spin text-red-500" size={24} />
                       <span>Đang tải câu hỏi khảo sát...</span>
@@ -538,7 +598,7 @@ export default function SelfReviewPage() {
                                   </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100">
-                                  {REVIEWERS_LIST.map((name) => (
+                                  {reviewersList.map((name) => (
                                     <tr key={name}>
                                       <td className="px-4 py-2 font-bold text-gray-700">{name}</td>
                                       <td className="px-4 py-2 text-center">
@@ -567,17 +627,8 @@ export default function SelfReviewPage() {
                       )}
 
                       {/* DYNAMIC STEPS: Render questions dynamically */}
-                      {currentStep > 1 && currentStep < 6 && (
+                      {currentStep > 1 && currentStep < maxStep && (
                         <div className="flex flex-col gap-4">
-                          {currentStep === 2 && (
-                            <div className="rounded-xl bg-red-50/50 border border-red-100 p-3 text-[10.5px] leading-relaxed text-red-700 font-semibold mb-2">
-                              <strong>Mẫu 3 dòng trả lời:</strong><br />
-                              📌 Bối cảnh: (task gì, dự án gì, tình huống nào)<br />
-                              📌 Tôi đã làm: (hành động cụ thể của bạn)<br />
-                              📌 Kết quả / Bài học: (output, con số, hoặc rút ra được gì)
-                            </div>
-                          )}
-
                           {currentStepQuestions.map((q) => (
                             <div key={q.id} className="flex flex-col gap-1.5">
                               <label className="text-xs font-bold text-gray-700 leading-relaxed">
@@ -590,8 +641,8 @@ export default function SelfReviewPage() {
                         </div>
                       )}
 
-                      {/* STEP 6: CONFIRM & SUBMIT */}
-                      {currentStep === 6 && (
+                      {/* LAST STEP: CONFIRM & SUBMIT */}
+                      {currentStep === maxStep && (
                         <div className="flex flex-col gap-6 py-4">
                           <div className="rounded-2xl border border-gray-150 bg-white p-6 shadow-sm flex flex-col gap-3">
                             <h3 className="text-base font-black text-gray-800">Xác nhận thông tin</h3>
@@ -632,14 +683,14 @@ export default function SelfReviewPage() {
 
                     <button
                       onClick={handleNext}
-                      disabled={submitting || (loadingQuestions && currentStep > 1 && currentStep < 6)}
+                      disabled={submitting || (loadingQuestions && currentStep > 1 && currentStep < maxStep && questions.length === 0)}
                       className="flex h-10 items-center gap-1.5 rounded-xl bg-red-500 px-5 text-xs font-bold text-white hover:bg-red-600 shadow-lg shadow-red-500/10 disabled:opacity-50"
                     >
                       {submitting ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
                         <>
-                          <span>{currentStep === 6 ? "Gửi khảo sát" : "Tiếp tục"}</span>
+                          <span>{currentStep === maxStep ? "Gửi khảo sát" : "Tiếp tục"}</span>
                           <ArrowRight size={14} />
                         </>
                       )}

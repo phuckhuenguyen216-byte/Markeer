@@ -2,6 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 import { validateAdminRequest } from "@/lib/admin-auth";
 
+const DEFAULT_SELF_SECTIONS = [
+  { section_index: 2, section_title: "PHẦN 1: KPI & OUTPUT" },
+  { section_index: 3, section_title: "PHẦN 2: CHẤT LƯỢNG & CHUẨN NGHỀ" },
+  { section_index: 4, section_title: "PHẦN 3: BEHAVIOR & THÁI ĐỘ" },
+  { section_index: 5, section_title: "PHẦN 4: ĐỐI CHIẾU TIÊU CHÍ & CAM KẾT" }
+];
+
+const DEFAULT_LEADER_SECTIONS = [
+  { section_index: 2, section_title: "PHẦN 2: KPI & OUTPUT" },
+  { section_index: 3, section_title: "PHẦN 3: CHẤT LƯỢNG & NĂNG LỰC" },
+  { section_index: 4, section_title: "PHẦN 4: BEHAVIOR & THÁI ĐỘ" },
+  { section_index: 5, section_title: "PHẦN 5: SẴN SÀNG LÊN LEVEL (Tối đa 15 điểm)" },
+  { section_index: 6, section_title: "PHẦN 6: LEADER TỰ ĐÁNH GIÁ" }
+];
+
 const DEFAULT_SELF_REVIEW = [
   { section_index: 2, section_title: "PHẦN 1: KPI & OUTPUT", question_text: "[Q1] Kỳ này bạn được giao bao nhiêu task/deliverable? Hoàn thành được bao nhiêu % và đúng hạn chưa?", question_type: "textarea", options: [], is_required: true, sort_order: 1 },
   { section_index: 2, section_title: "PHẦN 1: KPI & OUTPUT", question_text: "[Q2] Liệt kê 2–3 output quan trọng nhất kỳ này. (Mỗi output kèm link evidence và số liệu cụ thể nếu có)", question_type: "textarea", options: [], is_required: true, sort_order: 2 },
@@ -17,9 +32,9 @@ const DEFAULT_SELF_REVIEW = [
   { section_index: 4, section_title: "PHẦN 3: BEHAVIOR & THÁI ĐỘ", question_text: "[Q9] Kể 1 lần bạn nhận feedback / góp ý từ Mentor hoặc Leader. Bạn phản ứng thế nào và đã thay đổi gì?", question_type: "textarea", options: [], is_required: true, sort_order: 2 },
   { section_index: 4, section_title: "PHẦN 3: BEHAVIOR & THÁI ĐỘ", question_text: "[Q10] Kỳ này bạn gặp blocker / vướng mắc nào? Bạn tự xử lý hay đã leo thang (hỏi mentor) đúng lúc?", question_type: "textarea", options: [], is_required: true, sort_order: 3 },
   
-  { section_index: 5, section_title: "PHẦN 2: ĐỐI CHIẾU TIÊU CHÍ & CAM KẾT", question_text: "[Q11] Đối chiếu với tiêu chí level bạn muốn lên: Bạn đã đáp ứng những điểm nào? Bạn còn thiếu điểm nào? (Liệt kê cụ thể 2–3 điểm đã đáp ứng + 1–2 điểm chưa đủ)", question_type: "textarea", options: [], is_required: true, sort_order: 1 },
-  { section_index: 5, section_title: "PHẦN 2: ĐỐI CHIẾU TIÊU CHÍ & CAM KẾT", question_text: "[Q12] Nếu được lên level, bạn cam kết gì cho kỳ tiếp theo? (Scope mới, deliverable mới, ownership cụ thể gì?)", question_type: "textarea", options: [], is_required: true, sort_order: 2 },
-  { section_index: 5, section_title: "PHẦN 2: ĐỐI CHIẾU TIÊU CHÍ & CAM KẾT", question_text: "[Q13] Có điều gì bạn muốn Leader/ Sếp biết thêm khi xem xét lên level không? (Context quan trọng, hoàn cảnh đặc biệt, hay đóng góp chưa được ghi nhận?)", question_type: "textarea", options: [], is_required: false, sort_order: 3 }
+  { section_index: 5, section_title: "PHẦN 4: ĐỐI CHIẾU TIÊU CHÍ & CAM KẾT", question_text: "[Q11] Đối chiếu với tiêu chí level bạn muốn lên: Bạn đã đáp ứng những điểm nào? Bạn còn thiếu điểm nào? (Liệt kê cụ thể 2–3 điểm đã đáp ứng + 1–2 điểm chưa đủ)", question_type: "textarea", options: [], is_required: true, sort_order: 1 },
+  { section_index: 5, section_title: "PHẦN 4: ĐỐI CHIẾU TIÊU CHÍ & CAM KẾT", question_text: "[Q12] Nếu được lên level, bạn cam kết gì cho kỳ tiếp theo? (Scope mới, deliverable mới, ownership cụ thể gì?)", question_type: "textarea", options: [], is_required: true, sort_order: 2 },
+  { section_index: 5, section_title: "PHẦN 4: ĐỐI CHIẾU TIÊU CHÍ & CAM KẾT", question_text: "[Q13] Có điều gì bạn muốn Leader/ Sếp biết thêm khi xem xét lên level không? (Context quan trọng, hoàn cảnh đặc biệt, hay đóng góp chưa được ghi nhận?)", question_type: "textarea", options: [], is_required: false, sort_order: 3 }
 ];
 
 const DEFAULT_LEADER_REVIEW = [
@@ -33,7 +48,7 @@ const DEFAULT_LEADER_REVIEW = [
   { section_index: 3, section_title: "PHẦN 3: CHẤT LƯỢNG & NĂNG LỰC", question_text: "Bàn giao đầy đủ (handover/runbook/doc)", question_type: "scale", options: { min: 1, max: 10, minLabel: "Không có", maxLabel: "Bàn giao đầy đủ" }, is_required: true, sort_order: 4 },
   
   { section_index: 4, section_title: "PHẦN 4: BEHAVIOR & THÁI ĐỘ", question_text: "Chủ động vượt scope — invisible work (việc ngoài KPI chính, hỗ trợ team, cải tiến quy trình)", question_type: "scale", options: { min: 1, max: 10, minLabel: "Không có", maxLabel: "Có evidence rõ, impact tốt" }, is_required: true, sort_order: 1 },
-  { section_index: 4, section_title: "PHẦN 4: BEHAVIOR & THÁI ĐỘ", question_text: "Phản ứng với feedback & hành vi cải thiện", 'question_type': "scale", options: { min: 1, max: 10, minLabel: "Phòng thủ/né tránh", maxLabel: "Tiếp nhận & thay đổi có pattern" }, is_required: true, sort_order: 2 },
+  { section_index: 4, section_title: "PHẦN 4: BEHAVIOR & THÁI ĐỘ", question_text: "Phản ứng với feedback & hành vi cải thiện", question_type: "scale", options: { min: 1, max: 10, minLabel: "Phòng thủ/né tránh", maxLabel: "Tiếp nhận & thay đổi có pattern" }, is_required: true, sort_order: 2 },
   { section_index: 4, section_title: "PHẦN 4: BEHAVIOR & THÁI ĐỘ", question_text: "Xử lý blocker & leo thang đúng lúc", question_type: "scale", options: { min: 1, max: 10, minLabel: "Hay bị block, phải nhắc liền tục", maxLabel: "Tự xử lý được + biết khi nào cần hỏi" }, is_required: true, sort_order: 3 },
   
   { section_index: 5, section_title: "PHẦN 5: SẴN SÀNG LÊN LEVEL (Tối đa 15 điểm)", question_text: "Đã đáp ứng tiêu chí deliverable của level tiếp theo chưa? (đối chiếu Career Ladder theo track)", question_type: "scale", options: { min: 1, max: 10, minLabel: "Xem xét loại hoặc cần cải thiện nhiều", maxLabel: "Hoàn toàn đáp ứng" }, is_required: true, sort_order: 1 },
@@ -45,7 +60,7 @@ const DEFAULT_LEADER_REVIEW = [
   { section_index: 6, section_title: "PHẦN 6: LEADER TỰ ĐÁNH GIÁ", question_text: "Kỳ này có thay đổi lớn nào ảnh hưởng đến member không? (VD: Chuyển team, scope đổi giữa chừng, thiếu resource...)", question_type: "text", options: [], is_required: true, sort_order: 3 }
 ];
 
-// POST /api/survey-review/questions/reset - Reset questions to default seed (Admin only)
+// POST /api/survey-review/questions/reset - Reset questions and sections to defaults (Admin only)
 export async function POST(request: NextRequest) {
   const user = await validateAdminRequest(request);
   if (!user) {
@@ -62,7 +77,28 @@ export async function POST(request: NextRequest) {
 
     const supabase = getSupabaseAdmin();
 
-    // 1. Delete current questions of this type
+    // 1. Reset survey_sections
+    const { error: deleteSecError } = await supabase
+      .from("survey_sections")
+      .delete()
+      .eq("survey_type", surveyType);
+
+    if (deleteSecError) {
+      console.error("[POST /api/survey-review/questions/reset] Delete Sections Error:", deleteSecError);
+      return NextResponse.json({ error: deleteSecError.message }, { status: 500 });
+    }
+
+    const defaultSections = surveyType === "self-review" ? DEFAULT_SELF_SECTIONS : DEFAULT_LEADER_SECTIONS;
+    const { error: insertSecError } = await supabase
+      .from("survey_sections")
+      .insert(defaultSections.map(s => ({ ...s, survey_type: surveyType })));
+
+    if (insertSecError) {
+      console.error("[POST /api/survey-review/questions/reset] Insert Sections Error:", insertSecError);
+      return NextResponse.json({ error: insertSecError.message }, { status: 500 });
+    }
+
+    // 2. Reset survey_questions
     const { error: deleteError } = await supabase
       .from("survey_questions")
       .delete()
@@ -73,10 +109,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: deleteError.message }, { status: 500 });
     }
 
-    // 2. Select default list
     const defaults = surveyType === "self-review" ? DEFAULT_SELF_REVIEW : DEFAULT_LEADER_REVIEW;
-    
-    // 3. Re-seed questions
     const insertPayload = defaults.map((item) => ({
       survey_type: surveyType,
       section_index: item.section_index,
